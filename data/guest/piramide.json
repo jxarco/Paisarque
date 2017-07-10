@@ -1,0 +1,18 @@
+{
+    "id":"Piramide",
+    "autor":"Carla Lancelotti",
+    "lugar":"Sudan",
+    "coordenadas": {"lat": 12.892800, "lng": 29.998197},
+    "render":{"id":"piramides","mesh":"piramide/mesh.obj","texture":["piramide/tex_0.jpg"],
+             "rotaciones":[{"grados":90,"x": 0, "y": 0, "z": 1}, 
+                           {"grados":-20,"x": 1, "y": 0, "z": 0}, 
+                           {"grados":90,"x": 0, "y": 1, "z": 0} ]},
+    "extra":[
+        {"type":"text", "data":"Piramide"},
+        {"type":"image",    "data":"http://img.planospara.com/plano-general-de-qenqo-en-sitios-arqueologicos-historia-30992.gif"},
+        {"type":"pdf",      "data":"data/wpbr.pdf"},
+        {"type":"text",     "data":"Hola que tal, soy subnormal"},
+        {"type":"text",     "data":"esto es otro parrafo"},
+        {"type":"youtube",  "data":"https://www.youtube.com/embed/6W3R5ItkREk"}
+    ]
+}

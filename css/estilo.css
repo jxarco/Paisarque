@@ -1,0 +1,22 @@
+#placeholder {
+    height: calc(100vh - 275px);
+    background-image: url("../data/loading.gif");
+    background-repeat: no-repeat;
+    background-size: 15em;
+    background-position: center;
+    padding:0;
+    overflow: hidden;
+}
+
+
+#myCanvas {
+    height: calc(100vh - 275px);
+    background-position: center;
+    padding:0;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+#desAnot {
+    display:none;
+}
