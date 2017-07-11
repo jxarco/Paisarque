@@ -34,6 +34,20 @@ $.ajax({dataType: "json",
         }
 });
 
+$("#logout").click(function()
+{   
+     $.ajax( {
+        url: 'logout.php',
+        type: 'POST',
+        success: function() {
+            document.location.href = 'index.html';
+            $("#megatitle").html("eded");
+        }
+    } );
+    
+});
+
+
 
 function getQueryVariable(variable)
 { 
@@ -50,6 +64,10 @@ function getQueryVariable(variable)
 function loadContent(url, project, ){
     console.log("loading content " + url);
     document.location.href = url+"?r="+(project || current_project).toString();
+}
+
+function session_logout_ajax() {
+    
 }
 
 $('#videoLink').click(function () {

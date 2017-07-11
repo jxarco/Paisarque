@@ -7,21 +7,6 @@
         echo "sesion perdida";
     else
         echo "DEBUG : sesion activa (" . $_SESSION['current'] . ")";
-
-/*
-
-    // Destruir sesion
-    session_destroy(); 
-    $_SESSION = array();
-
-
-    if(!isset($_SESSION['current']))
-        echo "sesion cerrada correctamente";
-    else
-        echo "sesion todavia activa (" . $_SESSION['current'] . ")";
-
-*/
-
 ?>
 
 

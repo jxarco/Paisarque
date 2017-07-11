@@ -10,7 +10,7 @@
     {
         echo "DEBUG : sesion cerrada";
         $_SESSION['current'] = $_GET['user'];
-    }        
+    }    
 
 ?>
 
@@ -49,7 +49,7 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li class="logged-button"><a href="#" id="textUser"></a></li>
-                        <li class="logout-button"><a>
+                        <li id="logout" class="logout-button"><a>
                             <span class="glyphicon glyphicon-off" aria-hidden="true">
                             </span> Logout</a></li>
                     </ul></div>
