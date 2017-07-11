@@ -39,5 +39,18 @@
     margin-left: 2% !important;
 }
 
+.pointer{
+    cursor: pointer;
+}
 
+/* -------------------------------------------- */
 
+.mega-title
+{
+    width: 100% !important;
+}
+
+.project-options
+{
+    outline: none !important;
+}

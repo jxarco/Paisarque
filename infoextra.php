@@ -92,7 +92,8 @@
         <script src="litefile/js/codeLite.js"></script>
         <script>
             
-            function parseJSON(json){
+            function parseJSON(json)
+            {
                 console.log(json)
                 if(!json.extra){
                     console.err("empty");

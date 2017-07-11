@@ -4,12 +4,21 @@
     // Abrir sesión
     session_start(); 
 
+    //$_SESSION['complete-path'] = !$_SESSION['complete-path'];
+
     if(isset($_SESSION['current']))
-        echo "DEBUG : sesion activa (" . $_SESSION['current'] . ")";
+    {
+        
+        echo "DEBUG : sesion activa (" . $_SESSION['current'] . ")" . '</br>';
+        echo "DEBUG : show-complete-path (" . $_SESSION['complete-path'] . ")";
+    }
+        
     else
     {
         echo "DEBUG : sesion cerrada";
         $_SESSION['current'] = $_GET['user'];
+        $_SESSION['complete-path'] = false;
+        echo "DEBUG : abriendo sesion...";
     }    
 
 ?>
@@ -43,13 +52,13 @@
                           <span class="icon-bar"></span>
                           <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="index.html">PaisArque</a>
+                        <a class="navbar-brand mega-title" href="index.html">PaisArque</a>
                     </div>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"><ul class="nav navbar-nav">
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li class="logged-button"><a href="#" id="textUser"></a></li>
-                        <li id="logout" class="logout-button"><a>
+                        <li id="logout" class="logout-button pointer"><a>
                             <span class="glyphicon glyphicon-off" aria-hidden="true">
                             </span> Logout</a></li>
                     </ul></div>
@@ -174,6 +183,8 @@
             <br>
             <br>
             
+            
+            
             <!-- Listamos los ficheros que hay en el servidor/carpeta y sus propiedades -->
             <table class="table table-striped table-hover ">
                 <thead>
@@ -201,11 +212,15 @@
                             $user = substr(substr($files[$i], 5),0, -5);
                             $array = split('/', $user);
                             
-                            echo '<tr a style="cursor: pointer;" onclick' . '=' . '"loadContent(' . "'modelo.php','";
+                            echo '<tr a class="pointer" onclick' . '=' . '"loadContent(' . "'modelo.php','";
                             echo $user;
                             echo "')" . '"' . ">" . "<td>";
-                            //echo $_SESSION['current']."/";
-                            echo str_replace('_', ' ', ucfirst($array[1]))  . "</td>" . "<td>";
+                            if($_SESSION['complete-path'] == true)
+                            {
+                                echo $files[$i] . "</td>" . "<td>";;
+                            }
+                            else
+                                echo str_replace('_', ' ', ucfirst($array[1]))  . "</td>" . "<td>";
                             
                             $string = file_get_contents($files[$i]);
                             $json_a = json_decode($string, true);
@@ -228,6 +243,19 @@
                     ?>
                 </tbody>
             </table> 
+            
+            <button class="btn btn-sm btn-primary project-options" onclick="<?php echo "location.href = 'inicio.php?user=" . $_SESSION['current'] . "'"; ?>">
+            
+                <?php
+                    if(!$_SESSION['complete-path'])    
+                        echo "Mostrar ruta completa (En ello..)";
+                    else 
+                        echo "Mostrar menos";
+                ?>
+            
+            </button>
+            
+            <button class="btn btn-sm btn-primary project-options" onclick="">Eliminar projecto (TO DO)</button>
 
         </content><!--  content end-->
         

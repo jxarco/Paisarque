@@ -8,7 +8,7 @@
                            {"grados":90,"x": 0, "y": 1, "z": 0} ]},
     "extra":[
         {"type":"pdf",      "data":"data/wpbr.pdf"},
-        {"type":"image",    "data":"http://mylittlepony.hasbro.com/images/spring2016/ponies/char_rainbowdash.png"},
+        {"type":"image",    "data":"http://www.open.edu/openlearn/sites/www.open.edu.openlearn/files/styles/share_img/public/ole_images/nature/fossils-extinct-creatures/generic-fossil/generic%20fossil.jpg?itok=tARDwVMf"},
         {"type":"text",     "data":"Hola que tal, soy subnormal"},
         {"type":"text",     "data":"esto es otro parrafo"},
         {"type":"youtube",  "data":"https://www.youtube.com/embed/6W3R5ItkREk"}
