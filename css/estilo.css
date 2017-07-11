@@ -20,3 +20,24 @@
 #desAnot {
     display:none;
 }
+
+.addExtraData{
+    margin-left: 21%;
+    width: 50%;
+    height: 5vh;
+    text-align: center;
+    display: flex;
+}
+
+.addExtraData i{
+/*    margin-left: 40% !important;*/
+    vertical-align: text-top;
+}
+
+.addExtraData p{
+    margin-top: 1% !important;
+    margin-left: 2% !important;
+}
+
+
+

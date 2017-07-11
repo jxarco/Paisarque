@@ -170,7 +170,7 @@ $("#formUploadProject").on('submit', function(e) {
         
     });
     
-    if (values["idProyecto"] == "" || values["autor"] == "" || values["lugar"] == "" || values["latitud"] == "" || values["longitud"] == "") {
+    if (!values["idProyecto"].length || !values["autor"].length || !values["lugar"].length || !values["latitud"].length || !values["longitud"].length) {
         alert("Rellena todos los campos");
         return true;
     }

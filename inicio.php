@@ -12,6 +12,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/custom.min.css" rel="stylesheet">
     <link href="css/estilo.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
     </head>
     <body class="container">
@@ -116,22 +117,26 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-lg-10 text-center"> 
-                                    <button id="buttonYoutubeLink" type="button" class="btn btn-default">Añadir Youtube Link</button>
+                                    <button id="buttonYoutubeLink" type="button" class="btn btn-default addExtraData">
+                                        <i class="material-icons">add_circle_outline</i> <p>Youtube Link</p> </button>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-lg-10 text-center"> 
-                                    <button id="buttonPDFLink" type="button" class="btn btn-default">Añadir PDF</button>
+                                    <button id="buttonPDFLink" type="button" class="btn btn-default addExtraData">
+                                        <i class="material-icons">add_circle_outline</i> <p>PDF</p> </button>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-lg-10 text-center"> 
-                                    <button id="buttonImageLink" type="button" class="btn btn-default">Añadir Imágenes</button>
+                                    <button id="buttonImageLink" type="button" class="btn btn-default addExtraData">
+                                        <i class="material-icons">add_circle_outline</i> <p>Imagen</p> </button>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-lg-10 text-center"> 
-                                    <button id="buttonTextLink" type="button" class="btn btn-default">Añadir Texto</button>
+                                    <button id="buttonTextLink" type="button" class="btn btn-default addExtraData">
+                                        <i class="material-icons">add_circle_outline</i> <p>Texto</p> </button>
                                 </div>
                             </div>
                             
