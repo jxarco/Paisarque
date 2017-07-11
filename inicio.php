@@ -1,3 +1,19 @@
+<?php 
+    
+
+    // Abrir sesión
+    session_start(); 
+
+    if(isset($_SESSION['current']))
+        echo "DEBUG : sesion activa (" . $_SESSION['current'] . ")";
+    else
+    {
+        echo "DEBUG : sesion cerrada";
+        $_SESSION['current'] = $_GET['user'];
+    }        
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -187,8 +203,9 @@
                             
                             echo '<tr a style="cursor: pointer;" onclick' . '=' . '"loadContent(' . "'modelo.php','";
                             echo $user;
-                            echo "')" . '"';
-                            echo ">" . "<td>" . $array[1] . "</td>" . "<td>";
+                            echo "')" . '"' . ">" . "<td>";
+                            //echo $_SESSION['current']."/";
+                            echo str_replace('_', ' ', ucfirst($array[1]))  . "</td>" . "<td>";
                             
                             $string = file_get_contents($files[$i]);
                             $json_a = json_decode($string, true);

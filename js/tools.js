@@ -26,7 +26,7 @@ $.ajax({dataType: "json",
             $('#project').html(data.id + "<span class='caret'></span>");
             if(window.parseJSON) {
                 parseJSON(data);
-                console.log(data);  
+                //console.log(data);  
                 latitud = data["coordenadas"]["lat"];
                 longitud = data["coordenadas"]["lng"];
                 lugar = data["lugar"];
@@ -47,8 +47,8 @@ function getQueryVariable(variable)
 }
 
 
-function loadContent(url, project){
-    
+function loadContent(url, project, ){
+    console.log("loading content " + url);
     document.location.href = url+"?r="+(project || current_project).toString();
 }
 
@@ -86,6 +86,10 @@ $('#cargarProyecto').click( function() {
     console.log("cargando proyecto");
     $('#GSCCModal').model('hide');
 })
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 $("#formUploadProject").on('submit', function(e) {
     

@@ -283,7 +283,8 @@ var anotar = function(modoAnotacion) {
                     anotaciones.push(anotacion); 
                     
                     // se pone en el documento html y ademas que cuando se apreta a la anotacion se cambia a la camara con la que estaba
-                    var totalString = '<tr a onclick="changeCamera( camera, [' + camera.position  + "] , [" + camera.target + "],[" + camera.up + '])">'+ "<td>" + numeroA + "</td>" + "<td>" + text + "</td></tr>";
+                    var totalString = '<tr a onclick="changeCamera( camera, [' + camera.position  + "] , [" + camera.target + "],[" + camera.up + '])">'+ "<td>" + numeroA + "</td>" + "<td>" + text + "</td>"
+                    +"</tr>";
                     $("#anotacion_tabla").append(totalString);
                                         
                     $(this).off('hidden.bs.modal');
@@ -301,7 +302,10 @@ var anotar = function(modoAnotacion) {
 
 }
 
-
+var borrarAnotacion = function() {
+    
+    // TO DO
+}
 
 var borrarAnotaciones = function() {
     

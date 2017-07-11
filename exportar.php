@@ -1,3 +1,14 @@
+<?php 
+                    
+    // Recuperar sesión
+    session_start(); 
+    
+    if(!isset($_SESSION['current']))
+        echo "sesion perdida";
+    else
+        echo "DEBUG : sesion activa (" . $_SESSION['current'] . ")";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -42,11 +53,11 @@
                                 <li><a onclick="loadContent('index.html','grave')">    Grave     </a></li>
                             </ul>
                         </li>-->
-                        <li> <a onclick="location.href='inicio.php'"> Inicio</a> </li>
+                        <li> <a onclick="<?php echo "location.href = 'inicio.php?user=" . $_SESSION['current'] . "'"; ?>"> Inicio</a> </li>
                         <li> <a onclick="loadContent('modelo.html')"> Modelo 3D</a> </li>
-                        <li> <a onclick="loadContent('info.html')">   Info Extra </a> </li>
+                        <li> <a onclick="loadContent('infoextra.php')">   Info Extra </a> </li>
                         <li> <a onclick="loadContent('exportar.html')">   Exportar </a> </li>
-                        <li> <a onclick="loadContent('ayuda.html')">  Ayuda </a> </li>
+                        <li> <a onclick="loadContent('ayuda.php')">  Ayuda </a> </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li class="logged-button"><a href="#" id="textUser"></a></li>
