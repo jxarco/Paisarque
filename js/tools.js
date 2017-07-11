@@ -97,6 +97,9 @@ $("#formUploadProject").on('submit', function(e) {
     
     var values = getFormValues(this);
     
+    // Por si el nombre del proyecto tiene espacios!
+    values["idProyecto"] = values["idProyecto"].replace(/ /g, '_');
+
     // Enviar tambien la informacion de en que usuario estamos
     // para subir los ficheros a la carpeta que le corresponde
     
@@ -239,6 +242,9 @@ $("#formUploadProject").on('submit', function(e) {
             location = location;
         }
     } );
+    
+    // Resetear campos del form
+    $(this).trigger("reset");
     
 }) 
 
