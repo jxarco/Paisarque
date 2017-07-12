@@ -3,6 +3,7 @@ var context     = null;
 var scene       = null;
 var renderer    = null;
 var camera      = null;
+var result      = vec3.create();
 
 var _dt = 0.0;
 
@@ -132,7 +133,6 @@ function init(current_project, meshURL, textureURL, rotaciones)
     var obj = new RD.SceneNode();
     obj.position = [0,0,0];
     obj.color = [1,1,1,1];
-    
     obj.mesh = meshURL;
     // tenemos que pensar el caso en que haya mas de una textura
     if (!isArray(textureURL)) {
@@ -164,11 +164,30 @@ function init(current_project, meshURL, textureURL, rotaciones)
     for (var i = 0; i < anotaciones.length; i++) {
         
         var ball = new RD.SceneNode();
+        ball.id = i + 1;
         ball.color = [1,0,0,1];
+        ball.scale([1, 1, 1]);
         ball.mesh = "sphere";
+        ball.shader = "phong";
+        //var cam_normalized = vec3.create();
+        //vec3.normalize(cam_normalized, camera.position);
+        //ball._uniforms['u_light_vector'] = cam_normalized;
         ball.layers = 0x4;
         ball.flags.ignore_collisions = true;
-        scene.root.addChild(ball);  
+        ball.active = false;
+        ball.time = 0.0;
+        
+        scene.root.addChild(ball);
+
+        ball.update = function(dt)
+        {
+            this.time += dt;
+            
+            if(!this.active)
+                this.color = [1,0,0,1];
+            else
+                this.color = [1, 0.3, Math.sin(this.time*5), 1];
+        }
          
         var positionResult = [anotaciones[i]["posicion"][0], anotaciones[i]["posicion"][1], anotaciones[i]["posicion"][2]];
         
@@ -178,7 +197,7 @@ function init(current_project, meshURL, textureURL, rotaciones)
         
         ball.position = positionResult;
         
-        var totalString = '<tr a onclick="changeCamera( camera, [' + anotPosCamera + '] , [' +  anotTargetCamera + "] , [" + anotUpCamera + ' ] )"><td>' + anotaciones[i]["numero"] + "</td>" + "<td>" + anotaciones[i]["texto"] + "</td></tr>";
+        var totalString = '<tr a onclick="lookAtAnot( camera, [' + anotPosCamera + '] , [' +  anotTargetCamera + "] , [" + anotUpCamera + ' ], ' + ball.id + ' )"><td>' + anotaciones[i]["numero"] + "</td>" + "<td>" + anotaciones[i]["texto"] + "</td></tr>";
                 
         $("#anotacion_tabla").append(totalString);
     }
@@ -250,50 +269,24 @@ var anotar = function(modoAnotacion) {
         
         context.onmousedown = function(e) 
         {
-            var result = vec3.create();
             var ray = camera.getRay( e.canvasx, e.canvasy );
             var node = scene.testRay( ray, result, undefined, 0x1, true );
             
             // Si ha habido colision, se crea un punto y se abre una ventana de texto para escribir la anotacion
-            if (node) {
-                
-                var ball = new RD.SceneNode();
-                ball.color = [1,0,0,1];
-                ball.mesh = "sphere";
-                ball.layers = 0x4;
-                ball.flags.ignore_collisions = true;
-                scene.root.addChild(ball);
-                
-                console.log(result);
-                
-                ball.position = result;
-                
+            if (node)
+            {
+                // No hacer aqui ningún $(something).click o lo que sea para no repetir
+                // event listeners
+
                 // se abre la ventana de texto para escribir
                 $('#modalText').modal('show');
                 
-                // cuando se cierra la ventana
-                $("#modalText").on("hidden.bs.modal", function () {
-                    // se coge el texto correspondiente
-                    var text = document.getElementById("message-text").value;
-                    var numeroA = anotaciones.length + 1;
-                    
-                    // se crea una anotacion con todos los parametros
-                    var anotacion = {numero:numeroA, position_camera: [camera.position[0], camera.position[1], camera.position[2]], target_camera: [camera.target[0], camera.target[1], camera.target[2]], up_camera: [camera.up[0], camera.up[1], camera.up[2]], texto:text, posicion:result};
-                    // se anade a la lista de anotaciones de la aplicacion
-                    anotaciones.push(anotacion); 
-                    
-                    // se pone en el documento html y ademas que cuando se apreta a la anotacion se cambia a la camara con la que estaba
-                    var totalString = '<tr a onclick="changeCamera( camera, [' + camera.position  + "] , [" + camera.target + "],[" + camera.up + '])">'+ "<td>" + numeroA + "</td>" + "<td>" + text + "</td>"
-                    +"</tr>";
-                    $("#anotacion_tabla").append(totalString);
-                                        
-                    $(this).off('hidden.bs.modal');
-                                        
-                });
-                
+                // texto de anotaciones
+                $('#message-text').value = "";
+                //$('#message-text').focus();
             }
         }
-    } else if (modoAnotacion == false) {
+    } else if (!modoAnotacion) {
         console.log("Modo anotación desactivado");
         $("#actAnot").show();
         $("#desAnot").hide();
@@ -301,6 +294,61 @@ var anotar = function(modoAnotacion) {
     }
 
 }
+
+$("#saveTextButton").click(function (e) {
+                    
+    var ball = new RD.SceneNode();
+    var totalString = "";
+    var numeroA = anotaciones.length + 1;
+
+    ball.color = [1,0,0,1];
+    ball.id = numeroA;
+    ball.scale([1, 1, 1]);
+    ball.shader = "phong";
+    ball.mesh = "sphere";
+    ball.layers = 0x4;
+    ball.flags.ignore_collisions = true;
+    ball.active = false;
+    ball.time = 0.0;
+    scene.root.addChild(ball);
+
+    ball.update = function(dt)
+    {
+        this.time += dt;
+            
+        if(!this.active)
+            this.color = [1,0,0,1];
+        else
+            this.color = [1, 0.3, Math.sin(this.time*5), 1];
+    }
+
+    ball.position = result;
+
+    //$(this)
+    // se coge el texto correspondiente
+    var text = document.getElementById("message-text").value;
+    var numeroA = anotaciones.length + 1;
+
+    // se crea una anotacion con todos los parametros
+    var anotacion = {numero:numeroA, position_camera: [camera.position[0], camera.position[1], camera.position[2]], target_camera: [camera.target[0], camera.target[1], camera.target[2]], up_camera: [camera.up[0], camera.up[1], camera.up[2]], texto:text, posicion:result};
+    // se anade a la lista de anotaciones de la aplicacion
+    anotaciones.push(anotacion); 
+
+    // se pone en el documento html y ademas que cuando se apreta a la anotacion se cambia a la camara con la que estaba
+    totalString = '<tr a onclick="lookAtAnot( camera, [' + camera.position  + "] , [" + camera.target + "],[" + camera.up + '], ' + numeroA + ')">'+ "<td>" + numeroA + "</td>" + "<td>" + text + "</td>"
+    +"</tr>";
+    $("#anotacion_tabla").append(totalString);
+
+    //$(this).off('hidden.bs.modal');
+});
+
+
+// Enter para enviar la anotación 
+$('#message-text').keyup(function(e) {
+    e.preventDefault();
+    if(e.keyCode == 13)
+        $("#saveTextButton").click();
+});
 
 var borrarAnotacion = function() {
     

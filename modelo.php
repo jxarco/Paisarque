@@ -65,7 +65,7 @@
                 <div class="col-sm-3" id="tools">
                     <ul  class="nav nav-tabs">
                         <li class="active"><a href="#info" data-toggle="tab" aria-expanded="true">Info</a></li>
-                        <li> <a href="#herramientas" data-toggle="tab" aria-expanded="true">Herramientas</a> </li>
+                        <li> <a href="#herramientas" data-toggle="tab" aria-expanded="true">Tools</a> </li>
                         <li> <a href="#anotaciones" data-toggle="tab" aria-expanded="true">Anotaciones</a> </li>
                     </ul>
                     <div class="tab-content">
@@ -89,12 +89,12 @@
                                   <div class="modal-body">
                                     <form>
                                       <div class="form-group">
-                                        <textarea class="form-control" id="message-text"></textarea>
+                                        <textarea class="form-control" style="resize:none;" id="message-text"></textarea>
                                       </div>
                                     </form>
                                   </div>
                                   <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="saveTextButton">Close</button>
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="saveTextButton">Save</button>
                                   </div>
                                 </div>
                               </div>

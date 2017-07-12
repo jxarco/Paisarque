@@ -295,10 +295,22 @@ $('#buttonTextLink').click( function() {
     textLinkCounter++;
 })
 
-function changeCamera(camera, position_camera, target_camera, up_camera) {
+function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id) {
     
     camera.position = position_camera;
     camera.target = target_camera;
     camera.up = up_camera;
     
+    for(var i = 0; i < scene.root.children.length; i++)
+    {
+        var current = scene.root.children[i];
+        if(current.id == anot_id){
+            console.log(current);
+            current.active = true;
+            console.log(current);
+        }
+        else{
+            current.active = false;
+        }   
+    }
 }

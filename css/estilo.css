@@ -17,6 +17,10 @@
     visibility: hidden;
 }
 
+#tools{
+    overflow-y: scroll !important;
+}
+
 #desAnot {
     display:none;
 }
