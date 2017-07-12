@@ -81,6 +81,7 @@
                             <div id="map" style="width:200px;height:200px;"></div>
                         </div>
                         <div class="tab-pane fade" id="herramientas">
+                            <a onclick="medirMetro()" class="btn btn-default" id="actAnot">Configurar herramienta de medición</a>
                         </div>
                         <div class="tab-pane fade" id="anotaciones">
                             <div class="modal fade" id="modalText" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

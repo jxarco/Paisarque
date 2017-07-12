@@ -4,6 +4,8 @@ var scene       = null;
 var renderer    = null;
 var camera      = null;
 var result      = vec3.create();
+var firstPoint  = vec3.create();
+var secondPoint = vec3.create();
 
 var _dt = 0.0;
 
@@ -349,6 +351,74 @@ $('#message-text').keyup(function(e) {
     if(e.keyCode == 13)
         $("#saveTextButton").click();
 });
+
+
+var medirMetro = function () {
+    
+    console.log("midiendo cuanto es un metro");
+    alert("Selecciona dos puntos, la linea recta que los une corresponderá a un metro");
+    
+    var primerPunto = true;
+    var segundoPunto = false;
+    
+    context.onmousedown = function(e) 
+    {
+        
+        if (primerPunto) {
+        
+            var result = vec3.create();
+            var ray = camera.getRay( e.canvasx, e.canvasy );
+            var node = scene.testRay( ray, result, undefined, 0x1, true );
+            
+            // Si ha habido colision, se crea un punto y se abre una ventana de texto para escribir la anotacion
+            if (node) {
+                var ball = new RD.SceneNode();
+                ball.color = [0,1,0,1];
+                ball.mesh = "sphere";
+                ball.shader = "phong";
+                ball.layers = 0x4;
+                ball.flags.ignore_collisions = true;
+                scene.root.addChild(ball);                
+                ball.position = result;
+                firstPoint = result;
+            }
+            
+            primerPunto = false;
+            segundoPunto = true;
+            
+        } else if (segundoPunto) {
+            
+            var result = vec3.create();
+            var ray = camera.getRay( e.canvasx, e.canvasy );
+            var node = scene.testRay( ray, result, undefined, 0x1, true );
+            
+            // Si ha habido colision, se crea un punto y se abre una ventana de texto para escribir la anotacion
+            if (node) {
+                var ball = new RD.SceneNode();
+                ball.color = [0,1,0,1];
+                ball.mesh = "sphere";
+                ball.shader = "phong";
+                ball.layers = 0x4;
+                ball.flags.ignore_collisions = true;
+                scene.root.addChild(ball);                
+                ball.position = result;
+                secondPoint = result;
+                
+                var newPoint = vec3.create();
+                newPoint[0] = Math.abs(firstPoint[0] - secondPoint[0]);
+                newPoint[1] = Math.abs(firstPoint[1] - secondPoint[1]);
+                newPoint[2] = Math.abs(firstPoint[2] - secondPoint[2]);
+                
+                // Esto sera lo que correspondera a un metro en la aplicacion
+                console.log(newPoint);
+            }
+            
+            segundoPunto = false; 
+        }
+    } 
+    
+    
+}   
 
 var borrarAnotacion = function() {
     
