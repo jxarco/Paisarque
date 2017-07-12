@@ -57,6 +57,17 @@ function getQueryVariable(variable)
     return(false);
 }
 
+function showCompletePath(current_user){
+    
+    $.ajax( {
+        url: 'show_cp_path.php',
+        type: 'POST',
+        success: function() {
+            document.location.href = 'inicio.php?user=' + current_user;
+        }
+    } );
+}
+
 
 function loadContent(url, project, ){
     console.log("loading content " + url);
@@ -305,9 +316,9 @@ function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id) 
     {
         var current = scene.root.children[i];
         if(current.id == anot_id){
-            console.log(current);
+            //console.log(current);
             current.active = true;
-            console.log(current);
+            //console.log(current);
         }
         else{
             current.active = false;

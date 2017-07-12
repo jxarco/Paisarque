@@ -25,6 +25,15 @@
     display:none;
 }
 
+#logout{
+    transition: 0.5s;
+    font-size: 15px;
+}
+
+#logout:hover{
+    font-size: 20px;
+}
+
 .addExtraData{
     margin-left: 21%;
     width: 50%;
@@ -58,3 +67,4 @@
 {
     outline: none !important;
 }
+

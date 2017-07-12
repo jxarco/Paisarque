@@ -4,8 +4,6 @@
     // Abrir sesión
     session_start(); 
 
-    //$_SESSION['complete-path'] = !$_SESSION['complete-path'];
-
     if(isset($_SESSION['current']))
     {
         
@@ -52,7 +50,8 @@
                           <span class="icon-bar"></span>
                           <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand mega-title" href="index.html">PaisArque</a>
+<!--                        <a class="navbar-brand" href="index.html">PaisArque</a>-->
+                        <a class="navbar-brand">PaisArque</a>
                     </div>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"><ul class="nav navbar-nav">
                     </ul>
@@ -60,7 +59,7 @@
                         <li class="logged-button"><a href="#" id="textUser"></a></li>
                         <li id="logout" class="logout-button pointer"><a>
                             <span class="glyphicon glyphicon-off" aria-hidden="true">
-                            </span> Logout</a></li>
+                            </span></a></li>
                     </ul></div>
                 </div></nav>
             
@@ -215,7 +214,7 @@
                             echo '<tr a class="pointer" onclick' . '=' . '"loadContent(' . "'modelo.php','";
                             echo $user;
                             echo "')" . '"' . ">" . "<td>";
-                            if($_SESSION['complete-path'] == true)
+                            if($_SESSION['complete-path'])
                             {
                                 echo $files[$i] . "</td>" . "<td>";;
                             }
@@ -244,18 +243,18 @@
                 </tbody>
             </table> 
             
-            <button class="btn btn-sm btn-primary project-options" onclick="<?php echo "location.href = 'inicio.php?user=" . $_SESSION['current'] . "'"; ?>">
+            <button class="btn btn-sm btn-primary project-options" onclick="<?php echo "showCompletePath('" . $_SESSION['current'] . "');\""; ?>">
             
                 <?php
                     if(!$_SESSION['complete-path'])    
-                        echo "Mostrar ruta completa (En ello..)";
+                        echo "Mostrar ruta completa";
                     else 
                         echo "Mostrar menos";
                 ?>
             
             </button>
             
-            <button class="btn btn-sm btn-primary project-options" onclick="">Eliminar projecto (TO DO)</button>
+            <button class="btn btn-sm btn-primary project-options" onclick="we " + "">Eliminar projecto (TO DO)</button>
 
         </content><!--  content end-->
         
