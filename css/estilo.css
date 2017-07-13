@@ -55,6 +55,25 @@
     color: #ffeeee !important;
 }
 
+.tool-btn div{
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.3s linear;
+/*    transition-delay: 1s;*/
+    position: absolute;
+    padding: 10px;
+    background-color: darkgoldenrod;
+    color: black;
+    font-size: 20;
+    font-weight: 200;
+    margin: 30px;
+}
+
+.tool-btn:hover div {
+    visibility: visible;
+    opacity: 1;
+    text-align: center;
+}
 
 #desAnot {
     display:none;

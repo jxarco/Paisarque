@@ -376,11 +376,29 @@ function changeVizAnotInCanvas(viz)
             
             if(current.id > 0 && !viz){
                 current.flags.visible = false;
-                console.log("deleting viz to ball");
+                //console.log("deleting viz to ball");
             }
                 
             else
                 current.flags.visible = true;
+        }
+}
+
+function changeSizeAnotInCanvas(op_type)
+{
+    // lets say op_type = 1 to add
+    // and 0 to substract
+    var ADD = true;
+    var SUBS = false;
+    
+    for(var i = 0; i < scene.root.children.length; i++)
+        {
+            var current = scene.root.children[i];
+            
+            if(current.id > 0 && op_type === ADD)
+                current.scale([1.1, 1.1, 1.1]);
+            if(current.id > 0 && op_type === SUBS)
+                current.scale([0.9, 0.9, 0.9]);
         }
 }
 
@@ -401,7 +419,6 @@ var medirMetro = function () {
             var ray = camera.getRay( e.canvasx, e.canvasy );
             var node = scene.testRay( ray, result, undefined, 0x1, true );
             
-            // Si ha habido colision, se crea un punto y se abre una ventana de texto para escribir la anotacion
             if (node) {
                 var ball = new RD.SceneNode();
                 ball.color = [0,1,0,1];
@@ -442,6 +459,9 @@ var medirMetro = function () {
                 
                 // Esto sera lo que correspondera a un metro en la aplicacion
                 console.log(newPoint);
+                
+                var meter = vec3.length(newPoint);
+                console.log(meter);
             }
             
             segundoPunto = false; 

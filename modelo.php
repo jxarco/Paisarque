@@ -76,16 +76,16 @@
                         <div class="tab-pane fade active in" id="info">
                             <div id="descripcion">
                                 <label for="comment">Descripción:</label>
-                                <textarea style="width:200px;height:100px; resize: none;" class="form-control" rows="5" id="comment"></textarea>
+                                <textarea style="width:250px;height:100px; resize: none;" class="form-control" rows="5" id="comment"></textarea>
                             </div>
                             <br>
-                            <div id="map" style="width:200px;height:200px;"></div>
+                            <div id="map"></div>
                         </div>
                         <div class="tab-pane fade" id="herramientas">
-                            <a onclick="" class="btn btn-default tool-btn" id="viz_on"><i class="material-icons">visibility</i></a>
-                            <a onclick="" class="btn btn-default tool-btn" id ="add_size"><i class="material-icons">add</i></a></a>
-                            <a onclick="" class="btn btn-default tool-btn" id ="subs_size"><i class="material-icons">remove</i></a></a>
-                            <a onclick="medirMetro()" class="btn btn-default tool-btn">Configurar herramienta de medición</a>
+                            <a onclick="" class="btn btn-default tool-btn" id="viz_on"><div class="info_hover_box">Hide anotations</div><i class="material-icons">visibility</i></a>
+                            <a onclick="changeSizeAnotInCanvas(true)" class="btn btn-default tool-btn" id ="add_size"><div class="info_hover_box">Bigger anotations</div><i class="material-icons">add</i></a></a>
+                            <a onclick="changeSizeAnotInCanvas(false)" class="btn btn-default tool-btn" id ="subs_size"><div class="info_hover_box">Smaller anotations</div><i class="material-icons">remove</i></a></a>
+                            <a onclick="medirMetro()" class="btn btn-default tool-btn"><div class="info_hover_box">Configure distance</div><i class="material-icons">settings</i></a>
                         </div>
                         <div class="tab-pane fade" id="anotaciones">
                             <div class="modal fade" id="modalText" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
