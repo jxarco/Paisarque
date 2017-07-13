@@ -18,7 +18,8 @@ var current_project = getQueryVariable("r") || default_project;
 // - Texto
 // - Propiedades de la camara en ese momento
 var anotaciones = [];
-
+// Ver anotaciones en la mesh:
+var viz_anotations  = true;
 
 function parseJSON(json) {
     var renderData = json.render;
@@ -352,6 +353,36 @@ $('#message-text').keyup(function(e) {
         $("#saveTextButton").click();
 });
 
+/* ************************************************* */
+
+// Tab for tools
+
+$("#viz_on").click(function(){
+    
+    viz_anotations = !viz_anotations;
+    changeVizAnotInCanvas(viz_anotations);
+    
+    var extra = viz_anotations === false ? "_off" : "";
+    $(this).html( "<i class='material-icons'>visibility" + extra + "</i>" );
+    
+    //console.log( $(this).html() ); 
+});
+
+function changeVizAnotInCanvas(viz)
+{
+    for(var i = 0; i < scene.root.children.length; i++)
+        {
+            var current = scene.root.children[i];
+            
+            if(current.id > 0 && !viz){
+                current.flags.visible = false;
+                console.log("deleting viz to ball");
+            }
+                
+            else
+                current.flags.visible = true;
+        }
+}
 
 var medirMetro = function () {
     
@@ -419,6 +450,8 @@ var medirMetro = function () {
     
     
 }   
+
+/* ************************************************* */
 
 var borrarAnotacion = function() {
     

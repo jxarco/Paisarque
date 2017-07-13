@@ -1,7 +1,12 @@
 <?php 
                     
+    $DEBUG = true;
+
     // Recuperar sesión
     session_start(); 
+    
+    if(!$DEBUG)
+        return;
     
     if(!isset($_SESSION['current']))
         echo "sesion perdida";

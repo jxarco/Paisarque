@@ -21,6 +21,7 @@
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="css/custom.min.css" rel="stylesheet">
     <link href="css/estilo.css" rel="stylesheet">
     <link href="css/verticalText.css" rel="stylesheet">
@@ -81,7 +82,10 @@
                             <div id="map" style="width:200px;height:200px;"></div>
                         </div>
                         <div class="tab-pane fade" id="herramientas">
-                            <a onclick="medirMetro()" class="btn btn-default" id="actAnot">Configurar herramienta de medición</a>
+                            <a onclick="" class="btn btn-default tool-btn" id="viz_on"><i class="material-icons">visibility</i></a>
+                            <a onclick="" class="btn btn-default tool-btn" id ="add_size"><i class="material-icons">add</i></a></a>
+                            <a onclick="" class="btn btn-default tool-btn" id ="subs_size"><i class="material-icons">remove</i></a></a>
+                            <a onclick="medirMetro()" class="btn btn-default tool-btn">Configurar herramienta de medición</a>
                         </div>
                         <div class="tab-pane fade" id="anotaciones">
                             <div class="modal fade" id="modalText" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

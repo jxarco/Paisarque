@@ -1,22 +1,26 @@
 <?php 
-    
+
+    $DEBUG = true;
 
     // Abrir sesión
     session_start(); 
 
     if(isset($_SESSION['current']))
     {
-        
-        echo "DEBUG : sesion activa (" . $_SESSION['current'] . ")" . '</br>';
-        echo "DEBUG : show-complete-path (" . $_SESSION['complete-path'] . ")";
+        if($DEBUG)
+        {
+            echo "DEBUG : sesion activa (" . $_SESSION['current'] . ")" . '</br>';
+            echo "DEBUG : show-complete-path (" . $_SESSION['complete-path'] . ")";    
+        }
     }
         
     else
     {
-        echo "DEBUG : sesion cerrada";
+        if($DEBUG)
+            echo "DEBUG : sesion cerrada, abriendo...";
+
         $_SESSION['current'] = $_GET['user'];
         $_SESSION['complete-path'] = false;
-        echo "DEBUG : abriendo sesion...";
     }    
 
 ?>
@@ -182,7 +186,7 @@
             <br>
             <br>
             
-            
+            <div id="table-projects">
             
             <!-- Listamos los ficheros que hay en el servidor/carpeta y sus propiedades -->
             <table class="table table-striped table-hover ">
@@ -242,6 +246,8 @@
                     ?>
                 </tbody>
             </table> 
+                
+            </div>
             
             <button class="btn btn-sm btn-primary project-options" onclick="<?php echo "showCompletePath('" . $_SESSION['current'] . "');\""; ?>">
             
@@ -254,7 +260,7 @@
             
             </button>
             
-            <button class="btn btn-sm btn-primary project-options" onclick="we " + "">Eliminar projecto (TO DO)</button>
+            <button id="delete-project" class="btn btn-sm btn-primary project-options" onclick="">Eliminar projecto (TO DO)</button>
 
         </content><!--  content end-->
         
