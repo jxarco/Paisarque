@@ -460,6 +460,9 @@ var medirMetro = function () {
                 // Esto sera lo que correspondera a un metro en la aplicacion
                 console.log(newPoint);
                 
+                
+                
+                // tengo que acabar la parte de las mediciones pero aun no tengo del todo claro, si quereis lo hablamos por correo para ver que pensais?
                 var meter = vec3.length(newPoint);
                 console.log(meter);
             }
