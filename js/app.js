@@ -331,6 +331,9 @@ $("#saveTextButton").click(function (e) {
     // se coge el texto correspondiente
     var text = document.getElementById("message-text").value;
     var numeroA = anotaciones.length + 1;
+    
+    // vaciar texto
+    document.getElementById("message-text").value = "";
 
     // se crea una anotacion con todos los parametros
     var anotacion = {numero:numeroA, position_camera: [camera.position[0], camera.position[1], camera.position[2]], target_camera: [camera.target[0], camera.target[1], camera.target[2]], up_camera: [camera.up[0], camera.up[1], camera.up[2]], texto:text, posicion:result};
@@ -363,7 +366,8 @@ $("#viz_on").click(function(){
     changeVizAnotInCanvas(viz_anotations);
     
     var extra = viz_anotations === false ? "_off" : "";
-    $(this).html( "<i class='material-icons'>visibility" + extra + "</i>" );
+    var tooltip = viz_anotations === false ? "Show anotations" : "Hide anotations";
+    $(this).html( "<div class='info_hover_box'>" + tooltip + "</div><i class='material-icons'>visibility" + extra + "</i>" );
     
     //console.log( $(this).html() ); 
 });
