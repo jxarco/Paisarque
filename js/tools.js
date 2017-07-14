@@ -8,6 +8,8 @@ var pdfLinkCounter = 0;
 var imagenLinkCounter = 0;
 var textLinkCounter = 0;
 
+var proj_to_delete = "test";
+var delete_project_active = false;
 
 $.ajax({dataType: "json",
         url: "data/"+current_project+'_anotacion.json',
@@ -46,6 +48,49 @@ $("#logout").click(function()
     
 });
 
+function enable_project_delete()
+{
+    if(!delete_project_active)
+    {
+        delete_project_active = true;
+        alert("Select project to delete in the table");
+    }
+}
+
+function deleteProject(user, project)
+{
+    if(!project.length)
+        return;
+    
+    var r = confirm("Are you sure you want to delete this project?");
+    if(!r)
+    {
+        delete_project_active = false;  
+        return;
+    }
+        
+    
+    var project_to_delete = [
+        "data/" + user + "/" + project + ".json",
+        "data/" + user + "/" + project + "_anotacion.json",
+        "data/" + user + "/" + project,
+    ]
+    
+    $.ajax({
+      url: 'deleteFile.php',
+      data: {'file' : project_to_delete[0],
+            'a_file': project_to_delete[1],
+            'folder': project_to_delete[2],
+            },
+      success: function (response) {
+//        console.log(response);
+//        alert("project has been deleted");
+          document.location.href = 'inicio.php?user=' + user;
+          delete_project_active = false;
+      }
+    });
+};
+
 function getQueryVariable(variable)
 { 
     var query = window.location.search.substring(1);
@@ -69,9 +114,18 @@ function showCompletePath(current_user){
 }
 
 
-function loadContent(url, project, ){
-    console.log("loading content " + url);
-    document.location.href = url+"?r="+(project || current_project).toString();
+function loadContent(url, project){
+    
+    if(!delete_project_active)
+    {
+        console.log("loading content " + url);
+        document.location.href = url+"?r="+(project || current_project).toString();    
+    }
+    else
+    {
+        var array = project.split('/');
+        deleteProject(array[0], array[1]);
+    }
 }
 
 $('#videoLink').click(function () {
@@ -131,7 +185,7 @@ $("#formUploadProject").on('submit', function(e) {
     
     var formData = new FormData(this);
     
-    var user = "guest"
+    var user = "guest";
     var query = window.location.search.substring(1);
     var vars = query.split("?");
     
@@ -315,7 +369,7 @@ function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id) 
     for(var i = 0; i < scene.root.children.length; i++)
     {
         var current = scene.root.children[i];
-        if(current.id == anot_id){
+        if(current.id === anot_id){
             //console.log(current);
             current.active = true;
             //console.log(current);
@@ -324,4 +378,8 @@ function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id) 
             current.active = false;
         }   
     }
+    
+     var string = '<div class="info_hover_box"> Hola </div>';
+        
+     $('#myCanvas').append(string);
 }

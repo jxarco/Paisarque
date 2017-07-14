@@ -283,9 +283,6 @@ var anotar = function(modoAnotacion) {
 
                 // se abre la ventana de texto para escribir
                 $('#modalText').modal('show');
-                
-                // texto de anotaciones
-                $('#message-text').value = "";
                 //$('#message-text').focus();
             }
         }
@@ -463,7 +460,6 @@ var medirMetro = function () {
                 
                 // Esto sera lo que correspondera a un metro en la aplicacion
                 console.log(newPoint);
-                
                 
                 
                 // tengo que acabar la parte de las mediciones pero aun no tengo del todo claro, si quereis lo hablamos por correo para ver que pensais?

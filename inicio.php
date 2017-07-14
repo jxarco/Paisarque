@@ -215,7 +215,7 @@
                             $user = substr(substr($files[$i], 5),0, -5);
                             $array = split('/', $user);
                             
-                            echo '<tr a class="pointer" onclick' . '=' . '"loadContent(' . "'modelo.php','";
+                            echo '<tr a class="pointer" id="' . $array[1] . '" onclick' . '=' . '"loadContent(' . "'modelo.php','";
                             echo $user;
                             echo "')" . '"' . ">" . "<td>";
                             if($_SESSION['complete-path'])
@@ -260,7 +260,7 @@
             
             </button>
             
-            <button id="delete-project" class="btn btn-sm btn-primary project-options" onclick="">Eliminar projecto (TO DO)</button>
+            <button id="delete-project" class="btn btn-sm btn-primary project-options" onclick="enable_project_delete();">Eliminar projecto (en ello)</button>
 
         </content><!--  content end-->
         

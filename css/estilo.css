@@ -48,11 +48,11 @@
 }
 
 .tool-btn:active{
-    color: #ffeeee !important;
+    color: #bbccff !important;
 }
 
 .tool-btn:hover{
-    color: #ffeeee !important;
+    color: #bbccff !important;
 }
 
 .tool-btn div{
@@ -62,9 +62,9 @@
 /*    transition-delay: 1s;*/
     position: absolute;
     padding: 10px;
-    background-color: darkgoldenrod;
-    color: black;
-    font-size: 20;
+    background-color: rgba(70, 70, 70, 0.75);
+    color: #fff;
+    font-size: 17;
     font-weight: 200;
     margin: 30px;
 }
