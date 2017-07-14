@@ -10,7 +10,7 @@
         if($DEBUG)
         {
             echo "DEBUG : sesion activa (" . $_SESSION['current'] . ")" . '</br>';
-            echo "DEBUG : show-complete-path (" . $_SESSION['complete-path'] . ")";    
+//            echo "DEBUG : show-complete-path (" . $_SESSION['complete-path'] . ")";    
         }
     }
         
@@ -260,7 +260,7 @@
             
             </button>
             
-            <button id="delete-project" class="btn btn-sm btn-primary project-options" onclick="enable_project_delete();">Eliminar projecto (en ello)</button>
+            <button id="delete-project" class="btn btn-sm btn-primary project-options" onclick="enable_project_delete();">Eliminar proyecto</button>
 
         </content><!--  content end-->
         

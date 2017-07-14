@@ -53,7 +53,7 @@ function enable_project_delete()
     if(!delete_project_active)
     {
         delete_project_active = true;
-        alert("Select project to delete in the table");
+        alert("Select the project which has to be deleted");
     }
 }
 
@@ -378,8 +378,4 @@ function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id) 
             current.active = false;
         }   
     }
-    
-     var string = '<div class="info_hover_box"> Hola </div>';
-        
-     $('#myCanvas').append(string);
 }
