@@ -213,9 +213,11 @@
                         for ($i = 0; $i < $filecount; $i = $i+2) {
                             
                             $user = substr(substr($files[$i], 5),0, -5);
-                            $array = split('/', $user);
+//                            $array = split('/', $user);
+                            $username = $_GET['user'];
+                            $project = substr($user, strlen($username) + 1, strlen($user));
                             
-                            echo '<tr a class="pointer" id="' . $array[1] . '" onclick' . '=' . '"loadContent(' . "'modelo.php','";
+                            echo '<tr a class="pointer" id="' . $project . '" onclick' . '=' . '"loadContent(' . "'modelo.php','";
                             echo $user;
                             echo "')" . '"' . ">" . "<td>";
                             if($_SESSION['complete-path'])
@@ -223,7 +225,7 @@
                                 echo $files[$i] . "</td>" . "<td>";;
                             }
                             else
-                                echo str_replace('_', ' ', ucfirst($array[1]))  . "</td>" . "<td>";
+                                echo str_replace('_', ' ', ucfirst($project))  . "</td>" . "<td>";
                             
                             $string = file_get_contents($files[$i]);
                             $json_a = json_decode($string, true);

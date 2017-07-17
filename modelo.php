@@ -86,6 +86,7 @@
                             <a onclick="changeSizeAnotInCanvas(true)" class="btn btn-default tool-btn" id ="add_size"><div class="info_hover_box">Bigger anotations</div><i class="material-icons">add</i></a>
                             <a onclick="changeSizeAnotInCanvas(false)" class="btn btn-default tool-btn" id ="subs_size"><div class="info_hover_box">Smaller anotations</div><i class="material-icons">remove</i></a>
                             <a onclick="medirMetro()" class="btn btn-default tool-btn"><div class="info_hover_box">Configure distance</div><i class="material-icons">settings</i></a>
+                            <a onclick="medirDistancia()" class="btn btn-default tool-btn"><div class="info_hover_box">Measure distance</div><i class="material-icons">space_bar</i></a>
                         </div>
                         <div class="tab-pane fade" id="anotaciones">
                             <div class="modal fade" id="modalText" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

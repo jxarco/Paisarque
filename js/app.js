@@ -6,6 +6,7 @@ var camera      = null;
 var result      = vec3.create();
 var firstPoint  = vec3.create();
 var secondPoint = vec3.create();
+var meter       = null;
 
 var _dt = 0.0;
 
@@ -408,8 +409,10 @@ var medirMetro = function () {
     console.log("midiendo cuanto es un metro");
     alert("Selecciona dos puntos, la linea recta que los une corresponderá a un metro");
     
-    var primerPunto = true;
-    var segundoPunto = false;
+    var primerPunto     = true;
+    var segundoPunto    = false;
+    var ball_first      = null;
+    var ball_sec        = null;
     
     context.onmousedown = function(e) 
     {
@@ -421,14 +424,14 @@ var medirMetro = function () {
             var node = scene.testRay( ray, result, undefined, 0x1, true );
             
             if (node) {
-                var ball = new RD.SceneNode();
-                ball.color = [0,1,0,1];
-                ball.mesh = "sphere";
-                ball.shader = "phong";
-                ball.layers = 0x4;
-                ball.flags.ignore_collisions = true;
-                scene.root.addChild(ball);                
-                ball.position = result;
+                ball_first = new RD.SceneNode();
+                ball_first.color = [0,1,0,1];
+                ball_first.mesh = "sphere";
+                ball_first.shader = "phong";
+                ball_first.layers = 0x4;
+                ball_first.flags.ignore_collisions = true;
+                scene.root.addChild(ball_first);                
+                ball_first.position = result;
                 firstPoint = result;
             }
             
@@ -443,14 +446,14 @@ var medirMetro = function () {
             
             // Si ha habido colision, se crea un punto y se abre una ventana de texto para escribir la anotacion
             if (node) {
-                var ball = new RD.SceneNode();
-                ball.color = [0,1,0,1];
-                ball.mesh = "sphere";
-                ball.shader = "phong";
-                ball.layers = 0x4;
-                ball.flags.ignore_collisions = true;
-                scene.root.addChild(ball);                
-                ball.position = result;
+                ball_sec = new RD.SceneNode();
+                ball_sec.color = [0,1,0,1];
+                ball_sec.mesh = "sphere";
+                ball_sec.shader = "phong";
+                ball_sec.layers = 0x4;
+                ball_sec.flags.ignore_collisions = true;
+                scene.root.addChild(ball_sec);                
+                ball_sec.position = result;
                 secondPoint = result;
                 
                 var newPoint = vec3.create();
@@ -461,17 +464,100 @@ var medirMetro = function () {
                 // Esto sera lo que correspondera a un metro en la aplicacion
                 console.log(newPoint);
                 
-                
                 // tengo que acabar la parte de las mediciones pero aun no tengo del todo claro, si quereis lo hablamos por correo para ver que pensais?
-                var meter = vec3.length(newPoint);
+                meter = vec3.length(newPoint);
                 console.log(meter);
             }
             
-            segundoPunto = false; 
+            segundoPunto = false;
+            
+            setTimeout(function(){
+                ball_first.destroy();
+                ball_sec.destroy();
+            }, 3000);
         }
     } 
     
     
+}   
+
+var medirDistancia = function () {
+    
+    
+    if(meter === null)
+    {
+        alert("Configura primero la distancia relativa a un metro");
+        return;
+    }
+    
+    console.log("midiendo distancia");
+    alert("Selecciona dos puntos:");
+    
+    var primerPunto     = true;
+    var segundoPunto    = false;
+    var ball_first      = null;
+    var ball_sec        = null;
+    
+    context.onmousedown = function(e) 
+    {
+        
+        if (primerPunto) {
+        
+            var result = vec3.create();
+            var ray = camera.getRay( e.canvasx, e.canvasy );
+            var node = scene.testRay( ray, result, undefined, 0x1, true );
+            
+            if (node) {
+                ball_first = new RD.SceneNode();
+                ball_first.color = [0,0,1,1];
+                ball_first.mesh = "sphere";
+                ball_first.shader = "phong";
+                ball_first.layers = 0x4;
+                ball_first.flags.ignore_collisions = true;
+                scene.root.addChild(ball_first);                
+                ball_first.position = result;
+                firstPoint = result;
+            }
+            
+            primerPunto = false;
+            segundoPunto = true;
+            
+        } else if (segundoPunto) {
+            
+            var result = vec3.create();
+            var ray = camera.getRay( e.canvasx, e.canvasy );
+            var node = scene.testRay( ray, result, undefined, 0x1, true );
+            
+            // Si ha habido colision, se crea un punto y se abre una ventana de texto para escribir la anotacion
+            if (node) {
+                ball_sec = new RD.SceneNode();
+                ball_sec.color = [0,0,1,1];
+                ball_sec.mesh = "sphere";
+                ball_sec.shader = "phong";
+                ball_sec.layers = 0x4;
+                ball_sec.flags.ignore_collisions = true;
+                scene.root.addChild(ball_sec);                
+                ball_sec.position = result;
+                secondPoint = result;
+                
+                var newPoint = vec3.create();
+                newPoint[0] = Math.abs(firstPoint[0] - secondPoint[0]);
+                newPoint[1] = Math.abs(firstPoint[1] - secondPoint[1]);
+                newPoint[2] = Math.abs(firstPoint[2] - secondPoint[2]);
+                
+                var distance = vec3.length(newPoint);
+                var distance_in_meters = distance / meter;
+                console.log(distance_in_meters);
+            }
+            
+            segundoPunto = false;
+            
+            setTimeout(function(){
+                ball_first.destroy();
+                ball_sec.destroy();
+            }, 3000);
+        }
+    } 
 }   
 
 /* ************************************************* */
