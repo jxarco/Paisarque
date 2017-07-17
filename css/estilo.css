@@ -25,6 +25,9 @@
     visibility: hidden;
 }
 
+#tools-btns{
+/*    position: absolute;*/
+}
 
 #anotaciones{
     overflow: scroll !important;
@@ -32,9 +35,8 @@
 }
 
 #herramientas{
-     width: 240px;
-/*    background: gray;*/
-    overflow-y: auto;
+    overflow: scroll !important;
+    height: calc(100vh - 330px);
 }
 
 .tool-btn{
@@ -72,6 +74,19 @@
 .tool-btn:hover div {
     visibility: visible;
     opacity: 1;
+    text-align: center;
+}
+
+#distances-table{
+    font-size: 13px;
+    display: none;
+}
+
+#distances-table th{
+    text-align: center;
+}
+
+#distances-table td{
     text-align: center;
 }
 

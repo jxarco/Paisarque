@@ -68,12 +68,12 @@
                 
                 <div class="col-sm-3" id="tools">
                     <ul  class="nav nav-tabs">
-                        <li class="active"><a href="#info" data-toggle="tab" aria-expanded="true">Info</a></li>
-                        <li> <a href="#herramientas" data-toggle="tab" aria-expanded="true">Tools</a> </li>
+                        <li><a href="#info" data-toggle="tab" aria-expanded="true">Info</a></li>
+                        <li class="active"> <a href="#herramientas" data-toggle="tab" aria-expanded="true">Tools</a> </li>
                         <li> <a href="#anotaciones" data-toggle="tab" aria-expanded="true">Anotaciones</a> </li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane fade active in" id="info">
+                        <div class="tab-pane fade" id="info">
                             <div id="descripcion">
                                 <label for="comment">Descripción:</label>
                                 <textarea style="width:250px;height:100px; resize: none;" class="form-control" rows="5" id="comment"></textarea>
@@ -81,12 +81,34 @@
                             <br>
                             <div id="map"></div>
                         </div>
-                        <div class="tab-pane fade" id="herramientas">
-                            <a onclick="" class="btn btn-default tool-btn" id="viz_on"><div class="info_hover_box">Hide anotations</div><i class="material-icons">visibility</i></a>
+                        <div class="tab-pane fade active in" id="herramientas">
+                            
+                            <div id="tools-btns">
+                            <a class="btn btn-default tool-btn" id="viz_on"><div class="info_hover_box">Hide anotations</div><i class="material-icons">visibility</i></a>
                             <a onclick="changeSizeAnotInCanvas(true)" class="btn btn-default tool-btn" id ="add_size"><div class="info_hover_box">Bigger anotations</div><i class="material-icons">add</i></a>
                             <a onclick="changeSizeAnotInCanvas(false)" class="btn btn-default tool-btn" id ="subs_size"><div class="info_hover_box">Smaller anotations</div><i class="material-icons">remove</i></a>
                             <a onclick="medirMetro()" class="btn btn-default tool-btn"><div class="info_hover_box">Configure distance</div><i class="material-icons">settings</i></a>
                             <a onclick="medirDistancia()" class="btn btn-default tool-btn"><div class="info_hover_box">Measure distance</div><i class="material-icons">space_bar</i></a>
+                            <a id="show_dt" class="btn btn-default tool-btn"><div class="info_hover_box">Show measured distances</div><i class="material-icons">view_agenda</i></a>
+                            
+                            <!-- DEBUG 
+                            <a onclick="meterByDefault()" class="btn btn-default tool-btn"><div class="info_hover_box">Meter = 100</div><i class="material-icons">home</i></a>
+                            </div> 
+                            
+                            -->
+
+                            <table class="table table-striped table-hover" id="distances-table">
+                                 <thead>
+                                    <tr>
+                                        <th>p1</th>
+                                        <th>p2</th>
+                                        <th>Distancia</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            
                         </div>
                         <div class="tab-pane fade" id="anotaciones">
                             <div class="modal fade" id="modalText" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

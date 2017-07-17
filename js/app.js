@@ -22,6 +22,9 @@ var anotaciones = [];
 // Ver anotaciones en la mesh:
 var viz_anotations  = true;
 
+// show distances table
+var showing_dt = false;
+
 function parseJSON(json) {
     var renderData = json.render;
     if(!renderData.mesh) {
@@ -433,10 +436,10 @@ var medirMetro = function () {
                 scene.root.addChild(ball_first);                
                 ball_first.position = result;
                 firstPoint = result;
+                
+                primerPunto = false;
+                segundoPunto = true;
             }
-            
-            primerPunto = false;
-            segundoPunto = true;
             
         } else if (segundoPunto) {
             
@@ -462,28 +465,26 @@ var medirMetro = function () {
                 newPoint[2] = Math.abs(firstPoint[2] - secondPoint[2]);
                 
                 // Esto sera lo que correspondera a un metro en la aplicacion
-                console.log(newPoint);
+//                console.log(newPoint);
                 
                 // tengo que acabar la parte de las mediciones pero aun no tengo del todo claro, si quereis lo hablamos por correo para ver que pensais?
                 meter = vec3.length(newPoint);
                 console.log(meter);
+                
+                segundoPunto = false;
+            
+                setTimeout(function(){
+                    ball_first.destroy();
+                    ball_sec.destroy();
+                }, 3000);
             }
-            
-            segundoPunto = false;
-            
-            setTimeout(function(){
-                ball_first.destroy();
-                ball_sec.destroy();
-            }, 3000);
         }
     } 
     
-    
 }   
 
-var medirDistancia = function () {
-    
-    
+var medirDistancia = function ()
+{
     if(meter === null)
     {
         alert("Configura primero la distancia relativa a un metro");
@@ -547,18 +548,65 @@ var medirDistancia = function () {
                 
                 var distance = vec3.length(newPoint);
                 var distance_in_meters = distance / meter;
-                console.log(distance_in_meters);
-            }
-            
-            segundoPunto = false;
-            
-            setTimeout(function(){
+//                console.log(distance_in_meters);
+                
+                segundoPunto = false;
+                
                 ball_first.destroy();
                 ball_sec.destroy();
-            }, 3000);
+                
+                pushMedicion(distance_in_meters);
+            }
+            
+            
         }
     } 
 }   
+
+function meterByDefault(){
+    meter = 100;
+    pushMedicion(100);
+}
+
+function revealDistancesTable()
+{
+    var table = $('#distances-table');
+    
+    if(showing_dt)
+        table.fadeIn();
+    else
+        table.fadeOut();
+}
+
+$("#show_dt").click(function(){
+    
+    console.log("showing/hiding distances table");
+    showing_dt = !showing_dt;
+    
+    revealDistancesTable();
+});
+
+function pushMedicion(distance)
+{
+    if(!distance)
+        return;
+    
+    var table = $('#distances-table');
+    var bodyTable = table.find('tbody');
+    
+    var row = "<tr a class='pointer'>" + 
+    "<td> x: " + Math.round(firstPoint[0] * 1000) / 1000 + "</br>y: " + Math.round(firstPoint[1] * 1000) / 1000 + "</br>z: " + Math.round(firstPoint[2] * 1000) / 1000 + "</td>" + 
+    "<td> x: " + Math.round(secondPoint[0] * 1000) / 1000 + "</br>y: " + Math.round(secondPoint[1] * 1000) / 1000 + "</br>z: " + Math.round(secondPoint[2] * 1000) / 1000 + "</td>" + 
+    "<td>" + Math.round(distance * 1000) / 1000 + "</td>" + 
+    "</tr>";
+    
+    bodyTable.append(row);
+    
+    console.log("showing/hiding distances table");
+    showing_dt = true;
+    
+    revealDistancesTable();
+}
 
 /* ************************************************* */
 
