@@ -19,6 +19,7 @@ var current_project = getQueryVariable("r") || default_project;
 // - Texto
 // - Propiedades de la camara en ese momento
 var anotaciones = [];
+var scaling_factor = 1;
 // Ver anotaciones en la mesh:
 var viz_anotations  = true;
 
@@ -110,7 +111,7 @@ function parseJSONANOT(json){
     }
     
     if(!anotaciones.length)
-        alert("project has 0 anotations");
+        alert("json has 0 anotations");
 }
 
 function init(current_project, meshURL, textureURL, rotaciones)
@@ -181,7 +182,8 @@ function init(current_project, meshURL, textureURL, rotaciones)
         var ball = new RD.SceneNode();
         ball.id = i + 1;
         ball.color = [1,0,0,1];
-        ball.scale([1, 1, 1]);
+        ball.size = scaling_factor;
+        ball.scaling = ball.size;
         ball.mesh = "sphere";
         ball.shader = "phong";
         //var cam_normalized = vec3.create();
@@ -315,7 +317,8 @@ $("#saveTextButton").click(function (e) {
 
     ball.color = [1,0,0,1];
     ball.id = numeroA;
-    ball.scale([1, 1, 1]);
+    ball.size = scaling_factor;
+    ball.scaling = ball.size;
     ball.shader = "phong";
     ball.mesh = "sphere";
     ball.layers = 0x4;
@@ -403,16 +406,28 @@ function changeSizeAnotInCanvas(op_type)
     // and 0 to substract
     var ADD = true;
     var SUBS = false;
+    var last_node = null;
     
     for(var i = 0; i < scene.root.children.length; i++)
-        {
-            var current = scene.root.children[i];
-            
-            if(current.id > 0 && op_type === ADD)
-                current.scale([1.1, 1.1, 1.1]);
-            if(current.id > 0 && op_type === SUBS)
-                current.scale([0.9, 0.9, 0.9]);
-        }
+    {
+        var current = scene.root.children[i];
+
+        if(current.id > 0 && op_type === ADD)
+            {
+                current.size = scaling_factor * 1.1;
+                current.scaling = current.size;
+            }
+                
+        else if(current.id > 0 && op_type === SUBS)
+            {
+                current.size = scaling_factor * 0.9;
+                current.scaling = current.size;
+            }
+        
+        last_node = current;
+    }
+    
+    scaling_factor = last_node.size;
 }
 
 var medirMetro = function () {
