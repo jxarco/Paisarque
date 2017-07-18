@@ -107,7 +107,10 @@ function parseJSONANOT(json){
     
     for (var i = 0; i < json.length; i++) {
         anotaciones.push(json[i]);
-    }           
+    }
+    
+    if(!anotaciones.length)
+        alert("project has 0 anotations");
 }
 
 function init(current_project, meshURL, textureURL, rotaciones)
@@ -169,6 +172,10 @@ function init(current_project, meshURL, textureURL, rotaciones)
     pivot.addChild( obj );
         
     // se listan las anotaciones que hay en el fichero correspondiente que es el nombre del proyecto _anotaciones y se dibujan con un circulo rojo en la mesh
+    
+    if(!anotaciones.length)
+        alert("no anotations");
+    
     for (var i = 0; i < anotaciones.length; i++) {
         
         var ball = new RD.SceneNode();

@@ -1,6 +1,5 @@
 /*
-*
-*
+* Return query variable from the url
 */
 
 function getQueryVariable(variable)
@@ -35,4 +34,53 @@ function addScript( url, callback ) {
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+/*
+* Loads the anotation data from the current project
+* Once has succeded loads the rest of the data
+* AJAX
+*/
+
+function loadANOTfromJSON()
+{
+    $.ajax({dataType: "json",
+    url: "data/"+current_project+'_anotacion.json',
+    error:function(error){console.log(error)},
+    success: function(data){
+        if(window.parseJSONANOT) {
+            parseJSONANOT(data);
+            loadDATAfromJSON();
+        }
+    }
+   });
+
+}
+
+/*
+* Loads the important data from the current project
+* and executes init function located at parseJSON.
+* AJAX
+*/
+
+function loadDATAfromJSON()
+{
+    $.ajax({dataType: "json",
+        url: "data/"+current_project+'.json',
+        error:function(error){console.log(error)},
+        success:function(data){
+            $('#project').html(data.id + "<span class='caret'></span>");
+            if(window.parseJSON) {
+                parseJSON(data);
+                //console.log(data);  
+                latitud = data["coordenadas"]["lat"];
+                longitud = data["coordenadas"]["lng"];
+                lugar = data["lugar"];
+
+//                console.log("latitud y longitud configuradas");  
+                // LOAD ALWAYS AFTER GETTING DATA
+                loadMapsAPI();
+            }
+        }
+    });
 }

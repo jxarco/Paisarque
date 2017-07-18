@@ -13,48 +13,11 @@ var delete_project_active = false;
 
 // GET DATA FROM JSONS
 
-$.ajax({dataType: "json",
-    url: "data/"+current_project+'_anotacion.json',
-    error:function(error){console.log(error)},
-    success: function(data){
-        if(window.parseJSONANOT) {
-            parseJSONANOT(data);
-        }
-    }
-});
-
-$.ajax({dataType: "json",
-        url: "data/"+current_project+'.json',
-        error:function(error){console.log(error)},
-        success:function(data){
-            $('#project').html(data.id + "<span class='caret'></span>");
-            if(window.parseJSON) {
-                parseJSON(data);
-                //console.log(data);  
-                latitud = data["coordenadas"]["lat"];
-                longitud = data["coordenadas"]["lng"];
-                lugar = data["lugar"];
-
-//                console.log("latitud y longitud configuradas");  
-                // LOAD ALWAYS AFTER GETTING DATA
-                loadMapsAPI();
-            }
-        }
-});
+// this function calls the other
+// so we are getting all necessary data
+loadANOTfromJSON();
     
 // FINISH GETTING DATA FROM JSONS
-
-$("#logout").click(function()
-{   
-     $.ajax( {
-        url: 'logout.php',
-        type: 'POST',
-        success: function() {
-            document.location.href = 'index.html';
-        }
-    } );
-    
-});
 
 function enable_project_delete()
 {
@@ -99,7 +62,8 @@ function deleteProject(user, project)
     });
 };
 
-function showCompletePath(current_user){
+function showCompletePath(current_user)
+{
     
     $.ajax( {
         url: 'show_cp_path.php',
@@ -110,9 +74,8 @@ function showCompletePath(current_user){
     } );
 }
 
-
-function loadContent(url, project){
-    
+function loadContent(url, project)
+{
     if(!delete_project_active)
     {
         console.log("loading content " + url);
@@ -125,21 +88,13 @@ function loadContent(url, project){
     }
 }
 
-$('#videoLink').click(function () {
-    var src = 'https://www.youtube.com/embed/VI04yNch1hU;autoplay=1';
-    // $('#introVideo').modal('show'); <-- remove this line
-    $('#introVideo iframe').attr('src', src);
-});
-
-$('#introVideo button.close').on('hidden.bs.modal', function () {
-    $('#introVideo iframe').removeAttr('src');
-})
-
-function loadMapsAPI() {
+function loadMapsAPI()
+{
     addScript( 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDrcNsufDO4FEmzoCO9X63ru59CUvCe2YI&callback=initMap' );
 }
 
-function initMap() {
+function initMap() 
+{
     
     // https://developers.google.com/maps/documentation/javascript/examples/infowindow-simple
                 
@@ -161,11 +116,52 @@ function initMap() {
     });    
 }
 
+function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id)
+{
+    
+    camera.position = position_camera;
+    camera.target = target_camera;
+    camera.up = up_camera;
+    
+    for(var i = 0; i < scene.root.children.length; i++)
+    {
+        var current = scene.root.children[i];
+        if(current.id === anot_id){
+            //console.log(current);
+            current.active = true;
+            //console.log(current);
+        }
+        else{
+            current.active = false;
+        }   
+    }
+}
+
+$("#logout").click(function() {   
+     $.ajax( {
+        url: 'logout.php',
+        type: 'POST',
+        success: function() {
+            document.location.href = 'index.html';
+        }
+    } );
+    
+});
 
 $('#cargarProyecto').click( function() {
     console.log("cargando proyecto");
     $('#GSCCModal').model('hide');
-})
+});
+
+$('#videoLink').click(function () {
+    var src = 'https://www.youtube.com/embed/VI04yNch1hU;autoplay=1';
+    // $('#introVideo').modal('show'); <-- remove this line
+    $('#introVideo iframe').attr('src', src);
+});
+
+$('#introVideo button.close').on('hidden.bs.modal', function () {
+    $('#introVideo iframe').removeAttr('src');
+});
 
 $("#formUploadProject").on('submit', function(e) {
     
@@ -359,23 +355,3 @@ $('#buttonTextLink').click( function() {
     $('#fieldset').append(stringTextLink);
     textLinkCounter++;
 })
-
-function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id) {
-    
-    camera.position = position_camera;
-    camera.target = target_camera;
-    camera.up = up_camera;
-    
-    for(var i = 0; i < scene.root.children.length; i++)
-    {
-        var current = scene.root.children[i];
-        if(current.id === anot_id){
-            //console.log(current);
-            current.active = true;
-            //console.log(current);
-        }
-        else{
-            current.active = false;
-        }   
-    }
-}
