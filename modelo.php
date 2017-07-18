@@ -68,12 +68,12 @@
                 
                 <div class="col-sm-3" id="tools">
                     <ul  class="nav nav-tabs">
-                        <li><a href="#info" data-toggle="tab" aria-expanded="true">Info</a></li>
-                        <li class="active"> <a href="#herramientas" data-toggle="tab" aria-expanded="true">Tools</a> </li>
+                        <li class="active"><a href="#info" data-toggle="tab" aria-expanded="true">Info</a></li>
+                        <li> <a href="#herramientas" data-toggle="tab" aria-expanded="true">Tools</a> </li>
                         <li> <a href="#anotaciones" data-toggle="tab" aria-expanded="true">Anotaciones</a> </li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane fade" id="info">
+                        <div class="tab-pane fade active in" id="info">
                             <div id="descripcion">
                                 <label for="comment">Descripción:</label>
                                 <textarea style="width:250px;height:100px; resize: none;" class="form-control" rows="5" id="comment"></textarea>
@@ -81,7 +81,7 @@
                             <br>
                             <div id="map"></div>
                         </div>
-                        <div class="tab-pane fade active in" id="herramientas">
+                        <div class="tab-pane fade" id="herramientas">
                             
                             <div id="tools-btns">
                             <a class="btn btn-default tool-btn" id="viz_on"><div class="info_hover_box">Hide anotations</div><i class="material-icons">visibility</i></a>
