@@ -90,7 +90,7 @@
                             <a onclick="medirMetro()" class="btn btn-default tool-btn"><div class="info_hover_box">Configure distance</div><i class="material-icons">settings</i></a>
                             <a onclick="medirDistancia()" class="btn btn-default tool-btn"><div class="info_hover_box">Measure distance</div><i class="material-icons">space_bar</i></a>
                             <a id="show_dt" class="btn btn-default tool-btn"><div class="info_hover_box">Show measured distances</div><i class="material-icons">view_agenda</i></a>
-                            
+                            </div> 
                             <!-- DEBUG 
                             <a onclick="meterByDefault()" class="btn btn-default tool-btn"><div class="info_hover_box">Meter = 100</div><i class="material-icons">home</i></a>
                             </div> 
