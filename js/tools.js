@@ -11,14 +11,16 @@ var textLinkCounter = 0;
 var proj_to_delete = "test";
 var delete_project_active = false;
 
+// GET DATA FROM JSONS
+
 $.ajax({dataType: "json",
-        url: "data/"+current_project+'_anotacion.json',
-        error:function(error){console.log(error)},
-        success: function(data){
-            if(window.parseJSONANOT) {
-                parseJSONANOT(data);
-            }
+    url: "data/"+current_project+'_anotacion.json',
+    error:function(error){console.log(error)},
+    success: function(data){
+        if(window.parseJSONANOT) {
+            parseJSONANOT(data);
         }
+    }
 });
 
 $.ajax({dataType: "json",
@@ -32,9 +34,15 @@ $.ajax({dataType: "json",
                 latitud = data["coordenadas"]["lat"];
                 longitud = data["coordenadas"]["lng"];
                 lugar = data["lugar"];
+
+//                console.log("latitud y longitud configuradas");  
+                // LOAD ALWAYS AFTER GETTING DATA
+                loadMapsAPI();
             }
         }
 });
+    
+// FINISH GETTING DATA FROM JSONS
 
 $("#logout").click(function()
 {   
@@ -91,17 +99,6 @@ function deleteProject(user, project)
     });
 };
 
-function getQueryVariable(variable)
-{ 
-    var query = window.location.search.substring(1);
-    var vars = query.split("&");
-    for (var i=0;i<vars.length;i++) {
-        var pair = vars[i].split("=");
-        if(pair[0] == variable){return pair[1];}
-    }
-    return(false);
-}
-
 function showCompletePath(current_user){
     
     $.ajax( {
@@ -138,11 +135,18 @@ $('#introVideo button.close').on('hidden.bs.modal', function () {
     $('#introVideo iframe').removeAttr('src');
 })
 
+function loadMapsAPI() {
+    addScript( 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDrcNsufDO4FEmzoCO9X63ru59CUvCe2YI&callback=initMap' );
+}
+
 function initMap() {
     
     // https://developers.google.com/maps/documentation/javascript/examples/infowindow-simple
                 
     var marker = {lat: latitud, lng: longitud};
+    
+//    console.log("latitud y longitud utilizadas");  
+    
     var mapCanvas = document.getElementById("map");
     var mapOptions = {
         // Hacer que la latitud y la longitud se cojan del json!! 
@@ -162,10 +166,6 @@ $('#cargarProyecto').click( function() {
     console.log("cargando proyecto");
     $('#GSCCModal').model('hide');
 })
-
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
 
 $("#formUploadProject").on('submit', function(e) {
     

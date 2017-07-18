@@ -140,6 +140,7 @@ function init(current_project, meshURL, textureURL, rotaciones)
     var obj = new RD.SceneNode();
     obj.position = [0,0,0];
     obj.color = [1,1,1,1];
+    //obj.shader = "textured_phong";
     obj.mesh = meshURL;
     // tenemos que pensar el caso en que haya mas de una textura
     if (!isArray(textureURL)) {
@@ -667,4 +668,5 @@ var resize = function(){
     }
     console.log('Resize');
 }
+
 window.onresize = resize;
