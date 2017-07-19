@@ -279,11 +279,10 @@
         <script type="text/javascript" src="js/extra/gl-matrix-min.js"></script>
         <script type="text/javascript" src="js/extra/litegl.js"></script>
         <script type="text/javascript" src="js/extra/rendeer.js"></script>
-        <script src="js/utils.js"></script>
-        <script src="js/tools.js"></script>
         <script src="litefile/litefileserver.js"></script>
         <script src="litefile/js/codeLite.js"></script>
-        
+        <script src="js/utils.js"></script>
+        <script src="js/tools.js"></script>
     </body>
     
 </html>

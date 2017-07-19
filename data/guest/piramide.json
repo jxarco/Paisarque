@@ -4,9 +4,7 @@
     "lugar":"Sudan",
     "coordenadas": {"lat": 12.892800, "lng": 29.998197},
     "render":{"id":"piramides","mesh":"piramide/mesh.obj","texture":["piramide/tex_0.jpg"],
-             "rotaciones":[{"grados":90,"x": 0, "y": 0, "z": 1}, 
-                           {"grados":-20,"x": 1, "y": 0, "z": 0}, 
-                           {"grados":90,"x": 0, "y": 1, "z": 0} ]},
+         "rotaciones":[]},
     "extra":[
         {"type":"text", "data":"Piramide"},
         {"type":"image",    "data":"http://img.planospara.com/plano-general-de-qenqo-en-sitios-arqueologicos-historia-30992.gif"},

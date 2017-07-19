@@ -66,6 +66,7 @@
             <!--<div id="placeholder" class="col-lg-12 well">-->
                 <div class="col-sm-9 text-left" id= "myCanvas"></div>
                 
+                
                 <div class="col-sm-3" id="tools">
                     <ul  class="nav nav-tabs">
                         <li class="active"><a href="#info" data-toggle="tab" aria-expanded="true">Info</a></li>
@@ -90,6 +91,9 @@
                             <a onclick="medirMetro()" class="btn btn-default tool-btn"><div class="info_hover_box">Configure distance</div><i class="material-icons">settings</i></a>
                             <a onclick="medirDistancia()" class="btn btn-default tool-btn"><div class="info_hover_box">Measure distance</div><i class="material-icons">space_bar</i></a>
                             <a id="show_dt" class="btn btn-default tool-btn"><div class="info_hover_box">Show measured distances</div><i class="material-icons">view_agenda</i></a>
+                            </div> 
+                            
+                            <a onclick="enableSetRotation()" class="btn btn-default tool-btn"><div class="info_hover_box">Apply rotations</div><i class="material-icons">alarm</i></a>
                             </div> 
                             <!-- DEBUG 
                             <a onclick="meterByDefault()" class="btn btn-default tool-btn"><div class="info_hover_box">Meter = 100</div><i class="material-icons">home</i></a>
@@ -149,7 +153,6 @@
                     </div>
                 </div>
                 
-            </div>
         </content><!--  content end-->
         
         <footer>
@@ -163,6 +166,7 @@
         <script src="js/extra/custom.js"></script>
         
         <script type="text/javascript" src="js/extra/gl-matrix-min.js"></script>
+        <script type="text/javascript" src="js/interact.min.js"></script>
         <script type="text/javascript" src="js/extra/litegl.js"></script>
         <script type="text/javascript" src="js/extra/rendeer.js"></script>
         <script src="js/utils.js"></script>
@@ -170,7 +174,6 @@
         <script src="js/app.js"></script>
         <script src="litefile/litefileserver.js"></script>
         <script src="litefile/js/codeLite.js"></script>
-<!--        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrcNsufDO4FEmzoCO9X63ru59CUvCe2YI&callback=initMap" type="text/javascript"></script>-->
         
     </body>
     

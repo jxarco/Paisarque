@@ -4,7 +4,7 @@
     "lugar":"Sudan",
     "coordenadas": {"lat": 12.892800, "lng": 29.998197},
     "render":{"id":"pit","mesh":"pit/mesh.obj","texture":["pit/tex_0.jpg"],
-              "rotaciones":[{"grados":90,"x": 0, "y": 0, "z": 1}]},
+              "rotaciones":[]},
     "extra":[
         {"type":"pdf",      "data":"data/wpbr.pdf"},
         {"type":"image",    "data":"http://mylittlepony.hasbro.com/images/spring2016/ponies/char_rainbowdash.png"},

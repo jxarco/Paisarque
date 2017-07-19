@@ -1,12 +1,16 @@
-var placer      = null;
-var context     = null;
-var scene       = null;
-var renderer    = null;
-var camera      = null;
-var result      = vec3.create();
-var firstPoint  = vec3.create();
-var secondPoint = vec3.create();
-var meter       = null;
+var placer          = null;
+var context         = null;
+var scene           = null;
+var renderer        = null;
+var camera          = null;
+var result          = vec3.create();
+var firstPoint      = vec3.create();
+var secondPoint     = vec3.create();
+var meter           = null;
+var setting_rotation= false;
+//
+
+//
 
 var _dt = 0.0;
 
@@ -103,7 +107,6 @@ function parseJSON(json) {
     init(current_project, totalPathMesh, totalPathTexture, renderData.rotaciones);
 }
 
-
 function parseJSONANOT(json){ 
     
     for (var i = 0; i < json.length; i++) {
@@ -143,6 +146,10 @@ function init(current_project, meshURL, textureURL, rotaciones)
     //create an obj in the scene
     var obj = new RD.SceneNode();
     obj.position = [0,0,0];
+    obj.cUP = 0;
+    obj.cDOWN = 0;
+    obj.cLEFT = 0;
+    obj.cRIGHT = 0;
     obj.color = [1,1,1,1];
     //obj.shader = "textured_phong";
     obj.mesh = meshURL;
@@ -160,17 +167,30 @@ function init(current_project, meshURL, textureURL, rotaciones)
     renderer.loadTexture(obj.texture, renderer.default_texture_settings);
     
     // Hacer las rotaciones que hay en el JSON
-    for (var i = 0; i < rotaciones.length; i++) {
-        var grados = rotaciones[i].grados;
-        var x = rotaciones[i].x;
-        var y = rotaciones[i].y;
-        var z = rotaciones[i].z;
-        
-        obj.rotate(grados,[x,y,z]);
+    
+    if(!rotaciones.length)
+        alert("no rotations by default, go to tools and set a rotation model");
+    else
+    {
+        obj.rotate(rotaciones[0].up, RD.UP);
+        obj.rotate(rotaciones[1].down, RD.DOWN);
+        obj.rotate(rotaciones[2].right, RD.RIGHT);
+        obj.rotate(rotaciones[3].left, RD.LEFT);
     }
     
     obj.scale([5,5,5]);
     pivot.addChild( obj );
+    
+    var grid = new RD.SceneNode();
+    
+    var grid_mesh = GL.Mesh.grid({size:5});
+    renderer.meshes["grid"] = grid_mesh;
+    
+    grid.mesh = "grid";
+    grid.primitive = gl.LINES;
+    grid.color = [1, 1, 1, 1];
+    grid.scale([25, 25, 25]);
+    scene.root.addChild(grid);
         
     // se listan las anotaciones que hay en el fichero correspondiente que es el nombre del proyecto _anotaciones y se dibujan con un circulo rojo en la mesh
     
@@ -268,9 +288,40 @@ function init(current_project, meshURL, textureURL, rotaciones)
         camera.position = vec3.scale( camera.position, camera.position, e.wheel < 0 ? 1.01 : 0.99 );
     }
 
+    context.onkeyup = function(e)
+    {   
+        if(!setting_rotation)
+            return;
+        
+        if(e.keyCode === 65)
+            {
+                obj.rotate(0.05, RD.UP);
+                obj.cUP += 0.05;
+            }
+        if(e.keyCode === 68)
+            {
+                obj.rotate(0.05, RD.DOWN);
+                obj.cDOWN += 0.05;
+            }
+        if(e.keyCode === 83)
+            {
+                obj.rotate(0.05, RD.LEFT);
+                obj.cLEFT += 0.05;
+            }
+        if(e.keyCode === 87)
+            {
+                obj.rotate(0.05, RD.RIGHT);
+                obj.cRIGHT += 0.05;
+            }
+        if(e.keyCode === 13) // Enter
+            {
+                setting_rotation = false;
+                saveRotations(obj.cUP, obj.cDOWN, obj.cLEFT, obj.cRIGHT);
+            }
+    }
     
     context.captureMouse(true);
-    
+    context.captureKeys();
 }
 
 function run(){
@@ -359,7 +410,6 @@ $("#saveTextButton").click(function (e) {
 
     //$(this).off('hidden.bs.modal');
 });
-
 
 // Enter para enviar la anotación 
 $('#message-text').keyup(function(e) {
@@ -665,7 +715,6 @@ var borrarAnotaciones = function() {
     });
 }
 
-
 var saveAnotations = function() {
     
     var fileNameString = "data/"+current_project+'_anotacion.json';
@@ -678,6 +727,47 @@ var saveAnotations = function() {
                 console.log("TABLA ACTUALIZADA");
             }                    
     });
+}
+
+// Rotation tools
+
+function enableSetRotation()
+{
+    setting_rotation = !setting_rotation;
+}
+
+function writeNewInfo(data, up, down, left, right)
+{
+    var local_Data = data;
+    
+    local_Data.render.rotaciones = [{"up": up},
+                    {"down": down},
+                    {"right": right},
+                    {"left": left}]
+    
+    console.log(local_Data);
+        
+    var fileNameString = "data/" + current_project + '.json';
+    
+    $.ajax({type: "GET",
+            dataType : 'json',
+            url: 'save_anotation.php',
+            data: { data: JSON.stringify(local_Data), file_name:fileNameString}
+    });
+}
+
+function saveRotations(up, down, left, right)
+{
+    var file = "data/" + current_project + '.json';
+    
+     $.ajax({dataType: "json",
+        url: file,
+        error: function(error){console.log(error)},
+        success: function(data){
+            console.log("reading data...");
+            writeNewInfo(data, up, down, left, right);
+        }
+   });
 }
 
 var resize = function(){

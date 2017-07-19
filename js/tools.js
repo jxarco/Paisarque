@@ -137,6 +137,27 @@ function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id)
     }
 }
 
+$('#fullscreen-mode').click(function(){
+    
+//    var canvas = $('#myCanvas');
+//    
+//    console.log(canvas);
+//    
+//   if (!document.mozFullScreen && !document.webkitFullScreen) {
+//      if (canvas.mozRequestFullScreen) {
+//        canvas.mozRequestFullScreen();
+//      } else {
+//        canvas.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+//      }
+//    } else {
+//      if (document.mozCancelFullScreen) {
+//        document.mozCancelFullScreen();
+//      } else {
+//        document.webkitCancelFullScreen();
+//      }
+//    }
+});
+
 $("#logout").click(function() {   
      $.ajax( {
         url: 'logout.php',
@@ -272,7 +293,10 @@ $("#formUploadProject").on('submit', function(e) {
         }
     }
     
-    // falta anadir al form lo de las rotaciones
+    /* falta anadir al form lo de las rotaciones
+    *  en lugar de añadirlo, permitir que se rote al gusto y poder 
+    *  guardarlo en el json
+    */
     var jsonFicheroPrincipal = {
         "id": values["idProyecto"],
         "autor": values["autor"],
@@ -282,6 +306,18 @@ $("#formUploadProject").on('submit', function(e) {
                   "rotaciones":[]},
         "extra":listaExtra
     };
+    
+    // DEBUG
+//    jsonFicheroPrincipal = {
+//        "id": values["idProyecto"],
+//        "autor": values["autor"],
+//        "lugar": values["lugar"],
+//        "coordenadas": {"lat": values["latitud"], "lng": values["longitud"]},
+//        "extra":listaExtra,
+//        "render":{"id":values["idProyecto"],"mesh":urlMesh,"texture":[urlTexture],
+//                  "rotaciones":[]}
+//    };
+    //
         
     var fileNameString = "data/" + user + "/" + values["idProyecto"] + '.json';
     
