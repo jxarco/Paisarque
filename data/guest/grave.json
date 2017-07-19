@@ -1,1 +1,10 @@
-{"id":"Grave","autor":"Carla Lancelotti","lugar":"Sudan","coordenadas":{"lat":12.8928,"lng":29.998197},"render":{"id":"grave","mesh":"grave/mesh.obj","texture":["grave/tex_0.jpg"],"rotaciones":[{"up":0.1},{"down":0},{"right":0.9500000000000003},{"left":2.549999999999999}]},"extra":[{"type":"pdf","data":"data/wpbr.pdf"},{"type":"image","data":"http://www.open.edu/openlearn/sites/www.open.edu.openlearn/files/styles/share_img/public/ole_images/nature/fossils-extinct-creatures/generic-fossil/generic%20fossil.jpg?itok=tARDwVMf"},{"type":"text","data":"Hola que tal, soy subnormal"},{"type":"text","data":"esto es otro parrafo"},{"type":"youtube","data":"https://www.youtube.com/embed/6W3R5ItkREk"}]}
+{
+    "id":"Grave",
+    "autor":"Carla Lancelotti",
+    "lugar":"Sudan",
+    "coordenadas":{"lat":12.8928,"lng":29.998197},
+    "render":{"id":"grave","mesh":"grave/mesh.obj","texture":["grave/tex_0.jpg"],"rotaciones":[{"up":0.1},{"down":0},{"right":0.9500000000000003},{"left":2.549999999999999}]},
+    "extra":[
+        {"type":"pdf","data":"data/wpbr.pdf"},{"type":"image","data":"http://www.open.edu/openlearn/sites/www.open.edu.openlearn/files/styles/share_img/public/ole_images/nature/fossils-extinct-creatures/generic-fossil/generic%20fossil.jpg?itok=tARDwVMf"},{"type":"text","data":"Hola que tal, soy subnormal"},{"type":"text","data":"esto es otro parrafo"},{"type":"youtube","data":"https://www.youtube.com/embed/6W3R5ItkREk"}
+    ]
+}

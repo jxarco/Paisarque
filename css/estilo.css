@@ -25,23 +25,35 @@
     visibility: hidden;
 }
 
-:-webkit-full-screen #myCanvas {
-      width: 100%;
-      height: 100%;
-    }
-
 #tools-btns{
 /*    position: absolute;*/
 }
 
+#info{
+    overflow: scroll !important;
+    max-height: calc(100vh - 330px);
+    
+    border-style: solid;
+    border-width: 2px;
+    border-color: green;
+}
+
 #anotaciones{
     overflow: scroll !important;
-    height: calc(100vh - 330px);
+    max-height: calc(100vh - 330px);
+    
+    border-style: solid;
+    border-width: 2px;
+    border-color: blue;
 }
 
 #herramientas{
     overflow: scroll !important;
-    height: calc(100vh - 330px);
+    max-height: calc(100vh - 330px);
+    
+    border-style: solid;
+    border-width: 2px;
+    border-color: red;
 }
 
 .tool-btn{

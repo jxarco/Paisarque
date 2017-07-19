@@ -293,10 +293,10 @@ $("#formUploadProject").on('submit', function(e) {
         }
     }
     
-    /* falta anadir al form lo de las rotaciones
-    *  en lugar de añadirlo, permitir que se rote al gusto y poder 
-    *  guardarlo en el json
+    /* 
+    *  Se permite crear unas rotaciones básicas en el primer uso de la mesh
     */
+    
     var jsonFicheroPrincipal = {
         "id": values["idProyecto"],
         "autor": values["autor"],
@@ -304,20 +304,8 @@ $("#formUploadProject").on('submit', function(e) {
         "coordenadas": {"lat": values["latitud"], "lng": values["longitud"]},
         "render":{"id":values["idProyecto"],"mesh":urlMesh,"texture":[urlTexture],
                   "rotaciones":[]},
-        "extra":listaExtra
+        "extra": listaExtra
     };
-    
-    // DEBUG
-//    jsonFicheroPrincipal = {
-//        "id": values["idProyecto"],
-//        "autor": values["autor"],
-//        "lugar": values["lugar"],
-//        "coordenadas": {"lat": values["latitud"], "lng": values["longitud"]},
-//        "extra":listaExtra,
-//        "render":{"id":values["idProyecto"],"mesh":urlMesh,"texture":[urlTexture],
-//                  "rotaciones":[]}
-//    };
-    //
         
     var fileNameString = "data/" + user + "/" + values["idProyecto"] + '.json';
     
