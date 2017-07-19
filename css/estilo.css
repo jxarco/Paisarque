@@ -170,11 +170,6 @@
     display: none;
 }
 
-output{
-    color: white;
-    margin: 10px;
-}
-
 input[type='range'] {
     width: 50%;
     margin-top: 30px !important;

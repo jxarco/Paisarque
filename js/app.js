@@ -186,6 +186,7 @@ function init(current_project, meshURL, textureURL, rotaciones)
     var grid_mesh = GL.Mesh.grid({size:5});
     renderer.meshes["grid"] = grid_mesh;
     grid.flags.visible = false;
+    grid.name = "grid";
     grid.mesh = "grid";
     grid.primitive = gl.LINES;
     grid.color = [1, 1, 1, 1];
@@ -678,7 +679,7 @@ var borrarAnotaciones = function() {
 
     // Eliminamos todos los hijos de la escena menos el primero
     // el primero sera la mesh y los otros los puntos que queremos quitar
-    scene.root.children.splice(1,scene.root.children.length)
+    scene.root.children.splice(2,scene.root.children.length)
     
     console.log(scene.root.children);
 
@@ -717,7 +718,7 @@ var previousValue = 0;
 
 function modifyRotations(slider)
 {
-    console.log(slider.id);
+//    console.log(slider.id);
     var obj = scene.root.children[0];
     
     var axis01 = null;
