@@ -33,36 +33,43 @@
     overflow: scroll !important;
     max-height: calc(100vh - 330px);
     
+/*
     border-style: solid;
     border-width: 2px;
     border-color: green;
+*/
 }
 
 #anotaciones{
     overflow: scroll !important;
     max-height: calc(100vh - 330px);
     
+/*
     border-style: solid;
     border-width: 2px;
     border-color: blue;
+*/
 }
 
 #herramientas{
     overflow: scroll !important;
     max-height: calc(100vh - 330px);
     
+/*
     border-style: solid;
     border-width: 2px;
     border-color: red;
+*/
 }
 
 .tool-btn{
-    width: 50px;
-    height: 50px;
-    padding-top: 5%;
+    width: 35px;
+    height: 35px;
+    padding-top: 2.25%;
+    padding-left: 2.4%;
     float: left;
     background: lightgray;   
-    margin: 15px;
+    margin: 12.5px;
     vertical-align: middle;
 }
 
@@ -154,3 +161,33 @@
     outline: none !important;
 }
 
+/* -------------------------------------------- */
+/* sliders */
+
+.sliders{
+    width: 300px;
+    position: absolute;
+    display: none;
+}
+
+output{
+    color: white;
+    margin: 10px;
+}
+
+input[type='range'] {
+    width: 50%;
+    margin-top: 30px !important;
+}
+
+.rangeslider--horizontal {
+    height: 10px !important;
+    width: 75% !important;
+    margin-top: 20px !important;
+}
+
+.rangeslider__handle {
+    width: 20px !important;
+    height: 20px !important;
+    margin-top: 5px !important;
+}

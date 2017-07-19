@@ -25,7 +25,7 @@
     <link href="css/custom.min.css" rel="stylesheet">
     <link href="css/estilo.css" rel="stylesheet">
     <link href="css/verticalText.css" rel="stylesheet">
-
+    <link href="css/rangeslider.css" rel="stylesheet">
 
     </head>
     <body class="container">
@@ -65,7 +65,11 @@
             <div class="col-sm-12 text-left" id="placeholder"> 
             <!--<div id="placeholder" class="col-lg-12 well">-->
                 <div class="col-sm-9 text-left" id= "myCanvas"></div>
-                
+                <div class="sliders">
+                    <input id="s1" type="range" value="250" step="0.02" min="0.01" max="500.0">
+                    <input id="s2" type="range" value="250" step="0.02" min="0.01" max="500.0">
+                    <input id="s3" type="range" value="250" step="0.02" min="0.01" max="500.0">
+                </div>
                 
                 <div class="col-sm-3" id="tools">
                     <ul  class="nav nav-tabs">
@@ -85,9 +89,14 @@
                         <div class="tab-pane fade" id="herramientas">
                             
                             <div id="tools-btns">
+                            <a onclick="enableSetRotation()" class="btn btn-default tool-btn">
+                                <div class="info_hover_box">Set default rotations</div>
+                                <i class="material-icons">3d_rotation</i>
+                            </a>
+                            </div> 
                             <a class="btn btn-default tool-btn" id="viz_on">
                                 <div class="info_hover_box">Hide anotations</div>
-                                <i class="material-icons">visibility</i>
+                                <i class="material-icons">visibility_off</i>
                             </a>
                             <a onclick="changeSizeAnotInCanvas(true)" class="btn btn-default tool-btn" id ="add_size">
                                 <div class="info_hover_box">Bigger anotations</div>
@@ -109,11 +118,7 @@
                                 <div class="info_hover_box">Show measured distances</div>
                                 <i class="material-icons">view_agenda</i>
                             </a>
-                            <a onclick="enableSetRotation()" class="btn btn-default tool-btn">
-                                <div class="info_hover_box">Set default rotations</div>
-                                <i class="material-icons">3d_rotation</i>
-                            </a>
-                            </div> 
+                            
                             
                             <table class="table table-striped table-hover" id="distances-table">
                                  <thead>
@@ -180,7 +185,7 @@
         <script src="js/extra/custom.js"></script>
         
         <script type="text/javascript" src="js/extra/gl-matrix-min.js"></script>
-        <script type="text/javascript" src="js/interact.min.js"></script>
+        <script type="text/javascript" src="js/extra/rangeslider.min.js"></script>
         <script type="text/javascript" src="js/extra/litegl.js"></script>
         <script type="text/javascript" src="js/extra/rendeer.js"></script>
         <script src="js/utils.js"></script>

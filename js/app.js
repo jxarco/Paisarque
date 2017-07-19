@@ -185,11 +185,11 @@ function init(current_project, meshURL, textureURL, rotaciones)
     
     var grid_mesh = GL.Mesh.grid({size:5});
     renderer.meshes["grid"] = grid_mesh;
-    
+    grid.flags.visible = false;
     grid.mesh = "grid";
     grid.primitive = gl.LINES;
     grid.color = [1, 1, 1, 1];
-    grid.scale([25, 25, 25]);
+    grid.scale([50, 50, 50]);
     scene.root.addChild(grid);
         
     // se listan las anotaciones que hay en el fichero correspondiente que es el nombre del proyecto _anotaciones y se dibujan con un circulo rojo en la mesh
@@ -293,26 +293,6 @@ function init(current_project, meshURL, textureURL, rotaciones)
         if(!setting_rotation)
             return;
         
-        if(e.keyCode === 65)
-            {
-                obj.rotate(0.05, RD.UP);
-                obj.cUP += 0.05;
-            }
-        if(e.keyCode === 68)
-            {
-                obj.rotate(0.05, RD.DOWN);
-                obj.cDOWN += 0.05;
-            }
-        if(e.keyCode === 83)
-            {
-                obj.rotate(0.05, RD.LEFT);
-                obj.cLEFT += 0.05;
-            }
-        if(e.keyCode === 87)
-            {
-                obj.rotate(0.05, RD.RIGHT);
-                obj.cRIGHT += 0.05;
-            }
         if(e.keyCode === 13) // Enter
             {
                 setting_rotation = false;
@@ -427,7 +407,7 @@ $("#viz_on").click(function(){
     viz_anotations = !viz_anotations;
     changeVizAnotInCanvas(viz_anotations);
     
-    var extra = viz_anotations === false ? "_off" : "";
+    var extra = viz_anotations === false ? "" : "_off";
     var tooltip = viz_anotations === false ? "Show anotations" : "Hide anotations";
     $(this).html( "<div class='info_hover_box'>" + tooltip + "</div><i class='material-icons'>visibility" + extra + "</i>" );
     
@@ -682,6 +662,7 @@ function pushMedicion(distance)
 }
 
 /* ************************************************* */
+// Anotation tools
 
 var borrarAnotacion = function() {
     
@@ -729,11 +710,62 @@ var saveAnotations = function() {
     });
 }
 
+/* ************************************************* */
 // Rotation tools
+
+var previousValue = 0;
+
+function modifyRotations(slider)
+{
+    console.log(slider.id);
+    var obj = scene.root.children[0];
+    
+    var axis01 = null;
+    var axis11 = null;
+    
+    if(slider.id === "s1")
+        {
+            axis01 = RD.UP;
+            axis11 = RD.DOWN;
+        }
+    if(slider.id === "s2")
+        {
+            axis01 = RD.LEFT;
+            axis11 = RD.RIGHT;
+        }
+    if(slider.id === "s3")
+        {
+            axis01 = RD.BACK;
+            axis11 = RD.FRONT;
+        }
+    
+    if(slider.value > previousValue)
+    {
+        obj.rotate(0.02, axis01);
+        obj.cUP += 0.02;
+    }
+    else if(slider.value === previousValue)
+    {}
+    else
+    {
+        obj.rotate(0.02, axis11);
+        obj.cDOWN += 0.02;
+    }
+    
+    previousValue = slider.value;
+
+}
 
 function enableSetRotation()
 {
     setting_rotation = !setting_rotation;
+    // grid
+    scene.root.children[1].flags.visible = setting_rotation;
+    
+    if(setting_rotation)
+       $('.sliders').fadeIn();        
+    else
+        $('.sliders').fadeOut();        
 }
 
 function writeNewInfo(data, up, down, left, right)

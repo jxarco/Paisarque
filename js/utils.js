@@ -90,3 +90,33 @@ function loadDATAfromJSON()
         }
     });
 }
+
+/*
+* Loads the important data from the current project
+* and executes init function located at parseJSON.
+* AJAX
+*/
+
+$(function() {
+//  var output = document.querySelectorAll('output')[0];
+  var slider = document.querySelector('#s1');
+    
+//  var output2 = document.querySelectorAll('output')[1];
+  var slider2 = document.querySelector('#s2');
+    
+//  var output3 = document.querySelectorAll('output')[1];
+  var slider3 = document.querySelector('#s2');
+  
+  $(document).on('input', 'input[type="range"]', function(e) {
+//        output.innerHTML = slider.value;
+//        output2.innerHTML = slider2.value;
+//        output3.innerHTML = slider3.value;
+      
+      modifyRotations(e.currentTarget);
+  });
+  
+  $('input[type=range]').rangeslider({
+    polyfill: false
+  });
+    
+});
