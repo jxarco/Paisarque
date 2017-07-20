@@ -92,9 +92,7 @@ function loadDATAfromJSON()
 }
 
 /*
-* Loads the important data from the current project
-* and executes init function located at parseJSON.
-* AJAX
+* Sliders initialization
 */
 
 $(function() {

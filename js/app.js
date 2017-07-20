@@ -9,9 +9,6 @@ var firstPoint      = vec3.create();
 var secondPoint     = vec3.create();
 var meter           = null;
 var setting_rotation= false;
-//
-
-//
 
 var _dt = 0.0;
 
@@ -30,6 +27,10 @@ var viz_anotations  = true;
 
 // show distances table
 var showing_dt = false;
+
+//
+// Functions below this:
+//
 
 function parseJSON(json) {
     var renderData = json.render;
@@ -401,8 +402,7 @@ $('#message-text').keyup(function(e) {
 });
 
 /* ************************************************* */
-
-// Tab for tools
+// Anotations viz tools
 
 $("#viz_on").click(function() 
 {
@@ -427,8 +427,7 @@ function changeVizAnotInCanvas(viz)
                 current.flags.visible = false;
                 //console.log("deleting viz to ball");
             }
-                
-            else
+            else if(current.id > 0 && viz)
                 current.flags.visible = true;
         }
 }
@@ -462,6 +461,9 @@ function changeSizeAnotInCanvas(op_type)
     
     scaling_factor = last_node.size;
 }
+
+/* ************************************************* */
+// Distances tools
 
 var medirMetro = function ()
 {
@@ -620,7 +622,8 @@ var medirDistancia = function ()
     } 
 }   
 
-function meterByDefault(){
+function meterByDefault() 
+{
     meter = 100;
     pushMedicion(100);
 }
@@ -635,7 +638,8 @@ function revealDistancesTable()
         table.fadeOut();
 }
 
-$("#show_dt").click(function(){
+$("#show_dt").click(function() 
+{
     
     console.log("showing/hiding distances table");
     showing_dt = !showing_dt;
@@ -717,10 +721,21 @@ var saveAnotations = function() {
 /* ************************************************* */
 // Rotation tools
 
+var _dvalue = 0;
+
 function modifyRotations(slider)
 {
-    var value = Math.sign(slider.value);
-    var to_rotate = 0.1 * value;
+//    first option
+//    var sign = Math.sign(slider.value);
+//    var to_rotate = 0.1 * sign;
+    
+//    second option
+    var to_rotate;
+    if(slider.value > _dvalue)
+        to_rotate = 0.1 * Math.sign(slider.value);
+    else
+        to_rotate = - 0.1 * Math.sign(slider.value);
+        
     var axis = null;
 
     if(slider.id === "s1")
@@ -731,6 +746,8 @@ function modifyRotations(slider)
             axis = RD.FRONT;
 
     obj.rotate(to_rotate, axis);
+    _dvalue = slider.value;
+    
 }
 
 function enableSetRotation()
@@ -783,6 +800,8 @@ function saveRotations()
         }
    });
 }
+
+/* ************************************************* */
 
 var resize = function(){
     context.canvas.width   = placer.clientWidth;

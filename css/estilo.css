@@ -168,17 +168,18 @@
     width: 300px;
     position: absolute;
     display: none;
+    margin: 20px;
 }
 
-input[type='range'] {
-    width: 50%;
-    margin-top: 30px !important;
+.slider{
+    display: flex; 
 }
 
 .rangeslider--horizontal {
     height: 10px !important;
     width: 75% !important;
-    margin-top: 20px !important;
+    margin-left: 5px;
+    margin-top: 5px;
 }
 
 .rangeslider__handle {
