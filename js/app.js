@@ -1,16 +1,17 @@
+var project         = null;
 var obj             = null;
 var placer          = null;
 var context         = null;
 var scene           = null;
 var renderer        = null;
 var camera          = null;
+var meter           = null;
 var result          = vec3.create();
 var firstPoint      = vec3.create();
 var secondPoint     = vec3.create();
-var meter           = null;
-var setting_rotation= false;
 
-var _dt = 0.0;
+var _dt              = 0.0;
+var setting_rotation = false;
 
 var default_project = "pit";
 var current_project = getQueryVariable("r") || default_project;
@@ -20,19 +21,46 @@ var current_project = getQueryVariable("r") || default_project;
 // - Posición
 // - Texto
 // - Propiedades de la camara en ese momento
-var anotaciones = [];
-var scaling_factor = 1;
-// Ver anotaciones en la mesh:
-var viz_anotations  = true;
 
+var anotaciones         = [];
+var scaling_factor      = 1;
+var viz_anotations      = true;
 // show distances table
-var showing_dt = false;
+var showing_dt          = false;
 
 //
 // Functions below this:
 //
 
-function parseJSON(json) {
+function parseJSON(json)
+{
+    
+    if(project === null)
+        project = new Project( json );
+    
+    for (var i = 0; i < anotaciones.length; i++)
+    {
+        var camera = {
+            "position": anotaciones[i].position_camera,
+            "target": anotaciones[i].target_camera,
+            "up": anotaciones[i].up_camera,
+        }
+        
+        var text = anotaciones[i].texto;
+        
+        var position = {
+            "0": anotaciones[i].posicion["0"],
+            "1": anotaciones[i].posicion["1"],
+            "2": anotaciones[i].posicion["2"],
+        }
+        
+        project.insertAnotation(camera, position, text)
+    }
+    
+    anotaciones = [];
+    
+    project._user = current_project.split('/')[0];
+    
     var renderData = json.render;
     if(!renderData.mesh) {
         console.err("There is no mesh");
@@ -109,7 +137,8 @@ function parseJSON(json) {
     init(current_project, totalPathMesh, totalPathTexture, renderData.rotaciones);
 }
 
-function parseJSONANOT(json){ 
+function parseJSONANOT(json) 
+{ 
     
     for (var i = 0; i < json.length; i++) {
         anotaciones.push(json[i]);
@@ -119,7 +148,7 @@ function parseJSONANOT(json){
         alert("json has 0 anotations");
 }
 
-function init(current_project, meshURL, textureURL, rotaciones)
+function init(current_project, meshURL, textureURL)
 {
     scene = new RD.Scene();
 
@@ -162,7 +191,9 @@ function init(current_project, meshURL, textureURL, rotaciones)
     renderer.loadMesh(obj.mesh, makeVisible);
     renderer.loadTexture(obj.texture, renderer.default_texture_settings);
     
-    // Hacer las rotaciones que hay en el JSON
+    // Hacer las rotaciones pendientes
+    var rotaciones = project._rotations;
+    
     
     if(!rotaciones.length)
         alert("No default rotations. Go to Tools and set a default rotation matrix");
@@ -193,6 +224,8 @@ function init(current_project, meshURL, textureURL, rotaciones)
         
     // se listan las anotaciones que hay en el fichero correspondiente que es el nombre del proyecto _anotaciones y se dibujan con un circulo rojo en la mesh
     
+    var anotaciones = project._anotations;
+    
     if(!anotaciones.length)
         alert("no anotations");
     
@@ -222,15 +255,15 @@ function init(current_project, meshURL, textureURL, rotaciones)
                 this.color = [1, 0.3, Math.sin(this.time*5), 1];
         }
          
-        var positionResult = [anotaciones[i]["posicion"][0], anotaciones[i]["posicion"][1], anotaciones[i]["posicion"][2]];
+        var position = [anotaciones[i].position[0], anotaciones[i].position[1], anotaciones[i].position[2]];
         
-        var anotPosCamera = [anotaciones[i]["position_camera"][0], anotaciones[i]["position_camera"][1], anotaciones[i]["position_camera"][2]];
-        var anotTargetCamera = [anotaciones[i]["target_camera"][0], anotaciones[i]["target_camera"][1], anotaciones[i]["target_camera"][2]];
-        var anotUpCamera = [anotaciones[i]["up_camera"][0], anotaciones[i]["up_camera"][1], anotaciones[i]["up_camera"][2]];
+        var anotPosCamera = [anotaciones[i].camera_position[0], anotaciones[i].camera_position[1], anotaciones[i].camera_position[2]];
+        var anotTargetCamera = [anotaciones[i].camera_target[0], anotaciones[i].camera_target[1], anotaciones[i].camera_target[2]];
+        var anotUpCamera = [anotaciones[i].camera_up[0], anotaciones[i].camera_up[1], anotaciones[i].camera_up[2]];
         
-        ball.position = positionResult;
+        ball.position = position;
         
-        var totalString = '<tr a onclick="lookAtAnot( camera, [' + anotPosCamera + '] , [' +  anotTargetCamera + "] , [" + anotUpCamera + ' ], ' + ball.id + ' )"><td>' + anotaciones[i]["numero"] + "</td>" + "<td>" + anotaciones[i]["texto"] + "</td></tr>";
+        var totalString = '<tr a onclick="lookAtAnot( camera, [' + anotPosCamera + '] , [' +  anotTargetCamera + "] , [" + anotUpCamera + ' ], ' + ball.id + ' )"><td>' + anotaciones[i].id + "</td>" + "<td>" + anotaciones[i].text + "</td></tr>";
                 
         $("#anotacion_tabla").append(totalString);
     }
@@ -299,7 +332,7 @@ function init(current_project, meshURL, textureURL, rotaciones)
                 else
                     $('.sliders').fadeOut();        
                 
-                saveRotations(obj.cUP, obj.cDOWN, obj.cLEFT, obj.cRIGHT);
+                //saveRotations();
             }
     }
     
@@ -307,11 +340,8 @@ function init(current_project, meshURL, textureURL, rotaciones)
     context.captureKeys();
 }
 
-function run(){
-    resize();
-}
-
-var anotar = function(modoAnotacion) {
+function anotar(modoAnotacion)
+{
     
     if (modoAnotacion) {
         console.log("Modo anotación activado")
@@ -394,28 +424,8 @@ $("#saveTextButton").click(function (e) {
     //$(this).off('hidden.bs.modal');
 });
 
-// Enter para enviar la anotación 
-$('#message-text').keyup(function(e) {
-    e.preventDefault();
-    if(e.keyCode == 13)
-        $("#saveTextButton").click();
-});
-
 /* ************************************************* */
 // Anotations viz tools
-
-$("#viz_on").click(function() 
-{
-    
-    viz_anotations = !viz_anotations;
-    changeVizAnotInCanvas(viz_anotations);
-    
-    var extra = viz_anotations === false ? "" : "_off";
-    var tooltip = viz_anotations === false ? "Show anotations" : "Hide anotations";
-    $(this).html( "<div class='info_hover_box'>" + tooltip + "</div><i class='material-icons'>visibility" + extra + "</i>" );
-    
-    //console.log( $(this).html() ); 
-});
 
 function changeVizAnotInCanvas(viz)
 {
@@ -465,7 +475,7 @@ function changeSizeAnotInCanvas(op_type)
 /* ************************************************* */
 // Distances tools
 
-var medirMetro = function ()
+function medirMetro()
 {
     
     console.log("midiendo cuanto es un metro");
@@ -542,7 +552,7 @@ var medirMetro = function ()
     
 }   
 
-var medirDistancia = function ()
+function medirDistancia()
 {
     if(meter === null)
     {
@@ -638,15 +648,6 @@ function revealDistancesTable()
         table.fadeOut();
 }
 
-$("#show_dt").click(function() 
-{
-    
-    console.log("showing/hiding distances table");
-    showing_dt = !showing_dt;
-    
-    revealDistancesTable();
-});
-
 function pushMedicion(distance)
 {
     if(!distance)
@@ -672,51 +673,19 @@ function pushMedicion(distance)
 /* ************************************************* */
 // Anotation tools
 
-var borrarAnotacion = function() {
-    
-    // TO DO
-}
-
-var borrarAnotaciones = function() {
-    
-    anotaciones = [];
-    $('#anotacion_tabla').empty();
-    
-    console.log(scene.root.children);
-
-    // Eliminamos todos los hijos de la escena menos el primero
-    // el primero sera la mesh y los otros los puntos que queremos quitar
-    scene.root.children.splice(2,scene.root.children.length)
-    
-    console.log(scene.root.children);
-
-
-    var fileNameString = "data/"+current_project+'_anotacion.json';
-
-
-    $.ajax({type: "GET",
-            dataType : 'json',
-            url: 'save_anotation.php',
-            data: { data: "", file_name:fileNameString},
-            success: function(data){ 
-                console.log("TABLA ACTUALIZADA");
-            }                    
-    });
-}
-
-var saveAnotations = function() {
-    
-    var fileNameString = "data/"+current_project+'_anotacion.json';
-    
-    $.ajax({type: "GET",
-            dataType : 'json',
-            url: 'save_anotation.php',
-            data: { data: JSON.stringify(anotaciones), file_name:fileNameString},
-            success: function(){ 
-                console.log("TABLA ACTUALIZADA");
-            }                    
-    });
-}
+//var saveAnotations = function() {
+//    
+//    var fileNameString = "data/" + current_project + '_anotacion.json';
+//    
+//    $.ajax({type: "GET",
+//            dataType : 'json',
+//            url: 'save_anotation.php',
+//            data: { data: JSON.stringify(anotaciones), file_name:fileNameString},
+//            success: function(){ 
+//                console.log("TABLA ACTUALIZADA");
+//            }                    
+//    });
+//}
 
 /* ************************************************* */
 // Rotation tools
@@ -762,9 +731,9 @@ function enableSetRotation()
         $('.sliders').fadeOut();        
 }
 
-function writeNewInfo(data)
-{
-    var local_Data = data;
+function saveRotations()
+{   
+    var local_Data = project._json;
     
     var r0 = obj._rotation[0];
     var r1 = obj._rotation[1];
@@ -787,23 +756,15 @@ function writeNewInfo(data)
     });
 }
 
-function saveRotations()
-{
-    var file = "data/" + current_project + '.json';
-    
-     $.ajax({dataType: "json",
-        url: file,
-        error: function(error){console.log(error)},
-        success: function(data){
-//            console.log("reading data...");
-            writeNewInfo(data);
-        }
-   });
-}
-
 /* ************************************************* */
 
-var resize = function(){
+function run() 
+{
+    resize();
+}
+
+var resize = function() 
+{
     context.canvas.width   = placer.clientWidth;
     context.canvas.height  = placer.clientHeight;
     context.viewport(0, 0, context.canvas.width, context.canvas.height);
