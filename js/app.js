@@ -1,3 +1,4 @@
+var obj             = null;
 var placer          = null;
 var context         = null;
 var scene           = null;
@@ -142,14 +143,9 @@ function init(current_project, meshURL, textureURL, rotaciones)
     }*/
     scene.root.addChild(pivot);
 
-
     //create an obj in the scene
-    var obj = new RD.SceneNode();
+    obj = new RD.SceneNode();
     obj.position = [0,0,0];
-    obj.cUP = 0;
-    obj.cDOWN = 0;
-    obj.cLEFT = 0;
-    obj.cRIGHT = 0;
     obj.color = [1,1,1,1];
     //obj.shader = "textured_phong";
     obj.mesh = meshURL;
@@ -159,7 +155,6 @@ function init(current_project, meshURL, textureURL, rotaciones)
     }
     
     var makeVisible = function () {
-        
         placer.style.visibility="visible";
     };
 
@@ -169,13 +164,15 @@ function init(current_project, meshURL, textureURL, rotaciones)
     // Hacer las rotaciones que hay en el JSON
     
     if(!rotaciones.length)
-        alert("no rotations by default, go to tools and set a rotation model");
+        alert("No default rotations. Go to Tools and set a default rotation matrix");
     else
     {
-        obj.rotate(rotaciones[0].up, RD.UP);
-        obj.rotate(rotaciones[1].down, RD.DOWN);
-        obj.rotate(rotaciones[2].right, RD.RIGHT);
-        obj.rotate(rotaciones[3].left, RD.LEFT);
+        obj._rotation[0] = rotaciones[0].r0;
+        obj._rotation[1] = rotaciones[1].r1;
+        obj._rotation[2] = rotaciones[2].r2;
+        obj._rotation[3] = rotaciones[3].r3;
+        
+        obj.updateMatrices();
     }
     
     obj.scale([5,5,5]);
@@ -207,9 +204,6 @@ function init(current_project, meshURL, textureURL, rotaciones)
         ball.scaling = ball.size;
         ball.mesh = "sphere";
         ball.shader = "phong";
-        //var cam_normalized = vec3.create();
-        //vec3.normalize(cam_normalized, camera.position);
-        //ball._uniforms['u_light_vector'] = cam_normalized;
         ball.layers = 0x4;
         ball.flags.ignore_collisions = true;
         ball.active = false;
@@ -297,6 +291,13 @@ function init(current_project, meshURL, textureURL, rotaciones)
         if(e.keyCode === 13) // Enter
             {
                 setting_rotation = false;
+                scene.root.children[1].flags.visible = setting_rotation;
+    
+                if(setting_rotation)
+                   $('.sliders').fadeIn();        
+                else
+                    $('.sliders').fadeOut();        
+                
                 saveRotations(obj.cUP, obj.cDOWN, obj.cLEFT, obj.cRIGHT);
             }
     }
@@ -403,7 +404,8 @@ $('#message-text').keyup(function(e) {
 
 // Tab for tools
 
-$("#viz_on").click(function(){
+$("#viz_on").click(function() 
+{
     
     viz_anotations = !viz_anotations;
     changeVizAnotInCanvas(viz_anotations);
@@ -461,7 +463,8 @@ function changeSizeAnotInCanvas(op_type)
     scaling_factor = last_node.size;
 }
 
-var medirMetro = function () {
+var medirMetro = function ()
+{
     
     console.log("midiendo cuanto es un metro");
     alert("Selecciona dos puntos, la linea recta que los une corresponderá a un metro");
@@ -714,47 +717,20 @@ var saveAnotations = function() {
 /* ************************************************* */
 // Rotation tools
 
-var previousValue = 0;
-
 function modifyRotations(slider)
 {
-//    console.log(slider.id);
-    var obj = scene.root.children[0];
-    
-    var axis01 = null;
-    var axis11 = null;
-    
-    if(slider.id === "s1")
-        {
-            axis01 = RD.UP;
-            axis11 = RD.DOWN;
-        }
-    if(slider.id === "s2")
-        {
-            axis01 = RD.LEFT;
-            axis11 = RD.RIGHT;
-        }
-    if(slider.id === "s3")
-        {
-            axis01 = RD.BACK;
-            axis11 = RD.FRONT;
-        }
-    
-    if(slider.value > previousValue)
-    {
-        obj.rotate(0.02, axis01);
-        obj.cUP += 0.02;
-    }
-    else if(slider.value === previousValue)
-    {}
-    else
-    {
-        obj.rotate(0.02, axis11);
-        obj.cDOWN += 0.02;
-    }
-    
-    previousValue = slider.value;
+    var value = Math.sign(slider.value);
+    var to_rotate = 0.1 * value;
+    var axis = null;
 
+    if(slider.id === "s1")
+            axis = RD.UP;
+    if(slider.id === "s2")
+            axis = RD.LEFT;
+    if(slider.id === "s3")
+            axis = RD.FRONT;
+
+    obj.rotate(to_rotate, axis);
 }
 
 function enableSetRotation()
@@ -769,16 +745,21 @@ function enableSetRotation()
         $('.sliders').fadeOut();        
 }
 
-function writeNewInfo(data, up, down, left, right)
+function writeNewInfo(data)
 {
     var local_Data = data;
     
-    local_Data.render.rotaciones = [{"up": up},
-                    {"down": down},
-                    {"right": right},
-                    {"left": left}]
+    var r0 = obj._rotation[0];
+    var r1 = obj._rotation[1];
+    var r2 = obj._rotation[2];
+    var r3 = obj._rotation[3];
     
-    console.log(local_Data);
+    local_Data.render.rotaciones = [{"r0": r0},
+                    {"r1": r1},
+                    {"r2": r2},
+                    {"r3": r3}]
+    
+    console.log(local_Data.render.rotaciones);
         
     var fileNameString = "data/" + current_project + '.json';
     
@@ -789,7 +770,7 @@ function writeNewInfo(data, up, down, left, right)
     });
 }
 
-function saveRotations(up, down, left, right)
+function saveRotations()
 {
     var file = "data/" + current_project + '.json';
     
@@ -797,8 +778,8 @@ function saveRotations(up, down, left, right)
         url: file,
         error: function(error){console.log(error)},
         success: function(data){
-            console.log("reading data...");
-            writeNewInfo(data, up, down, left, right);
+//            console.log("reading data...");
+            writeNewInfo(data);
         }
    });
 }
