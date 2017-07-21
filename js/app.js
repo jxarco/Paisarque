@@ -12,9 +12,6 @@ var secondPoint     = vec3.create();
 var _dt              = 0.0;
 var setting_rotation = false;
 
-var default_project = "pit";
-var current_project = getQueryVariable("r") || default_project;
-
 // Una lista de anotaciones vacia, cada anotacion consistira en:
 // - Numero 
 // - Posición
@@ -25,7 +22,7 @@ var anotaciones         = [];
 var scaling_factor      = 1;
 var viz_anotations      = true;
 // show distances table
-var showing_dt          = false;
+var showing_dist_table  = false;
 
 //
 // Functions below this:
@@ -366,22 +363,22 @@ function anotar(modoAnotacion)
 /* ************************************************* */
 // Anotations viz tools
 
-function changeVizAnotInCanvas(viz)
+function changeVizAnotInCanvas(showing)
 {
     for(var i = 0; i < scene.root.children.length; i++)
         {
             var current = scene.root.children[i];
             
-            if(current.id > 0 && !viz){
+            if(current.id > 0 && !showing){
                 current.flags.visible = false;
                 //console.log("deleting viz to ball");
             }
-            else if(current.id > 0 && viz)
+            else if(current.id > 0 && showing)
                 current.flags.visible = true;
         }
 }
 
-function changeSizeAnotInCanvas(op_type)
+function changeSizeAnotInCanvas(operation)
 {
     // lets say op_type = 1 to add
     // and 0 to substract
@@ -393,13 +390,13 @@ function changeSizeAnotInCanvas(op_type)
     {
         var current = scene.root.children[i];
 
-        if(current.id > 0 && op_type === ADD)
+        if(current.id > 0 && operation === ADD)
             {
                 current.size = scaling_factor * 1.1;
                 current.scaling = current.size;
             }
                 
-        else if(current.id > 0 && op_type === SUBS)
+        else if(current.id > 0 && operation === SUBS)
             {
                 current.size = scaling_factor * 0.9;
                 current.scaling = current.size;
@@ -566,16 +563,6 @@ function medirDistancia()
     } 
 }   
 
-function revealDistancesTable()
-{
-    var table = $('#distances-table');
-    
-    if(showing_dt)
-        table.fadeIn();
-    else
-        table.fadeOut();
-}
-
 function pushMedicion(distance)
 {
     if(!distance)
@@ -593,9 +580,9 @@ function pushMedicion(distance)
     bodyTable.append(row);
     
 //    console.log("showing/hiding distances table");
-    showing_dt = true;
+    showing_dist_table = true;
     
-    revealDistancesTable();
+    revealDOMElement(table, showing_dist_table);
 }
 
 /* ************************************************* */

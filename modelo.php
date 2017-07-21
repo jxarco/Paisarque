@@ -125,12 +125,12 @@
                                 </a>
                                 <a id="show_dt" class="btn btn-default tool-btn">
                                     <div class="info_hover_box">Show measured distances</div>
-                                    <i class="material-icons">view_agenda</i>
+                                    <i class="material-icons">reorder</i>
                                 </a>
 
                                 <a id="test" class="btn btn-default tool-btn">
                                     <div class="info_hover_box">Save project</div>
-                                    <i class="material-icons">view</i>
+                                    <i class="material-icons">save</i>
                                 </a>
                             
                             </div> 

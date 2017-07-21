@@ -14,10 +14,10 @@ function Project( data )
 
 Project.prototype._ctor = function( data )
 {
-	this._uid = last_project_id++;
-    this._json = data;
+	data = data || {};
     
-    var data = data || {};
+    this._uid = last_project_id++;
+    this._json = data;
     
 	// data
 	this._id = data.id;
@@ -43,7 +43,7 @@ Project.prototype._ctor = function( data )
     this._rotations = data.render.rotaciones || {};
     
     //distances
-    this._meter = data.render.metro;
+    this._meter = data.render.metro || -1;
 }
 
 /*

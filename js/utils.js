@@ -34,6 +34,17 @@ function addScript( url, callback ) {
 }
 
 /*
+* Hide or show DOM element passed as parameter
+*/
+function revealDOMElement( element, showing )
+{   
+    if(showing)
+        element.fadeIn();
+    else
+        element.fadeOut();
+}
+
+/*
 * Capitalize first letter of a string
 * passed as parameter
 */

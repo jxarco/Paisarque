@@ -1,4 +1,4 @@
-var default_project = "pit";
+var default_project = null;
 var current_project = getQueryVariable("r") || default_project;
 
 var proj_to_delete = "test";
@@ -8,7 +8,8 @@ var delete_project_active = false;
 
 // this function calls the other
 // so we are getting all necessary data
-loadANOTfromJSON();
+if(current_project !== null)
+    loadANOTfromJSON();
     
 // FINISH GETTING DATA FROM JSONS
 
