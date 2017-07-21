@@ -98,37 +98,43 @@
                         <div class="tab-pane fade" id="herramientas">
                             
                             <div id="tools-btns">
-                            <a onclick="enableSetRotation()" class="btn btn-default tool-btn">
-                                <div class="info_hover_box">Set default rotations</div>
-                                <i class="material-icons">3d_rotation</i>
-                            </a>
+                                
+                                <a onclick="enableSetRotation()" class="btn btn-default tool-btn">
+                                    <div class="info_hover_box">Set default rotations</div>
+                                    <i class="material-icons">3d_rotation</i>
+                                </a>
+                                <a class="btn btn-default tool-btn" id="viz_on">
+                                    <div class="info_hover_box">Hide anotations</div>
+                                    <i class="material-icons">visibility_off</i>
+                                </a>
+                                <a onclick="changeSizeAnotInCanvas(true)" class="btn btn-default tool-btn" id ="add_size">
+                                    <div class="info_hover_box">Bigger anotations</div>
+                                    <i class="material-icons">add</i>
+                                </a>
+                                <a onclick="changeSizeAnotInCanvas(false)" class="btn btn-default tool-btn" id ="subs_size">
+                                    <div class="info_hover_box">Smaller anotations</div>
+                                    <i class="material-icons">remove</i>
+                                </a>
+                                <a onclick="medirMetro()" class="btn btn-default tool-btn">
+                                    <div class="info_hover_box">Configure distance</div>
+                                    <i class="material-icons">settings</i>
+                                </a>
+                                <a onclick="medirDistancia()" class="btn btn-default tool-btn">
+                                    <div class="info_hover_box">Measure distance</div>
+                                    <i class="material-icons">space_bar</i>
+                                </a>
+                                <a id="show_dt" class="btn btn-default tool-btn">
+                                    <div class="info_hover_box">Show measured distances</div>
+                                    <i class="material-icons">view_agenda</i>
+                                </a>
+
+                                <a id="test" class="btn btn-default tool-btn">
+                                    <div class="info_hover_box">Save project</div>
+                                    <i class="material-icons">view</i>
+                                </a>
+                            
                             </div> 
-                            <a class="btn btn-default tool-btn" id="viz_on">
-                                <div class="info_hover_box">Hide anotations</div>
-                                <i class="material-icons">visibility_off</i>
-                            </a>
-                            <a onclick="changeSizeAnotInCanvas(true)" class="btn btn-default tool-btn" id ="add_size">
-                                <div class="info_hover_box">Bigger anotations</div>
-                                <i class="material-icons">add</i>
-                            </a>
-                            <a onclick="changeSizeAnotInCanvas(false)" class="btn btn-default tool-btn" id ="subs_size">
-                                <div class="info_hover_box">Smaller anotations</div>
-                                <i class="material-icons">remove</i>
-                            </a>
-                            <a onclick="medirMetro()" class="btn btn-default tool-btn">
-                                <div class="info_hover_box">Configure distance</div>
-                                <i class="material-icons">settings</i>
-                            </a>
-                            <a onclick="medirDistancia()" class="btn btn-default tool-btn">
-                                <div class="info_hover_box">Measure distance</div>
-                                <i class="material-icons">space_bar</i>
-                            </a>
-                            <a id="show_dt" class="btn btn-default tool-btn">
-                                <div class="info_hover_box">Show measured distances</div>
-                                <i class="material-icons">view_agenda</i>
-                            </a>
-                            
-                            
+                                
                             <table class="table table-striped table-hover" id="distances-table">
                                  <thead>
                                     <tr>

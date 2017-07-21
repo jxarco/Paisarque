@@ -242,6 +242,9 @@ function init(current_project, meshURL, textureURL)
         ball.active = false;
         ball.time = 0.0;
         
+        var position = [ anotaciones[i].position[0], anotaciones[i].position[1], anotaciones[i].position[2]];
+        ball.position = position;
+        
         scene.root.addChild(ball);
 
         ball.update = function(dt)

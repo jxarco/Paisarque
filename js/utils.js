@@ -42,6 +42,10 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+function uncapitalizeFirstLetter(string) {
+    return string.charAt(0).toLowerCase() + string.slice(1);
+}
+
 /*
 * Loads the anotation data from the current project
 * Once has succeded loads the rest of the data
@@ -51,7 +55,7 @@ function capitalizeFirstLetter(string) {
 function loadANOTfromJSON()
 {
     $.ajax({dataType: "json",
-    url: "data/"+current_project+'_anotacion.json',
+    url: "data/" + current_project + '_anotacion.json',
     error:function(error){console.log(error)},
     success: function(data){
         if(window.parseJSONANOT) {

@@ -8,12 +8,11 @@ var textLinkCounter = 0;
 */
 $("#saveTextButton").click(function(e)
 {
-                    
     var ball = new RD.SceneNode();
     var id = project.getAnnotations().length + 1;
     
     ball.color = [1,0,0,1];
-    ball.id = numeroA;
+    ball.id = id;
     ball.size = scaling_factor;
     ball.scaling = ball.size;
     ball.shader = "phong";
@@ -43,7 +42,7 @@ $("#saveTextButton").click(function(e)
     document.getElementById("message-text").value = "";
     
     // se anade a la lista de anotaciones del proyecto
-    project.insertAnotation(camera, result, text);
+    project.insertAnotation(id, camera, result, text);
 });
 
 /*
@@ -144,7 +143,7 @@ $("#formUploadProject").on('submit', function(e)
     var values = getFormValues(this);
     
     // Por si el nombre del proyecto tiene espacios!
-    values["idProyecto"] = values["idProyecto"].replace(/ /g, '_');
+    var project_id = uncapitalizeFirstLetter(values["idProyecto"].replace(/ /g, '_'));
 
     // Enviar tambien la informacion de en que usuario estamos
     // para subir los ficheros a la carpeta que le corresponde
@@ -169,8 +168,8 @@ $("#formUploadProject").on('submit', function(e)
     var urlTexture = "data/" + user + "/" + values["idProyecto"] + "/"; 
     */
     
-    var urlMesh = values["idProyecto"] + "/"; 
-    var urlTexture = values["idProyecto"] + "/"; 
+    var urlMesh = project_id + "/"; 
+    var urlTexture = project_id + "/"; 
     
     var listaExtra = []; // hacer una lista de objetos de tipo {"type":"pdf",      "data":"data/wpbr.pdf"}, hay que mirar todos los que se suben, ver su nombre, url y que tipo son
     
@@ -198,7 +197,7 @@ $("#formUploadProject").on('submit', function(e)
                 urlTexture = urlTexture + nameTexture;
             }
         } else if (nameInput.includes("pdf")){
-            var urlPdf = "data/" + user + "/" + values["idProyecto"] + "/"; 
+            var urlPdf = "data/" + user + "/" + project_id + "/"; 
             var auxList = input[0]["value"].split('\\');
             var namePdf = auxList[auxList.length - 1];
             urlPdf = urlPdf + namePdf;
@@ -207,7 +206,7 @@ $("#formUploadProject").on('submit', function(e)
             
             listaExtra.push(objectPdf);
         } else if (nameInput.includes("image")) {
-            var urlImagen = "data/" + user + "/" + values["idProyecto"] + "/"; 
+            var urlImagen = "data/" + user + "/" + project_id + "/"; 
             var auxList = input[0]["value"].split('\\');
             var nameImagen = auxList[auxList.length - 1];
             urlImagen = urlImagen + nameImagen;
@@ -219,7 +218,7 @@ $("#formUploadProject").on('submit', function(e)
         
     });
     
-    if (!values["idProyecto"].length || !values["autor"].length || !values["lugar"].length || !values["latitud"].length || !values["longitud"].length) {
+    if (!project_id.length || !values["autor"].length || !values["lugar"].length || !values["latitud"].length || !values["longitud"].length) {
         alert("Rellena todos los campos");
         return true;
     }
@@ -249,16 +248,16 @@ $("#formUploadProject").on('submit', function(e)
     */
     
     var jsonFicheroPrincipal = {
-        "id": values["idProyecto"],
+        "id": project_id,
         "autor": values["autor"],
         "lugar": values["lugar"],
         "coordenadas": {"lat": values["latitud"], "lng": values["longitud"]},
-        "render":{"id":values["idProyecto"],"mesh":urlMesh,"texture":[urlTexture],
+        "render":{"id": project_id, "mesh":urlMesh, "texture":[urlTexture],
                   "rotaciones":[], "metro": -1},
         "extra": listaExtra
     };
         
-    var fileNameString = "data/" + user + "/" + values["idProyecto"] + '.json';
+    var fileNameString = "data/" + user + "/" + project_id + '.json';
     
     $.ajax({type: "GET",
             dataType : 'json',
@@ -267,7 +266,7 @@ $("#formUploadProject").on('submit', function(e)
     });
         
     
-    fileNameString = "data/" + user + "/" + values["idProyecto"] + '_anotacion.json';
+    fileNameString = "data/" + user + "/" + project_id + '_anotacion.json';
 
     $.ajax({type: "GET",
             dataType : 'json',
@@ -303,6 +302,10 @@ $('#cargarProyecto').click( function()
 {
 //    console.log("cargando proyecto");
     $('#GSCCModal').model('hide');
+});
+
+$("#test").click(function(){
+   project.save(); 
 });
 
 /*

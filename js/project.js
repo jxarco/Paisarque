@@ -25,17 +25,25 @@ Project.prototype._ctor = function( data )
 	this._author = data.autor;
     this._location = data.lugar;
     this._coordinates = data.coordenadas;
+    
     this._render = data.render;
+    
+    this._mesh = data.render.mesh;
+    this._textures = [];
+    
+    for(var i = 0; i < data.render.texture.length; ++i)
+        this._textures.push(data.render.texture[i]);    
+    
     this._extra = data.extra;
     
     // anotations
     this._anotations = data.anotaciones || [];
     
     // rotations
-    this._rotations = data.render.rotaciones;
+    this._rotations = data.render.rotaciones || {};
     
     //distances
-    this._meter = data.meter === -1 ? null : data.meter;
+    this._meter = data.render.metro === -1 ? null : data.render.metro;
 }
 
 Project.prototype.insertExtra = function( type, data )
@@ -162,16 +170,34 @@ Project.prototype.save = function()
     *   con los atributos actuales del proyecto
     */
     
-    var fileNameString = "data/" + current_project + '_anotacion.json';
-//    
-//    $.ajax({type: "GET",
-//            dataType : 'json',
-//            url: 'save_anotation.php',
-//            data: { data: JSON.stringify(anotaciones), file_name:fileNameString},
-//            success: function(){ 
-//                console.log("TABLA ACTUALIZADA");
-//            }                    
-//    });
+    var project = this._user + "/" + this._id;
+    var path = "data/" + project + '_test.json';
+    
+    var json = {
+        "id": this._id,
+        "autor": this._author,
+        "lugar": this._location,
+        "coordenadas": {"lat": this._coordinates.lat, "lng": this._coordinates.lng},
+        "render":{"id": this._id, "mesh": this._mesh, "texture": this._textures,
+                  "rotaciones": this._rotations, "metro": this._meter},
+        "extra": this._extra
+    };
+        
+    $.ajax({type: "GET",
+            dataType : 'json',
+            url: 'save_to_disc.php',
+            data: { 
+                data: JSON.stringify(json),
+                file: path
+            },
+            succes: function(response){
+                console.log("SAVED!!");
+            },
+            error: function(error){
+                console.log("error");
+                console.log(error);
+            }
+    });
 }
 
 Project.prototype.delete = function()
