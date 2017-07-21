@@ -46,6 +46,12 @@ Project.prototype._ctor = function( data )
     this._meter = data.render.metro;
 }
 
+/*
+*  @prototype insertExtra
+*  Insert extra information to the _extra list.
+*  - type: data type (pdf, image, etc)
+*  - data: path to data (or link)
+*/
 Project.prototype.insertExtra = function( type, data )
 {
     var dataURL = "";
@@ -61,9 +67,17 @@ Project.prototype.insertExtra = function( type, data )
     });
 }
 
+/*
+*  @prototype rename
+*  Renames project (ID!!)
+*  - name: new name
+*/
 Project.prototype.rename = function( name )
 {
-	this._id = name;
+    var new_name = name.replace(/ /g, '_');
+    new_name = new_name.charAt(0).toLowerCase() + string.slice(1);
+    
+	this._id = new_name;
 }
 
 /*
@@ -77,12 +91,6 @@ Project.prototype.rename = function( name )
 *  - position: x y z of the anotation
 *  - status: text of the anotation
 */
-
-Project.prototype.getAnnotations = function()
-{
-    return this._anotations;
-}
-
 Project.prototype.insertAnotation = function( id, camera, position, status )
 {
     this._anotations.push({
@@ -105,6 +113,16 @@ Project.prototype.insertAnotation = function( id, camera, position, status )
     $("#anotacion_tabla").append(totalString);
 }
 
+Project.prototype.getAnnotations = function()
+{
+    return this._anotations;
+}
+
+/*
+*  @prototype deleteAnotation
+*  Deletes a single annotation
+*  - id: id of the annotation to delete
+*/
 Project.prototype.deleteAnotation = function( id )
 {
     var index = null;
@@ -112,15 +130,21 @@ Project.prototype.deleteAnotation = function( id )
 	for(var i = 0; i < this._anotations.length; ++i)
     {
         if(this._anotations[i].id === id)
-            {
-                index = i;
-                break;
-            }
+        {
+            index = i;
+            break;
+        }
 //        console.log(this._anotations[i].id);
     }
     
     this._anotations.splice(index, 1);
 }
+
+/*
+*  @prototype deleteAllAnotations
+*  Deletes all annotations
+*  - scene: current global scene
+*/
 
 Project.prototype.deleteAllAnotations = function( scene )
 {
@@ -142,6 +166,12 @@ Project.prototype.getRotations = function()
     return this._rotations;
 }
 
+/*
+*  @prototype setRotations
+*  Sets the current rotations to the project
+*  - rotation: array list of the object rotations
+*/
+
 Project.prototype.setRotations = function( rotation )
 {
     var r0 = rotation[0];
@@ -154,7 +184,6 @@ Project.prototype.setRotations = function( rotation )
         {"r2": r2},
         {"r3": r3}
     ];
-    
 }
 
 /*
@@ -162,20 +191,21 @@ Project.prototype.setRotations = function( rotation )
 *  @class Project
 */
 
-Project.prototype.save = function()
+/*  
+*   @prototype save
+*   Guardar todos los datos a disco
+*   Se trata de sobreescribir (o no) el json original,
+*   con los atributos actuales del proyecto
+*/
+Project.prototype.save = function( overwrite, extra )
 {
-    /*  
-    *   Guardar todos los datos a disco
-    *   Se trata de sobreescribir el json original,
-    *   con los atributos actuales del proyecto
-    */
-    
-    var overwrite = true;
+    overwrite = overwrite || true;
+    extra = extra || "";
     
     var project = this._user + "/" + this._id;
     
     if(!overwrite)
-        project += "_test";
+        project += extra;
     
     var path = "data/" + project + '.json';
     
