@@ -1,8 +1,5 @@
 var default_project = "pit";
 var current_project = getQueryVariable("r") || default_project;
-var latitud = 0;
-var longitud = 0;
-var lugar = "";
 
 var proj_to_delete = "test";
 var delete_project_active = false;
@@ -94,13 +91,16 @@ function initMap()
     
     // https://developers.google.com/maps/documentation/javascript/examples/infowindow-simple
                 
+    var latitud = project._coordinates.lat;
+    var longitud = project._coordinates.lng;
+    var location = project._location;
+    
     var marker = {lat: latitud, lng: longitud};
     
 //    console.log("latitud y longitud utilizadas");  
     
     var mapCanvas = document.getElementById("map");
     var mapOptions = {
-        // Hacer que la latitud y la longitud se cojan del json!! 
         center: new google.maps.LatLng(latitud, longitud), zoom: 5
     };
     var map = new google.maps.Map(mapCanvas, mapOptions);
@@ -108,7 +108,7 @@ function initMap()
     var marker = new google.maps.Marker({
         position: marker,
         map: map,
-        title: lugar
+        title: location
     });    
 }
 

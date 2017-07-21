@@ -5,7 +5,6 @@ var context         = null;
 var scene           = null;
 var renderer        = null;
 var camera          = null;
-var meter           = null;
 var result          = vec3.create();
 var firstPoint      = vec3.create();
 var secondPoint     = vec3.create();
@@ -34,12 +33,13 @@ var showing_dt          = false;
 
 function parseJSON(json)
 {
-    
     if(project === null)
         project = new Project( json );
     
     for (var i = 0; i < anotaciones.length; i++)
     {
+        var id = anotaciones[i].numero;
+        
         var camera = {
             "position": anotaciones[i].position_camera,
             "target": anotaciones[i].target_camera,
@@ -54,7 +54,7 @@ function parseJSON(json)
             "2": anotaciones[i].posicion["2"],
         }
         
-        project.insertAnotation(camera, position, text)
+        project.insertAnotation(id, camera, position, text)
     }
     
     anotaciones = [];
@@ -134,7 +134,7 @@ function parseJSON(json)
     
     /* Ya tenemos el path completo de la Texture */     
     
-    init(current_project, totalPathMesh, totalPathTexture, renderData.rotaciones);
+    init(current_project, totalPathMesh, totalPathTexture);
 }
 
 function parseJSONANOT(json) 
@@ -177,8 +177,8 @@ function init(current_project, meshURL, textureURL)
     obj = new RD.SceneNode();
     obj.position = [0,0,0];
     obj.color = [1,1,1,1];
-    //obj.shader = "textured_phong";
     obj.mesh = meshURL;
+    
     // tenemos que pensar el caso en que haya mas de una textura
     if (!isArray(textureURL)) {
         obj.texture = textureURL;
@@ -192,8 +192,7 @@ function init(current_project, meshURL, textureURL)
     renderer.loadTexture(obj.texture, renderer.default_texture_settings);
     
     // Hacer las rotaciones pendientes
-    var rotaciones = project._rotations;
-    
+    var rotaciones = project.getRotations();
     
     if(!rotaciones.length)
         alert("No default rotations. Go to Tools and set a default rotation matrix");
@@ -224,10 +223,10 @@ function init(current_project, meshURL, textureURL)
         
     // se listan las anotaciones que hay en el fichero correspondiente que es el nombre del proyecto _anotaciones y se dibujan con un circulo rojo en la mesh
     
-    var anotaciones = project._anotations;
+    var anotaciones = project.getAnnotations();
     
     if(!anotaciones.length)
-        alert("no anotations");
+        console.log("no anotations");
     
     for (var i = 0; i < anotaciones.length; i++) {
         
@@ -254,22 +253,10 @@ function init(current_project, meshURL, textureURL)
             else
                 this.color = [1, 0.3, Math.sin(this.time*5), 1];
         }
-         
-        var position = [anotaciones[i].position[0], anotaciones[i].position[1], anotaciones[i].position[2]];
-        
-        var anotPosCamera = [anotaciones[i].camera_position[0], anotaciones[i].camera_position[1], anotaciones[i].camera_position[2]];
-        var anotTargetCamera = [anotaciones[i].camera_target[0], anotaciones[i].camera_target[1], anotaciones[i].camera_target[2]];
-        var anotUpCamera = [anotaciones[i].camera_up[0], anotaciones[i].camera_up[1], anotaciones[i].camera_up[2]];
-        
-        ball.position = position;
-        
-        var totalString = '<tr a onclick="lookAtAnot( camera, [' + anotPosCamera + '] , [' +  anotTargetCamera + "] , [" + anotUpCamera + ' ], ' + ball.id + ' )"><td>' + anotaciones[i].id + "</td>" + "<td>" + anotaciones[i].text + "</td></tr>";
-                
-        $("#anotacion_tabla").append(totalString);
     }
 
     //global settings
-    var bg_color = vec4.fromValues(0.2,0.3,0.4,1);
+    var bg_color = vec4.fromValues(0.3, 0.4, 0.5, 1);
 
     //main render loop
     var last = now = getTime();
@@ -284,7 +271,8 @@ function init(current_project, meshURL, textureURL)
         renderer.render(scene, camera);
         scene.update(dt);
     }
-    run();
+    
+    resize();
     context.animate(); //launch loop
     
     context.onupdate = function(dt) {
@@ -332,7 +320,7 @@ function init(current_project, meshURL, textureURL)
                 else
                     $('.sliders').fadeOut();        
                 
-                //saveRotations();
+                project.setRotations(obj._rotation);
             }
     }
     
@@ -342,7 +330,6 @@ function init(current_project, meshURL, textureURL)
 
 function anotar(modoAnotacion)
 {
-    
     if (modoAnotacion) {
         console.log("Modo anotación activado")
         $("#actAnot").hide();
@@ -372,57 +359,6 @@ function anotar(modoAnotacion)
     }
 
 }
-
-$("#saveTextButton").click(function (e) {
-                    
-    var ball = new RD.SceneNode();
-    var totalString = "";
-    var numeroA = anotaciones.length + 1;
-
-    ball.color = [1,0,0,1];
-    ball.id = numeroA;
-    ball.size = scaling_factor;
-    ball.scaling = ball.size;
-    ball.shader = "phong";
-    ball.mesh = "sphere";
-    ball.layers = 0x4;
-    ball.flags.ignore_collisions = true;
-    ball.active = false;
-    ball.time = 0.0;
-    scene.root.addChild(ball);
-
-    ball.update = function(dt)
-    {
-        this.time += dt;
-            
-        if(!this.active)
-            this.color = [1,0,0,1];
-        else
-            this.color = [1, 0.3, Math.sin(this.time*5), 1];
-    }
-
-    ball.position = result;
-
-    //$(this)
-    // se coge el texto correspondiente
-    var text = document.getElementById("message-text").value;
-    var numeroA = anotaciones.length + 1;
-    
-    // vaciar texto
-    document.getElementById("message-text").value = "";
-
-    // se crea una anotacion con todos los parametros
-    var anotacion = {numero:numeroA, position_camera: [camera.position[0], camera.position[1], camera.position[2]], target_camera: [camera.target[0], camera.target[1], camera.target[2]], up_camera: [camera.up[0], camera.up[1], camera.up[2]], texto:text, posicion:result};
-    // se anade a la lista de anotaciones de la aplicacion
-    anotaciones.push(anotacion); 
-
-    // se pone en el documento html y ademas que cuando se apreta a la anotacion se cambia a la camara con la que estaba
-    totalString = '<tr a onclick="lookAtAnot( camera, [' + camera.position  + "] , [" + camera.target + "],[" + camera.up + '], ' + numeroA + ')">'+ "<td>" + numeroA + "</td>" + "<td>" + text + "</td>"
-    +"</tr>";
-    $("#anotacion_tabla").append(totalString);
-
-    //$(this).off('hidden.bs.modal');
-});
 
 /* ************************************************* */
 // Anotations viz tools
@@ -477,8 +413,7 @@ function changeSizeAnotInCanvas(op_type)
 
 function medirMetro()
 {
-    
-    console.log("midiendo cuanto es un metro");
+//    console.log("midiendo cuanto es un metro");
     alert("Selecciona dos puntos, la linea recta que los une corresponderá a un metro");
     
     var primerPunto     = true;
@@ -533,19 +468,15 @@ function medirMetro()
                 newPoint[1] = Math.abs(firstPoint[1] - secondPoint[1]);
                 newPoint[2] = Math.abs(firstPoint[2] - secondPoint[2]);
                 
-                // Esto sera lo que correspondera a un metro en la aplicacion
-//                console.log(newPoint);
-                
-                // tengo que acabar la parte de las mediciones pero aun no tengo del todo claro, si quereis lo hablamos por correo para ver que pensais?
-                meter = vec3.length(newPoint);
-                console.log(meter);
+                project._meter = vec3.length(newPoint);
+                console.log(project._meter);
                 
                 segundoPunto = false;
             
                 setTimeout(function(){
                     ball_first.destroy();
                     ball_sec.destroy();
-                }, 3000);
+                }, 1500);
             }
         }
     } 
@@ -554,7 +485,7 @@ function medirMetro()
 
 function medirDistancia()
 {
-    if(meter === null)
+    if(project._meter === null)
     {
         alert("Configura primero la distancia relativa a un metro");
         return;
@@ -616,7 +547,7 @@ function medirDistancia()
                 newPoint[2] = Math.abs(firstPoint[2] - secondPoint[2]);
                 
                 var distance = vec3.length(newPoint);
-                var distance_in_meters = distance / meter;
+                var distance_in_meters = distance / project._meter;
 //                console.log(distance_in_meters);
                 
                 segundoPunto = false;
@@ -631,12 +562,6 @@ function medirDistancia()
         }
     } 
 }   
-
-function meterByDefault() 
-{
-    meter = 100;
-    pushMedicion(100);
-}
 
 function revealDistancesTable()
 {
@@ -664,28 +589,11 @@ function pushMedicion(distance)
     
     bodyTable.append(row);
     
-    console.log("showing/hiding distances table");
+//    console.log("showing/hiding distances table");
     showing_dt = true;
     
     revealDistancesTable();
 }
-
-/* ************************************************* */
-// Anotation tools
-
-//var saveAnotations = function() {
-//    
-//    var fileNameString = "data/" + current_project + '_anotacion.json';
-//    
-//    $.ajax({type: "GET",
-//            dataType : 'json',
-//            url: 'save_anotation.php',
-//            data: { data: JSON.stringify(anotaciones), file_name:fileNameString},
-//            success: function(){ 
-//                console.log("TABLA ACTUALIZADA");
-//            }                    
-//    });
-//}
 
 /* ************************************************* */
 // Rotation tools
@@ -731,37 +639,7 @@ function enableSetRotation()
         $('.sliders').fadeOut();        
 }
 
-function saveRotations()
-{   
-    var local_Data = project._json;
-    
-    var r0 = obj._rotation[0];
-    var r1 = obj._rotation[1];
-    var r2 = obj._rotation[2];
-    var r3 = obj._rotation[3];
-    
-    local_Data.render.rotaciones = [{"r0": r0},
-                    {"r1": r1},
-                    {"r2": r2},
-                    {"r3": r3}]
-    
-    console.log(local_Data.render.rotaciones);
-        
-    var fileNameString = "data/" + current_project + '.json';
-    
-    $.ajax({type: "GET",
-            dataType : 'json',
-            url: 'save_anotation.php',
-            data: { data: JSON.stringify(local_Data), file_name:fileNameString}
-    });
-}
-
 /* ************************************************* */
-
-function run() 
-{
-    resize();
-}
 
 var resize = function() 
 {

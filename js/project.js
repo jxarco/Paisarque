@@ -4,7 +4,6 @@
 */
 
 var last_project_id = 0;
-var last_anotation_id = 1;
 
 function Project( data )
 {
@@ -34,6 +33,9 @@ Project.prototype._ctor = function( data )
     
     // rotations
     this._rotations = data.render.rotaciones;
+    
+    //distances
+    this._meter = data.meter === -1 ? null : data.meter;
 }
 
 Project.prototype.insertExtra = function( type, data )
@@ -67,10 +69,14 @@ Project.prototype.rename = function( name )
 *  - position: x y z of the anotation
 *  - status: text of the anotation
 */
-Project.prototype.insertAnotation = function( camera, position, status )
+
+Project.prototype.getAnnotations = function()
 {
-    var id = last_anotation_id++;
-    
+    return this._anotations;
+}
+
+Project.prototype.insertAnotation = function( id, camera, position, status )
+{
     this._anotations.push({
         "id": id,
         "camera_position": camera.position,
@@ -83,27 +89,12 @@ Project.prototype.insertAnotation = function( camera, position, status )
             "2": position[2],
         }
     });
-}
-
-Project.prototype.deleteAllAnotations = function( scene, current_project )
-{
-	this._anotations = [];
     
-    $('#anotacion_tabla').empty();
+    // se pone en el documento html y ademas que cuando se apreta a la anotacion se cambia a la camara con la que estaba
+    var totalString = '<tr a onclick="lookAtAnot( camera, [' + camera.position  + "] , [" + camera.target + "],[" + camera.up + '], ' + id + ')">'+ "<td>" + id + "</td>" + "<td>" + status + "</td>"
+    +"</tr>";
     
-    // nos quedamos con OBJ y GRID
-    scene.root.children.splice(2, scene.root.children.length)
-    
-    var fileNameString = "data/" + current_project + '_anotacion.json';
-
-    /*$.ajax({type: "GET",
-            dataType : 'json',
-            url: 'save_anotation.php',
-            data: { data: "", file_name:fileNameString},
-            success: function(data){ 
-                console.log("TABLA ACTUALIZADA");
-            }                    
-    });*/
+    $("#anotacion_tabla").append(totalString);
 }
 
 Project.prototype.deleteAnotation = function( id )
@@ -117,10 +108,20 @@ Project.prototype.deleteAnotation = function( id )
                 index = i;
                 break;
             }
-        console.log(this._anotations[i].id);
+//        console.log(this._anotations[i].id);
     }
     
     this._anotations.splice(index, 1);
+}
+
+Project.prototype.deleteAllAnotations = function( scene )
+{
+	this._anotations = [];
+    
+    $('#anotacion_tabla').empty();
+    
+    // nos quedamos con OBJ y GRID
+    scene.root.children.splice(2, scene.root.children.length);
 }
 
 /*
@@ -128,9 +129,24 @@ Project.prototype.deleteAnotation = function( id )
 *  @class Project
 */
 
-Project.prototype.setRotations = function( rotations )
+Project.prototype.getRotations = function()
 {
-    this._rotations = rotations;
+    return this._rotations;
+}
+
+Project.prototype.setRotations = function( rotation )
+{
+    var r0 = rotation[0];
+    var r1 = rotation[1];
+    var r2 = rotation[2];
+    var r3 = rotation[3];
+    
+    this._rotations = [{"r0": r0},
+        {"r1": r1},
+        {"r2": r2},
+        {"r3": r3}
+    ];
+    
 }
 
 /*
@@ -140,15 +156,30 @@ Project.prototype.setRotations = function( rotations )
 
 Project.prototype.save = function()
 {
-    // guardar todos los datos al json
+    /*  
+    *   Guardar todos los datos a disco
+    *   Se trata de sobreescribir el json original,
+    *   con los atributos actuales del proyecto
+    */
+    
+    var fileNameString = "data/" + current_project + '_anotacion.json';
+//    
+//    $.ajax({type: "GET",
+//            dataType : 'json',
+//            url: 'save_anotation.php',
+//            data: { data: JSON.stringify(anotaciones), file_name:fileNameString},
+//            success: function(){ 
+//                console.log("TABLA ACTUALIZADA");
+//            }                    
+//    });
 }
 
-
-
-
-
-
-
-
-
-
+Project.prototype.delete = function()
+{
+    /*  
+    *   Vaciar proyecto para cuando se hace logout o 
+    *   se cambia de proyecto
+    */
+    
+    
+}

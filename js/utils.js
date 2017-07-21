@@ -76,14 +76,9 @@ function loadDATAfromJSON()
         error:function(error){console.log(error)},
         success:function(data){
             $('#project').html(data.id + "<span class='caret'></span>");
-            if(window.parseJSON) {
+            if(window.parseJSON)
+            {
                 parseJSON(data);
-                //console.log(data);  
-                latitud = data["coordenadas"]["lat"];
-                longitud = data["coordenadas"]["lng"];
-                lugar = data["lugar"];
-
-//                console.log("latitud y longitud configuradas");  
                 // LOAD ALWAYS AFTER GETTING DATA
                 loadMapsAPI();
             }

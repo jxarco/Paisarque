@@ -3,17 +3,71 @@ var pdfLinkCounter = 0;
 var imagenLinkCounter = 0;
 var textLinkCounter = 0;
 
-// Enter para enviar la anotación 
-$('#message-text').keyup(function(e) {
+/*
+*   Button: Insert annotation to project
+*/
+$("#saveTextButton").click(function(e)
+{
+                    
+    var ball = new RD.SceneNode();
+    var id = project.getAnnotations().length + 1;
+    
+    ball.color = [1,0,0,1];
+    ball.id = numeroA;
+    ball.size = scaling_factor;
+    ball.scaling = ball.size;
+    ball.shader = "phong";
+    ball.mesh = "sphere";
+    ball.layers = 0x4;
+    ball.flags.ignore_collisions = true;
+    ball.active = false;
+    ball.time = 0.0;
+    scene.root.addChild(ball);
+
+    ball.update = function(dt)
+    {
+        this.time += dt;
+            
+        if(!this.active)
+            this.color = [1,0,0,1];
+        else
+            this.color = [1, 0.3, Math.sin(this.time*5), 1];
+    }
+
+    ball.position = result;
+
+    // se coge el texto correspondiente
+    var text = document.getElementById("message-text").value;
+    
+    // vaciar texto
+    document.getElementById("message-text").value = "";
+    
+    // se anade a la lista de anotaciones del proyecto
+    project.insertAnotation(camera, result, text);
+});
+
+/*
+*   Key: Click #saveTextButton
+*/
+$('#message-text').keyup(function(e) 
+{
     e.preventDefault();
     if(e.keyCode == 13)
         $("#saveTextButton").click();
 });
 
-$("#delete-anot-btn").click(function(){
-    project.deleteAllAnotations(scene, current_project);
+/*
+*   Button: Delete all annotations in project
+*/
+$("#delete-anot-btn").click(function() 
+{
+    project.deleteAllAnotations(scene);
 });
 
+/*
+*   Button: Change visibility of the annotations
+*   in canvas
+*/
 $("#viz_on").click(function() 
 {
     viz_anotations = !viz_anotations;
@@ -24,6 +78,9 @@ $("#viz_on").click(function()
     $(this).html( "<div class='info_hover_box'>" + tooltip + "</div><i class='material-icons'>visibility" + extra + "</i>" );
 });
 
+/*
+*   Button: Show/Hide the distances measured table
+*/
 $("#show_dt").click(function() 
 {
 //    console.log("showing/hiding distances table");
@@ -32,7 +89,12 @@ $("#show_dt").click(function()
     revealDistancesTable();
 });
 
-$('#fullscreen-mode').click(function(){
+/*
+*   TODO!!!
+*   Button: Go canvas fullscreen 
+*/
+$('#fullscreen-mode').click(function() 
+{
     
 //    var canvas = $('#myCanvas');
 //    
@@ -53,8 +115,11 @@ $('#fullscreen-mode').click(function(){
 //    }
 });
 
-
-$("#logout").click(function() {   
+/*
+*   Button: Close session
+*/
+$("#logout").click(function()
+{   
      $.ajax( {
         url: 'logout.php',
         type: 'POST',
@@ -62,26 +127,14 @@ $("#logout").click(function() {
             document.location.href = 'index.html';
         }
     } );
-    
 });
 
-$('#cargarProyecto').click( function() {
-    console.log("cargando proyecto");
-    $('#GSCCModal').model('hide');
-});
+/*
+*   PROJECT STUFF
+*/
 
-$('#videoLink').click(function () {
-    var src = 'https://www.youtube.com/embed/VI04yNch1hU;autoplay=1';
-    // $('#introVideo').modal('show'); <-- remove this line
-    $('#introVideo iframe').attr('src', src);
-});
-
-$('#introVideo button.close').on('hidden.bs.modal', function () {
-    $('#introVideo iframe').removeAttr('src');
-});
-
-$("#formUploadProject").on('submit', function(e) {
-    
+$("#formUploadProject").on('submit', function(e)
+{
     e.preventDefault();
     
     $('#GSCCModal').modal('hide');   
@@ -190,7 +243,9 @@ $("#formUploadProject").on('submit', function(e) {
     }
     
     /* 
-    *  Se permite crear unas rotaciones básicas en el primer uso de la mesh
+    *   Se permite crear unas rotaciones básicas en el primer uso de la mesh,
+    *   así que ahora están vacías. Lo relativo a un metro también se guardará
+    *   en el json del proyecto.
     */
     
     var jsonFicheroPrincipal = {
@@ -199,7 +254,7 @@ $("#formUploadProject").on('submit', function(e) {
         "lugar": values["lugar"],
         "coordenadas": {"lat": values["latitud"], "lng": values["longitud"]},
         "render":{"id":values["idProyecto"],"mesh":urlMesh,"texture":[urlTexture],
-                  "rotaciones":[]},
+                  "rotaciones":[], "metro": -1},
         "extra": listaExtra
     };
         
@@ -242,9 +297,32 @@ $("#formUploadProject").on('submit', function(e) {
     // Resetear campos del form
     $(this).trigger("reset");
     
-}) 
+});
 
-$('#buttonYoutubeLink').click( function() {
+$('#cargarProyecto').click( function() 
+{
+//    console.log("cargando proyecto");
+    $('#GSCCModal').model('hide');
+});
+
+/*
+*   Extra info stuff
+*/
+
+$('#videoLink').click(function () 
+{
+    var src = 'https://www.youtube.com/embed/VI04yNch1hU;autoplay=1';
+    // $('#introVideo').modal('show'); <-- remove this line
+    $('#introVideo iframe').attr('src', src);
+});
+
+$('#introVideo button.close').on('hidden.bs.modal', function ()
+{
+    $('#introVideo iframe').removeAttr('src');
+});
+
+$('#buttonYoutubeLink').click( function() 
+{
     
     var stringYoutubeLink = '<div class="form-group"><label for="youtube' + (youtubeLinkCounter+1) + '" class="col-lg-2 control-label">Youtube Link</label><div class="col-lg-10"><input type="url" class="form-control" id="youtube' + (youtubeLinkCounter+1) + '" name="youtube' + (youtubeLinkCounter+1) + '"></div></div>';
         
@@ -252,7 +330,8 @@ $('#buttonYoutubeLink').click( function() {
     youtubeLinkCounter++;
 })
 
-$('#buttonPDFLink').click( function() {
+$('#buttonPDFLink').click( function() 
+{
     
     var stringPDFLink = '<div class="form-group"><label for="pdfLink' + (pdfLinkCounter+1) + '" class="col-lg-2 control-label">PDF Link</label><div class="col-lg-10"><input type="file" class="form-control" id="pdfLink' + (pdfLinkCounter+1) + '" name="pdfLink' + (pdfLinkCounter+1) + '"></div></div>';
         
@@ -260,7 +339,8 @@ $('#buttonPDFLink').click( function() {
     pdfLinkCounter++;
 })
 
-$('#buttonImageLink').click( function() {
+$('#buttonImageLink').click( function() 
+{
     
     var stringImageLink = '<div class="form-group"><label for="image' + (imagenLinkCounter+1) + '" class="col-lg-2 control-label">Image Link</label><div class="col-lg-10"><input type="file" class="form-control" id="image' + (imagenLinkCounter+1) + '" name="image' + (imagenLinkCounter+1)+ '" ></div></div>';
         
@@ -268,7 +348,8 @@ $('#buttonImageLink').click( function() {
     imagenLinkCounter++;
 })
 
-$('#buttonTextLink').click( function() {
+$('#buttonTextLink').click( function() 
+{
     
     var stringTextLink = '<div class="form-group"><label for="text' + (textLinkCounter+1) + '" class="col-lg-2 control-label">Textos</label><div class="col-lg-10"><input type="text" class="form-control" id="text' + (textLinkCounter+1) + '" name="text' + (textLinkCounter+1) + '"></div></div>';
         
