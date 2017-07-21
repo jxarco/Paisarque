@@ -43,7 +43,7 @@ Project.prototype._ctor = function( data )
     this._rotations = data.render.rotaciones || {};
     
     //distances
-    this._meter = data.render.metro === -1 ? null : data.render.metro;
+    this._meter = data.render.metro;
 }
 
 Project.prototype.insertExtra = function( type, data )
@@ -170,8 +170,14 @@ Project.prototype.save = function()
     *   con los atributos actuales del proyecto
     */
     
+    var overwrite = true;
+    
     var project = this._user + "/" + this._id;
-    var path = "data/" + project + '_test.json';
+    
+    if(!overwrite)
+        project += "_test";
+    
+    var path = "data/" + project + '.json';
     
     var json = {
         "id": this._id,
@@ -183,8 +189,9 @@ Project.prototype.save = function()
         "extra": this._extra
     };
         
-    $.ajax({type: "GET",
-            dataType : 'json',
+    $.ajax({
+            type: "GET",
+            //dataType : 'json',
             url: 'save_to_disc.php',
             data: { 
                 data: JSON.stringify(json),

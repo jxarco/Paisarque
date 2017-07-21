@@ -54,15 +54,20 @@ function uncapitalizeFirstLetter(string) {
 
 function loadANOTfromJSON()
 {
-    $.ajax({dataType: "json",
-    url: "data/" + current_project + '_anotacion.json',
-    error:function(error){console.log(error)},
-    success: function(data){
-        if(window.parseJSONANOT) {
-            parseJSONANOT(data);
-            loadDATAfromJSON();
+    var url = "data/" + current_project + '_anotacion.json'
+    
+    $.ajax({ 
+        url: url,
+        dataType: "json",
+        error: function(error){
+            console.log(error);
+        },
+        success: function(data){
+            if(window.parseJSONANOT) {
+                parseJSONANOT(data);
+                loadDATAfromJSON();
+            }
         }
-    }
    });
 
 }

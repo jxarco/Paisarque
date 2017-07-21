@@ -3,7 +3,7 @@
 	"autor":"Melanie",
 	"lugar":"Sudan",
 	"coordenadas":
-		{"lat":"13.631010","lng":"29.218989"},
+		{"lat":13.631010,"lng":29.218989},
 	"render":
 		{
 			"id":"Temple",

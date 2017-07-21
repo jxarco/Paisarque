@@ -488,7 +488,7 @@ function medirMetro()
 
 function medirDistancia()
 {
-    if(project._meter === null)
+    if(project._meter === -1)
     {
         alert("Configura primero la distancia relativa a un metro");
         return;
@@ -605,19 +605,16 @@ var _dvalue = 0;
 
 function modifyRotations(slider)
 {
-//    first option
-//    var sign = Math.sign(slider.value);
-//    var to_rotate = 0.1 * sign;
-    
-//    second option
     var to_rotate;
     if(slider.value > _dvalue)
-        to_rotate = 0.1 * Math.sign(slider.value);
+        to_rotate = 0.05 * Math.sign(slider.value);
     else
-        to_rotate = - 0.1 * Math.sign(slider.value);
+        to_rotate = - 0.05 * Math.sign(slider.value);
         
     var axis = null;
 
+//    console.log(slider.id);
+    
     if(slider.id === "s1")
             axis = RD.UP;
     if(slider.id === "s2")

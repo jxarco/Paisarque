@@ -72,11 +72,11 @@
                     </div>
                     <div class="slider">
                         <p style="color:white;">Y </p>
-                        <input id="s1" type="range" value="0" step="0.01" min="-6.5" max="6.5">
+                        <input id="s2" type="range" value="0" step="0.01" min="-6.5" max="6.5">
                     </div>
                     <div class="slider">
                         <p style="color:white;">Z </p>
-                        <input id="s1" type="range" value="0" step="0.01" min="-6.5" max="6.5">
+                        <input id="s3" type="range" value="0" step="0.01" min="-6.5" max="6.5">
                     </div>
                 </div>
                 
