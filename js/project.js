@@ -164,8 +164,19 @@ Project.prototype.deleteAnotation = function( id )
         var rowindex = i + 1;
         var row = $("#" + rowindex);
         var sub = row.attr("id") - 1;
+        
+        if(!sub)
+            continue;
+        
         row.attr("id", sub);
         this._anotations[i].id = sub;
+        
+        // testing
+        row = $("#" + sub);
+        var tmp = row.html();
+        tmp = tmp.replace("<td>" + (sub+1) + "</td>", "<td>" + sub + "</td>");
+        row.html(tmp);
+        //
     }
     
     // list
