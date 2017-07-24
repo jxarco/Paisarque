@@ -37,7 +37,19 @@ Project.prototype._ctor = function( data )
     this._extra = data.extra;
     
     // anotations
-    this._anotations = data.anotaciones || [];
+    this._anotations = [];
+    var len = data.anotaciones.length || 0;
+    
+    for(var i = 0; i < len; i++)
+    {
+        var cam = {
+            "position": data.anotaciones[i].camera_position,
+            "target": data.anotaciones[i].camera_target,
+            "up": data.anotaciones[i].camera_up
+        };
+        
+        this.insertAnotation( data.anotaciones[i].id, cam, data.anotaciones[i].position, data.anotaciones[i].text );
+    }
     
     // rotations
     this._rotations = data.render.rotaciones || {};
@@ -106,8 +118,13 @@ Project.prototype.insertAnotation = function( id, camera, position, status )
         }
     });
     
+    // fixing some bugs
+    var c_position = vec3.fromValues(camera.position[0], camera.position[1], camera.position[2]);
+    var c_target = vec3.fromValues(camera.target[0], camera.target[1], camera.target[2]);
+    var c_up = vec3.fromValues(camera.up[0], camera.up[1], camera.up[2]);
+    
     // se pone en el documento html y ademas que cuando se apreta a la anotacion se cambia a la camara con la que estaba
-    var totalString = '<tr a onclick="lookAtAnot( camera, [' + camera.position  + "] , [" + camera.target + "],[" + camera.up + '], ' + id + ')">'+ "<td>" + id + "</td>" + "<td>" + status + "</td>"
+    var totalString = '<tr a onclick="lookAtAnot( camera, [' + c_position  + "], [" + c_target + "], [" + c_up + '], ' + id + ')">'+ "<td>" + id + "</td>" + "<td>" + status + "</td>"
     +"</tr>";
     
     $("#anotacion_tabla").append(totalString);
@@ -146,14 +163,14 @@ Project.prototype.deleteAnotation = function( id )
 *  - scene: current global scene
 */
 
-Project.prototype.deleteAllAnotations = function( scene )
+Project.prototype.deleteAllAnotations = function( obj )
 {
 	this._anotations = [];
     
     $('#anotacion_tabla').empty();
     
     // nos quedamos con OBJ y GRID
-    scene.root.children.splice(2, scene.root.children.length);
+    obj.children.splice(0, obj.children.length);
 }
 
 /*

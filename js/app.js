@@ -214,11 +214,6 @@ function init(current_project, meshURL, textureURL)
             else
                 this.color = [1, 0.3, Math.sin(this.time*5), 1];
         }
-        
-         var totalString = '<tr a onclick="lookAtAnot( camera, [' + anotaciones[i].camera_position  + "] , [" + anotaciones[i].camera_target + "],[" + anotaciones[i].camera_up + '], ' + ball.id + ')">'+ "<td>" + ball.id + "</td>" + "<td>" +anotaciones[i].text + "</td>"
-        +"</tr>";
-
-        $("#anotacion_tabla").append(totalString);
     }
 
     //global settings

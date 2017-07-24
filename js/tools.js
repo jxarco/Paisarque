@@ -119,13 +119,15 @@ function initMap()
 function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id)
 {
     
+    console.log("looking at annotation");
+    
     camera.position = position_camera;
     camera.target = target_camera;
     camera.up = up_camera;
     
-    for(var i = 0; i < scene.root.children.length; i++)
+    for(var i = 0; i < obj.children.length; i++)
     {
-        var current = scene.root.children[i];
+        var current = obj.children[i];
         if(current.id === anot_id){
             //console.log(current);
             current.active = true;

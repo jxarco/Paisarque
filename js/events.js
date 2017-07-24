@@ -66,7 +66,7 @@ $('#message-text').keyup(function(e)
 */
 $("#delete-anot-btn").click(function() 
 {
-    project.deleteAllAnotations(scene);
+    project.deleteAllAnotations( obj );
 });
 
 /*
