@@ -102,3 +102,26 @@ $(function() {
   });
     
 });
+
+
+/*
+*  Dragging stuff
+*/
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("data", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("data");
+    
+    if(ev.target.id === "drag-cont")
+        project.deleteAnotation(data);
+}
+
+

@@ -124,7 +124,7 @@ Project.prototype.insertAnotation = function( id, camera, position, status )
     var c_up = vec3.fromValues(camera.up[0], camera.up[1], camera.up[2]);
     
     // se pone en el documento html y ademas que cuando se apreta a la anotacion se cambia a la camara con la que estaba
-    var totalString = '<tr a onclick="lookAtAnot( camera, [' + c_position  + "], [" + c_target + "], [" + c_up + '], ' + id + ')">'+ "<td>" + id + "</td>" + "<td>" + status + "</td>"
+    var totalString = '<tr a id="' + id + '" draggable="true" ondragstart="drag(event)" onclick="lookAtAnot( camera, [' + c_position  + "], [" + c_target + "], [" + c_up + '], ' + id + ')">'+ "<td>" + id + "</td>" + "<td>" + status + "</td>"
     +"</tr>";
     
     $("#anotacion_tabla").append(totalString);
@@ -142,25 +142,34 @@ Project.prototype.getAnnotations = function()
 */
 Project.prototype.deleteAnotation = function( id )
 {
+    //anotations list
     var index = null;
-    
 	for(var i = 0; i < this._anotations.length; ++i)
     {
-        if(this._anotations[i].id === id)
+        if(this._anotations[i].id === id && !found)
         {
             index = i;
-            break;
         }
-//        console.log(this._anotations[i].id);
     }
     
     this._anotations.splice(index, 1);
+    
+    // table
+    $("#" + id).remove();
+    
+    // scene
+    for(var i = 0; i < obj.children.length; ++i)
+        if(obj.children[i].id == id)
+        {
+            obj.children[i].destroy();
+            return;
+        }
 }
 
 /*
 *  @prototype deleteAllAnotations
 *  Deletes all annotations
-*  - scene: current global scene
+*  - obj: current global mesh of the project
 */
 
 Project.prototype.deleteAllAnotations = function( obj )

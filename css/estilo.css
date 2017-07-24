@@ -43,12 +43,16 @@
 #anotaciones{
     overflow: scroll !important;
     max-height: calc(100vh - 330px);
-    
-/*
+}
+
+#drag-cont{
+  
+    margin-top: 15px;
+    padding: 10px;
     border-style: solid;
     border-width: 2px;
     border-color: blue;
-*/
+
 }
 
 #herramientas{

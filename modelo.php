@@ -182,6 +182,9 @@
                                 <tbody id="anotacion_tabla"></tbody>
                             </table>
                             <a id="delete-anot-btn" class="btn btn-default">Borrar anotaciones</a>
+                            <div id="drag-cont" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                Borrar anotación (drag here)
+                            </div>
                         </div>
                     </div>
                 </div>
