@@ -9,7 +9,7 @@ var delete_project_active = false;
 // this function calls the other
 // so we are getting all necessary data
 if(current_project !== null)
-    loadANOTfromJSON();
+    loadJSON();
     
 // FINISH GETTING DATA FROM JSONS
 

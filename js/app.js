@@ -18,7 +18,6 @@ var setting_rotation = false;
 // - Texto
 // - Propiedades de la camara en ese momento
 
-var anotaciones         = [];
 var scaling_factor      = 1;
 var viz_anotations      = true;
 // show distances table
@@ -32,29 +31,6 @@ function parseJSON(json)
 {
     if(project === null)
         project = new Project( json );
-    
-    for (var i = 0; i < anotaciones.length; i++)
-    {
-        var id = anotaciones[i].numero;
-        
-        var camera = {
-            "position": anotaciones[i].position_camera,
-            "target": anotaciones[i].target_camera,
-            "up": anotaciones[i].up_camera,
-        }
-        
-        var text = anotaciones[i].texto;
-        
-        var position = {
-            "0": anotaciones[i].posicion["0"],
-            "1": anotaciones[i].posicion["1"],
-            "2": anotaciones[i].posicion["2"],
-        }
-        
-        project.insertAnotation(id, camera, position, text)
-    }
-    
-    anotaciones = [];
     
     project._user = current_project.split('/')[0];
     
@@ -134,17 +110,6 @@ function parseJSON(json)
     init(current_project, totalPathMesh, totalPathTexture);
 }
 
-function parseJSONANOT(json) 
-{ 
-    
-    for (var i = 0; i < json.length; i++) {
-        anotaciones.push(json[i]);
-    }
-    
-    if(!anotaciones.length)
-        alert("json has 0 anotations");
-}
-
 function init(current_project, meshURL, textureURL)
 {
     scene = new RD.Scene();
@@ -222,13 +187,13 @@ function init(current_project, meshURL, textureURL)
     
     var anotaciones = project.getAnnotations();
     
-    if(!anotaciones.length)
-        console.log("no anotations");
+//    if(!anotaciones.length)
+//        console.log("no anotations");
     
     for (var i = 0; i < anotaciones.length; i++) {
         
         var ball = new RD.SceneNode();
-        ball.id = i + 1;
+        ball.id = anotaciones[i].id;
         ball.color = [1,0,0,1];
         ball.size = scaling_factor;
         ball.scaling = ball.size;
@@ -253,6 +218,11 @@ function init(current_project, meshURL, textureURL)
             else
                 this.color = [1, 0.3, Math.sin(this.time*5), 1];
         }
+        
+         var totalString = '<tr a onclick="lookAtAnot( camera, [' + anotaciones[i].camera_position  + "] , [" + anotaciones[i].camera_target + "],[" + anotaciones[i].camera_up + '], ' + ball.id + ')">'+ "<td>" + ball.id + "</td>" + "<td>" +anotaciones[i].text + "</td>"
+        +"</tr>";
+
+        $("#anotacion_tabla").append(totalString);
     }
 
     //global settings

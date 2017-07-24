@@ -58,43 +58,21 @@ function uncapitalizeFirstLetter(string) {
 }
 
 /*
-* Loads the anotation data from the current project
-* Once has succeded loads the rest of the data
-* AJAX
-*/
-
-function loadANOTfromJSON()
-{
-    var url = "data/" + current_project + '_anotacion.json'
-    
-    $.ajax({ 
-        url: url,
-        dataType: "json",
-        error: function(error){
-            console.log(error);
-        },
-        success: function(data){
-            if(window.parseJSONANOT) {
-                parseJSONANOT(data);
-                loadDATAfromJSON();
-            }
-        }
-   });
-
-}
-
-/*
 * Loads the important data from the current project
 * and executes init function located at parseJSON.
 * AJAX
 */
 
-function loadDATAfromJSON()
+function loadJSON()
 {
     $.ajax({dataType: "json",
         url: "data/" + current_project + '.json',
-        error:function(error){console.log(error)},
-        success:function(data){
+        error: function(error)
+            {
+                console.log(error)
+            },
+            success:function(data)
+            {
             $('#project').html(data.id + "<span class='caret'></span>");
             if(window.parseJSON)
             {

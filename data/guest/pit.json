@@ -11,5 +11,6 @@
         {"type":"text",     "data":"Hola que tal, soy subnormal"},
         {"type":"text",     "data":"esto es otro parrafo"},
         {"type":"youtube",  "data":"https://www.youtube.com/embed/6W3R5ItkREk"}
-    ]
+    ],
+    "anotaciones":[]
 }

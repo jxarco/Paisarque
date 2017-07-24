@@ -210,7 +210,7 @@
                             $filecount = count($files);
                         }
 
-                        for ($i = 0; $i < $filecount; $i = $i+2) {
+                        for ($i = 0; $i < $filecount; $i = $i+1) {
                             
                             $user = substr(substr($files[$i], 5),0, -5);
 //                            $array = split('/', $user);

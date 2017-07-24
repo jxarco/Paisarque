@@ -252,9 +252,16 @@ $("#formUploadProject").on('submit', function(e)
         "autor": values["autor"],
         "lugar": values["lugar"],
         "coordenadas": {"lat": values["latitud"], "lng": values["longitud"]},
-        "render":{"id": project_id, "mesh":urlMesh, "texture":[urlTexture],
-                  "rotaciones":[], "metro": -1},
-        "extra": listaExtra
+        "render":{
+            "id": project_id, 
+            "mesh":urlMesh, 
+            "texture":
+                [urlTexture],
+              "rotaciones":[], 
+            "metro": -1
+        },
+        "extra": listaExtra,
+        "anotaciones": []
     };
         
     var fileNameString = "data/" + user + "/" + project_id + '.json';
@@ -262,19 +269,23 @@ $("#formUploadProject").on('submit', function(e)
     $.ajax({type: "GET",
             dataType : 'json',
             url: 'save_anotation.php',
-            data: { data: JSON.stringify(jsonFicheroPrincipal), file_name:fileNameString}
+            data:
+            { 
+                data: JSON.stringify(jsonFicheroPrincipal), 
+                file_name: fileNameString
+            }
     });
         
     
-    fileNameString = "data/" + user + "/" + project_id + '_anotacion.json';
+    /*fileNameString = "data/" + user + "/" + project_id + '_anotacion.json';
 
     $.ajax({type: "GET",
             dataType : 'json',
             url: 'save_anotation.php',
             data: { data: "", file_name: fileNameString}                  
-    });
+    });*/
     
-    // esto hare una llamada a ajax para que se cree un fichero con el nombre idProyecto.json y ademas otros igual con _anotacion.json
+    // Anotaciones también en el fichero principal???
     
     $('#loadingModal').modal('show');   
     

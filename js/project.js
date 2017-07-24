@@ -216,7 +216,8 @@ Project.prototype.save = function( overwrite, extra )
         "coordenadas": {"lat": this._coordinates.lat, "lng": this._coordinates.lng},
         "render":{"id": this._id, "mesh": this._mesh, "texture": this._textures,
                   "rotaciones": this._rotations, "metro": this._meter},
-        "extra": this._extra
+        "extra": this._extra,
+        "anotaciones": this._anotations
     };
         
     $.ajax({
