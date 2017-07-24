@@ -142,6 +142,9 @@ Project.prototype.getAnnotations = function()
 */
 Project.prototype.deleteAnotation = function( id )
 {
+    console.log("to delete: " + id);
+    console.log(this._anotations);
+    
     //anotations list
     var index = null;
 	for(var i = 0; i < this._anotations.length; ++i)
@@ -151,21 +154,22 @@ Project.prototype.deleteAnotation = function( id )
     if(index === null)
         throw("no annotation to delete");
     
-    this._anotations.splice(index, 1);
+    //table
+    $("#" + (index+1)).remove();
     
-    // table
-    $("#" + id).remove();
-    
+    // reorder table
     for(var i = index; i < this._anotations.length; ++i)
     {
-        // list
-        this._anotations[i].id--;
-        // update table
-        var id = i + 2;
-        var tmp = $("#" + id).html();
-        tmp = tmp.replace("<td>" + id + "</td>", "<td>" + (id-1) + "</td>")
-        $("#" + id).html(tmp);
+        
+        var rowindex = i + 1;
+        var row = $("#" + rowindex);
+        var sub = row.attr("id") - 1;
+        row.attr("id", sub);
+        this._anotations[i].id = sub;
     }
+    
+    // list
+    this._anotations.splice(index, 1);
     
     // scene
     for(var i = 0; i < obj.children.length; ++i)
