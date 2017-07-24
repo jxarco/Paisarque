@@ -13,8 +13,6 @@ $("#saveTextButton").click(function(e)
     
     ball.color = [1,0,0,1];
     ball.id = id;
-    ball.size = scaling_factor;
-    ball.scaling = ball.size;
     ball.shader = "phong";
     ball.mesh = "sphere";
     ball.layers = 0x4;

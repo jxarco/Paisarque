@@ -9,19 +9,12 @@ var result          = vec3.create();
 var firstPoint      = vec3.create();
 var secondPoint     = vec3.create();
 
-var _dt              = 0.0;
-var setting_rotation = false;
-
-// Una lista de anotaciones vacia, cada anotacion consistira en:
-// - Numero 
-// - Posición
-// - Texto
-// - Propiedades de la camara en ese momento
-
-var scaling_factor      = 1;
+var _dt                 = 0.0;
+var setting_rotation    = false;
 var viz_anotations      = true;
-// show distances table
 var showing_dist_table  = false;
+var subs                = 0;
+var adds                = 0;
 
 //
 // Functions below this:
@@ -195,8 +188,6 @@ function init(current_project, meshURL, textureURL)
         var ball = new RD.SceneNode();
         ball.id = anotaciones[i].id;
         ball.color = [1,0,0,1];
-        ball.size = scaling_factor;
-        ball.scaling = ball.size;
         ball.mesh = "sphere";
         ball.shader = "phong";
         ball.layers = 0x4;
@@ -367,20 +358,20 @@ function changeSizeAnotInCanvas(operation)
 
         if(operation === ADD)
             {
-                current.size = scaling_factor * 1.1;
-                current.scaling = current.size;
+//                var m = current.getLocalMatrix();
+//                current.scale([1.1, 1.1, 1.1]);
+//                
+//                mat4.multiply(current._local_matrix, current._local_matrix, m);
+//                
+//                adds++;
             }
                 
         else if(operation === SUBS)
             {
-                current.size = scaling_factor * 0.9;
-                current.scaling = current.size;
+//                current.scale([0.9, 0.9, 0.9]);
+//                subs++;
             }
-        
-        last_node = current;
     }
-    
-    scaling_factor = last_node.size;
 }
 
 /* ************************************************* */
