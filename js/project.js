@@ -153,16 +153,14 @@ Project.prototype.deleteAnotation = function( id )
     
     this._anotations.splice(index, 1);
     
-    for(var i = index; i < this._anotations.length; ++i)
-            this._anotations[i].id--;
-        
     // table
-//    var tmp = $("#" + id).html();
-//    console.log(tmp);
     $("#" + id).remove();
     
     for(var i = index; i < this._anotations.length; ++i)
     {
+        // list
+        this._anotations[i].id--;
+        // update table
         var id = i + 2;
         var tmp = $("#" + id).html();
         tmp = tmp.replace("<td>" + id + "</td>", "<td>" + (id-1) + "</td>")
