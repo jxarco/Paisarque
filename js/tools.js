@@ -78,7 +78,10 @@ function loadContent(url, project)
     else
     {
         var array = project.split('/');
-        deleteProject(array[0], array[1]);
+        var user = array[0];
+        var project = array[1];
+        
+        deleteProject(user, project);
     }
 }
 

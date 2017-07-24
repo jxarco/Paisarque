@@ -271,7 +271,7 @@ $("#formUploadProject").on('submit', function(e)
     $.ajax({type: "GET",
             dataType : 'json',
             url: 'save_anotation.php',
-            data: { data: "", file_name:fileNameString}                  
+            data: { data: "", file_name: fileNameString}                  
     });
     
     // esto hare una llamada a ajax para que se cree un fichero con el nombre idProyecto.json y ademas otros igual con _anotacion.json
