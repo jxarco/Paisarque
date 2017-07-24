@@ -32,12 +32,6 @@
 #info{
     overflow: scroll !important;
     max-height: calc(100vh - 330px);
-    
-/*
-    border-style: solid;
-    border-width: 2px;
-    border-color: green;
-*/
 }
 
 #anotaciones{
@@ -46,24 +40,34 @@
 }
 
 #drag-cont{
-  
     margin-top: 15px;
     padding: 10px;
-    border-style: solid;
-    border-width: 2px;
-    border-color: blue;
+    border: 3px solid;
+    border-color: #e3403a;
+    box-shadow: 0px 2px 0 #d6251f, 2px 4px 6px #e02a24;
+    font-weight: 300;
+    text-align: center;
+    -webkit-transition: all 150ms linear;
+    transition: all 150ms linear;
+}
 
+.dragging{
+    cursor: move;
+}
+
+.drag-cont-over{
+    border: 3px solid;
+    background: rgba(255, 0, 0, 0.1);
+    box-shadow: -2px -2px -3px rgba(255, 255, 255, 0.2);
+    color: #e3403a;
+    text-decoration: none;
+    -webkit-transition: all 250ms linear;
+    transition: all 250ms linear;
 }
 
 #herramientas{
     overflow: scroll !important;
     max-height: calc(100vh - 330px);
-    
-/*
-    border-style: solid;
-    border-width: 2px;
-    border-color: red;
-*/
 }
 
 .tool-btn{

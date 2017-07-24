@@ -110,6 +110,11 @@ $(function() {
 
 function allowDrop(ev) {
     ev.preventDefault();
+    $("#drag-cont").addClass("drag-cont-over");
+}
+
+function disallowDrop(ev) {
+    $("#drag-cont").removeClass("drag-cont-over");
 }
 
 function drag(ev) {
@@ -121,7 +126,10 @@ function drop(ev) {
     var data = ev.dataTransfer.getData("data");
     
     if(ev.target.id === "drag-cont")
+    {
+        $("#drag-cont").removeClass("drag-cont-over");
         project.deleteAnotation(data);
+    }
 }
 
 
