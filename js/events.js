@@ -21,7 +21,7 @@ $("#saveTextButton").click(function(e)
     ball.flags.ignore_collisions = true;
     ball.active = false;
     ball.time = 0.0;
-    scene.root.addChild(ball);
+//    scene.root.addChild(ball);
 
     ball.update = function(dt)
     {
@@ -34,6 +34,14 @@ $("#saveTextButton").click(function(e)
     }
 
     ball.position = result;
+    
+    // set ball parent
+    var parentInverse = mat4.create();
+    var sonGlobal = mat4.create();
+    mat4.invert(parentInverse, obj.getGlobalMatrix());
+    sonGlobal = ball.getGlobalMatrix();
+    obj.addChild(ball);
+    mat4.multiply(ball._local_matrix, parentInverse, sonGlobal);
 
     // se coge el texto correspondiente
     var text = document.getElementById("message-text").value;
@@ -275,17 +283,6 @@ $("#formUploadProject").on('submit', function(e)
                 file_name: fileNameString
             }
     });
-        
-    
-    /*fileNameString = "data/" + user + "/" + project_id + '_anotacion.json';
-
-    $.ajax({type: "GET",
-            dataType : 'json',
-            url: 'save_anotation.php',
-            data: { data: "", file_name: fileNameString}                  
-    });*/
-    
-    // Anotaciones también en el fichero principal???
     
     $('#loadingModal').modal('show');   
     

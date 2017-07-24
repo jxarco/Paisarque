@@ -207,12 +207,17 @@ function init(current_project, meshURL, textureURL)
         var position = [ anotaciones[i].position[0], anotaciones[i].position[1], anotaciones[i].position[2]];
         ball.position = position;
         
-        scene.root.addChild(ball);
+        // set ball parent
+        var parentInverse = mat4.create();
+        var sonGlobal = mat4.create();
+        mat4.invert(parentInverse, obj.getGlobalMatrix());
+        sonGlobal = ball.getGlobalMatrix();
+        obj.addChild(ball);
+        mat4.multiply(ball._local_matrix, parentInverse, sonGlobal);
 
         ball.update = function(dt)
         {
             this.time += dt;
-            
             if(!this.active)
                 this.color = [1,0,0,1];
             else
@@ -335,15 +340,15 @@ function anotar(modoAnotacion)
 
 function changeVizAnotInCanvas(showing)
 {
-    for(var i = 0; i < scene.root.children.length; i++)
+    for(var i = 0; i < obj.children.length; i++)
         {
-            var current = scene.root.children[i];
+            var current = obj.children[i];
             
-            if(current.id > 0 && !showing){
+            if(!showing){
                 current.flags.visible = false;
                 //console.log("deleting viz to ball");
             }
-            else if(current.id > 0 && showing)
+            else
                 current.flags.visible = true;
         }
 }
@@ -356,17 +361,17 @@ function changeSizeAnotInCanvas(operation)
     var SUBS = false;
     var last_node = null;
     
-    for(var i = 0; i < scene.root.children.length; i++)
+    for(var i = 0; i < obj.children.length; i++)
     {
-        var current = scene.root.children[i];
+        var current = obj.children[i];
 
-        if(current.id > 0 && operation === ADD)
+        if(operation === ADD)
             {
                 current.size = scaling_factor * 1.1;
                 current.scaling = current.size;
             }
                 
-        else if(current.id > 0 && operation === SUBS)
+        else if(operation === SUBS)
             {
                 current.size = scaling_factor * 0.9;
                 current.scaling = current.size;
