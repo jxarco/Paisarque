@@ -140,9 +140,9 @@
                             <table class="table table-striped table-hover" id="distances-table">
                                  <thead>
                                     <tr>
-                                        <th>p1</th>
-                                        <th>p2</th>
-                                        <th>Distancia</th>
+                                        <th>P1</th>
+                                        <th>P2</th>
+                                        <th>Dist (metros)</th>
                                     </tr>
                                 </thead>
                                 <tbody>

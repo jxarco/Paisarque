@@ -535,7 +535,10 @@ function pushMedicion(distance)
     var table = $('#distances-table');
     var bodyTable = table.find('tbody');
     
-    var row = "<tr a class='pointer'>" + 
+    // add to measures in project
+    var id = project.insertMeasure(firstPoint, secondPoint, distance);
+    
+    var row = "<tr id=" + id + " a class='pointer'>" + 
     "<td> x: " + Math.round(firstPoint[0] * 1000) / 1000 + "</br>y: " + Math.round(firstPoint[1] * 1000) / 1000 + "</br>z: " + Math.round(firstPoint[2] * 1000) / 1000 + "</td>" + 
     "<td> x: " + Math.round(secondPoint[0] * 1000) / 1000 + "</br>y: " + Math.round(secondPoint[1] * 1000) / 1000 + "</br>z: " + Math.round(secondPoint[2] * 1000) / 1000 + "</td>" + 
     "<td>" + Math.round(distance * 1000) / 1000 + "</td>" + 
@@ -543,9 +546,7 @@ function pushMedicion(distance)
     
     bodyTable.append(row);
     
-//    console.log("showing/hiding distances table");
     showing_dist_table = true;
-    
     revealDOMElement(table, showing_dist_table);
 }
 

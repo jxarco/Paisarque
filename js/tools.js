@@ -58,7 +58,6 @@ function deleteProject(user, project)
 
 function showCompletePath(current_user)
 {
-    
     $.ajax( {
         url: 'show_cp_path.php',
         type: 'POST',
@@ -92,7 +91,6 @@ function loadMapsAPI()
 
 function initMap() 
 {
-    
     // https://developers.google.com/maps/documentation/javascript/examples/infowindow-simple
                 
     var latitud = project._coordinates.lat;
@@ -100,8 +98,6 @@ function initMap()
     var location = project._location;
     
     var marker = {lat: latitud, lng: longitud};
-    
-//    console.log("latitud y longitud utilizadas");  
     
     var mapCanvas = document.getElementById("map");
     var mapOptions = {
@@ -118,9 +114,6 @@ function initMap()
 
 function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id)
 {
-    
-    console.log("looking at annotation");
-    
     camera.position = position_camera;
     camera.target = target_camera;
     camera.up = up_camera;
@@ -128,13 +121,9 @@ function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id)
     for(var i = 0; i < obj.children.length; i++)
     {
         var current = obj.children[i];
-        if(current.id === anot_id){
-            //console.log(current);
+        if(current.id === anot_id)
             current.active = true;
-            //console.log(current);
-        }
-        else{
+        else
             current.active = false;
-        }   
     }
 }

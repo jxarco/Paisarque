@@ -4,6 +4,7 @@
 */
 
 var last_project_id = 0;
+var last_measure_id = 0;
 
 function Project( data )
 {
@@ -197,6 +198,44 @@ Project.prototype.setRotations = function( rotation )
 }
 
 /*
+*  Distances
+*  @class Project
+*/
+
+Project.prototype.getMeasurements = function()
+{
+    return this._measures;
+}
+
+/*
+*  @prototype insertMeasure
+*  Push a new measure to the list project
+*  - 
+*/
+
+Project.prototype.insertMeasure = function( x1, x2, distance )
+{
+    var measure = {
+        "id": last_measure_id,
+        "x1": {
+            "0": x1[0],
+            "1": x1[1],
+            "2": x1[2],
+        },
+        "x2": {
+            "0": x2[0],
+            "1": x2[1],
+            "2": x2[2],
+        },
+        "distance": distance
+    };
+    
+    this._measures.push( measure );
+    
+    return last_measure_id++;
+}
+
+/*
 *  JSON
 *  @class Project
 */
@@ -245,6 +284,7 @@ Project.prototype.FROMJSON = function( data )
     
     //distances
     this._meter = data.render.metro || -1;
+    this._measures = [];
 }
 
 /*  
