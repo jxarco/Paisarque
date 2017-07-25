@@ -14,48 +14,7 @@ function Project( data )
 
 Project.prototype._ctor = function( data )
 {
-	data = data || {};
-    
-    this._uid = last_project_id++;
-    this._json = data;
-    
-	// data
-	this._id = data.id;
-    this._user = "guest";
-	this._author = data.autor;
-    this._location = data.lugar;
-    this._coordinates = data.coordenadas;
-    
-    this._render = data.render;
-    
-    this._mesh = data.render.mesh;
-    this._textures = [];
-    
-    for(var i = 0; i < data.render.texture.length; ++i)
-        this._textures.push(data.render.texture[i]);    
-    
-    this._extra = data.extra;
-    
-    // anotations
-    this._anotations = [];
-    var len = data.anotaciones.length || 0;
-    
-    for(var i = 0; i < len; i++)
-    {
-        var cam = {
-            "position": data.anotaciones[i].camera_position,
-            "target": data.anotaciones[i].camera_target,
-            "up": data.anotaciones[i].camera_up
-        };
-        
-        this.insertAnotation( data.anotaciones[i].id, cam, data.anotaciones[i].position, data.anotaciones[i].text );
-    }
-    
-    // rotations
-    this._rotations = data.render.rotaciones || {};
-    
-    //distances
-    this._meter = data.render.metro || -1;
+	this.FROMJSON( data );
 }
 
 /*
@@ -241,6 +200,52 @@ Project.prototype.setRotations = function( rotation )
 *  JSON
 *  @class Project
 */
+
+Project.prototype.FROMJSON = function( data )
+{
+    data = data || {};
+    
+    this._uid = last_project_id++;
+    this._json = data;
+    
+	// data
+	this._id = data.id;
+    this._user = "guest";
+	this._author = data.autor;
+    this._location = data.lugar;
+    this._coordinates = data.coordenadas;
+    
+    this._render = data.render;
+    
+    this._mesh = data.render.mesh;
+    this._textures = [];
+    
+    for(var i = 0; i < data.render.texture.length; ++i)
+        this._textures.push(data.render.texture[i]);    
+    
+    this._extra = data.extra;
+    
+    // anotations
+    this._anotations = [];
+    var len = data.anotaciones.length || 0;
+    
+    for(var i = 0; i < len; i++)
+    {
+        var cam = {
+            "position": data.anotaciones[i].camera_position,
+            "target": data.anotaciones[i].camera_target,
+            "up": data.anotaciones[i].camera_up
+        };
+        
+        this.insertAnotation( data.anotaciones[i].id, cam, data.anotaciones[i].position, data.anotaciones[i].text );
+    }
+    
+    // rotations
+    this._rotations = data.render.rotaciones || {};
+    
+    //distances
+    this._meter = data.render.metro || -1;
+}
 
 /*  
 *   @prototype save
