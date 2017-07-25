@@ -89,9 +89,10 @@ $("#viz_on").click(function()
 $("#show_dt").click(function() 
 {
 //    console.log("showing/hiding distances table");
-    showing_dt = !showing_dt;
+    showing_dist_table = !showing_dist_table;
     
-    revealDistancesTable();
+    var table = $('#distances-table');
+    revealDOMElement(table, showing_dist_table);
 });
 
 /*
