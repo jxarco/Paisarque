@@ -140,7 +140,9 @@ function init(current_project, meshURL, textureURL)
     }
     
     var makeVisible = function () {
-        placer.style.visibility="visible";
+        placer.style.visibility = "visible";
+        // COMMENT BELOW TO DEBUG
+        //alert("Remember to save the project when making any change!");
     };
 
     renderer.loadMesh(obj.mesh, makeVisible);
@@ -293,8 +295,9 @@ function anotar(modoAnotacion)
 {
     if (modoAnotacion) {
         console.log("Modo anotación activado")
-        $("#actAnot").hide();
-        $("#desAnot").show();
+        $("#desAnot").css('opacity', '1');
+        $("#actAnot").css('opacity', '0.2');
+        
         
         context.onmousedown = function(e) 
         {
@@ -314,8 +317,8 @@ function anotar(modoAnotacion)
         }
     } else if (!modoAnotacion) {
         console.log("Modo anotación desactivado");
-        $("#actAnot").show();
-        $("#desAnot").hide();
+        $("#desAnot").css('opacity', '0.2');
+        $("#actAnot").css('opacity', '1');
         context.onmousedown = function(e) {}
     }
 

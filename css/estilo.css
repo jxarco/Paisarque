@@ -25,8 +25,9 @@
     visibility: hidden;
 }
 
-#tools-btns{
-/*    position: absolute;*/
+.tools-btns{
+/*    background-color: blue;*/
+    margin-bottom: 5%;
 }
 
 #info{
@@ -39,11 +40,18 @@
     max-height: calc(100vh - 330px);
 }
 
+/*
+#desAnot {
+    display:none;
+}
+*/
+
 #drag-cont{
     margin-top: 15px;
     padding: 10px;
-    border: 3px solid;
-    border-color: #e3403a;
+    border-width: 3px;
+    border-style: dotted;
+    border-color: rgba(240, 20, 10, 0.3);
     box-shadow: 0px 2px 0 #d6251f, 2px 4px 6px #e02a24;
     font-weight: 300;
     text-align: center;
@@ -56,9 +64,9 @@
 }
 
 .drag-cont-over{
-    border: 3px solid;
     background: rgba(255, 0, 0, 0.1);
-    box-shadow: -2px -2px -3px rgba(255, 255, 255, 0.2);
+    border-style: dotted;
+    border-color: rgba(240, 20, 10, 0.9) !important;
     color: #e3403a;
     text-decoration: none;
     -webkit-transition: all 250ms linear;
@@ -70,16 +78,25 @@
     max-height: calc(100vh - 330px);
 }
 
+.delimiter{
+    font-size: 16px;
+    font-weight: 200;
+}
+
 .tool-btn{
-    width: 35px;
-    height: 35px;
-    padding-top: 2.25%;
-    padding-left: 2.4%;
-    float: left;
+    width: 35px !important;
+    height: 35px !important;
+    padding-top: 2.1%;
+    padding-left: 2.1%;
     background: lightgray;   
     margin: 12.5px;
     vertical-align: middle;
 }
+
+.tool-btn.nodisplay{
+    opacity: 0.2;
+}
+
 
 .tool-btn:active{
     color: #bbccff !important;
@@ -120,10 +137,6 @@
 
 #distances-table td{
     text-align: center;
-}
-
-#desAnot {
-    display:none;
 }
 
 #logout{
