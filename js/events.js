@@ -169,12 +169,6 @@ $("#formUploadProject").on('submit', function(e)
     }
     formData.append("user", user);
     
-    /*
-    No estoy segura cual de los dos sera el correcto
-    var urlMesh = "data/" + user + "/" + values["idProyecto"] + "/"; 
-    var urlTexture = "data/" + user + "/" + values["idProyecto"] + "/"; 
-    */
-    
     var urlMesh = project_id + "/"; 
     var urlTexture = project_id + "/"; 
     
