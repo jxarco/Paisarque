@@ -79,6 +79,7 @@
                         <input id="s3" type="range" value="0" step="0.01" min="-6.5" max="6.5">
                     </div>
                 </div>
+                <img id="cardinal-axis" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Br%C3%BAjula.svg/300px-Br%C3%BAjula.svg.png">
                 
                 <div class="col-sm-3" id="tools">
                     <ul  class="nav nav-tabs">

@@ -182,6 +182,14 @@
     outline: none !important;
 }
 
+#cardinal-axis{
+    position: absolute;
+    left: 48vw;
+    width: 20vh;
+    height: 20vh;
+    display: none;
+}
+
 /* -------------------------------------------- */
 /* sliders */
 

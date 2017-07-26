@@ -223,12 +223,12 @@ function init(current_project, meshURL, textureURL)
             if(!this.active)
                 this.color = [1,0,0,1];
             else
-                this.color = [1, 0.3, Math.sin(this.time*5), 1];
+                this.color = [1, 0.3 + Math.sin(this.time*5), 0.3 + Math.sin(this.time*5), 1];
         }
     }
 
     //global settings
-    var bg_color = vec4.fromValues(0.3, 0.4, 0.5, 1);
+    var bg_color = vec4.fromValues(0.4, 0.5, 0.6, 1);
 
     //main render loop
     var last = now = getTime();
@@ -630,9 +630,16 @@ function enableSetRotation()
     scene.root.children[1].flags.visible = setting_rotation;
     
     if(setting_rotation)
-       $('.sliders').fadeIn();        
+    {
+        $("#cardinal-axis").fadeIn();
+        $('.sliders').fadeIn();        
+    }
     else
+    {
+        $("#cardinal-axis").fadeOut();
         $('.sliders').fadeOut();        
+    }
+        
 }
 
 /* ************************************************* */
