@@ -19,10 +19,10 @@ Project.prototype._ctor = function( data )
 }
 
 /*
-*  @prototype insertExtra
-*  Insert extra information to the _extra list.
-*  - type: data type (pdf, image, etc)
-*  - data: path to data (or link)
+*   @prototype insertExtra
+*   Insert extra information to the _extra list.
+*   @param type: data type (pdf, image, etc)
+*   @param data: path to data (or link)
 */
 Project.prototype.insertExtra = function( type, data )
 {
@@ -40,9 +40,9 @@ Project.prototype.insertExtra = function( type, data )
 }
 
 /*
-*  @prototype rename
-*  Renames project (ID!!)
-*  - name: new name
+*   @prototype rename
+*   Renames project (ID!!)
+*   @param name: new name
 */
 Project.prototype.rename = function( name )
 {
@@ -53,15 +53,15 @@ Project.prototype.rename = function( name )
 }
 
 /*
-*  Anotations
-*  @class Project
+*   Anotations
+*   @class Project
 */
 
 /*
-*  @prototype insertAnotation
-*  - camera: contains position, target and up
-*  - position: x y z of the anotation
-*  - status: text of the anotation
+*   @prototype insertAnotation
+*   @param camera: contains position, target and up
+*   @param position: x y z of the anotation
+*   @param status: text of the anotation
 */
 Project.prototype.insertAnotation = function( id, camera, position, status )
 {
@@ -96,14 +96,14 @@ Project.prototype.getAnnotations = function()
 }
 
 /*
-*  @prototype deleteAnotation
-*  Deletes a single annotation
-*  - id: id of the annotation to delete
+*   @prototype deleteAnotation
+*   Deletes a single annotation
+*   @param id: id of the annotation to delete
 */
 Project.prototype.deleteAnotation = function( id )
 {
-    console.log("to delete: " + id);
-    console.log(this._anotations);
+//    console.log("to delete: " + id);
+//    console.log(this._anotations);
     
     //anotations list
     var index = null;
@@ -152,9 +152,9 @@ Project.prototype.deleteAnotation = function( id )
 }
 
 /*
-*  @prototype deleteAllAnotations
-*  Deletes all annotations
-*  - obj: current global mesh of the project
+*   @prototype deleteAllAnotations
+*   Deletes all annotations
+*   @param obj: current global mesh of the project
 */
 
 Project.prototype.deleteAllAnotations = function( obj )
@@ -178,9 +178,9 @@ Project.prototype.getRotations = function()
 }
 
 /*
-*  @prototype setRotations
-*  Sets the current rotations to the project
-*  - rotation: array list of the object rotations
+*   @prototype setRotations
+*   Sets the current rotations to the project
+*   @param rotation: array list of the object rotations
 */
 
 Project.prototype.setRotations = function( rotation )
@@ -198,8 +198,8 @@ Project.prototype.setRotations = function( rotation )
 }
 
 /*
-*  Distances
-*  @class Project
+*   Distances
+*   @class Project
 */
 
 Project.prototype.getMeasurements = function()
@@ -207,16 +207,27 @@ Project.prototype.getMeasurements = function()
     return this._measures;
 }
 
+Project.prototype.getMeasure = function(id)
+{
+    for(var i = 0; i < this._measures.length; i++)
+        if(this._measures[i].id == id)
+            return this._measures[i];
+}
+
 /*
-*  @prototype insertMeasure
-*  Push a new measure to the list project
-*  - 
+*   @prototype insertMeasure
+*   Push a new measure to the list project
+*   @param camera: get camera properties
+*   @param x1 and x2: points within distance is calculated
 */
 
-Project.prototype.insertMeasure = function( x1, x2, distance )
-{
+Project.prototype.insertMeasure = function( camera, x1, x2, distance )
+{   
     var measure = {
         "id": last_measure_id,
+        "camera_position": vec3.clone(camera.position),
+        "camera_target": vec3.clone(camera.target),
+        "camera_up": vec3.clone(camera.up),
         "x1": {
             "0": x1[0],
             "1": x1[1],
@@ -236,8 +247,8 @@ Project.prototype.insertMeasure = function( x1, x2, distance )
 }
 
 /*
-*  JSON
-*  @class Project
+*   JSON
+*   @class Project
 */
 
 Project.prototype.FROMJSON = function( data )

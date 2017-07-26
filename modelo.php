@@ -119,6 +119,7 @@
                                     <div class="info_hover_box">Hide anotations</div>
                                     <i class="material-icons">visibility_off</i>
                                 </a>
+<!--
                                 <a onclick="changeSizeAnotInCanvas(true)" class="btn tool-btn" id ="add_size">
                                     <div class="info_hover_box">Bigger anotations</div>
                                     <i class="material-icons">add</i>
@@ -127,6 +128,7 @@
                                     <div class="info_hover_box">Smaller anotations</div>
                                     <i class="material-icons">remove</i>
                                 </a>
+-->
                                 <a onclick="medirDistancia()" class="btn tool-btn">
                                     <div class="info_hover_box">Measure distance</div>
                                     <i class="material-icons">space_bar</i>
