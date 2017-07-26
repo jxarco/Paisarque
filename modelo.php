@@ -127,7 +127,7 @@
                                     <i class="material-icons">remove</i>
                                 </a>
 -->
-                                <a onclick="medirDistancia()" class="btn tool-btn">
+                                <a id="measure-btn" onclick="medirDistancia()" class="btn tool-btn nodisplay">
                                     <div class="info_hover_box">Medir distancia</div>
                                     <i class="material-icons">space_bar</i>
                                 </a>

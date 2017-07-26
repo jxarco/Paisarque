@@ -30,6 +30,8 @@ function parseJSON(json)
         project = new Project( json );
     
     project._user = current_project.split('/')[0];
+    if(project._meter !== -1)
+       $("#measure-btn").css('opacity', '1');
     
     var renderData = json.render;
     if(!renderData.mesh) {
@@ -432,7 +434,7 @@ function medirMetro()
                 newPoint[2] = Math.abs(firstPoint[2] - secondPoint[2]);
                 
                 project._meter = vec3.length(newPoint);
-                console.log(project._meter);
+                $("#measure-btn").css('opacity', '1');
                 
                 segundoPunto = false;
             
