@@ -584,9 +584,20 @@ function viewMeasure(id)
     ball2.position = [measure.x2[0], measure.x2[1], measure.x2[2]];
     scene.root.addChild(ball2);
     
+    // falta acabarlo y subir los puntos correspondientes
+    linea = new RD.SceneNode();
+    //linea.shader = "phong";
+    linea.flags.ignore_collisions = true;
+    linea.primitive = GL.LINES;
     
+    // hay que anyadir estos dos puntos en la mesh y estara la linea hecha
+    point1 = [measure.x1[0], measure.x1[1], measure.x1[2]];
+    point2 = [measure.x2[0], measure.x2[1], measure.x2[2]];
+    meshLinea = GL.Mesh();
+    linea.mesh = meshLinea;
     
-    
+    scene.root.addChild(linea);
+
     // change global camera
     camera.position = measure.camera_position;
     camera.target = measure.camera_target;
