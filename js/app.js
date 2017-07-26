@@ -283,9 +283,15 @@ function init(current_project, meshURL, textureURL)
                 scene.root.children[1].flags.visible = setting_rotation;
     
                 if(setting_rotation)
-                   $('.sliders').fadeIn();        
+                {
+                    $("#cardinal-axis").fadeIn();
+                    $('.sliders').fadeIn();        
+                }
                 else
+                {
+                    $("#cardinal-axis").fadeOut();
                     $('.sliders').fadeOut();        
+                }
                 
                 project.setRotations(obj._rotation);
             }
