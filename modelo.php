@@ -128,7 +128,7 @@
                                 </a>
 -->
                                 <a id="measure-btn" onclick="medirDistancia()" class="btn tool-btn nodisplay">
-                                    <div class="info_hover_box">Medir distancia</div>
+                                    <div class="info_hover_box">Configura el metro antes de medir</div>
                                     <i class="material-icons">space_bar</i>
                                 </a>
                                 <a id="show_dt" class="btn tool-btn">

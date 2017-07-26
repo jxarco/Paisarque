@@ -31,7 +31,10 @@ function parseJSON(json)
     
     project._user = current_project.split('/')[0];
     if(project._meter !== -1)
-       $("#measure-btn").css('opacity', '1');
+    {
+        $("#measure-btn").find("div").html("Medir distancia");
+        $("#measure-btn").css('opacity', '1'); 
+    }
     
     var renderData = json.render;
     if(!renderData.mesh) {
@@ -434,6 +437,7 @@ function medirMetro()
                 newPoint[2] = Math.abs(firstPoint[2] - secondPoint[2]);
                 
                 project._meter = vec3.length(newPoint);
+                $("#measure-btn").find("div").html("Medir distancia");
                 $("#measure-btn").css('opacity', '1');
                 
                 segundoPunto = false;
@@ -451,10 +455,7 @@ function medirMetro()
 function medirDistancia()
 {
     if(project._meter === -1)
-    {
-        alert("Configura primero la distancia relativa a un metro");
         return;
-    }
     
 //    console.log("midiendo distancia");
 //    alert("Selecciona dos puntos:");
