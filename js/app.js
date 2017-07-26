@@ -17,9 +17,11 @@ var subs                = 0;
 var adds                = 0;
 
 // measurement points
-var ball = null;
-var ball2 = null;
-var first_measurement = true;
+var first_measurement   = true;
+var ball    = null;
+var ball2   = null;
+var linea   = null;
+
 //
 // Functions below this:
 //
@@ -560,7 +562,7 @@ function viewMeasure(id)
 {
     if(!first_measurement)
     {
-        var elements = [ball, ball2];
+        var elements = [ball, ball2, linea];
         destroySceneElements(elements);    
     }
         
@@ -568,40 +570,41 @@ function viewMeasure(id)
     
 //    var console.log(id);
     var measure = project.getMeasure(id);
+    var x1 = [measure.x1[0], measure.x1[1], measure.x1[2]];
+    var x2 = [measure.x2[0], measure.x2[1], measure.x2[2]];
     
     ball = new RD.SceneNode();
-    ball.color = [0,0,1,1];
+//    ball.color = [0.3,0.2,0.8,1];
     ball.mesh = "sphere";
-    ball.shader = "phong";
+//    ball.shader = "phong";
     ball.scaling = 2;
     ball.layers = 0x4;
     ball.flags.ignore_collisions = true;
-    ball.position = [measure.x1[0], measure.x1[1], measure.x1[2]];
+    ball.position = x1;
     scene.root.addChild(ball);                
     
     
     ball2 = new RD.SceneNode();
-    ball2.color = [0,0,1,1];
+//    ball2.color = [0.3,0.2,0.8,1];
     ball2.mesh = "sphere";
-    ball2.shader = "phong";
+//    ball2.shader = "phong";
     ball2.scaling = 2;
     ball2.layers = 0x4;
     ball2.flags.ignore_collisions = true;
-    ball2.position = [measure.x2[0], measure.x2[1], measure.x2[2]];
+    ball2.position = x2;
     scene.root.addChild(ball2);
     
-    // falta acabarlo y subir los puntos correspondientes
+    var vertices = x1.concat(x2);
+    var mesh = GL.Mesh.load({ vertices: vertices }); 
+    renderer.meshes["line"] = mesh;
     linea = new RD.SceneNode();
-    //linea.shader = "phong";
     linea.flags.ignore_collisions = true;
-    linea.primitive = GL.LINES;
+    linea.primitive = gl.LINES;
+    linea.mesh = "line";
+//    linea.color = [0.3,0.2,0.8,1];
+    linea.flags.depth_test = false;
     
-    // hay que anyadir estos dos puntos en la mesh y estara la linea hecha
-    point1 = [measure.x1[0], measure.x1[1], measure.x1[2]];
-    point2 = [measure.x2[0], measure.x2[1], measure.x2[2]];
-    meshLinea = GL.Mesh();
-    linea.mesh = meshLinea;
-    
+    console.log(linea);
     scene.root.addChild(linea);
 
     // change global camera

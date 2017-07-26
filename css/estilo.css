@@ -32,11 +32,14 @@
 
 #info{
     overflow: scroll !important;
+    min-height: calc(100vh - 330px);
     max-height: calc(100vh - 330px);
 }
 
 #anotaciones{
+    border: 2px solid red;
     overflow: scroll !important;
+    min-height: calc(100vh - 330px);
     max-height: calc(100vh - 330px);
 }
 
@@ -46,17 +49,25 @@
 }
 */
 
+#deleting-div{
+    display: flex;
+    position: relative;
+    bottom: 0;
+    width: 250px;
+}
+
 #drag-cont{
-    margin-top: 15px;
     padding: 10px;
     border-width: 3px;
     border-style: dotted;
     border-color: rgba(240, 20, 10, 0.3);
-    box-shadow: 0px 2px 0 #d6251f, 2px 4px 6px #e02a24;
     font-weight: 300;
     text-align: center;
     -webkit-transition: all 150ms linear;
     transition: all 150ms linear;
+    -webkit-user-select: none; /* Chrome/Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+ */
 }
 
 .dragging{

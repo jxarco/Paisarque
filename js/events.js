@@ -99,7 +99,7 @@ $("#show_dt").click(function()
     revealDOMElement(table, showing_dist_table);
     if(!showing_dist_table)
     {
-        var elements = [ball, ball2];
+        var elements = [ball, ball2, linea];
         destroySceneElements(elements);
     }
 });

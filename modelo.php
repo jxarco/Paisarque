@@ -198,14 +198,17 @@
                                 <tbody id="anotacion_tabla"></tbody>
                             </table>
                             
-                             <a class="btn tool-btn" id="delete-anot-btn">
+                            <div id="deleting-div">
+                                <a class="btn tool-btn" id="delete-anot-btn">
                                     <div class="info_hover_box">Borrar todas las anotaciones</div>
                                     <i class="material-icons">delete</i>
-                            </a>
-                            
-                            <div id="drag-cont" ondrop="drop(event)" ondragleave="disallowDrop()" ondragover="allowDrop(event)">
-                                Arrastra aquí para borrar una sola anotación
+                                </a>
+
+                                <div id="drag-cont" ondrop="drop(event)" ondragleave="disallowDrop()" ondragover="allowDrop(event)">
+                                    Arrastra aquí para borrar una sola anotación
+                                </div>
                             </div>
+                            
                         </div>
                     </div>
                 </div>
