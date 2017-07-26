@@ -248,11 +248,6 @@ function init(current_project, meshURL, textureURL)
 
     context.onmousemove = function(e)
     {
-        /*if(e.dragging) {
-            camera.position = vec3.scaleAndAdd( camera.position, camera.position, RD.UP, e.deltay );
-            camera.rotate(e.deltax * 0.01, RD.UP);
-            //pivot.rotate( e.deltax * 0.01, RD.UP );
-        }*/
         
         mouse = [e.canvasx, gl.canvas.height - e.canvasy];
         if (e.dragging && e.leftButton) {
