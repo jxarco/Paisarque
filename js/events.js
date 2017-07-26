@@ -93,6 +93,11 @@ $("#show_dt").click(function()
     
     var table = $('#distances-table');
     revealDOMElement(table, showing_dist_table);
+    if(!showing_dist_table)
+    {
+        var elements = [ball, ball2];
+        destroySceneElements(elements);
+    }
 });
 
 /*

@@ -112,6 +112,12 @@ function initMap()
     });    
 }
 
+function destroySceneElements(elements)
+{
+    for(var i = 0; i < elements.length; ++i)
+        elements[i].destroy();
+}
+
 function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id)
 {
     camera.position = position_camera;

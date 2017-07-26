@@ -551,10 +551,11 @@ function viewMeasure(id)
 {
     if(!first_measurement)
     {
-        ball.destroy();
-        ball2.destroy();
-        first_measurement = false;
+        var elements = [ball, ball2];
+        destroySceneElements(elements);    
     }
+        
+    first_measurement = false;
     
 //    var console.log(id);
     var measure = project.getMeasure(id);
@@ -584,8 +585,6 @@ function viewMeasure(id)
     camera.position = measure.camera_position;
     camera.target = measure.camera_target;
     camera.up = measure.camera_up;
-    
-    console.log(camera);
 }
 
 /* ************************************************* */
