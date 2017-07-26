@@ -1,27 +1,12 @@
 <?php 
 
-    $DEBUG = true;
-
-    // Abrir sesión
     session_start(); 
 
-    if(isset($_SESSION['current']))
+    if(!isset($_SESSION['current']))
     {
-        if($DEBUG)
-        {
-            echo "DEBUG : sesion activa (" . $_SESSION['current'] . ")" . '</br>';
-//            echo "DEBUG : show-complete-path (" . $_SESSION['complete-path'] . ")";    
-        }
-    }
-        
-    else
-    {
-        if($DEBUG)
-            echo "DEBUG : sesion cerrada, abriendo...";
-
-        $_SESSION['current'] = $_GET['user'];
+       $_SESSION['current'] = $_GET['user'];
         $_SESSION['complete-path'] = false;
-    }    
+    }
 
 ?>
 

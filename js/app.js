@@ -230,7 +230,7 @@ function init(current_project, meshURL, textureURL)
     }
 
     //global settings
-    var bg_color = vec4.fromValues(0.4, 0.5, 0.6, 1);
+    var bg_color = vec4.fromValues(0.921, 0.921, 0.921, 1);
 
     //main render loop
     var last = now = getTime();
