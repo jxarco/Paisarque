@@ -100,21 +100,23 @@
                             <div class="tools-btns project">
                                 <p class="delimiter">PROJECT</p>
                                 <a onclick="enableSetRotation()" class="btn tool-btn">
-                                    <div class="info_hover_box">Set default rotations</div>
+                                    <div class="info_hover_box">Configurar rotaciones por defecto</div>
                                     <i class="material-icons">3d_rotation</i>
                                 </a>
-                                <a onclick="medirMetro()" class="btn tool-btn">
-                                    <div class="info_hover_box">Configure distance</div>
-                                    <i class="material-icons">settings</i>
-                                </a>
+
                                 <a id="test" class="btn tool-btn">
-                                    <div class="info_hover_box">Save project</div>
+                                    <div class="info_hover_box">Guardar cambios del proyecto</div>
                                     <i class="material-icons">save</i>
                                 </a>
                             </div>
                             
                             <div class="tools-btns anot">    
                                 <p class="delimiter">DISTANCIAS</p>
+                                
+                                <a onclick="medirMetro()" class="btn tool-btn">
+                                    <div class="info_hover_box">Definir un metro</div>
+                                    <i class="material-icons">settings</i>
+                                </a>
 <!--
                                 <a onclick="changeSizeAnotInCanvas(true)" class="btn tool-btn" id ="add_size">
                                     <div class="info_hover_box">Bigger anotations</div>
@@ -126,11 +128,11 @@
                                 </a>
 -->
                                 <a onclick="medirDistancia()" class="btn tool-btn">
-                                    <div class="info_hover_box">Measure distance</div>
+                                    <div class="info_hover_box">Medir distancia</div>
                                     <i class="material-icons">space_bar</i>
                                 </a>
                                 <a id="show_dt" class="btn tool-btn">
-                                    <div class="info_hover_box">Show measured distances</div>
+                                    <div class="info_hover_box">Mostrar distancias medidas</div>
                                     <i class="material-icons">reorder</i>
                                 </a>
                             </div> 
