@@ -172,7 +172,7 @@
                             </div>
                             
                             <a class="btn tool-btn" id="viz_on">
-                                    <div class="info_hover_box">Hide anotations</div>
+                                    <div class="info_hover_box">Esconder anotaciones</div>
                                     <i class="material-icons">visibility_off</i>
                             </a>
                             
