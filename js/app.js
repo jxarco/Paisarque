@@ -32,11 +32,18 @@ function parseJSON(json)
         project = new Project( json );
     
     project._user = current_project.split('/')[0];
+    
     if(project._meter !== -1)
     {
         $("#measure-btn").find("div").html("Medir distancia");
         $("#measure-btn").css('opacity', '1'); 
     }
+    
+    if(project._description !== "nodesc")
+        $("#comment").val(project._description);
+    
+    /****************************************************************/
+    /* render stuff*/
     
     var renderData = json.render;
     if(!renderData.mesh) {
@@ -185,7 +192,7 @@ function init(current_project, meshURL, textureURL)
     grid.name = "grid";
     grid.mesh = "grid";
     grid.primitive = gl.LINES;
-    grid.color = [1, 1, 1, 1];
+    grid.color = [0.5, 0.5, 0.5, 1];
     grid.scale([50, 50, 50]);
     scene.root.addChild(grid);
         

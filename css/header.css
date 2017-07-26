@@ -7,10 +7,11 @@ body {
 }
 
 header {
-		width: 100% !important;
-		height: 50px;
-		background-color: #f44355;
-		box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    width: 100% !important;
+    height: 50px;
+    background-color: rgb(62, 164, 155);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    z-index: 100 !important;
 }
 
 header > nav > div {
@@ -35,6 +36,15 @@ header > nav > div:hover > a {
         color: aliceblue;
 		cursor: pointer;
         text-decoration: none; 
+}
+
+.space{
+    background: none !important;
+}
+
+.space:hover{
+    background: none !important;
+    cursor: default;
 }
 
 #megatitle{

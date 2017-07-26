@@ -4,13 +4,15 @@ var current_project = getQueryVariable("r") || default_project;
 var proj_to_delete = "test";
 var delete_project_active = false;
 
-// GET DATA FROM JSONS
+// LOAD DATA FROM JSONS
 
-// this function calls the other
-// so we are getting all necessary data
-if(current_project !== null)
-    loadJSON();
-    
+var LOADER = {
+    load: function(){
+        if(current_project !== null)
+            loadJSON();
+    }
+};
+
 // FINISH GETTING DATA FROM JSONS
 
 function enable_project_delete()

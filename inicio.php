@@ -25,39 +25,32 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/custom.min.css" rel="stylesheet">
     <link href="css/estilo.css" rel="stylesheet">
+    <link href="css/header.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
     </head>
     <body class="container">
         
-        <header class="row"><div class="col-lg-12">
-            
-                <nav class="navbar navbar-default"><div class="container-fluid">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                          <span class="sr-only">Toggle navigation</span>
-                          <span class="icon-bar"></span>
-                          <span class="icon-bar"></span>
-                          <span class="icon-bar"></span>
-                        </button>
-<!--                        <a class="navbar-brand" href="index.html">PaisArque</a>-->
-                        <a class="navbar-brand">PaisArque</a>
-                    </div>
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"><ul class="nav navbar-nav">
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="logged-button"><a href="#" id="textUser"></a></li>
-                        <li id="logout" class="logout-button pointer"><a>
-                            <span class="glyphicon glyphicon-off" aria-hidden="true">
-                            </span></a></li>
-                    </ul></div>
-                </div></nav>
-            
-        </div></header><!--   header end-->
+        <header>
+            <nav>
+                <div id="megadiv">
+                        <a id="megatitle"><span>PaisArque </span></a>
+                </div>
+                <div>
+                        <a id="textUser" class="space">username</a>
+                </div>
+                
+                <div>
+                        <a id="logout"><span class="glyphicon glyphicon-off" aria-hidden="true">
+                            </span></a>
+                </div>
+                
+            </nav>
+        </header><!--   header end-->
         
         <content class="container">
             
-            <a href="#" id="addProject" class="btn btn-lg btn-primary t" data-toggle="modal" data-target="#GSCCModal">Añadir nuevo proyecto</a>
+            <a href="#" id="addProject" class="btn btn-lg" data-toggle="modal" data-target="#GSCCModal">Añadir nuevo proyecto</a>
             
             <div class="modal" id="loadingModal" aria-hidden="true">
                 <div class="modal-dialog">
@@ -159,7 +152,7 @@
                             <div class="form-group">
                                 <div class="col-lg-10 col-lg-offset-2">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                    <button type="submit" name="submit" value="send" class="btn btn-primary" >Submit</button>
+                                    <button type="submit" name="submit" value="send" class="btn my-btn" >Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -237,18 +230,22 @@
                 
             </div>
             
-            <button class="btn btn-sm btn-primary project-options" onclick="<?php echo "showCompletePath('" . $_SESSION['current'] . "');\""; ?>">
+            <div class="project-options">
             
-                <?php
-                    if(!$_SESSION['complete-path'])    
-                        echo "Mostrar ruta completa";
-                    else 
-                        echo "Mostrar menos";
-                ?>
-            
-            </button>
-            
-            <button id="delete-project" class="btn btn-sm btn-primary project-options" onclick="enable_project_delete();">Eliminar proyecto</button>
+                <button class="btn" onclick="<?php echo "showCompletePath('" . $_SESSION['current'] . "');\""; ?>">
+
+                    <?php
+                        if(!$_SESSION['complete-path'])    
+                            echo "Mostrar ruta completa";
+                        else 
+                            echo "Mostrar menos";
+                    ?>
+
+                </button>
+
+                <button id="delete-project" class="btn" onclick="enable_project_delete();">Eliminar proyecto</button>
+                
+            </div>
 
         </content><!--  content end-->
         

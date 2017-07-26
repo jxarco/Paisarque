@@ -61,6 +61,13 @@ $('#message-text').keyup(function(e)
         $("#saveTextButton").click();
 });
 
+$('#comment').keyup(function(e) 
+{
+    e.preventDefault();
+    project._description = $(this).val();
+});
+
+
 /*
 *   Button: Delete all annotations in project
 */

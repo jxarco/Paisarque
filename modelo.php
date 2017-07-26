@@ -4,7 +4,7 @@
 
     if(!isset($_SESSION['current']))
     {
-       $_SESSION['current'] = $_GET['user'];
+       $_SESSION['current'] = "guest";
     }
 
 ?>
@@ -24,47 +24,53 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="css/custom.min.css" rel="stylesheet">
     <link href="css/estilo.css" rel="stylesheet">
+    <link href="css/header.css" rel="stylesheet">
     <link href="css/verticalText.css" rel="stylesheet">
     <link href="css/rangeslider.css" rel="stylesheet">
 
     </head>
-    <body class="container">
+    <body>
         
-        <header class="row"><div class="col-lg-12">
-            
-                <nav class="navbar navbar-default"><div class="container-fluid">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                          <span class="sr-only">Toggle navigation</span>
-                          <span class="icon-bar"></span>
-                          <span class="icon-bar"></span>
-                          <span class="icon-bar"></span>
-                        </button>
-<!--                        <a class="navbar-brand" href="index.html">PaisArque</a>-->
-                        <a class="navbar-brand">PaisArque</a>
-                    </div>
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"><ul class="nav navbar-nav">
-                        <li> <a onclick="<?php echo "location.href = 'inicio.php?user=" . $_SESSION['current'] . "'"; ?>"> Inicio</a> </li>
-                        <li> <a onclick="loadContent('modelo.php')"> Modelo 3D</a> </li>
-                        <li> <a onclick="loadContent('infoextra.php')">   Info Extra </a> </li>
-                        <li> <a onclick="loadContent('exportar.php')">   Exportar </a> </li>
-                        <li> <a onclick="loadContent('ayuda.php')">  Ayuda </a> </li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="logged-button"><a href="#" id="textUser"></a></li>
-                        <li id="logout" class="logout-button pointer"><a>
-                            <span class="glyphicon glyphicon-off" aria-hidden="true">
-                            </span></a></li>
-                    </ul></div>
-                </div></nav>
-            
-        </div></header><!--   header end-->
+       <header>
+            <nav>
+                <div id="megadiv">
+                        <a id="megatitle"><span>PaisArque </span></a>
+                </div>
+                <div>
+                        <a onclick="<?php echo "location.href = 'inicio.php?user=" . $_SESSION['current'] . "'"; ?>"><span>Inicio </span></a>
+                </div>
+                <div>
+                        <a onclick="loadContent('modelo.php')"><span>3D </span></a>
+                </div>
+                <div>
+                        <a onclick="loadContent('infoextra.php')"><span>Información </span></a>
+                </div>
+                <div>
+                        <a onclick="loadContent('exportar.php')"><span>Exportar </span></a>
+                </div>
+                <div>
+                        <a onclick="loadContent('ayuda.php')"><span>Ayuda </span></a>
+                </div>
+                <div>
+                        <a class="space"><span>-</span></a>
+                </div>
+                <div>
+                        <a id="textUser">username</a>
+                </div>
+                
+                <div>
+                        <a id="logout"><span class="glyphicon glyphicon-off" aria-hidden="true">
+                            </span></a>
+                </div>
+                
+            </nav>
+        </header><!--   header end-->
         
-        <content class="container">
+        <content>
             
             <div class="col-sm-12 text-left" id="placeholder"> 
-            <!--<div id="placeholder" class="col-lg-12 well">-->
-                <div class="col-sm-9 text-left" id= "myCanvas"></div>
+                <div class="col-sm-10 text-left" id= "myCanvas"></div>
+                
                 <div class="sliders">
                     <div class="slider">
                         <p style="color:white;">X </p>
@@ -81,17 +87,19 @@
                 </div>
                 <img id="cardinal-axis" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Br%C3%BAjula.svg/300px-Br%C3%BAjula.svg.png">
                 
-                <div class="col-sm-3" id="tools">
-                    <ul  class="nav nav-tabs">
+                
+                <div class="col-sm-2" id="tools">
+                    <ul class="nav nav-tabs">
                         <li class="active"><a href="#info" data-toggle="tab" aria-expanded="true">Info</a></li>
                         <li> <a href="#herramientas" data-toggle="tab" aria-expanded="true">Tools</a> </li>
-                        <li> <a href="#anotaciones" data-toggle="tab" aria-expanded="true">Anotaciones</a> </li>
+                        <li> <a href="#anotaciones" data-toggle="tab" aria-expanded="true">Notas</a> </li>
                     </ul>
                     <div class="tab-content">
+                        
                         <div class="tab-pane fade active in" id="info">
-                            <div id="descripcion">
+                             <div id="descripcion">
                                 <label for="comment">Descripción:</label>
-                                <textarea style="width:250px;height:100px; resize: none;" class="form-control" rows="5" id="comment"></textarea>
+                                <textarea style="width:100%;height:100px; resize: none;" class="form-control" rows="5" id="comment"></textarea>
                             </div>
                             <br>
                             <div id="map"></div>
@@ -151,6 +159,7 @@
                             </table>
                             
                         </div>
+                        
                         <div class="tab-pane fade" id="anotaciones">
                             <div class="modal fade" id="modalText" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                               <div class="modal-dialog" role="document">
@@ -207,11 +216,12 @@
                                 </a>
 
                                 <div id="drag-cont" ondrop="drop(event)" ondragleave="disallowDrop()" ondragover="allowDrop(event)">
-                                    Arrastra aquí para borrar una sola anotación
+                                    Arrastra aquí: eliminar anotación
                                 </div>
                             </div>
                             
                         </div>
+                        
                     </div>
                 </div>
             </div>
@@ -236,7 +246,10 @@
         <script src="js/utils.js"></script>
         <script src="js/tools.js"></script>
         <script src="js/app.js"></script>
-        <script src="js/events.js"></script>
+        <script src="js/events.js"></script>    
+        <script>
+            LOADER.load();
+        </script>
     </body>
     
 </html>

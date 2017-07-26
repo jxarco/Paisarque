@@ -1,15 +1,21 @@
 @import url('https://fonts.googleapis.com/css?family=Ubuntu');
 
-body{
+body, html{
     margin: 0 !important;
     padding: 0 !important;
     font-family: 'Ubuntu', sans-serif;
     background-color: rgb(235, 235, 235);
     width: 100% !important;
+    height: 100% !important;
+    overflow-y: hidden;
+}
+
+content{
+    height: 100% !important;
 }
 
 label, p{
-    color: aliceblue;
+    color: black;
 }
 
 li a{
@@ -20,6 +26,92 @@ li:hover > a {
     background-color: rgba(0, 0, 0, 0.2) !important;
     border: none !important;
 }
+
+button:hover{
+    background-color: rgb(150, 150, 150);
+}
+
+/*********************************************************/
+/* general */
+
+.pointer{
+    cursor: pointer;
+}
+
+.my-btn{
+    color: aliceblue;
+    background-color: rgb(62, 164, 155);
+}
+
+.my-btn:hover{
+    color: aliceblue !important;
+    background-color: rgb(20, 120, 120);
+}
+
+/*********************************************************/
+/* inicio.php */
+
+#addProject{
+    margin: 5%;
+    margin-bottom: 0;
+    background-color: rgb(62, 164, 155);
+    width: 20%;
+    height: 50px;
+    color: aliceblue !important;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+#addProject:hover{
+    color: aliceblue !important;
+    background-color: rgb(20, 120, 120);
+}
+
+#table-projects{
+    margin: 5%;
+    margin-top: 0;
+}
+
+#table-projects tr:hover td{
+    background-color: rgba(82, 184, 175, 0.5) !important;
+}
+
+.project-options > button{
+    margin-left: 5%;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.project-options > button:hover{
+    margin-left: 5%;
+}
+
+.form-group > label{
+    color: dimgrey !important;
+}
+
+.addExtraData > p{
+    color: dimgrey !important;
+}
+
+.addExtraData{
+    margin-left: 21%;
+    width: 50%;
+    height: 5vh;
+    text-align: center;
+    display: flex;
+}
+
+.addExtraData i{
+/*    margin-left: 40% !important;*/
+    vertical-align: text-top;
+}
+
+.addExtraData p{
+    margin-top: 1% !important;
+    margin-left: 2% !important;
+}
+
+/*********************************************************/
+/* modelo.php */
 
 .active a{
     color: black !important;
@@ -33,7 +125,8 @@ li:hover > a {
 }
 
 #placeholder {
-    height: calc(100vh - 275px);
+/*    height: calc(100vh - 275px);*/
+    height: 100%;
     background-image: url("../data/loading.gif");
     background-repeat: no-repeat;
     background-size: 15em;
@@ -43,19 +136,19 @@ li:hover > a {
 }
 
 #tools{
-    height: calc(100vh - 125px);
-    background-color: rgba(244, 67, 85, 1);
+    background-color: rgba(82, 184, 175, 0.65) !important;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    height: 100%;
+    right: 0;
+    top: 0;
 }
 
 #myCanvas {
-    height: calc(100vh - 125px);
     background-position: center;
-    padding:0;
     overflow: hidden;
     visibility: hidden;
+    z-index: 0 !important;
+    margin-top: 6px;
 }
 
 .tools-btns{
@@ -65,8 +158,8 @@ li:hover > a {
 
 #info{
     overflow: scroll !important;
-    min-height: calc(100vh - 330px);
-    max-height: calc(100vh - 330px);
+    min-height: 100%;
+    max-height: 100%;
 }
 
 #anotaciones{
@@ -131,8 +224,8 @@ li:hover > a {
 .tool-btn{
     width: 35px !important;
     height: 35px !important;
-    padding-top: 2.1%;
-    padding-left: 2.1%;
+    padding-top: 2.75% !important;
+    padding-left: 2.75% !important;
     background: lightgray;   
     margin: 12.5px;
     vertical-align: middle;
@@ -162,7 +255,8 @@ li:hover > a {
     color: #fff;
     font-size: 17;
     font-weight: 200;
-    margin: 30px;
+    margin-top: -50px;
+    margin-left: -100px;
 }
 
 .tool-btn:hover div {
@@ -191,28 +285,6 @@ li:hover > a {
 
 #logout:hover{
     font-size: 20px;
-}
-
-.addExtraData{
-    margin-left: 21%;
-    width: 50%;
-    height: 5vh;
-    text-align: center;
-    display: flex;
-}
-
-.addExtraData i{
-/*    margin-left: 40% !important;*/
-    vertical-align: text-top;
-}
-
-.addExtraData p{
-    margin-top: 1% !important;
-    margin-left: 2% !important;
-}
-
-.pointer{
-    cursor: pointer;
 }
 
 /* -------------------------------------------- */

@@ -15,6 +15,10 @@ function Project( data )
 
 Project.prototype._ctor = function( data )
 {
+    this._anotations    = [];
+    this._measures      = [];
+    this._textures      = [];
+    
 	this.FROMJSON( data );
 }
 
@@ -259,7 +263,10 @@ Project.prototype.FROMJSON = function( data )
     this._json = data;
     
 	// data
-	this._id = data.id;
+    var desc = data.descripcion || "";
+	this._description = desc.length ? desc : "nodesc";
+    
+    this._id = data.id;
     this._user = "guest";
 	this._author = data.autor;
     this._location = data.lugar;
@@ -268,7 +275,6 @@ Project.prototype.FROMJSON = function( data )
     this._render = data.render;
     
     this._mesh = data.render.mesh;
-    this._textures = [];
     
     for(var i = 0; i < data.render.texture.length; ++i)
         this._textures.push(data.render.texture[i]);    
@@ -276,7 +282,6 @@ Project.prototype.FROMJSON = function( data )
     this._extra = data.extra;
     
     // anotations
-    this._anotations = [];
     var len = data.anotaciones.length || 0;
     
     for(var i = 0; i < len; i++)
@@ -295,7 +300,6 @@ Project.prototype.FROMJSON = function( data )
     
     //distances
     this._meter = data.render.metro || -1;
-    this._measures = [];
 }
 
 /*  
@@ -318,6 +322,7 @@ Project.prototype.save = function( overwrite, extra )
     
     var json = {
         "id": this._id,
+        "descripcion": this._description,
         "autor": this._author,
         "lugar": this._location,
         "coordenadas": {"lat": this._coordinates.lat, "lng": this._coordinates.lng},
