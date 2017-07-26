@@ -66,7 +66,8 @@ $('#message-text').keyup(function(e)
 */
 $("#delete-anot-btn").click(function() 
 {
-    project.deleteAllAnotations( obj );
+    if(confirm("¿Estas seguro?"))
+        project.deleteAllAnotations( obj );
 });
 
 /*

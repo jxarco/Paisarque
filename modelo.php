@@ -193,7 +193,14 @@
                                 </thead>
                                 <tbody id="anotacion_tabla"></tbody>
                             </table>
-                            <a id="delete-anot-btn" class="btn btn-default">Borrar anotaciones</a>
+                            
+<!--                            <a id="delete-anot-btn" class="btn btn-default">Borrar anotaciones</a>-->
+                            
+                             <div tabindex="1" class="onoff-input">
+                                <input type="checkbox" id="onoff1" />
+                                <div class="selectable"></div>
+                              </div>
+                            
                             <div id="drag-cont" ondrop="drop(event)" ondragleave="disallowDrop()" ondragover="allowDrop(event)">
                                 Arrastra aquí para borrar una sola anotación
                             </div>

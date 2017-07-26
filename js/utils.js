@@ -103,6 +103,42 @@ $(function() {
     
 });
 
+/*
+* Toogle delete annotations
+*/
+
+$(function() {
+  var container = $(".onoff-input");
+  var input = $(".onoff-input input[type=checkbox]");
+  
+  input.change(function() {
+    var i = $(this)
+    var parent = $(this).parent();
+    var sibling = $(this).siblings(".selectable");
+    
+    var on = i.is(":checked");
+//      console.log(i.is(":checked"));
+    var width = parent.width() - sibling.width();
+    
+      
+    parent.css("background-color", "#4cd864");
+    
+    sibling.animate(
+      { "margin-left": on ? width : 0 },
+      { duration: 120, queue: false, complete: function(){
+          if(confirm("¿Estas seguro?")) {
+                project.deleteAllAnotations( obj );    
+                parent.css("background-color", "#fff");
+          }
+        } 
+      });
+  });
+  
+  container.click(function() {
+    $(this).children("input[type=checkbox]").click();
+  });
+});
+
 
 /*
 *  Dragging stuff
