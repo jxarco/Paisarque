@@ -114,11 +114,7 @@
                             </div>
                             
                             <div class="tools-btns anot">    
-                                <p class="delimiter">ANOTACIONES</p>
-                                <a class="btn tool-btn" id="viz_on">
-                                    <div class="info_hover_box">Hide anotations</div>
-                                    <i class="material-icons">visibility_off</i>
-                                </a>
+                                <p class="delimiter">DISTANCIAS</p>
 <!--
                                 <a onclick="changeSizeAnotInCanvas(true)" class="btn tool-btn" id ="add_size">
                                     <div class="info_hover_box">Bigger anotations</div>
@@ -173,6 +169,11 @@
                               </div>
                             </div>
                             
+                            <a class="btn tool-btn" id="viz_on">
+                                    <div class="info_hover_box">Hide anotations</div>
+                                    <i class="material-icons">visibility_off</i>
+                            </a>
+                            
                             <a onclick="anotar(true)" class="btn tool-btn" id="actAnot">
                                     <div class="info_hover_box">Activar Modo Anotación</div>
                                     <i class="material-icons">create</i>
@@ -194,12 +195,10 @@
                                 <tbody id="anotacion_tabla"></tbody>
                             </table>
                             
-<!--                            <a id="delete-anot-btn" class="btn btn-default">Borrar anotaciones</a>-->
-                            
-                             <div tabindex="1" class="onoff-input">
-                                <input type="checkbox" id="onoff1" />
-                                <div class="selectable"></div>
-                              </div>
+                             <a class="btn tool-btn" id="delete-anot-btn">
+                                    <div class="info_hover_box">Borrar todas las anotaciones</div>
+                                    <i class="material-icons">delete</i>
+                            </a>
                             
                             <div id="drag-cont" ondrop="drop(event)" ondragleave="disallowDrop()" ondragover="allowDrop(event)">
                                 Arrastra aquí para borrar una sola anotación
