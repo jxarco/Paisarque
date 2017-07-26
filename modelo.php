@@ -1,3 +1,14 @@
+<?php 
+
+    session_start(); 
+
+    if(!isset($_SESSION['current']))
+    {
+       $_SESSION['current'] = $_GET['user'];
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>

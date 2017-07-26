@@ -574,7 +574,7 @@ function viewMeasure(id)
     var x2 = [measure.x2[0], measure.x2[1], measure.x2[2]];
     
     ball = new RD.SceneNode();
-//    ball.color = [0.3,0.2,0.8,1];
+    ball.color = [0.3,0.2,0.8,1];
     ball.mesh = "sphere";
 //    ball.shader = "phong";
     ball.scaling = 2;
@@ -585,7 +585,7 @@ function viewMeasure(id)
     
     
     ball2 = new RD.SceneNode();
-//    ball2.color = [0.3,0.2,0.8,1];
+    ball2.color = [0.3,0.2,0.8,1];
     ball2.mesh = "sphere";
 //    ball2.shader = "phong";
     ball2.scaling = 2;
@@ -601,7 +601,7 @@ function viewMeasure(id)
     linea.flags.ignore_collisions = true;
     linea.primitive = gl.LINES;
     linea.mesh = "line";
-//    linea.color = [0.3,0.2,0.8,1];
+    linea.color = [0.3,0.2,0.8,1];
     linea.flags.depth_test = false;
     
     console.log(linea);

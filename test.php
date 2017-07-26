@@ -1,3 +1,14 @@
+<?php 
+
+    session_start(); 
+
+    if(!isset($_SESSION['current']))
+    {
+       $_SESSION['current'] = $_GET['user'];
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -21,33 +32,33 @@
     <body class="container">
         
        <header>
-                <nav>
-                        <div id="megadiv">
-                                <a id="megatitle"><span>Paisarque </span></a>
-                        </div>
-                        <div>
-                                <a><span>Inicio </span></a>
-                        </div>
-                        <div>
-                                <a><span>3D </span></a>
-                        </div>
-                        <div>
-                                <a><span>Información </span></a>
-                        </div>
-                        <div>
-                                <a><span>Exportar </span></a>
-                        </div>
-                        <div>
-                                <a><span>Ayuda </span></a>
-                        </div>
-                </nav>
+            <nav>
+                <div id="megadiv">
+                        <a id="megatitle"><span>Paisarque </span></a>
+                </div>
+                <div>
+                        <a onclick="<?php echo "location.href = 'inicio.php?user=" . $_SESSION['current'] . "'"; ?>"><span>Inicio </span></a>
+                </div>
+                <div>
+                        <a onclick="loadContent('modelo.php')"><span>3D </span></a>
+                </div>
+                <div>
+                        <a onclick="loadContent('infoextra.php')"><span>Información </span></a>
+                </div>
+                <div>
+                        <a onclick="loadContent('exportar.php')"><span>Exportar </span></a>
+                </div>
+                <div>
+                        <a onclick="loadContent('ayuda.php')"><span>Ayuda </span></a>
+                </div>
+            </nav>
         </header><!--   header end-->
         
         <content class="container">
             
             <div class="col-sm-12 text-left" id="placeholder"> 
             <!--<div id="placeholder" class="col-lg-12 well">-->
-                <div class="col-sm-9 text-left" id= "myCanvas"></div>
+                <div class="col-sm-10 text-left" id= "myCanvas"></div>
                 
                 <div class="sliders">
                     <div class="slider">
@@ -66,11 +77,11 @@
                 <img id="cardinal-axis" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Br%C3%BAjula.svg/300px-Br%C3%BAjula.svg.png">
                 
                 
-                <div class="col-sm-3" id="tools">
+                <div class="col-sm-2" id="tools">
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#info" data-toggle="tab" aria-expanded="true">Info</a></li>
                         <li> <a href="#herramientas" data-toggle="tab" aria-expanded="true">Tools</a> </li>
-                        <li> <a href="#anotaciones" data-toggle="tab" aria-expanded="true">Anotaciones</a> </li>
+                        <li> <a href="#anotaciones" data-toggle="tab" aria-expanded="true">Notas</a> </li>
                     </ul>
                     <div class="tab-content">
                         
@@ -194,7 +205,7 @@
                                 </a>
 
                                 <div id="drag-cont" ondrop="drop(event)" ondragleave="disallowDrop()" ondragover="allowDrop(event)">
-                                    Arrastra aquí para borrar una sola anotación
+                                    Arrastra aquí: eliminar anotación
                                 </div>
                             </div>
                             
