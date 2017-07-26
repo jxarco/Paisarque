@@ -584,10 +584,14 @@ function viewMeasure(id)
     ball2.position = [measure.x2[0], measure.x2[1], measure.x2[2]];
     scene.root.addChild(ball2);
     
+    
+    
+    
     // change global camera
     camera.position = measure.camera_position;
     camera.target = measure.camera_target;
     camera.up = measure.camera_up;
+    
 }
 
 /* ************************************************* */
