@@ -200,8 +200,8 @@ function init(current_project, meshURL, textureURL)
     
     var anotaciones = project.getAnnotations();
     
-//    if(!anotaciones.length)
-//        console.log("no anotations");
+    if(!anotaciones.length)
+        console.log("no anotations");
     
     for (var i = 0; i < anotaciones.length; i++) {
         

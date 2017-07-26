@@ -165,21 +165,20 @@ button:hover{
 #anotaciones{
 /*    border: 2px solid red;*/
     overflow: scroll !important;
-    min-height: calc(100vh - 330px);
-    max-height: calc(100vh - 330px);
+    max-height: calc(100vh - 130px);
 }
 
 #deleting-div{
     display: flex;
     position: absolute;
-    bottom: 10px;
+    bottom: 75px;
     /* scrolling out of view :-( */
     z-index:2;
     width: 90%;
 }
 
 #entire-anot-table{
-    height: 35vh !important;
+    height: 60vh !important;
     overflow-y: scroll;
 }
 
@@ -213,7 +212,7 @@ button:hover{
 
 #herramientas{
     overflow: scroll !important;
-    max-height: calc(100vh - 330px);
+    max-height: calc(100vh - 130px);
 }
 
 .delimiter{
