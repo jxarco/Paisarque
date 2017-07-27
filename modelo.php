@@ -98,10 +98,11 @@
                         
                         <div class="tab-pane fade active in" id="info">
                              <div id="descripcion">
-                                <label for="comment">Descripción:</label>
+                                <label for="comment">Descripción</label>
                                 <textarea style="width:100%;height:100px; resize: none;" class="form-control" rows="5" id="comment"></textarea>
                             </div>
                             <br>
+                            <label for="comment">Ubicación</label>
                             <div id="map"></div>
                         </div>
                         <div class="tab-pane fade" id="herramientas">

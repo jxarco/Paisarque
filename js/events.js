@@ -266,6 +266,7 @@ $("#formUploadProject").on('submit', function(e)
     
     var jsonFicheroPrincipal = {
         "id": project_id,
+        "descripcion": "desc",
         "autor": values["autor"],
         "lugar": values["lugar"],
         "coordenadas": {"lat": values["latitud"], "lng": values["longitud"]},

@@ -263,9 +263,7 @@ Project.prototype.FROMJSON = function( data )
     this._json = data;
     
 	// data
-    var desc = data.descripcion || "";
-	this._description = desc.length ? desc : "nodesc";
-    
+	this._description = data.descripcion;
     this._id = data.id;
     this._user = "guest";
 	this._author = data.autor;
