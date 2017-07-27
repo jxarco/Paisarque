@@ -141,6 +141,10 @@
                                     <div class="info_hover_box">Configura el metro antes de medir</div>
                                     <i class="material-icons">space_bar</i>
                                 </a>
+                                <a id="measure-seg-btn" onclick="medirSegmentos()" class="btn tool-btn nodisplay">
+                                    <div class="info_hover_box">Configura el metro antes de medir</div>
+                                    <i class="material-icons">timeline</i>
+                                </a>
                                 <a id="show_dt" class="btn tool-btn">
                                     <div class="info_hover_box">Mostrar distancias medidas</div>
                                     <i class="material-icons">reorder</i>
