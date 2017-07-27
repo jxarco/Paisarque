@@ -58,7 +58,7 @@ $('#message-text').keyup(function(e)
 {
     e.preventDefault();
     if(e.keyCode == 13)
-        $("#saveTextButton").click();
+        $("#saveTextButton").click();    
 });
 
 $('#comment').keyup(function(e) 

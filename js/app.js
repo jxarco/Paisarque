@@ -5,22 +5,23 @@ var context         = null;
 var scene           = null;
 var renderer        = null;
 var camera          = null;
+var _dt             = 0.0;
+var viz_anotations  = true;
+
+// distances
 var result          = vec3.create();
 var firstPoint      = vec3.create();
 var secondPoint     = vec3.create();
-
-var _dt                 = 0.0;
-var setting_rotation    = false;
-var viz_anotations      = true;
+var ball            = null;
+var ball2           = null;
+var linea           = null;
+var first_measurement   = true;
 var showing_dist_table  = false;
+
+// rotaciones
+var setting_rotation    = false;
 var subs                = 0;
 var adds                = 0;
-
-// measurement points
-var first_measurement   = true;
-var ball    = null;
-var ball2   = null;
-var linea   = null;
 
 //
 // Functions below this:
@@ -37,6 +38,8 @@ function parseJSON(json)
     {
         $("#measure-btn").find("div").html("Medir distancia");
         $("#measure-btn").css('opacity', '1'); 
+        $("#measure-seg-btn").find("div").html("Medir por segmentos");
+        $("#measure-seg-btn").css('opacity', '1'); 
     }
     
     if(project._description !== "nodesc")
@@ -251,6 +254,7 @@ function init(current_project, meshURL, textureURL)
         renderer.clear(bg_color);
         renderer.render(scene, camera);
         scene.update(dt);
+//        console.log(keys[83]);
     }
     
     resize();
@@ -281,13 +285,20 @@ function init(current_project, meshURL, textureURL)
         camera.position = vec3.scale( camera.position, camera.position, e.wheel < 0 ? 1.01 : 0.99 );
     }
 
+    context.onkeydown = function(e)
+    {
+        keys[e.keyCode] = true;        
+    }
+    
     context.onkeyup = function(e)
     {   
-        if(!setting_rotation)
-            return;
+        keys[e.keyCode] = false;        
         
         if(e.keyCode === 13) // Enter
             {
+                if(!setting_rotation)
+                    return;
+                
                 setting_rotation = false;
                 scene.root.children[1].flags.visible = setting_rotation;
     
@@ -361,6 +372,7 @@ function changeVizAnotInCanvas(showing)
         }
 }
 
+// FIX IT
 function changeSizeAnotInCanvas(operation)
 {
     // lets say op_type = 1 to add
@@ -473,7 +485,7 @@ function medirDistancia()
         return;
     
 //    console.log("midiendo distancia");
-//    alert("Selecciona dos puntos:");
+    alert("Selecciona dos puntos:");
     
     var primerPunto     = true;
     var segundoPunto    = false;
@@ -540,7 +552,61 @@ function medirDistancia()
             }
         }
     } 
-}   
+}
+
+function medirSegmentos()
+{
+    if(project._meter === -1)
+        return;
+    
+//    console.log("midiendo distancia");
+    alert("Selecciona los vértices de los segmentos:");
+    
+    var points              = [];
+    var distance            = 0;
+    var started_segments    = true;
+    
+    context.onmousedown = function(e) 
+    {
+        if((!keys[KEY_S] && !keys[KEY_SPACE]) || !started_segments)
+            return;
+        
+        var result = vec3.create();
+        var ray = camera.getRay( e.canvasx, e.canvasy );
+        var node = scene.testRay( ray, result, undefined, 0x1, true );
+
+        if (node) {
+            var ball = new RD.SceneNode();
+            ball.color = [0,0,1,1];
+            ball.mesh = "sphere";
+            ball.shader = "phong";
+            ball.layers = 0x4;
+            ball.flags.ignore_collisions = true;
+            scene.root.addChild(ball);                
+            ball.position = result;
+            points.push(result);
+        }
+        
+         if(keys[KEY_SPACE])
+        {
+            for(var i = 0; i < points.length - 1; ++i)
+            {
+                var newPoint = vec3.create();
+                newPoint[0] = Math.abs(points[i][0] - points[i + 1][0]);
+                newPoint[1] = Math.abs(points[i][1] - points[i + 1][1]);
+                newPoint[2] = Math.abs(points[i][2] - points[i + 1][2]);
+
+                var units = vec3.length(newPoint);
+                var distance_in_meters = units / project._meter;
+                distance += distance_in_meters;
+            }
+            
+            started_segments = false;
+            console.log("done: " + distance);
+            return;
+        }
+    } 
+}
 
 function pushMedicion(distance)
 {
