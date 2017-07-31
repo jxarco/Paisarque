@@ -5,6 +5,8 @@ var KEY_S = 83;
 var KEY_D = 68;
 var KEY_SPACE = 32;
 
+var current_user = null;
+
 /*
 * Server session stuff
 */
@@ -13,6 +15,7 @@ var PAS = {
     recover: function()
     {
         session = JSON.parse(localStorage.session);
+        current_user = session.user.username;
     }
 }
 

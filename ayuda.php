@@ -1,12 +1,11 @@
 <?php 
-                    
-    // Recuperar sesión
+
     session_start(); 
-    
     if(!isset($_SESSION['current']))
     {
        $_SESSION['current'] = "guest";
     }
+
 ?>
 
 <!DOCTYPE html>
@@ -57,7 +56,7 @@
                         <a class="space"><span>-</span></a>
                 </div>
                 <div>
-                        <a id="textUser">username</a>
+                        <a id="textUser"></a>
                 </div>
                 
                 <div>

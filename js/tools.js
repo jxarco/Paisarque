@@ -4,7 +4,7 @@ var current_project = getQueryVariable("r") || default_project;
 var proj_to_delete = "test";
 var delete_project_active = false;
 
-// LOAD DATA FROM JSONS
+// LOAD DATA FROM JSON
 
 var LOADER = {
     load: function(){
@@ -38,7 +38,6 @@ function deleteProject(user, project)
         return;
     }
         
-    
     var project_to_delete = [
         "data/" + user + "/" + project + ".json",
         "data/" + user + "/" + project + "_anotacion.json",
@@ -60,7 +59,7 @@ function deleteProject(user, project)
     });
 };
 
-function showCompletePath(current_user)
+function showCompletePath()
 {
     $.ajax( {
         url: 'show_cp_path.php',
@@ -80,11 +79,8 @@ function loadContent(url, project)
     }
     else
     {
-        var array = project.split('/');
-        var user = array[0];
-        var project = array[1];
-        
-        deleteProject(user, project);
+        var dproject = project.split('/')[1];
+        deleteProject(current_user, dproject);
     }
 }
 

@@ -30,12 +30,8 @@ var adds                = 0;
 function parseJSON(json)
 {
     if(project === null)
-        project = new Project( json );
+        project = new Project( json, current_user );
     
-    project._user = current_project.split('/')[0];
-    
-    $("#textUser").html(project._user);
-
     if(project._meter !== -1)
     {
         $("#measure-btn").find("div").html("Medir distancia");

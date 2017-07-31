@@ -25,7 +25,7 @@
                         <a id="megatitle"><span>PaisArque </span></a>
                 </div>
                 <div>
-                        <a id="textUser" class="space">username</a>
+                        <a id="textUser" class="space"></a>
                 </div>
                 
                 <div>
@@ -219,7 +219,7 @@
             
             <div class="project-options">
             
-                <button class="btn" onclick="<?php echo "showCompletePath('" . $_SESSION['current'] . "');\""; ?>">
+                <button class="btn" onclick="showCompletePath()">
 
                     <?php
                         if(!$_SESSION['complete-path'])    

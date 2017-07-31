@@ -49,7 +49,7 @@
                         <a class="space"><span>-</span></a>
                 </div>
                 <div>
-                        <a id="textUser">username</a>
+                        <a id="textUser"></a>
                 </div>
                 
                 <div>

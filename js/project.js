@@ -6,11 +6,12 @@
 var last_project_id = 0;
 var last_measure_id = 0;
 
-function Project( data )
+function Project( data, user )
 {
 	if(this.constructor !== Project)
 		throw("You must use new to create a Project");
 	this._ctor( data );
+    this._user = user;
 }
 
 Project.prototype._ctor = function( data )
