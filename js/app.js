@@ -34,6 +34,8 @@ function parseJSON(json)
     
     project._user = current_project.split('/')[0];
     
+    $("#textUser").html(project._user);
+
     if(project._meter !== -1)
     {
         $("#measure-btn").find("div").html("Medir distancia");
@@ -748,5 +750,3 @@ var resize = function()
     }
     console.log('Resize');
 }
-
-window.onresize = resize;

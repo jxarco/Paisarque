@@ -13,10 +13,7 @@ $(".startup-dialog").show();
 // se esconde el dialogo para acceder
 $("#loginForm").hide();
 
-// poner if(1) cuando se suba al servidor
-if(0)
-{
-    LiteFileServer.setup("", function(status, resp) {
+LiteFileServer.setup("", function(status, resp) {
 	console.log("server checked");
 	$(".startup-dialog").hide();
 	if(status == 1)
@@ -34,10 +31,7 @@ if(0)
 			$(".warning-dialog .content").html("LiteFileServer database not found, please run the <a href='install.php'>install.php</a>.");
 		$(".warning-dialog").show();
 	}
-    });
-
-}
-
+});
 
 function systemReady()
 {    

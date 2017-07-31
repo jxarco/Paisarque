@@ -1,3 +1,30 @@
+<?php 
+
+    $DEBUG = true;
+
+    // Abrir sesión
+    session_start(); 
+
+    if(isset($_SESSION['current']))
+    {
+        if($DEBUG)
+        {
+            echo "DEBUG : sesion activa (" . $_SESSION['current'] . ")" . '</br>';
+//            echo "DEBUG : show-complete-path (" . $_SESSION['complete-path'] . ")";    
+        }
+    }
+        
+    else
+    {
+        if($DEBUG)
+            echo "DEBUG : sesion cerrada, abriendo...";
+
+        $_SESSION['current'] = $_GET['user'];
+        $_SESSION['complete-path'] = false;
+    }    
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -8,37 +35,43 @@
         
     <title>PaisArque Application</title>
 
-    <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/custom.min.css" rel="stylesheet">
     <link href="css/estilo.css" rel="stylesheet">
-    <link href="css/header.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
     </head>
     <body class="container">
         
-        <header>
-            <nav>
-                <div id="megadiv">
-                        <a id="megatitle"><span>PaisArque </span></a>
-                </div>
-                <div>
-                        <a id="textUser" class="space">username</a>
-                </div>
-                
-                <div>
-                        <a id="logout"><span class="glyphicon glyphicon-off" aria-hidden="true">
-                            </span></a>
-                </div>
-                
-            </nav>
-        </header><!--   header end-->
+        <header class="row"><div class="col-lg-12">
+            
+                <nav class="navbar navbar-default"><div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                          <span class="sr-only">Toggle navigation</span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                        </button>
+<!--                        <a class="navbar-brand" href="index.html">PaisArque</a>-->
+                        <a class="navbar-brand">PaisArque</a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"><ul class="nav navbar-nav">
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="logged-button"><a href="#" id="textUser"></a></li>
+                        <li id="logout" class="logout-button pointer"><a>
+                            <span class="glyphicon glyphicon-off" aria-hidden="true">
+                            </span></a></li>
+                    </ul></div>
+                </div></nav>
+            
+        </div></header><!--   header end-->
         
         <content class="container">
             
-            <a href="#" id="addProject" class="btn btn-lg" data-toggle="modal" data-target="#GSCCModal">Añadir nuevo proyecto</a>
+            <a href="#" id="addProject" class="btn btn-lg btn-primary t" data-toggle="modal" data-target="#GSCCModal">Añadir nuevo proyecto</a>
             
             <div class="modal" id="loadingModal" aria-hidden="true">
                 <div class="modal-dialog">
@@ -140,7 +173,7 @@
                             <div class="form-group">
                                 <div class="col-lg-10 col-lg-offset-2">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                    <button type="submit" name="submit" value="send" class="btn my-btn" >Submit</button>
+                                    <button type="submit" name="submit" value="send" class="btn btn-primary" >Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -166,7 +199,8 @@
                 </thead>
                 <tbody id="tableInicio">
                     <!-- Esto es necesario para saber cuantos JSON hay y hacer una lista de ellos para luego acceder al modelo -->
-                    <?php                                         
+                    <?php 
+                                                                
                         $directory = "data/" . $_GET['user'] ."/";
                                         
                         $filecount = 0;
@@ -217,22 +251,18 @@
                 
             </div>
             
-            <div class="project-options">
+            <button class="btn btn-sm btn-primary project-options" onclick="<?php echo "showCompletePath('" . $_SESSION['current'] . "');\""; ?>">
             
-                <button class="btn" onclick="<?php echo "showCompletePath('" . $_SESSION['current'] . "');\""; ?>">
-
-                    <?php
-                        if(!$_SESSION['complete-path'])    
-                            echo "Mostrar ruta completa";
-                        else 
-                            echo "Mostrar menos";
-                    ?>
-
-                </button>
-
-                <button id="delete-project" class="btn" onclick="enable_project_delete();">Eliminar proyecto</button>
-                
-            </div>
+                <?php
+                    if(!$_SESSION['complete-path'])    
+                        echo "Mostrar ruta completa";
+                    else 
+                        echo "Mostrar menos";
+                ?>
+            
+            </button>
+            
+            <button id="delete-project" class="btn btn-sm btn-primary project-options" onclick="enable_project_delete();">Eliminar proyecto</button>
 
         </content><!--  content end-->
         
@@ -241,22 +271,22 @@
         </footer><!--   footer end-->
             
 
-        
-        
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="js/extra/bootstrap.min.js"></script>
         <script src="js/extra/custom.js"></script>
+        <script type="text/javascript" src="js/extra/rangeslider.min.js"></script>
         <script type="text/javascript" src="js/extra/gl-matrix-min.js"></script>
         <script type="text/javascript" src="js/extra/litegl.js"></script>
         <script type="text/javascript" src="js/extra/rendeer.js"></script>
         <script src="litefile/litefileserver.js"></script>
         <script src="litefile/js/codeLite.js"></script>
+        <script src="js/project.js"></script>
         <script src="js/utils.js"></script>
-        <script type="text/javascript">
-            PAS.recover(); // load paisarque session
-        </script>
         <script src="js/tools.js"></script>
+        <script src="js/app.js"></script>
+        <script src="js/events.js"></script>
     </body>
     
 </html>

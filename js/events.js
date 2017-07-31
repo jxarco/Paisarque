@@ -138,20 +138,6 @@ $('#fullscreen-mode').click(function()
 });
 
 /*
-*   Button: Close session
-*/
-$("#logout").click(function()
-{   
-     $.ajax( {
-        url: 'logout.php',
-        type: 'POST',
-        success: function() {
-            document.location.href = 'index.html';
-        }
-    } );
-});
-
-/*
 *   PROJECT STUFF
 */
 

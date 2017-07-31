@@ -10,6 +10,8 @@ var LOADER = {
     load: function(){
         if(current_project !== null)
             loadJSON();
+        window.onresize = resize;
+        init_sliders(); // canvas rotations
     }
 };
 

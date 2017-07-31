@@ -9,8 +9,12 @@ var KEY_SPACE = 32;
 * Server session stuff
 */
 
-// dwiheihfwe
-
+var PAS = {
+    recover: function()
+    {
+        session = JSON.parse(localStorage.session);
+    }
+}
 
 /*
 * Return query variable from the url
@@ -96,7 +100,7 @@ function loadJSON()
 * Sliders initialization
 */
 
-$(function() {
+var init_sliders = function() {
   var slider = document.querySelector('#s1');
   var slider2 = document.querySelector('#s2');
   var slider3 = document.querySelector('#s2');
@@ -109,7 +113,7 @@ $(function() {
     polyfill: false
   });
     
-});
+};
 
 
 /*
