@@ -59,23 +59,19 @@ function deleteProject(user, project)
     });
 };
 
-function showCompletePath()
-{
-    $.ajax( {
-        url: 'show_cp_path.php',
-        type: 'POST',
-        success: function() {
-            document.location.href = 'inicio.php?user=' + current_user;
-        }
-    } );
-}
-
 function loadContent(url, project)
 {
     if(!delete_project_active)
     {
         console.log("loading content " + url);
-        document.location.href = url+"?r="+(project || current_project).toString();    
+        
+        if(url === 'inicio.php')
+        {
+            document.location.href = url+"?user=" + current_user;
+            return;
+        }
+        else
+            document.location.href = url+"?r="+(project || current_project).toString();    
     }
     else
     {

@@ -1,13 +1,3 @@
-<?php 
-
-    session_start(); 
-    if(!isset($_SESSION['current']))
-    {
-       $_SESSION['current'] = "guest";
-    }
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -35,22 +25,22 @@
         <header>
             <nav>
                 <div id="megadiv">
-                        <a id="megatitle"><span>Paisarque </span></a>
+                        <a id="megatitle"><span>PaisArque </span></a>
                 </div>
                 <div>
-                        <a onclick="<?php echo "location.href = 'inicio.php?user=" . $_SESSION['current'] . "'"; ?>"><span>Inicio </span></a>
+                        <a onclick="loadContent('inicio.php')"><span>Inicio </span></a>
                 </div>
                 <div>
-                        <a onclick="loadContent('modelo.php')"><span>3D </span></a>
+                        <a onclick="loadContent('modelo.html')"><span>3D </span></a>
                 </div>
                 <div>
-                        <a onclick="loadContent('infoextra.php')"><span>Información </span></a>
+                        <a onclick="loadContent('infoextra.html')"><span>Información </span></a>
                 </div>
                 <div>
                         <a onclick="loadContent('exportar.php')"><span>Exportar </span></a>
                 </div>
                 <div>
-                        <a onclick="loadContent('ayuda.php')"><span>Ayuda </span></a>
+                        <a onclick="loadContent('ayuda.html')"><span>Ayuda </span></a>
                 </div>
                 <div>
                         <a class="space"><span>-</span></a>
@@ -114,8 +104,11 @@
         <script type="text/javascript" src="js/extra/litegl.js"></script>
         <script type="text/javascript" src="js/extra/rendeer.js"></script>
         <script src="litefile/litefileserver.js"></script>
-        <script src="litefile/js/codeLite.js"></script>
+<!--        <script src="litefile/js/codeLite.js"></script>-->
         <script src="js/utils.js"></script>
+       <script type="text/javascript">
+            PAS.recover(); // load paisarque session
+        </script>
         <script src="js/tools.js"></script>
         <script src="js/events.js"></script>
     </body>

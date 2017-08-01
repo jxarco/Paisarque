@@ -164,11 +164,11 @@ Project.prototype.deleteAnotation = function( id )
 
 Project.prototype.deleteAllAnotations = function( obj )
 {
-	this._anotations = [];
-    
+	// list
+    this._anotations = [];
+    // html
     $('#anotacion_tabla').empty();
-    
-    // nos quedamos con OBJ y GRID
+    // scene
     obj.children.splice(0, obj.children.length);
 }
 
@@ -306,6 +306,8 @@ Project.prototype.FROMJSON = function( data )
 *   Guardar todos los datos a disco
 *   Se trata de sobreescribir (o no) el json original,
 *   con los atributos actuales del proyecto
+*   @param overwrite
+*   @param extra
 */
 Project.prototype.save = function( overwrite, extra )
 {
@@ -343,7 +345,7 @@ Project.prototype.save = function( overwrite, extra )
                 console.log("SAVED!!");
             },
             error: function(error){
-                console.log("error");
+//                console.log("error");
                 console.log(error);
             }
     });

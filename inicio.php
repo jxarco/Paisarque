@@ -27,7 +27,6 @@
                 <div>
                         <a id="textUser" class="space"></a>
                 </div>
-                
                 <div>
                         <a id="logout"><span class="glyphicon glyphicon-off" aria-hidden="true">
                             </span></a>
@@ -183,15 +182,10 @@
                             $username = $_GET['user'];
                             $project = substr($user, strlen($username) + 1, strlen($user));
                             
-                            echo '<tr a class="pointer" id="' . $project . '" onclick' . '=' . '"loadContent(' . "'modelo.php','";
+                            echo '<tr a class="pointer" id="' . $project . '" onclick' . '=' . '"loadContent(' . "'modelo.html','";
                             echo $user;
                             echo "')" . '"' . ">" . "<td>";
-                            if($_SESSION['complete-path'])
-                            {
-                                echo $files[$i] . "</td>" . "<td>";;
-                            }
-                            else
-                                echo str_replace('_', ' ', ucfirst($project))  . "</td>" . "<td>";
+                            echo str_replace('_', ' ', ucfirst($project))  . "</td>" . "<td>";
                             
                             $string = file_get_contents($files[$i]);
                             $json_a = json_decode($string, true);
@@ -218,20 +212,7 @@
             </div>
             
             <div class="project-options">
-            
-                <button class="btn" onclick="showCompletePath()">
-
-                    <?php
-                        if(!$_SESSION['complete-path'])    
-                            echo "Mostrar ruta completa";
-                        else 
-                            echo "Mostrar menos";
-                    ?>
-
-                </button>
-
                 <button id="delete-project" class="btn" onclick="enable_project_delete();">Eliminar proyecto</button>
-                
             </div>
 
         </content><!--  content end-->

@@ -285,15 +285,6 @@ button:hover{
     text-align: center;
 }
 
-#logout{
-    transition: 0.5s;
-    font-size: 15px;
-}
-
-#logout:hover{
-    font-size: 20px;
-}
-
 /* -------------------------------------------- */
 
 #superhead

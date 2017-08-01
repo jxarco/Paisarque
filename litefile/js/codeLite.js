@@ -1,4 +1,4 @@
-var session = null;
+//var session = null;
 var system_info = {};
 var filesview_mode = "thumbnails";
 var units = {};
@@ -14,7 +14,7 @@ $(".startup-dialog").show();
 $("#loginForm").hide();
 
 // poner if(1) cuando se suba al servidor
-if(0)
+if(session === null)
 {
     LiteFileServer.setup("", function(status, resp) {
 	console.log("server checked");
