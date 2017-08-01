@@ -595,7 +595,7 @@ function medirSegmentos()
     
     context.onmousedown = function(e) 
     {
-        if((!keys[KEY_S] && !keys[KEY_SPACE]) || !started_segments)
+        if((!keys[KEY_S] && !keys[KEY_F]) || !started_segments)
             return;
         
         var result = vec3.create();
@@ -605,7 +605,7 @@ function medirSegmentos()
         if (node) {
             var ball = new RD.SceneNode();
             ball.description = "config";
-            ball.color = [0,0,1,1];
+            ball.color = [0.3,0.8,0.1,1];
             ball.mesh = "sphere";
             ball.shader = "phong";
             ball.layers = 0x4;
@@ -615,7 +615,7 @@ function medirSegmentos()
             points.push(result);
         }
         
-         if(keys[KEY_SPACE])
+         if(keys[KEY_F])
         {
             for(var i = 0; i < points.length - 1; ++i)
             {
@@ -631,6 +631,38 @@ function medirSegmentos()
             
             started_segments = false;
             console.log("done: " + distance);
+            putCanvasMessage(distance, 3000);
+            
+            var vertices = [];
+            
+            for(var i = 0; i < points.length; ++i)
+                {
+                    vertices.push(points[i][0]);
+                    vertices.push(points[i][1]);
+                    vertices.push(points[i][2]);
+                    
+                        if(i)
+                        {
+                            vertices.push(points[i][0]);
+                            vertices.push(points[i][1]);
+                            vertices.push(points[i][2]);
+                        }
+                }
+                
+            
+            var mesh = GL.Mesh.load({ vertices: vertices }); 
+            renderer.meshes["line"] = mesh;
+            var linea = new RD.SceneNode();
+            linea.description = "config";
+            linea.flags.ignore_collisions = true;
+            linea.primitive = gl.LINES;
+            linea.mesh = "line";
+            linea.color = [0.3,0.8,0.1,1];
+            linea.flags.depth_test = false;
+
+//            console.log(linea);
+            scene.root.addChild(linea);
+            
             return;
         }
     } 
