@@ -108,10 +108,20 @@ function initMap()
     });    
 }
 
-function destroySceneElements(elements)
+/*
+* @param elements: nodes list
+* @param description: delete only by description
+*/
+function destroySceneElements(elements, description)
 {
     for(var i = 0; i < elements.length; ++i)
-        elements[i].destroy();
+    {
+        if(!description)    
+            elements[i].destroy();
+        else if(description == elements[i].description)
+            elements[i].destroy();
+    }
+        
 }
 
 function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id)
@@ -128,4 +138,16 @@ function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id)
         else
             current.active = false;
     }
+}
+
+/*
+* @param text: message to display in canvas
+* @param ms: time to display before hidding
+*/
+function putCanvasMessage(text, ms)
+{
+    $("#messages").html(text).fadeIn();
+    setTimeout(function(){
+        $("#messages").fadeOut();
+    }, ms);
 }

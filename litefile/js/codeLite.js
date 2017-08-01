@@ -1,4 +1,4 @@
-//var session = null;
+var session = null;
 var system_info = {};
 var filesview_mode = "thumbnails";
 var units = {};

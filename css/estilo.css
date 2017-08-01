@@ -151,6 +151,20 @@ button:hover{
     margin-top: 6px;
 }
 
+#messages{
+    position: absolute; 
+    background-color: rgba(100, 100, 100, 0.6); 
+    margin-left: 5%; 
+    margin-top: 15px;
+    height: 75px;
+    display: none;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+    padding: 20px;
+}
+
 .tools-btns{
 /*    background-color: blue;*/
     margin-bottom: 5%;

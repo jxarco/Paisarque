@@ -313,6 +313,28 @@ function init(current_project, meshURL, textureURL)
                 
                 project.setRotations(obj._rotation);
             }
+        
+        if(e.keyCode === 27) // ESC
+            {
+                // disable of features
+                
+                context.onmousedown = function(e) {};
+                setting_rotation = false;
+                scene.root.children[1].flags.visible = setting_rotation;
+    
+                if(setting_rotation)
+                {
+                    $("#cardinal-axis").fadeIn();
+                    $('.sliders').fadeIn();        
+                }
+                else
+                {
+                    $("#cardinal-axis").fadeOut();
+                    $('.sliders').fadeOut();        
+                }
+                
+                destroySceneElements(scene.root.children, "config");
+            }
     }
     
     context.captureMouse(true);
@@ -407,7 +429,8 @@ function changeSizeAnotInCanvas(operation)
 function medirMetro()
 {
 //    console.log("midiendo cuanto es un metro");
-    alert("Selecciona dos puntos, la linea recta que los une corresponderá a un metro");
+//    alert("Selecciona dos puntos, la linea recta que los une corresponderá a un metro");
+    putCanvasMessage("Selecciona dos puntos, la linea recta que los une corresponderá a un metro", 2500);
     
     var primerPunto     = true;
     var segundoPunto    = false;
@@ -425,6 +448,7 @@ function medirMetro()
             
             if (node) {
                 ball_first = new RD.SceneNode();
+                ball_first.description = "config";
                 ball_first.color = [0,1,0,1];
                 ball_first.mesh = "sphere";
                 ball_first.shader = "phong";
@@ -447,6 +471,7 @@ function medirMetro()
             // Si ha habido colision, se crea un punto y se abre una ventana de texto para escribir la anotacion
             if (node) {
                 ball_sec = new RD.SceneNode();
+                ball_sec.description = "config";
                 ball_sec.color = [0,1,0,1];
                 ball_sec.mesh = "sphere";
                 ball_sec.shader = "phong";
@@ -483,7 +508,8 @@ function medirDistancia()
         return;
     
 //    console.log("midiendo distancia");
-    alert("Selecciona dos puntos:");
+//    alert("Selecciona dos puntos:");
+    putCanvasMessage("Selecciona dos puntos:", 2500);
     
     var primerPunto     = true;
     var segundoPunto    = false;
@@ -501,6 +527,7 @@ function medirDistancia()
             
             if (node) {
                 ball_first = new RD.SceneNode();
+                ball_first.description = "config";
                 ball_first.color = [0,0,1,1];
                 ball_first.mesh = "sphere";
                 ball_first.shader = "phong";
@@ -523,6 +550,7 @@ function medirDistancia()
             // Si ha habido colision, se crea un punto y se abre una ventana de texto para escribir la anotacion
             if (node) {
                 ball_sec = new RD.SceneNode();
+                ball_sec.description = "config";
                 ball_sec.color = [0,0,1,1];
                 ball_sec.mesh = "sphere";
                 ball_sec.shader = "phong";
@@ -558,7 +586,8 @@ function medirSegmentos()
         return;
     
 //    console.log("midiendo distancia");
-    alert("Selecciona los vértices de los segmentos:");
+//    alert("Selecciona los vértices de los segmentos:");
+    putCanvasMessage("Selecciona los vértices de los segmentos:", 2500);
     
     var points              = [];
     var distance            = 0;
@@ -575,6 +604,7 @@ function medirSegmentos()
 
         if (node) {
             var ball = new RD.SceneNode();
+            ball.description = "config";
             ball.color = [0,0,1,1];
             ball.mesh = "sphere";
             ball.shader = "phong";
