@@ -7,7 +7,7 @@ body {
 }
 
 header {
-    width: 100% !important;
+    width: 100%;
     height: 50px;
     background-color: rgb(62, 164, 155);
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
@@ -16,7 +16,7 @@ header {
 
 header > nav > div {
 		float: left;
-		width: 8.72%;
+        width: 5vw;
 		height: 100%;
 		position: relative;
         z-index: 100;
@@ -33,25 +33,30 @@ header > nav > div > a {
 
 header > nav > div:hover > a {
 		background-color: rgba(0, 0, 0, 0.2);
-        color: aliceblue;
+        
 		cursor: pointer;
         text-decoration: none; 
 }
 
-.space{
-    background: none !important;
+.w3-button{
+    text-decoration: none !important;
 }
 
-.space:hover{
-    background: none !important;
-    cursor: default;
+.w3-bar{
+    background-color: rgb(62, 164, 155) !important;   
+    color: aliceblue !important;
+}
+
+#navDemo{
+    background-color: rgba(155, 155, 155, 0.6) !important;   
+    color: aliceblue !important;
 }
 
 #megatitle{
-    font-family: 'Pacifico', cursive;
-    font-size: 30px;
+    font-family: 'Pacifico', cursive !important;
 }
 
-#megadiv {
-    width: 25.52% !important;
+#megatitle-index{
+    font-family: 'Pacifico', cursive !important;
+    margin-left: calc(50vw - 50px);
 }

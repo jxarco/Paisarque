@@ -47,6 +47,33 @@ if(session === null)
 
 }
 
+//LOGOUT
+	$(".logout-button").click( function(e) {
+        
+        var previousSession = JSON.parse(localStorage.getItem('session'));
+        var newSession = new LiteFileServer.Session();
+        
+        copySession(newSession, previousSession);
+
+        console.log("newSession")
+        console.log(newSession);
+        
+        window.session = newSession;
+        
+        console.log(session);        
+        
+        if(!session)
+			return;
+
+        session.logout( function(session, result) {
+//            localStorage.setItem('session', JSON.stringify(session));
+            localStorage.clear();
+            session = null;
+            window.location.href = "index.html";
+        });
+			
+	});
+
 function systemReady()
 {    
 	//LOGIN
@@ -93,9 +120,9 @@ function systemReady()
     }
       
         
-    if ($("#textUser").length > 0){
-        $("#textUser").append('<span class="glyphicon glyphicon-user"></span>');
-        $("#textUser").append(user["username"]);
+    if ($(".textUser").length > 0){
+        $(".textUser").html(user["username"]);
+        $(".textUser").append('<span style="margin-left: 10px;" class="glyphicon glyphicon-user"></span>');
     }
     
     var tableInicio = document.getElementById("tableInicio");
@@ -103,33 +130,6 @@ function systemReady()
         var userElement = document.getElementById("textUser");        
         var pathElements = "data/" + userElement.text;
     }
-
-	//LOGOUT
-	$(".logout-button").click( function(e) {
-        
-        var previousSession = JSON.parse(localStorage.getItem('session'));
-        var newSession = new LiteFileServer.Session();
-        
-        copySession(newSession, previousSession);
-
-        console.log("newSession")
-        console.log(newSession);
-        
-        window.session = newSession;
-        
-        console.log(session);        
-        
-        if(!session)
-			return;
-
-        session.logout( function(session, result) {
-//            localStorage.setItem('session', JSON.stringify(session));
-            localStorage.clear();
-            session = null;
-            window.location.href = "index.html";
-        });
-			
-	});
     
     
      $("#formRegister").on('submit', function(e) {

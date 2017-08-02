@@ -1,43 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+    <html lang="en">
     <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+        <title>PaisArque Application</title>
+
+        <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
+        <!-- Bootstrap -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/custom.min.css" rel="stylesheet">
+        <link href="css/estilo.css" rel="stylesheet">
+        <link href="css/header.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/RWD.css"> <!-- responsive web design -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+        <script type="text/javascript">
+            // Used to toggle the menu on small screens when clicking on the menu button
+            function showNavBar() {
+                var x = document.getElementById("navDemo");
+                if (x.className.indexOf("w3-show") == -1) {
+                    x.className += " w3-show";
+                } else { 
+                    x.className = x.className.replace(" w3-show", "");
+                }
+            }
+        </script>
         
-    <title>PaisArque Application</title>
-
-    <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/custom.min.css" rel="stylesheet">
-    <link href="css/estilo.css" rel="stylesheet">
-    <link href="css/header.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
     </head>
-    <body class="container">
+    <body>
         
-        <header>
-            <nav>
-                <div id="megadiv">
-                        <a id="megatitle"><span>PaisArque </span></a>
-                </div>
-                <div>
-                        <a id="textUser" class="space"></a>
-                </div>
-                <div class="logout-button">
-                        <a id="logout"><span class="glyphicon glyphicon-off" aria-hidden="true">
-                            </span></a>
-                </div>
-                
-            </nav>
-        </header><!--   header end-->
+        <!-- Navbar -->
+        <div class="w3-top">
+          <div class="w3-bar w3-card-2">
+            <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="showNavBar()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+            <a id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
+            <a class="w3-bar-item w3-button w3-padding-large w3-hide-small textUser">username</a>
+            <a class="w3-bar-item w3-button w3-padding-large w3-hide-small logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+          </div>
+        </div>
+
+        <!-- Navbar on small screens -->
+        <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
+          <a class="w3-bar-item w3-button w3-padding-large textUser">username</a>
+            <a class="w3-bar-item w3-button w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+        </div>
         
         <content class="container">
             
-            <a href="#" id="addProject" class="btn btn-lg btn-primary t" data-toggle="modal" data-target="#GSCCModal">Añadir nuevo proyecto</a>
+            <div class="row" style="margin-top: 10.5%;">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <button id="addProject" class="submit-button btn btn-lg btn-block ladda-button" data-style="slide-up" data-color="green" type="submit" data-toggle="modal" data-target="#GSCCModal"><span class="ladda-label">Crear nuevo proyecto</span><span class="ladda-spinner"></span></button>
+                            <button id="delete-project" onclick="enable_project_delete();" class="submit-button btn btn-lg btn-block ladda-button" data-style="slide-up" data-color="green" type="submit"><span class="ladda-label">Eliminar proyecto existente</span><span class="ladda-spinner"></span></button>
+                            
+                            <!-- Listamos los ficheros que hay en el servidor/carpeta y sus propiedades -->
+                            <table id="projects-tb" class="table table-striped table-hover ">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre proyecto</th>
+                                        <th>Autor proyecto</th>
+                                        <th>Lugar</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableInicio">
+                                    <!-- Esto es necesario para saber cuantos JSON hay y hacer una lista de ellos para luego acceder al modelo -->
+                                    <?php                                         
+                                        $directory = "data/" . $_GET['user'] ."/";
+
+                                        $filecount = 0;
+                                        $files = glob($directory . "*.{json}",GLOB_BRACE);
+
+                                        if ($files){
+                                            $filecount = count($files);
+                                        }
+
+                                        for ($i = 0; $i < $filecount; $i = $i+1) {
+
+                                            $user = substr(substr($files[$i], 5),0, -5);
+                                            $username = $_GET['user'];
+                                            $project = substr($user, strlen($username) + 1, strlen($user));
+
+                                            echo '<tr a class="pointer" id="' . $project . '" onclick' . '=' . '"loadContent(' . "'modelo.html','";
+                                            echo $user;
+                                            echo "')" . '"' . ">" . "<td>";
+                                            echo str_replace('_', ' ', ucfirst($project))  . "</td>" . "<td>";
+
+                                            $string = file_get_contents($files[$i]);
+                                            $json_a = json_decode($string, true);
+
+                                            foreach ($json_a as $k => $v) {
+                                                if ($k == "autor")
+                                                    echo $v;
+                                            }
+
+                                            echo "</td>" . "<td>";
+
+                                            foreach ($json_a as $k => $v) {
+                                                if ($k == "lugar")
+                                                    echo $v;
+                                            }
+
+                                            echo "</td>" . "</tr>". "<br>";
+
+                                        }
+                                    ?>
+                                </tbody>
+                            </table> 
+                            
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+	       </div>
+            
             
             <div class="modal" id="loadingModal" aria-hidden="true">
                 <div class="modal-dialog">
@@ -152,68 +234,11 @@
             <br>
             <br>
             
-            <div id="table-projects">
+<!--            <div id="table-projects">-->
             
-            <!-- Listamos los ficheros que hay en el servidor/carpeta y sus propiedades -->
-            <table class="table table-striped table-hover ">
-                <thead>
-                    <tr>
-                        <th>Nombre proyecto</th>
-                        <th>Autor proyecto</th>
-                        <th>Lugar</th>
-                    </tr>
-                </thead>
-                <tbody id="tableInicio">
-                    <!-- Esto es necesario para saber cuantos JSON hay y hacer una lista de ellos para luego acceder al modelo -->
-                    <?php                                         
-                        $directory = "data/" . $_GET['user'] ."/";
-                                        
-                        $filecount = 0;
-                        $files = glob($directory . "*.{json}",GLOB_BRACE);
-                        
-                        if ($files){
-                            $filecount = count($files);
-                        }
-
-                        for ($i = 0; $i < $filecount; $i = $i+1) {
-                            
-                            $user = substr(substr($files[$i], 5),0, -5);
-//                            $array = split('/', $user);
-                            $username = $_GET['user'];
-                            $project = substr($user, strlen($username) + 1, strlen($user));
-                            
-                            echo '<tr a class="pointer" id="' . $project . '" onclick' . '=' . '"loadContent(' . "'modelo.html','";
-                            echo $user;
-                            echo "')" . '"' . ">" . "<td>";
-                            echo str_replace('_', ' ', ucfirst($project))  . "</td>" . "<td>";
-                            
-                            $string = file_get_contents($files[$i]);
-                            $json_a = json_decode($string, true);
-
-                            foreach ($json_a as $k => $v) {
-                                if ($k == "autor")
-                                    echo $v;
-                            }
-                            
-                            echo "</td>" . "<td>";
-                            
-                            foreach ($json_a as $k => $v) {
-                                if ($k == "lugar")
-                                    echo $v;
-                            }
-                            
-                            echo "</td>" . "</tr>". "<br>";
-                            
-                        }
-                    ?>
-                </tbody>
-            </table> 
+            
                 
-            </div>
-            
-            <div class="project-options">
-                <button id="delete-project" class="btn" onclick="enable_project_delete();">Eliminar proyecto</button>
-            </div>
+<!--            </div>-->
 
         </content><!--  content end-->
         

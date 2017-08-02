@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,52 +12,55 @@
     <link href="css/custom.min.css" rel="stylesheet">
     <link href="css/estilo.css" rel="stylesheet">
     <link href="css/header.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/RWD.css"> <!-- responsive web design -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script type="text/javascript">
+        // Used to toggle the menu on small screens when clicking on the menu button
+        function showNavbar() {
+            var x = document.getElementById("navDemo");
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+            } else { 
+                x.className = x.className.replace(" w3-show", "");
+            }
+        }
+    </script>
+
         
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    </head>
+s</head>
     <body class="container">
         
-        <header>
-            <nav>
-                <div id="megadiv">
-                        <a id="megatitle"><span>PaisArque </span></a>
-                </div>
-                <div>
-                        <a onclick="loadContent('inicio.php')"><span>Inicio </span></a>
-                </div>
-                <div>
-                        <a onclick="loadContent('modelo.html')"><span>3D </span></a>
-                </div>
-                <div>
-                        <a onclick="loadContent('infoextra.html')"><span>Información </span></a>
-                </div>
-                <div>
-                        <a onclick="loadContent('exportar.php')"><span>Exportar </span></a>
-                </div>
-                <div>
-                        <a onclick="loadContent('ayuda.html')"><span>Ayuda </span></a>
-                </div>
-                <div>
-                        <a class="space"><span>-</span></a>
-                </div>
-                <div>
-                        <a id="textUser"></a>
-                </div>
-                
-                <div>
-                        <a id="logout"><span class="glyphicon glyphicon-off" aria-hidden="true">
-                            </span></a>
-                </div>
-                
-            </nav>
-        </header><!--   header end-->
+       <!-- Navbar -->
+        <div class="w3-top">
+          <div class="w3-bar w3-card-2">
+            <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" onclick="showNavbar()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+            <a onclick="loadContent('inicio.php')" id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
+            <a onclick="loadContent('modelo.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small">3D</a>
+            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Info</a>
+            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Exportar</a>
+            <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Ayuda</a>
+            <a id="textUser" class="w3-bar-item w3-button w3-padding-large w3-hide-small">username</a>
+            <a class="w3-bar-item w3-button w3-padding-large w3-hide-small logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+              
+          </div>
+        </div>
+
+        <!-- Navbar on small screens -->
+        <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
+            <a onclick="loadContent('modelo.html')" class="w3-bar-item w3-button w3-padding-large">3D</a>
+            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large">Información</a>
+            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large">Exportar</a>
+            <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large">Ayuda</a>
+            <a class="w3-bar-item w3-button w3-padding-large textUser">username</a>
+            <a class="w3-bar-item w3-button w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+        </div>
         
-        <content class="container"></content>
+        <content class="row"><div class="col-lg-12" style="margin-top: 2.5% !important;">
+            <h2>Opciones de exportación</h2>
+        </div>
         <!--Aqui tendrian que haber diferentes opciones de export (jpg/pdf):
         <br>
         - Modelo 3D con sin info/medidas/anotaciones
@@ -84,6 +87,9 @@
         ?>
 
         <br>
+            
+            </content>
+        
         <footer>
         </footer><!--   footer end-->
             

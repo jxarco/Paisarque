@@ -3,11 +3,11 @@
 body, html{
     margin: 0 !important;
     padding: 0 !important;
-    font-family: 'Ubuntu', sans-serif;
+    font-family: 'Ubuntu', sans-serif !important;
     background-color: rgb(235, 235, 235);
     width: 100% !important;
     height: 100% !important;
-    overflow-y: hidden;
+/*    overflow-y: hidden;*/
 }
 
 content{
@@ -19,7 +19,7 @@ label, p{
 }
 
 li a{
-    color: aliceblue !important;
+    color: dimgray!important;
 }
 
 li:hover > a {
@@ -55,37 +55,17 @@ button:hover{
 /*    margin-left: 15px;*/
 }
 
-#addProject{
-    margin: 5%;
-    margin-bottom: 0;
-    background-color: rgb(62, 164, 155);
-    width: 20%;
-    height: 50px;
-    color: aliceblue !important;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+.btn{
+   outline: none !important;
 }
 
-#addProject:hover{
-    color: aliceblue !important;
-    background-color: rgb(20, 120, 120);
+#projects-tb{
+    margin-left: 5%;
+    width: 90%;
 }
 
-#table-projects{
-    margin: 5%;
-    margin-top: 0;
-}
-
-#table-projects tr:hover td{
+#projects-tb tr:hover td{
     background-color: rgba(82, 184, 175, 0.5) !important;
-}
-
-.project-options > button{
-    margin-left: 5%;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-}
-
-.project-options > button:hover{
-    margin-left: 5%;
 }
 
 .form-group > label{
