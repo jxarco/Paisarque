@@ -574,7 +574,7 @@ function medirDistancia()
                 ball_first.destroy();
                 ball_sec.destroy();
                 
-                pushMedicion(distance_in_meters);
+                project.insertMeasure(camera, firstPoint, secondPoint, distance_in_meters, true);
             }
         }
     } 
@@ -587,7 +587,7 @@ function medirSegmentos()
     
 //    console.log("midiendo distancia");
 //    alert("Selecciona los vértices de los segmentos:");
-    putCanvasMessage("Selecciona los vértices de los segmentos:", 2500);
+    putCanvasMessage("Selecciona los vértices de los segmentos:", 252500);
     
     var points              = [];
     var distance            = 0;
@@ -668,29 +668,6 @@ function medirSegmentos()
     } 
 }
 
-function pushMedicion(distance)
-{
-    if(!distance)
-        return;
-    
-    var table = $('#distances-table');
-    var bodyTable = table.find('tbody');
-    
-    // add to measures in project
-    var id = project.insertMeasure(camera, firstPoint, secondPoint, distance);
-    
-    var row = "<tr onclick='viewMeasure(" + id + ")' id=" + id + " a class='pointer'>" + 
-    "<td> x: " + Math.round(firstPoint[0] * 1000) / 1000 + "</br>y: " + Math.round(firstPoint[1] * 1000) / 1000 + "</br>z: " + Math.round(firstPoint[2] * 1000) / 1000 + "</td>" + 
-    "<td> x: " + Math.round(secondPoint[0] * 1000) / 1000 + "</br>y: " + Math.round(secondPoint[1] * 1000) / 1000 + "</br>z: " + Math.round(secondPoint[2] * 1000) / 1000 + "</td>" + 
-    "<td>" + Math.round(distance * 1000) / 1000 + "</td>" + 
-    "</tr>";
-    
-    bodyTable.append(row);
-    
-    showing_dist_table = true;
-    revealDOMElement(table, showing_dist_table);
-}
-
 function viewMeasure(id)
 {
     if(!first_measurement)
@@ -710,7 +687,7 @@ function viewMeasure(id)
     ball.color = [0.3,0.2,0.8,1];
     ball.mesh = "sphere";
 //    ball.shader = "phong";
-    ball.scaling = 2;
+    ball.scaling = 1.25;
     ball.layers = 0x4;
     ball.flags.ignore_collisions = true;
     ball.position = x1;
@@ -721,7 +698,7 @@ function viewMeasure(id)
     ball2.color = [0.3,0.2,0.8,1];
     ball2.mesh = "sphere";
 //    ball2.shader = "phong";
-    ball2.scaling = 2;
+    ball2.scaling = 1.25;
     ball2.layers = 0x4;
     ball2.flags.ignore_collisions = true;
     ball2.position = x2;

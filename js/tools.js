@@ -116,6 +116,9 @@ function destroySceneElements(elements, description)
 {
     for(var i = 0; i < elements.length; ++i)
     {
+        if(elements[i] === null)
+            return;
+        
         if(!description)    
             elements[i].destroy();
         else if(description == elements[i].description)

@@ -17,8 +17,8 @@ function Project( data, user )
 Project.prototype._ctor = function( data )
 {
     this._anotations    = [];
-    this._measures      = [];
     this._textures      = [];
+    this._measures      = [];
     
 	this.FROMJSON( data );
 }
@@ -224,12 +224,31 @@ Project.prototype.getMeasure = function(id)
 *   Push a new measure to the list project
 *   @param camera: get camera properties
 *   @param x1 and x2: points within distance is calculated
+*   @param display: show or not the table after inserting measure
 */
 
-Project.prototype.insertMeasure = function( camera, x1, x2, distance )
+Project.prototype.insertMeasure = function( camera, x1, x2, distance, display )
 {   
-    var measure = {
-        "id": last_measure_id,
+    if(!distance)
+        return;
+    
+    var table = $('#distances-table');
+    var bodyTable = table.find('tbody');
+    var id = last_measure_id++;
+    
+    var row = "<tr onclick='viewMeasure(" + id + ")' id=" + id + " a class='pointer'>" + 
+    "<td>" + Math.round(x1[0] * 100) / 100 + "</br>" + Math.round(x1[1] * 100) / 100 + "</br>" + Math.round(x1[2] * 100) / 100 + "</td>" + 
+    "<td>" + Math.round(x2[0] * 100) / 100 + "</br>" + Math.round(x2[1] * 100) / 100 + "</br>" + Math.round(x2[2] * 100) / 100 + "</td>" + 
+    "<td>" + Math.round(distance * 1000) / 1000 + "</td>" + 
+    "</tr>";
+    
+    bodyTable.append(row);
+    
+    showing_dist_table = display;
+    revealDOMElement(table, showing_dist_table);
+    
+    this._measures.push( {
+        "id": id,
         "camera_position": vec3.clone(camera.position),
         "camera_target": vec3.clone(camera.target),
         "camera_up": vec3.clone(camera.up),
@@ -244,11 +263,7 @@ Project.prototype.insertMeasure = function( camera, x1, x2, distance )
             "2": x2[2],
         },
         "distance": distance
-    };
-    
-    this._measures.push( measure );
-    
-    return last_measure_id++;
+    } );
 }
 
 /*
@@ -299,6 +314,24 @@ Project.prototype.FROMJSON = function( data )
     
     //distances
     this._meter = data.render.metro || -1;
+    this._segments = data.segmentos || [];
+    
+    len = data.medidas ? data.medidas.length : 0;
+    
+    for(var i = 0; i < len; i++)
+    {
+        var camera = {
+            "position": data.medidas[i].camera_position,
+            "target": data.medidas[i].camera_target,
+            "up": data.medidas[i].camera_up
+        };
+        
+        var x1 = data.medidas[i].x1;
+        var x2 = data.medidas[i].x2;
+        var distance = data.medidas[i].distance;
+        
+        this.insertMeasure(camera, x1, x2, distance, false);
+    }
 }
 
 /*  
@@ -330,7 +363,9 @@ Project.prototype.save = function( overwrite, extra )
         "render":{"id": this._id, "mesh": this._mesh, "texture": this._textures,
                   "rotaciones": this._rotations, "metro": this._meter},
         "extra": this._extra,
-        "anotaciones": this._anotations
+        "anotaciones": this._anotations,
+        "medidas": this._measures,
+        "segmentos": this._segments
     };
         
     $.ajax({

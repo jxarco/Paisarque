@@ -265,7 +265,9 @@ $("#formUploadProject").on('submit', function(e)
             "metro": -1
         },
         "extra": listaExtra,
-        "anotaciones": []
+        "anotaciones": [],
+        "medidas": [],
+        "segmentos": []
     };
         
     var fileNameString = "data/" + user + "/" + project_id + '.json';
