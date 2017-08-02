@@ -47,8 +47,6 @@ if(session === null)
 
 }
 
-
-
 function systemReady()
 {    
 	//LOGIN
