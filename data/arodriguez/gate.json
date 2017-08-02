@@ -1,0 +1,1 @@
+{"id":"gate","descripcion":"desc","autor":"Alex Rodriguez","lugar":"Budapest","coordenadas":{"lat":"47.2853","lng":"19.2402"},"render":{"id":"gate","mesh":"gate/mesh.obj","texture":["gate/tex01.jpg"],"rotaciones":[],"metro":-1},"extra":[{"type":"text","data":"test gate "}],"anotaciones":[],"medidas":[],"segmentos":[]}

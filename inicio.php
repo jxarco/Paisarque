@@ -37,7 +37,7 @@
         
         <content class="container">
             
-            <a href="#" id="addProject" class="btn btn-lg" data-toggle="modal" data-target="#GSCCModal">Añadir nuevo proyecto</a>
+            <a href="#" id="addProject" class="btn btn-lg btn-primary t" data-toggle="modal" data-target="#GSCCModal">Añadir nuevo proyecto</a>
             
             <div class="modal" id="loadingModal" aria-hidden="true">
                 <div class="modal-dialog">
@@ -138,8 +138,8 @@
                         <div class="modal-footer">
                             <div class="form-group">
                                 <div class="col-lg-10 col-lg-offset-2">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                    <button type="submit" name="submit" value="send" class="btn my-btn" >Submit</button>
+                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                    <button type="submit" name="submit" value="send" class="btn btn-primary" >Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -238,6 +238,7 @@
             PAS.recover(); // load paisarque session
         </script>
         <script src="js/tools.js"></script>
+        <script src="js/events.js"></script>
     </body>
     
 </html>

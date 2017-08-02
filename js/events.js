@@ -143,7 +143,10 @@ $('#fullscreen-mode').click(function()
 
 $("#formUploadProject").on('submit', function(e)
 {
+    console.log("uploading project");
     e.preventDefault();
+    
+    
     
     $('#GSCCModal').modal('hide');   
     
