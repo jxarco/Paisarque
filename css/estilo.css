@@ -51,6 +51,10 @@ button:hover{
 /*********************************************************/
 /* inicio.php */
 
+#textUser{
+/*    margin-left: 15px;*/
+}
+
 #addProject{
     margin: 5%;
     margin-bottom: 0;

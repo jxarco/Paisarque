@@ -27,7 +27,7 @@
                 <div>
                         <a id="textUser" class="space"></a>
                 </div>
-                <div>
+                <div class="logout-button">
                         <a id="logout"><span class="glyphicon glyphicon-off" aria-hidden="true">
                             </span></a>
                 </div>

@@ -1,4 +1,4 @@
-var session = null;
+var session = window.session || null;
 var system_info = {};
 var filesview_mode = "thumbnails";
 var units = {};
@@ -17,14 +17,23 @@ $("#loginForm").hide();
 if(session === null)
 {
     LiteFileServer.setup("", function(status, resp) {
-	console.log("server checked");
-	$(".startup-dialog").hide();
-	if(status == 1)
-	{
-		system_info = resp.info;
-		console.log("Server ready");
-		systemReady();
-	}
+        console.log("server checked");
+        $(".startup-dialog").hide();
+        if(status == 1)
+        {
+            system_info = resp.info;
+            console.log("Server ready");
+            systemReady();
+
+            if(window.session === null && localStorage.length)
+            {
+                session = JSON.parse(localStorage.session);
+                localStorage.setItem('session', JSON.stringify(session));
+                window.location.href = ("inicio.php?user=" + session.user.username);
+
+            }
+
+        }
 	else
 	{
 		console.warn("Server not ready");
@@ -37,6 +46,7 @@ if(session === null)
     });
 
 }
+
 
 
 function systemReady()
@@ -55,7 +65,6 @@ function systemReady()
 		$("#inputEmail").val( values["username"] );
 		$("#inputPassword").val( values["password"] );
 
-		//create user
 		LiteFileServer.login( values["username"], values["password"], function(session, result){
             
             // si el login es correcto, se entra y se va a la url de inicio
@@ -79,8 +88,11 @@ function systemReady()
 	});
     
     
-    var sessionTry = JSON.parse(localStorage.getItem('session'));
-    var user = sessionTry["user"];
+    if(session)
+    {
+        var sessionTry = JSON.parse(localStorage.getItem('session'));
+        var user = sessionTry["user"];
+    }
       
         
     if ($("#textUser").length > 0){
@@ -113,7 +125,8 @@ function systemReady()
 			return;
 
         session.logout( function(session, result) {
-            localStorage.setItem('session', JSON.stringify(session));
+//            localStorage.setItem('session', JSON.stringify(session));
+            localStorage.clear();
             session = null;
             window.location.href = "index.html";
         });
