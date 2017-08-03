@@ -132,7 +132,8 @@ button:hover{
     overflow: hidden;
     visibility: hidden;
     z-index: 0 !important;
-    margin-top: 6px;
+    height: 100%;
+/*    border: 3px solid red;*/
 }
 
 #messages{
