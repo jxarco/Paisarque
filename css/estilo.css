@@ -148,11 +148,6 @@ button:hover{
     padding: 20px;
 }
 
-.tools-btns{
-/*    background-color: blue;*/
-    margin-bottom: 5%;
-}
-
 #deleting-div{
     display: flex;
     z-index:2;
@@ -203,11 +198,18 @@ button:hover{
 .tool-btn{
     width: 35px !important;
     height: 35px !important;
+    padding-top: 30% !important;
+    padding-left: 30% !important;
+    background: lightgray;   
+    margin: 2px;
+    vertical-align: middle;
+}
+
+.tool-btn.anot{
+    margin-bottom: 5%;
     padding-top: 2.75% !important;
     padding-left: 2.75% !important;
-    background: lightgray;   
     margin: 12.5px;
-    vertical-align: middle;
 }
 
 .tool-btn.nodisplay{
