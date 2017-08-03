@@ -110,21 +110,18 @@ button:hover{
 
 #placeholder {
 /*    height: calc(100vh - 275px);*/
-    height: 100%;
     background-image: url("../data/loading.gif");
     background-repeat: no-repeat;
     background-size: 15em;
     background-position: center;
     padding:0;
-/*    overflow: hidden;*/
+    margin-top: 46px;
+    height: calc(100vh - 46px);
+/*    border: 3px solid green;*/
 }
 
 #tools{
-    background-color: rgba(82, 184, 175, 0.65) !important;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-    height: 100%;
-    right: 0;
-    top: 0;
+    height: calc(100vh - 46px);
 }
 
 #myCanvas {
@@ -132,8 +129,9 @@ button:hover{
     overflow: hidden;
     visibility: hidden;
     z-index: 0 !important;
+/*    border: 3px solid blue;*/
     height: 100%;
-/*    border: 3px solid red;*/
+    width: 100%;
 }
 
 #messages{
@@ -155,27 +153,9 @@ button:hover{
     margin-bottom: 5%;
 }
 
-#info{
-    overflow-x: hidden !important;
-    overflow-y: hidden !important;
-    min-height: 100%;
-    max-height: 100%;
-}
-
-#anotaciones{
-/*    border: 2px solid red;*/
-/*    overflow-y: scroll !important;*/
-    overflow-x: hidden !important;
-    max-height: calc(100vh - 130px);
-}
-
 #deleting-div{
     display: flex;
-    position: absolute;
-    bottom: 75px;
-    /* scrolling out of view :-( */
     z-index:2;
-    width: 90%;
 }
 
 #entire-anot-table{
@@ -191,7 +171,7 @@ button:hover{
     padding: 10px;
     border-width: 3px;
     border-style: dotted;
-    border-color: rgba(232, 232, 232, 0.3);
+    border-color: rgba(132, 132, 232, 0.5);
     font-weight: 300;
     text-align: center;
     -webkit-transition: all 150ms linear;
@@ -208,18 +188,11 @@ button:hover{
 .drag-cont-over{
     background: rgba(255, 0, 0, 0.1);
     border-style: dotted;
-    border-color: rgba(232, 232, 232, 0.9) !important;
+    border-color: rgba(132, 132, 232, 0.9) !important;
     color: #e3403a;
     text-decoration: none;
     -webkit-transition: all 250ms linear;
     transition: all 250ms linear;
-}
-
-#herramientas{
-/*    overflow: scroll !important;*/
-    max-height: calc(100vh - 130px);
-    overflow-x: hidden !important;
-    overflow-y: hidden !important;
 }
 
 .delimiter{
