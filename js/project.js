@@ -20,7 +20,7 @@ Project.prototype._ctor = function( data )
     this._anotations    = [];
     this._textures      = [];
     this._measures      = [];
-    this._seg_measures  = [];
+    this._segments      = [];
     
 	this.FROMJSON( data );
 }
@@ -223,14 +223,14 @@ Project.prototype.getMeasure = function(id)
 
 Project.prototype.getSegmentMeasurements = function()
 {
-    return this._seg_measures;
+    return this._segments;
 }
 
 Project.prototype.getSegmentMeasure = function(id)
 {
-    for(var i = 0; i < this._seg_measures.length; i++)
-        if(this._seg_measures[i].id == id)
-            return this._seg_measures[i];
+    for(var i = 0; i < this._segments.length; i++)
+        if(this._segments[i].id == id)
+            return this._segments[i];
 }
 
 /*
@@ -306,7 +306,7 @@ Project.prototype.insertSegmentMeasure = function( points, distance, display )
     showing_seg_dist_table = display;
     revealDOMElement(table, showing_seg_dist_table);
     
-    this._seg_measures.push( {
+    this._segments.push( {
         "id": id,
         "points": points,
         "distance": distance
@@ -361,7 +361,6 @@ Project.prototype.FROMJSON = function( data )
     
     //distances
     this._meter = data.render.metro || -1;
-    this._segments = data.segmentos || [];
     
     len = data.medidas ? data.medidas.length : 0;
     
@@ -379,6 +378,11 @@ Project.prototype.FROMJSON = function( data )
         
         this.insertMeasure(camera, x1, x2, distance, false);
     }
+    
+    len = data.segmentos ? data.segmentos.length : 0;
+    
+    for(var i = 0; i < len; i++)
+        this.insertSegmentMeasure( data.segmentos[i].points, data.segmentos[i].distance, false );
 }
 
 /*  

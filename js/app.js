@@ -5,15 +5,14 @@ var context         = null;
 var scene           = null;
 var renderer        = null;
 var camera          = null;
-var _dt             = 0.0;
 var viz_anotations  = true;
+var _dt             = 0.0;
 
 // distances
 var result          = vec3.create();
 var firstPoint      = vec3.create();
 var secondPoint     = vec3.create();
 var to_destroy      = [];
-var first_measurement       = true;
 var showing_dist_table      = false;
 var showing_seg_dist_table  = false;
 
@@ -360,14 +359,7 @@ function anotar(modoAnotacion)
             
             // Si ha habido colision, se crea un punto y se abre una ventana de texto para escribir la anotacion
             if (node)
-            {
-                // No hacer aqui ningún $(something).click o lo que sea para no repetir
-                // event listeners
-
-                // se abre la ventana de texto para escribir
                 $('#modalText').modal('show');
-                //$('#message-text').focus();
-            }
         }
     } else if (!modoAnotacion) {
         console.log("Modo anotación desactivado");
@@ -384,46 +376,13 @@ function anotar(modoAnotacion)
 function changeVizAnotInCanvas(showing)
 {
     for(var i = 0; i < obj.children.length; i++)
-        {
-            var current = obj.children[i];
-            
-            if(!showing){
-                current.flags.visible = false;
-                //console.log("deleting viz to ball");
-            }
-            else
-                current.flags.visible = true;
-        }
-}
-
-// FIX IT
-function changeSizeAnotInCanvas(operation)
-{
-    // lets say op_type = 1 to add
-    // and 0 to substract
-    var ADD = true;
-    var SUBS = false;
-    var last_node = null;
-    
-    for(var i = 0; i < obj.children.length; i++)
     {
         var current = obj.children[i];
 
-        if(operation === ADD)
-            {
-//                var m = current.getLocalMatrix();
-//                current.scale([1.1, 1.1, 1.1]);
-//                
-//                mat4.multiply(current._local_matrix, current._local_matrix, m);
-//                
-//                adds++;
-            }
-                
-        else if(operation === SUBS)
-            {
-//                current.scale([0.9, 0.9, 0.9]);
-//                subs++;
-            }
+        if(!showing)
+            current.flags.visible = false;
+        else
+            current.flags.visible = true;
     }
 }
 
@@ -438,8 +397,6 @@ function medirMetro()
     
     var primerPunto     = true;
     var segundoPunto    = false;
-    var ball_first      = null;
-    var ball_sec        = null;
     
     context.onmousedown = function(e) 
     {
@@ -451,7 +408,7 @@ function medirMetro()
             var node = scene.testRay( ray, result, undefined, 0x1, true );
             
             if (node) {
-                ball_first = new RD.SceneNode();
+                var ball_first = new RD.SceneNode();
                 ball_first.description = "config";
                 ball_first.color = [0,1,0,1];
                 ball_first.mesh = "sphere";
@@ -474,7 +431,7 @@ function medirMetro()
             
             // Si ha habido colision, se crea un punto y se abre una ventana de texto para escribir la anotacion
             if (node) {
-                ball_sec = new RD.SceneNode();
+                var ball_sec = new RD.SceneNode();
                 ball_sec.description = "config";
                 ball_sec.color = [0,1,0,1];
                 ball_sec.mesh = "sphere";
