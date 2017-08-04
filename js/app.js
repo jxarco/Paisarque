@@ -12,9 +12,6 @@ var viz_anotations  = true;
 var result          = vec3.create();
 var firstPoint      = vec3.create();
 var secondPoint     = vec3.create();
-var ball            = null;
-var ball2           = null;
-var linea           = null;
 var to_destroy      = [];
 var first_measurement       = true;
 var showing_dist_table      = false;
@@ -178,10 +175,11 @@ function init(current_project, meshURL, textureURL)
     
     var makeVisible = function () {
         placer.style.visibility = "visible";
-        putCanvasMessage("Recuerda: guarda el proyecto al realizar cambios!", 5000);
-        putCanvasMessage("Puedes cancelar cualquier acción con la tecla ESC", 5000);
+        putCanvasMessage("Recuerda: guarda el proyecto al realizar cambios!", 3000);
+        putCanvasMessage("Puedes cancelar cualquier acción con la tecla ESC", 3000);
         if(!rotaciones.length)
-            putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 4000, {b_color: "rgba(255, 0, 0, 0.5)"});
+            putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {b_color: "rgba(255, 0, 0, 0.5)"});
+            putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {b_color: "rgba(255, 0, 0, 0.5)"});
     };
 
     renderer.loadMesh(obj.mesh, makeVisible);
@@ -515,7 +513,7 @@ function medirDistancia()
     
 //    console.log("midiendo distancia");
 //    alert("Selecciona dos puntos:");
-    putCanvasMessage("Selecciona dos puntos:", 2500);
+    putCanvasMessage("Selecciona dos puntos manteniendo la letra S!", 2500);
     
     var primerPunto     = true;
     var segundoPunto    = false;
@@ -525,7 +523,7 @@ function medirDistancia()
     context.onmousedown = function(e) 
     {
         
-        if (primerPunto) {
+        if (primerPunto && keys[KEY_S]) {
         
             var result = vec3.create();
             var ray = camera.getRay( e.canvasx, e.canvasy );
@@ -547,7 +545,7 @@ function medirDistancia()
             primerPunto = false;
             segundoPunto = true;
             
-        } else if (segundoPunto) {
+        } else if (segundoPunto && keys[KEY_S]) {
             
             var result = vec3.create();
             var ray = camera.getRay( e.canvasx, e.canvasy );
@@ -577,8 +575,20 @@ function medirDistancia()
                 
                 segundoPunto = false;
                 
-                ball_first.destroy();
-                ball_sec.destroy();
+                var x1 = [firstPoint[0], firstPoint[1], firstPoint[2]];
+                var x2 = [secondPoint[0], secondPoint[1], secondPoint[2]];
+                
+                var vertices = x1.concat(x2);
+                var mesh = GL.Mesh.load({ vertices: vertices }); 
+                renderer.meshes["line"] = mesh;
+                var linea = new RD.SceneNode();
+                linea.description = "config";
+                linea.flags.ignore_collisions = true;
+                linea.primitive = gl.LINES;
+                linea.mesh = "line";
+                linea.color = [0.3,0.8,0.1,1];
+                linea.flags.depth_test = false;
+                scene.root.addChild(linea);
                 
                 project.insertMeasure(camera, firstPoint, secondPoint, distance_in_meters, true);
             }
@@ -675,10 +685,8 @@ function medirSegmentos()
 
 function viewMeasure(id)
 {
-    if(!first_measurement)
-        destroySceneElements(scene.root.children, "config");
-        
-    first_measurement = false;
+    // clear first
+    destroySceneElements(scene.root.children, "config");
     
 //    var console.log(id);
     var measure = project.getMeasure(id);
@@ -690,6 +698,7 @@ function viewMeasure(id)
     {
         var ball = new RD.SceneNode();
         ball.color = [0.3,0.2,0.8,1];
+        ball.description = "config";
         ball.mesh = "sphere";
         ball.scaling = 1.25;
         ball.layers = 0x4;
@@ -701,10 +710,11 @@ function viewMeasure(id)
     var vertices = x1.concat(x2);
     var mesh = GL.Mesh.load({ vertices: vertices }); 
     renderer.meshes["line"] = mesh;
-    linea = new RD.SceneNode();
+    var linea = new RD.SceneNode();
     linea.flags.ignore_collisions = true;
     linea.primitive = gl.LINES;
     linea.mesh = "line";
+    linea.description = "config";
     linea.color = [0.3,0.2,0.8,1];
     linea.flags.depth_test = false;
     scene.root.addChild(linea);
@@ -718,15 +728,12 @@ function viewMeasure(id)
 
 function viewSegmentMeasure(id)
 {
-    if(!first_measurement)
-        destroySceneElements(scene.root.children, "config");
-        
-    first_measurement = false;
+    // clear first
+    destroySceneElements(scene.root.children, "config");
     
 //    var console.log(id);
     var measure = project.getSegmentMeasure(id);
     var points = measure.points;
-//    console.log(points);
     
     for(var i = 0; i < points.length; ++i)
     {
