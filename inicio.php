@@ -50,7 +50,7 @@
             <a class="w3-bar-item w3-button w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
         </div>
         
-        <content class="container">
+        <content class="container" id="all">
             
             <div class="row" style="margin-top: 10.5%;">
                 <div class="col-md-6 col-md-offset-3">

@@ -6,6 +6,10 @@ var delete_project_active = false;
 
 // LOAD DATA FROM JSON
 
+// prevent of NO LOGIN
+if(session === null)
+    $("#all").hide();
+
 var LOADER = {
     load: function(){
         if(current_project !== null)

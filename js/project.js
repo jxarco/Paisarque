@@ -328,7 +328,6 @@ Project.prototype.FROMJSON = function( data )
 	// data
 	this._description = data.descripcion;
     this._id = data.id;
-    this._user = "guest";
 	this._author = data.autor;
     this._location = data.lugar;
     this._coordinates = data.coordenadas;
