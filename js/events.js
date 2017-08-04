@@ -28,7 +28,7 @@ $("#saveTextButton").click(function(e)
         if(!this.active)
             this.color = [1,0,0,1];
         else
-            this.color = [1, 0.3, Math.sin(this.time*5), 1];
+            this.color = [1, 0.3 + Math.sin(this.time*5), 0.3 + Math.sin(this.time*5), 1];
     }
 
     ball.position = result;
@@ -112,30 +112,22 @@ $("#show_dt").click(function()
 });
 
 /*
-*   TODO!!!
-*   Button: Go canvas fullscreen 
+*   Button: Show/Hide the segments distances measured table
 */
-$('#fullscreen-mode').click(function() 
+$("#show_dst").click(function() 
 {
+    console.log("showing/hiding segments distances table");
+    showing_seg_dist_table = !showing_seg_dist_table;
     
-//    var canvas = $('#myCanvas');
-//    
-//    console.log(canvas);
-//    
-//   if (!document.mozFullScreen && !document.webkitFullScreen) {
-//      if (canvas.mozRequestFullScreen) {
-//        canvas.mozRequestFullScreen();
-//      } else {
-//        canvas.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-//      }
-//    } else {
-//      if (document.mozCancelFullScreen) {
-//        document.mozCancelFullScreen();
-//      } else {
-//        document.webkitCancelFullScreen();
-//      }
+    var table = $('#segment-distances-table');
+    revealDOMElement(table, showing_seg_dist_table);
+//    if(!showing_seg_dist_table)
+//    {
+//        var elements = [ball, ball2, linea];
+//        destroySceneElements(elements);
 //    }
 });
+
 
 /*
 *   PROJECT STUFF

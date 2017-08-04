@@ -3,8 +3,9 @@
 * @class Project
 */
 
-var last_project_id = 0;
-var last_measure_id = 0;
+var last_project_id         = 0;
+var last_measure_id         = 0;
+var last_seg_measure_id     = 0;
 
 function Project( data, user )
 {
@@ -19,6 +20,7 @@ Project.prototype._ctor = function( data )
     this._anotations    = [];
     this._textures      = [];
     this._measures      = [];
+    this._seg_measures  = [];
     
 	this.FROMJSON( data );
 }
@@ -219,6 +221,18 @@ Project.prototype.getMeasure = function(id)
             return this._measures[i];
 }
 
+Project.prototype.getSegmentMeasurements = function()
+{
+    return this._seg_measures;
+}
+
+Project.prototype.getSegmentMeasure = function(id)
+{
+    for(var i = 0; i < this._seg_measures.length; i++)
+        if(this._seg_measures[i].id == id)
+            return this._seg_measures[i];
+}
+
 /*
 *   @prototype insertMeasure
 *   Push a new measure to the list project
@@ -262,6 +276,39 @@ Project.prototype.insertMeasure = function( camera, x1, x2, distance, display )
             "1": x2[1],
             "2": x2[2],
         },
+        "distance": distance
+    } );
+}
+
+/*
+*   @prototype insertSegmentMeasure
+*   Push a new segment measure to the list project
+*   @param points: list of vertices
+*   @param display: show or not the table after inserting measure
+*/
+
+Project.prototype.insertSegmentMeasure = function( points, distance, display )
+{   
+    if(!distance)
+        return;
+    
+    var table = $('#segment-distances-table');
+    var bodyTable = table.find('tbody');
+    var id = last_seg_measure_id++;
+    
+    var row = "<tr onclick='viewSegmentMeasure(" + id + ")' id=" + id + " a class='pointer'>" + 
+    "<td>" + points.length + "</td>" + 
+    "<td>" + Math.round(distance * 1000) / 1000 + "</td>" + 
+    "</tr>";
+    
+    bodyTable.append(row);
+    
+    showing_seg_dist_table = display;
+    revealDOMElement(table, showing_seg_dist_table);
+    
+    this._seg_measures.push( {
+        "id": id,
+        "points": points,
         "distance": distance
     } );
 }

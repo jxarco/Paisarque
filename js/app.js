@@ -15,8 +15,10 @@ var secondPoint     = vec3.create();
 var ball            = null;
 var ball2           = null;
 var linea           = null;
-var first_measurement   = true;
-var showing_dist_table  = false;
+var to_destroy      = [];
+var first_measurement       = true;
+var showing_dist_table      = false;
+var showing_seg_dist_table  = false;
 
 // rotaciones
 var setting_rotation    = false;
@@ -158,16 +160,6 @@ function init(current_project, meshURL, textureURL)
         obj.texture = textureURL;
     }
     
-    var makeVisible = function () {
-        placer.style.visibility = "visible";
-        putCanvasMessage("Recuerda: guarda el proyecto al realizar cambios!", 5000);
-        putCanvasMessage("Puedes cancelar cualquier acción con la tecla ESC", 5000);
-        putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 4000, {b_color: "rgba(255, 0, 0, 0.5)"});
-    };
-
-    renderer.loadMesh(obj.mesh, makeVisible);
-    renderer.loadTexture(obj.texture, renderer.default_texture_settings);
-    
     // Hacer las rotaciones pendientes
     var rotaciones = project.getRotations();
     
@@ -184,8 +176,19 @@ function init(current_project, meshURL, textureURL)
         obj.updateMatrices();
     }
     
+    var makeVisible = function () {
+        placer.style.visibility = "visible";
+        putCanvasMessage("Recuerda: guarda el proyecto al realizar cambios!", 5000);
+        putCanvasMessage("Puedes cancelar cualquier acción con la tecla ESC", 5000);
+        if(!rotaciones.length)
+            putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 4000, {b_color: "rgba(255, 0, 0, 0.5)"});
+    };
+
+    renderer.loadMesh(obj.mesh, makeVisible);
+    renderer.loadTexture(obj.texture, renderer.default_texture_settings);
+    
     obj.scale([5,5,5]);
-//    pivot.addChild( obj );
+    pivot.addChild( obj );
     
     var grid = new RD.SceneNode();
     
@@ -531,7 +534,7 @@ function medirDistancia()
             if (node) {
                 ball_first = new RD.SceneNode();
                 ball_first.description = "config";
-                ball_first.color = [0,0,1,1];
+                ball_first.color = [0.3,0.8,0.1,1];
                 ball_first.mesh = "sphere";
                 ball_first.shader = "phong";
                 ball_first.layers = 0x4;
@@ -554,7 +557,7 @@ function medirDistancia()
             if (node) {
                 ball_sec = new RD.SceneNode();
                 ball_sec.description = "config";
-                ball_sec.color = [0,0,1,1];
+                ball_sec.color = [0.3,0.8,0.1,1];
                 ball_sec.mesh = "sphere";
                 ball_sec.shader = "phong";
                 ball_sec.layers = 0x4;
@@ -631,8 +634,7 @@ function medirSegmentos()
             }
             
             started_segments = false;
-            console.log("done: " + distance);
-            putCanvasMessage(distance, 3000);
+//            console.log("done: " + distance);
             
             var vertices = [];
             
@@ -664,6 +666,8 @@ function medirSegmentos()
 //            console.log(linea);
             scene.root.addChild(linea);
             
+            project.insertSegmentMeasure(points, distance, true);
+            
             return;
         }
     } 
@@ -672,10 +676,7 @@ function medirSegmentos()
 function viewMeasure(id)
 {
     if(!first_measurement)
-    {
-        var elements = [ball, ball2, linea];
-        destroySceneElements(elements);    
-    }
+        destroySceneElements(scene.root.children, "config");
         
     first_measurement = false;
     
@@ -683,27 +684,19 @@ function viewMeasure(id)
     var measure = project.getMeasure(id);
     var x1 = [measure.x1[0], measure.x1[1], measure.x1[2]];
     var x2 = [measure.x2[0], measure.x2[1], measure.x2[2]];
+    var points = [x1, x2];
     
-    ball = new RD.SceneNode();
-    ball.color = [0.3,0.2,0.8,1];
-    ball.mesh = "sphere";
-//    ball.shader = "phong";
-    ball.scaling = 1.25;
-    ball.layers = 0x4;
-    ball.flags.ignore_collisions = true;
-    ball.position = x1;
-    scene.root.addChild(ball);                
-    
-    
-    ball2 = new RD.SceneNode();
-    ball2.color = [0.3,0.2,0.8,1];
-    ball2.mesh = "sphere";
-//    ball2.shader = "phong";
-    ball2.scaling = 1.25;
-    ball2.layers = 0x4;
-    ball2.flags.ignore_collisions = true;
-    ball2.position = x2;
-    scene.root.addChild(ball2);
+    for(var i = 0; i < points.length; ++i)
+    {
+        var ball = new RD.SceneNode();
+        ball.color = [0.3,0.2,0.8,1];
+        ball.mesh = "sphere";
+        ball.scaling = 1.25;
+        ball.layers = 0x4;
+        ball.flags.ignore_collisions = true;
+        ball.position = points[i];
+        scene.root.addChild(ball);        
+    }
     
     var vertices = x1.concat(x2);
     var mesh = GL.Mesh.load({ vertices: vertices }); 
@@ -714,8 +707,6 @@ function viewMeasure(id)
     linea.mesh = "line";
     linea.color = [0.3,0.2,0.8,1];
     linea.flags.depth_test = false;
-    
-    console.log(linea);
     scene.root.addChild(linea);
 
     // change global camera
@@ -723,6 +714,62 @@ function viewMeasure(id)
     camera.target = measure.camera_target;
     camera.up = measure.camera_up;
     
+}
+
+function viewSegmentMeasure(id)
+{
+    if(!first_measurement)
+        destroySceneElements(scene.root.children, "config");
+        
+    first_measurement = false;
+    
+//    var console.log(id);
+    var measure = project.getSegmentMeasure(id);
+    var points = measure.points;
+//    console.log(points);
+    
+    for(var i = 0; i < points.length; ++i)
+    {
+        var ball = new RD.SceneNode();
+        ball.color = [0.3,0.2,0.8,1];
+        ball.mesh = "sphere";
+        ball.description = "config";
+        ball.scaling = 1.25;
+        ball.layers = 0x4;
+        ball.flags.ignore_collisions = true;
+        ball.position = points[i];
+        scene.root.addChild(ball);                      
+        to_destroy.push(ball);
+    }
+    
+        var vertices = [];
+        for(var i = 0; i < points.length; ++i)
+        {
+            vertices.push(points[i][0]);
+            vertices.push(points[i][1]);
+            vertices.push(points[i][2]);
+
+                if(i)
+                {
+                    vertices.push(points[i][0]);
+                    vertices.push(points[i][1]);
+                    vertices.push(points[i][2]);
+                }
+        }
+                
+
+        var mesh = GL.Mesh.load({ vertices: vertices }); 
+        renderer.meshes["line"] = mesh;
+        var linea = new RD.SceneNode();
+        linea.description = "config";
+        linea.flags.ignore_collisions = true;
+        linea.primitive = gl.LINES;
+        linea.mesh = "line";
+        linea.color = [0.3,0.2,0.8,1];
+        linea.flags.depth_test = false;
+
+        scene.root.addChild(linea);
+        to_destroy.push(linea);
 }
 
 /* ************************************************* */
