@@ -146,11 +146,28 @@ function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id)
 /*
 * @param text: message to display in canvas
 * @param ms: time to display before hidding
+* @param options: color, background-color, font-size 
 */
-function putCanvasMessage(text, ms)
+var last_message_id = 0;
+function putCanvasMessage(text, ms, options)
 {
-    $("#messages").html(text).fadeIn();
+    var options = options || {};
+    
+    last_message_id++;
+    $("#cont-msg").append(
+    "<div class='messages' id='" + (last_message_id) + "'>" + 
+        text + 
+    "</div>"
+        );
+    
+    $("#" + last_message_id).css("color", options.color);
+    $("#" + last_message_id).css("background-color", options.b_color);
+    $("#" + last_message_id).css("font-size", options.size);
+    $("#" + last_message_id).fadeIn();
+    
+    var id = "#" + last_message_id;
     setTimeout(function(){
-        $("#messages").fadeOut();
+        $(id).fadeOut();
     }, ms);
+    last_message_id++;
 }

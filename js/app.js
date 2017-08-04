@@ -160,8 +160,9 @@ function init(current_project, meshURL, textureURL)
     
     var makeVisible = function () {
         placer.style.visibility = "visible";
-        // COMMENT BELOW TO DEBUG
-        //alert("Remember to save the project when making any change!");
+        putCanvasMessage("Recuerda: guarda el proyecto al realizar cambios!", 5000);
+        putCanvasMessage("Puedes cancelar cualquier acción con la tecla ESC", 5000);
+        putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 4000, {b_color: "rgba(255, 0, 0, 0.5)"});
     };
 
     renderer.loadMesh(obj.mesh, makeVisible);
@@ -171,7 +172,8 @@ function init(current_project, meshURL, textureURL)
     var rotaciones = project.getRotations();
     
     if(!rotaciones.length)
-        alert("No default rotations. Go to Tools and set a default rotation matrix");
+        console.log("No default rotations");
+//        alert("No default rotations. Go to Tools and set a default rotation matrix");
     else
     {
         obj._rotation[0] = rotaciones[0].r0;
@@ -183,7 +185,7 @@ function init(current_project, meshURL, textureURL)
     }
     
     obj.scale([5,5,5]);
-    pivot.addChild( obj );
+//    pivot.addChild( obj );
     
     var grid = new RD.SceneNode();
     
@@ -316,7 +318,8 @@ function init(current_project, meshURL, textureURL)
         
         if(e.keyCode === 27) // ESC
             {
-                // disable of features
+                // disable all features
+                putCanvasMessage("Cancelado", 1000);
                 
                 context.onmousedown = function(e) {};
                 setting_rotation = false;
@@ -585,9 +588,7 @@ function medirSegmentos()
     if(project._meter === -1)
         return;
     
-//    console.log("midiendo distancia");
-//    alert("Selecciona los vértices de los segmentos:");
-    putCanvasMessage("Selecciona los vértices de los segmentos:", 252500);
+    putCanvasMessage("Selecciona los vértices de los segmentos haciendo click mientras pulsas 'S'. Recuérda que para el último tienes que mantener la 'F'!", 10000);
     
     var points              = [];
     var distance            = 0;

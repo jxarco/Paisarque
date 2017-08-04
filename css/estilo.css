@@ -134,18 +134,24 @@ button:hover{
     width: 100%;
 }
 
-#messages{
-    position: absolute; 
+#cont-msg{
+/*    border: 3px solid red;*/
+    position: absolute;
+    width: 80%;
+}
+
+.messages{
+    position: relative; 
     background-color: rgba(100, 100, 100, 0.6); 
-    margin-left: 5%; 
-    margin-top: 15px;
-    height: 75px;
+    margin: 20px;
+    margin-bottom: 8px;
+    max-width: 45%;
     display: none;
     color: white;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 15px;
     text-align: center;
-    padding: 20px;
+    padding: 15px;
 }
 
 #deleting-div{
@@ -227,9 +233,7 @@ button:hover{
 
 .tool-btn div{
     visibility: hidden;
-    opacity: 0;
     transition: visibility 0s, opacity 0.3s linear;
-/*    transition-delay: 1s;*/
     position: absolute;
     padding: 10px;
     background-color: rgba(70, 70, 70, 0.75);

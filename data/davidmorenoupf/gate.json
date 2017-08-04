@@ -1,0 +1,1 @@
+{"id":"gate","descripcion":"desc","autor":"David Moreno","lugar":"Europe","coordenadas":{"lat":47.9253,"lng":19.2402},"render":{"id":"gate","mesh":"gate/mesh.obj","texture":["gate/tex01.jpg"],"rotaciones":[],"metro":-1},"extra":[{"type":"text","data":"testing other objects"}],"anotaciones":[],"medidas":[],"segmentos":[]}
