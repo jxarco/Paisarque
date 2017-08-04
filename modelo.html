@@ -33,18 +33,12 @@
             }
             
             function openTab(evt, tabName) {
-              var i, x, tablinks;
-              x = document.getElementsByClassName("tab");
-              for (i = 0; i < x.length; i++) {
-                 x[i].style.display = "none";
-              }
-              tablinks = document.getElementsByClassName("tablink");
-              for (i = 0; i < x.length; i++) {
-                 tablinks[i].className = tablinks[i].className.replace(" w3-border-grey", "");
-//                  console.log(tablinks[i]);
-              }
-              document.getElementById(tabName).style.display = "block";
-              evt.currentTarget.firstElementChild.className += " w3-border-grey";
+              $(".tab").hide();
+              $(".tablink").removeClass("w3-border-grey");
+              $(".tablink").removeClass("w3-border-white").addClass("w3-border-white");
+              $("#" + tabName).show();
+              var id = "#" + evt.currentTarget.firstElementChild.id;
+              $(id).addClass("w3-border-grey");
             }
         </script>
 
@@ -61,7 +55,7 @@
             <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Info</a>
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Exportar</a>
             <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Ayuda</a>
-            <a id="textUser" class="w3-bar-item w3-button w3-padding-large w3-hide-small">username</a>
+            <a class="w3-bar-item w3-button w3-padding-large w3-hide-small textUser">username</a>
             <a class="w3-bar-item w3-button w3-padding-large w3-hide-small logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
               
           </div>
@@ -111,13 +105,13 @@
                 
                       <div class="w3-row">
                         <a onclick="openTab(event, 'Info');">
-                          <div class="w3-third tablink w3-bottombar w3-border-grey w3-hover-teal w3-padding">Info</div>
+                          <div id="info_Tab" class="w3-third tablink w3-bottombar w3-border-grey w3-hover-teal w3-padding">Info</div>
                         </a>
                         <a onclick="openTab(event, 'Tools');">
-                          <div class="w3-third tablink w3-bottombar w3-border-white w3-hover-teal w3-padding">Tools</div>
+                          <div id="tools_Tab" class="w3-third tablink w3-bottombar w3-border-white w3-hover-teal w3-padding">Tools</div>
                         </a>
                         <a onclick="openTab(event, 'Notas');">
-                          <div class="w3-third tablink w3-bottombar w3-border-white w3-hover-teal w3-padding">Notas</div>
+                          <div id="notas_Tab" class="w3-third tablink w3-bottombar w3-border-white w3-hover-teal w3-padding">Notas</div>
                         </a>
                       </div>
 
