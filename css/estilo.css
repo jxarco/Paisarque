@@ -127,6 +127,7 @@ button:hover{
 #myCanvas {
     background-position: center;
     overflow: hidden;
+/*    display: none;*/
     visibility: hidden;
     z-index: 0 !important;
 /*    border: 3px solid blue;*/
@@ -274,14 +275,6 @@ button:hover{
 }
 
 /* -------------------------------------------- */
-
-#superhead
-{
-    width: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-}
 
 .project-options
 {

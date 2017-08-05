@@ -254,6 +254,7 @@
         <script src="js/extra/bootstrap.min.js"></script>
         <script src="js/extra/custom.js"></script>
         <script type="text/javascript" src="js/extra/gl-matrix-min.js"></script>
+        <script type="text/javascript" src="https://threejs.org/build/three.min.js"></script>
         <script type="text/javascript" src="js/extra/litegl.js"></script>
         <script type="text/javascript" src="js/extra/rendeer.js"></script>
         <script src="litefile/litefileserver.js"></script>

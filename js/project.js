@@ -297,7 +297,7 @@ Project.prototype.insertSegmentMeasure = function( points, distance, display )
     var id = last_seg_measure_id++;
     
     var row = "<tr onclick='viewSegmentMeasure(" + id + ")' id=" + id + " a class='pointer'>" + 
-    "<td>" + points.length + "</td>" + 
+    "<td>" + (points.length - 1) + "</td>" + 
     "<td>" + Math.round(distance * 1000) / 1000 + "</td>" + 
     "</tr>";
     

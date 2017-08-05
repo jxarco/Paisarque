@@ -173,12 +173,12 @@ function init(current_project, meshURL, textureURL)
     }
     
     var makeVisible = function () {
-        placer.style.visibility = "visible";
+        $('#myCanvas').css({"opacity": 0, "visibility": "visible"}).animate({"opacity": 1.0}, 1000);
         putCanvasMessage("Recuerda: guarda el proyecto al realizar cambios!", 3000);
         putCanvasMessage("Puedes cancelar cualquier acción con la tecla ESC", 3000);
         if(!rotaciones.length)
-            putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {b_color: "rgba(255, 0, 0, 0.5)"});
-            putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {b_color: "rgba(255, 0, 0, 0.5)"});
+            putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {b_color: "rgba(255, 0, 0, 0.5)"});    
+        
     };
 
     renderer.loadMesh(obj.mesh, makeVisible);
@@ -558,11 +558,15 @@ function medirSegmentos()
     if(project._meter === -1)
         return;
     
+    // clear first
+    destroySceneElements(scene.root.children, "config");
+    
     putCanvasMessage("Selecciona los vértices de los segmentos haciendo click mientras pulsas 'S'. Recuérda que para el último tienes que mantener la 'F'!", 10000);
     
     var points              = [];
     var distance            = 0;
     var started_segments    = true;
+    var isClosed            = false;
     
     context.onmousedown = function(e) 
     {
@@ -574,6 +578,23 @@ function medirSegmentos()
         var node = scene.testRay( ray, result, undefined, 0x1, true );
 
         if (node) {
+            
+            // test if the last vertex completes a closed measure
+            for(var i = 0; i < points.length; ++i)
+            {
+                var newPoint = vec3.create();
+                newPoint[0] = Math.abs(points[i][0] - result[0]);
+                newPoint[1] = Math.abs(points[i][1] - result[1]);
+                newPoint[2] = Math.abs(points[i][2] - result[2]);
+
+                var units = vec3.length(newPoint);
+                if(units < 1)
+                {
+                    result = points[i];    
+                    isClosed = true;
+                }
+            }
+            
             var ball = new RD.SceneNode();
             ball.description = "config";
             ball.color = [0.3,0.8,0.1,1];
@@ -583,11 +604,13 @@ function medirSegmentos()
             ball.flags.ignore_collisions = true;
             scene.root.addChild(ball);                
             ball.position = result;
-            points.push(result);
+            points.push(result);    
         }
         
          if(keys[KEY_F])
-        {
+         {   
+             var units = 0;
+             
             for(var i = 0; i < points.length - 1; ++i)
             {
                 var newPoint = vec3.create();
@@ -595,13 +618,12 @@ function medirSegmentos()
                 newPoint[1] = Math.abs(points[i][1] - points[i + 1][1]);
                 newPoint[2] = Math.abs(points[i][2] - points[i + 1][2]);
 
-                var units = vec3.length(newPoint);
-                var distance_in_meters = units / project._meter;
-                distance += distance_in_meters;
+                units += vec3.length(newPoint);
             }
+             
+             var distance = units / project._meter;
             
             started_segments = false;
-//            console.log("done: " + distance);
             
             var vertices = [];
             
@@ -634,10 +656,54 @@ function medirSegmentos()
             scene.root.addChild(linea);
             
             project.insertSegmentMeasure(points, distance, true);
+//             if(isClosed)
+//                 {
+//                     var area = calcularArea(points);
+////                      project.insertArea();
+//                     putCanvasMessage(area, 100000);
+//                 }
+
             
             return;
         }
     } 
+}
+
+function calcularArea(points)
+{
+    // extract last points bc its the same!!
+//    points.pop();
+    var vertices2D = [];
+    var sum     = 0;
+    var rest    = 0;
+    
+    for(var i = 0; i < points.length; ++i)
+    {
+        var p3d = vec3.fromValues(points[i][0], points[i][1], points[i][2]);
+        var p2d = camera.project(p3d);
+        p2d[0] -= gl.viewport_data[0];
+        p2d[1] -= gl.viewport_data[1];
+        p2d[0] /= gl.viewport_data[2] * 2;
+        p2d[1] /= gl.viewport_data[3] * 2;
+        vertices2D.push(p2d);
+    }
+    
+    console.log(vertices2D);
+    
+    var units = 0;
+    
+    for(var i = 0; i < vertices2D.length - 1; ++i)
+    {
+        var newPoint = vec2.create();
+        newPoint[0] = Math.abs(points[i][0] - vertices2D[i + 1][0]);
+        newPoint[1] = Math.abs(points[i][1] - vertices2D[i + 1][1]);
+
+        units += vec2.length(newPoint);
+    }
+    
+    var distance = units / project._meter;
+    
+    return distance;
 }
 
 function viewMeasure(id)
@@ -751,8 +817,6 @@ function modifyRotations(slider)
         
     var axis = null;
 
-//    console.log(slider.id);
-    
     if(slider.id === "s1")
             axis = RD.UP;
     if(slider.id === "s2")
