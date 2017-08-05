@@ -218,6 +218,16 @@ button:hover{
     margin: 12.5px;
 }
 
+.tool-btn.info{
+    padding-top: 6px !important;
+    padding-left: 6px !important;
+}
+
+.tool-btn.info:hover{
+    color: black !important;
+}
+
+
 .tool-btn.nodisplay{
     opacity: 0.2;
 }

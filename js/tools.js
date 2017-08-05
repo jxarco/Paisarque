@@ -7,8 +7,10 @@ var delete_project_active = false;
 // LOAD DATA FROM JSON
 
 // prevent of NO LOGIN
-if(session === null)
-    $("#all").hide();
+// COMMENT TO DEBUG IN LOCAL
+//if(session === null)
+//    $("#all").hide();
+//
 
 var LOADER = {
     load: function(){
