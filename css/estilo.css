@@ -158,6 +158,19 @@ button:hover{
     padding: 15px;
 }
 
+.messages.alert{
+    background-color: rgba(200, 200, 90, 0.8); 
+}
+.messages.error{
+    background-color: rgba(200, 90, 90, 0.8); 
+}
+.messages.help{
+    background-color: rgba(100, 100, 100, 0.6); 
+}
+.messages.response{
+    background-color: rgba(90, 90, 200, 0.7); 
+}
+
 #deleting-div{
     display: flex;
     z-index:2;

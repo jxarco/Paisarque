@@ -178,7 +178,7 @@ function init(current_project, meshURL, textureURL)
         putCanvasMessage("Recuerda: guarda el proyecto al realizar cambios!", 3000);
         putCanvasMessage("Puedes cancelar cualquier acción con la tecla ESC", 3000);
         if(!rotaciones.length)
-            putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {b_color: "rgba(255, 0, 0, 0.5)"});    
+            putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "alert"});    
         
     };
 
@@ -267,7 +267,6 @@ function init(current_project, meshURL, textureURL)
 
     context.onmousemove = function(e)
     {
-        
         mouse = [e.canvasx, gl.canvas.height - e.canvasy];
         if (e.dragging && e.leftButton) {
             camera.orbit(-e.deltax * 0.1 * _dt, RD.UP,  camera._target);
@@ -337,6 +336,9 @@ function init(current_project, meshURL, textureURL)
     context.captureKeys();
 }
 
+/* ************************************************* */
+// Anotations
+
 function anotar(modoAnotacion)
 {
     if (modoAnotacion) {
@@ -362,9 +364,6 @@ function anotar(modoAnotacion)
     }
 
 }
-
-/* ************************************************* */
-// Anotations viz tools
 
 function changeVizAnotInCanvas(showing)
 {
@@ -693,7 +692,7 @@ function medirArea(points)
     var area = Math.abs(0.5 * (adds - subs));
     area /= Math.pow(project._meter, 2);
     var msg = "AREA: " + area;
-    putCanvasMessage(msg, 5000, {b_color: "blue"});
+    putCanvasMessage(msg, 5000, {type: "response"});
     console.log(area);
 }
 
@@ -823,18 +822,48 @@ function modifyRotations(slider)
 function enableSetRotation()
 {
     setting_rotation = !setting_rotation;
-    // grid
-    scene.root.children[1].flags.visible = setting_rotation;
+    scene.root.children[1].flags.visible = setting_rotation; // grid
     
     if(setting_rotation)
     {
+        putCanvasMessage("Usa los sliders o bien mantén pulsadas las teclas A, S y D mientras arrastras para rotar en cada eje. (¡Guarda al acabar!)", 8000, {type: "help"});
+        
         $("#cardinal-axis").fadeIn();
-        $('.sliders').fadeIn();        
+        $('.sliders').fadeIn();
+        
+        context.onmousemove = function(e)
+        {
+            mouse = [e.canvasx, gl.canvas.height - e.canvasy];
+            if (e.dragging && e.leftButton)
+                if(keys[KEY_A])
+                    obj.rotate(-e.deltax * 0.1 * _dt, RD.UP);
+                else if(keys[KEY_S])
+                    obj.rotate(-e.deltax * 0.1 * _dt, RD.FRONT);
+                else if(keys[KEY_D])
+                    obj.rotate(-e.deltax * 0.1 * _dt, RD.LEFT);
+                else
+                    {
+                        camera.orbit(-e.deltax * 0.1 * _dt, RD.UP,  camera._target);
+                        camera.orbit(-e.deltay * 0.1 * _dt, camera._right, camera._target );
+                    }
+        }
     }
     else
     {
         $("#cardinal-axis").fadeOut();
         $('.sliders').fadeOut();        
+        
+        context.onmousemove = function(e)
+        {
+            mouse = [e.canvasx, gl.canvas.height - e.canvasy];
+            if (e.dragging && e.leftButton) {
+                camera.orbit(-e.deltax * 0.1 * _dt, RD.UP,  camera._target);
+                camera.orbit(-e.deltay * 0.1 * _dt, camera._right, camera._target );
+            }
+            if (e.dragging && e.rightButton) {
+                camera.moveLocal([-e.deltax * 0.5 * _dt, e.deltay * 0.5 * _dt, 0]);
+            }
+        }
     }
         
 }

@@ -166,12 +166,17 @@ function putCanvasMessage(text, ms, options)
     "</div>"
         );
     
-    $("#" + last_message_id).css("color", options.color);
-    $("#" + last_message_id).css("background-color", options.b_color);
-    $("#" + last_message_id).css("font-size", options.size);
-    $("#" + last_message_id).fadeIn();
-    
     var id = "#" + last_message_id;
+    
+    $(id).css("color", options.color);
+    $(id).css("background-color", options.back);
+    $(id).css("font-size", options.size);
+    
+    // default css types if it has
+    $(id).addClass(options.type);
+    $(id).fadeIn();
+    
+
     setTimeout(function(){
         $(id).fadeOut();
     }, ms);
