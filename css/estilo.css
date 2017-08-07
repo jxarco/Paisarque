@@ -264,6 +264,10 @@ button:hover{
     text-align: center;
 }
 
+.sub-btns{
+    display: none;
+}
+
 .tables{
     font-size: 13px;
     display: none;

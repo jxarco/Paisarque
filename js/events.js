@@ -105,10 +105,7 @@ $("#show_dt").click(function()
     var table = $('#distances-table');
     revealDOMElements(table, showing_dist_table);
     if(!showing_dist_table)
-    {
-        var elements = [ball, ball2, linea];
-        destroySceneElements(elements);
-    }
+        destroySceneElements(obj.children, "config");
 });
 
 /*
@@ -121,11 +118,22 @@ $("#show_dst").click(function()
     
     var table = $('#segment-distances-table');
     revealDOMElements(table, showing_seg_dist_table);
-//    if(!showing_seg_dist_table)
-//    {
-//        var elements = [ball, ball2, linea];
-//        destroySceneElements(elements);
-//    }
+    if(!showing_seg_dist_table)
+        destroySceneElements(obj.children, "config");
+});
+
+$("#measure-opt-btn").click(function(){
+   
+    if($(".sub-btns").css("display") == "none")
+        {
+            $(this).find("i").html("remove_circle_outline");
+            $(".sub-btns").show(); 
+        }
+    else 
+        {
+            $(this).find("i").html("add_circle_outline");
+            $(".sub-btns").hide(); 
+        }
 });
 
 

@@ -32,10 +32,12 @@ function parseJSON(json)
     
     if(project._meter !== -1)
     {
-        $("#measure-btn").find("div").html("Medir distancia");
+        $("#measure-btn").find("div").html("Medir distancia recta");
         $("#measure-btn").css('opacity', '1'); 
         $("#measure-seg-btn").find("div").html("Medir por segmentos");
         $("#measure-seg-btn").css('opacity', '1'); 
+        $("#measure-areas-btn").find("div").html("Medir area");
+        $("#measure-areas-btn").css('opacity', '1'); 
     }
     
     if(project._description !== "nodesc")
@@ -327,6 +329,8 @@ function init(current_project, meshURL, textureURL)
                 revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
                 destroySceneElements(scene.root.children, "config");
                 $("#myCanvas").css("cursor", "default");
+                $("#measure-opt-btn").find("i").html("add_circle_outline");
+                $(".sub-btns").hide(); 
             }
     }
     
@@ -436,11 +440,14 @@ function medirMetro()
                 newPoint[2] = Math.abs(firstPoint[2] - secondPoint[2]);
                 
                 project._meter = vec3.length(newPoint);
-                $("#measure-btn").find("div").html("Medir distancia");
+                $("#measure-btn").find("div").html("Medir distancia recta");
                 $("#measure-btn").css('opacity', '1');
                 
                 $("#measure-seg-btn").find("div").html("Medir por segmentos");
                 $("#measure-seg-btn").css('opacity', '1'); 
+                
+                $("#measure-area-btn").find("div").html("Medir area");
+                $("#measure-area-btn").css('opacity', '1'); 
                 
                 segundoPunto = false;
             
@@ -547,22 +554,22 @@ function medirDistancia()
     } 
 }
 
-function medirSegmentos()
+function medirSegmentos(area)
 {
     if(project._meter === -1)
         return;
 
     $("#myCanvas").css("cursor", "crosshair");
+    $(".sub-btns").hide(); 
     
     // clear first
     destroySceneElements(scene.root.children, "config");
     
-    putCanvasMessage("Selecciona los vértices de los segmentos haciendo click mientras pulsas 'S'. Recuérda que para el último tienes que mantener la 'F'!", 10000);
+    putCanvasMessage("Selecciona los vértices de los segmentos haciendo click mientras pulsas 'S'. Recuérda que para el último tienes que mantener la 'F'!", 5000);
     
     var points              = [];
     var distance            = 0;
     var started_segments    = true;
-    var isClosed            = false;
     
     context.onmousedown = function(e) 
     {
@@ -572,6 +579,10 @@ function medirSegmentos()
         var result = vec3.create();
         var ray = camera.getRay( e.canvasx, e.canvasy );
         var node = scene.testRay( ray, result, undefined, 0x1, true );
+        
+        // set y to same as first point
+        if( area && points.length )
+            result[1] = points[0][1];
 
         if (node) {
             
@@ -584,11 +595,8 @@ function medirSegmentos()
                 newPoint[2] = Math.abs(points[i][2] - result[2]);
 
                 var units = vec3.length(newPoint);
-                if(units < 1)
-                {
+                if(units < 1.5)
                     result = points[i];    
-                    isClosed = true;
-                }
             }
             
             var ball = new RD.SceneNode();
@@ -598,6 +606,7 @@ function medirSegmentos()
             ball.shader = "phong";
             ball.layers = 0x4;
             ball.flags.ignore_collisions = true;
+            ball.flags.depth_test = false;
             scene.root.addChild(ball);                
             ball.position = result;
             points.push(result);    
@@ -647,60 +656,49 @@ function medirSegmentos()
             linea.mesh = "line";
             linea.color = [0.3,0.8,0.1,1];
             linea.flags.depth_test = false;
-
-//            console.log(linea);
             scene.root.addChild(linea);
             
             project.insertSegmentMeasure(points, distance, true);
-//             if(isClosed)
-//                 {
-//                     var area = calcularArea(points);
-////                      project.insertArea();
-//                     putCanvasMessage(area, 100000);
-//                 }
-
-            
             $("#myCanvas").css("cursor", "default");
+             
+             if(area)
+                 medirArea(points);
             return;
         }
     } 
 }
 
-function calcularArea(points)
+function medirArea(points)
 {
-    // extract last points bc its the same!!
-//    points.pop();
-    var vertices2D = [];
-    var sum     = 0;
-    var rest    = 0;
+    //removing y axis
+    var points2D = [];
     
     for(var i = 0; i < points.length; ++i)
     {
-        var p3d = vec3.fromValues(points[i][0], points[i][1], points[i][2]);
-        var p2d = camera.project(p3d);
-        p2d[0] -= gl.viewport_data[0];
-        p2d[1] -= gl.viewport_data[1];
-        p2d[0] /= gl.viewport_data[2] * 2;
-        p2d[1] /= gl.viewport_data[3] * 2;
-        vertices2D.push(p2d);
+        var p2D = vec2.fromValues(points[i][0], points[i][2]);
+        points2D.push(p2D);
     }
     
-    console.log(vertices2D);
+//    console.log(points);
+    console.log(points2D);
     
-    var units = 0;
+    var adds = 0;
+    var subs = 0;
     
-    for(var i = 0; i < vertices2D.length - 1; ++i)
+    for(var i = 0; i < points2D.length - 1; ++i)
     {
-        var newPoint = vec2.create();
-        newPoint[0] = Math.abs(points[i][0] - vertices2D[i + 1][0]);
-        newPoint[1] = Math.abs(points[i][1] - vertices2D[i + 1][1]);
-
-        units += vec2.length(newPoint);
+        var current = points2D[i];
+        var next = points2D[i+1];
+        
+        adds += current[0] * next[1];
+        subs += current[1] * next[0];
     }
     
-    var distance = units / project._meter;
-    
-    return distance;
+    var area = Math.abs(0.5 * (adds - subs));
+    area /= Math.pow(project._meter, 2);
+    var msg = "AREA: " + area;
+    putCanvasMessage(msg, 5000, {b_color: "blue"});
+    console.log(area);
 }
 
 function viewMeasure(id)
@@ -722,6 +720,7 @@ function viewMeasure(id)
         ball.mesh = "sphere";
         ball.scaling = 1.25;
         ball.layers = 0x4;
+        ball.flags.depth_test = false;
         ball.flags.ignore_collisions = true;
         ball.position = points[i];
         scene.root.addChild(ball);        
@@ -764,6 +763,7 @@ function viewSegmentMeasure(id)
         ball.scaling = 1.25;
         ball.layers = 0x4;
         ball.flags.ignore_collisions = true;
+        ball.flags.depth_test = false;
         ball.position = [points[i][0], points[i][1], points[i][2]];
         scene.root.addChild(ball);                      
         to_destroy.push(ball);
