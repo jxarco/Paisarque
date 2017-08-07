@@ -12,7 +12,6 @@ var _dt             = 0.0;
 var result          = vec3.create();
 var firstPoint      = vec3.create();
 var secondPoint     = vec3.create();
-var to_destroy      = [];
 var showing_dist_table      = false;
 var showing_seg_dist_table  = false;
 
@@ -441,13 +440,9 @@ function medirMetro()
                 
                 project._meter = vec3.length(newPoint);
                 $("#measure-btn").find("div").html("Medir distancia recta");
-                $("#measure-btn").css('opacity', '1');
-                
                 $("#measure-seg-btn").find("div").html("Medir por segmentos");
-                $("#measure-seg-btn").css('opacity', '1'); 
-                
-                $("#measure-area-btn").find("div").html("Medir area");
-                $("#measure-area-btn").css('opacity', '1'); 
+                $("#measure-areas-btn").find("div").html("Medir area");
+                $(".measures-btns").css('opacity', '1');
                 
                 segundoPunto = false;
             
@@ -607,7 +602,8 @@ function medirSegmentos(area)
             ball.layers = 0x4;
             ball.flags.ignore_collisions = true;
             ball.flags.depth_test = false;
-            scene.root.addChild(ball);                
+            scene.root.addChild(ball);   
+            console.log(scene.root.children.length);
             ball.position = result;
             points.push(result);    
         }
@@ -766,7 +762,6 @@ function viewSegmentMeasure(id)
         ball.flags.depth_test = false;
         ball.position = [points[i][0], points[i][1], points[i][2]];
         scene.root.addChild(ball);                      
-        to_destroy.push(ball);
     }
     
         var vertices = [];
@@ -796,7 +791,6 @@ function viewSegmentMeasure(id)
         linea.flags.depth_test = false;
 
         scene.root.addChild(linea);
-        to_destroy.push(linea);
 }
 
 /* ************************************************* */
