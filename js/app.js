@@ -320,23 +320,13 @@ function init(current_project, meshURL, textureURL)
             {
                 // disable all features
                 putCanvasMessage("Cancelado", 1000);
-                
                 context.onmousedown = function(e) {};
                 setting_rotation = false;
-                scene.root.children[1].flags.visible = setting_rotation;
-    
-                if(setting_rotation)
-                {
-                    $("#cardinal-axis").fadeIn();
-                    $('.sliders').fadeIn();        
-                }
-                else
-                {
-                    $("#cardinal-axis").fadeOut();
-                    $('.sliders').fadeOut();        
-                }
+                scene.root.children[1].flags.visible = false;
                 
+                revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
                 destroySceneElements(scene.root.children, "config");
+                $("#myCanvas").css("cursor", "default");
             }
     }
     
@@ -391,8 +381,6 @@ function changeVizAnotInCanvas(showing)
 
 function medirMetro()
 {
-//    console.log("midiendo cuanto es un metro");
-//    alert("Selecciona dos puntos, la linea recta que los une corresponderá a un metro");
     putCanvasMessage("Selecciona dos puntos, la linea recta que los une corresponderá a un metro", 2500);
     
     var primerPunto     = true;
@@ -451,12 +439,14 @@ function medirMetro()
                 $("#measure-btn").find("div").html("Medir distancia");
                 $("#measure-btn").css('opacity', '1');
                 
+                $("#measure-seg-btn").find("div").html("Medir por segmentos");
+                $("#measure-seg-btn").css('opacity', '1'); 
+                
                 segundoPunto = false;
             
                 setTimeout(function(){
-                    ball_first.destroy();
-                    ball_sec.destroy();
-                }, 1500);
+                    destroySceneElements(scene.root.children, "config");
+                }, 500);
             }
         }
     } 
@@ -468,8 +458,11 @@ function medirDistancia()
     if(project._meter === -1)
         return;
     
-//    console.log("midiendo distancia");
-//    alert("Selecciona dos puntos:");
+    $("#myCanvas").css("cursor", "crosshair");
+    
+    // clear first
+    destroySceneElements(scene.root.children, "config");
+    
     putCanvasMessage("Selecciona dos puntos manteniendo la letra S!", 2500);
     
     var primerPunto     = true;
@@ -548,6 +541,7 @@ function medirDistancia()
                 scene.root.addChild(linea);
                 
                 project.insertMeasure(camera, firstPoint, secondPoint, distance_in_meters, true);
+                $("#myCanvas").css("cursor", "default");
             }
         }
     } 
@@ -557,6 +551,8 @@ function medirSegmentos()
 {
     if(project._meter === -1)
         return;
+
+    $("#myCanvas").css("cursor", "crosshair");
     
     // clear first
     destroySceneElements(scene.root.children, "config");
@@ -664,6 +660,7 @@ function medirSegmentos()
 //                 }
 
             
+            $("#myCanvas").css("cursor", "default");
             return;
         }
     } 
@@ -767,7 +764,7 @@ function viewSegmentMeasure(id)
         ball.scaling = 1.25;
         ball.layers = 0x4;
         ball.flags.ignore_collisions = true;
-        ball.position = points[i];
+        ball.position = [points[i][0], points[i][1], points[i][2]];
         scene.root.addChild(ball);                      
         to_destroy.push(ball);
     }

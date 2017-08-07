@@ -103,7 +103,7 @@ $("#show_dt").click(function()
     showing_dist_table = !showing_dist_table;
     
     var table = $('#distances-table');
-    revealDOMElement(table, showing_dist_table);
+    revealDOMElements(table, showing_dist_table);
     if(!showing_dist_table)
     {
         var elements = [ball, ball2, linea];
@@ -120,7 +120,7 @@ $("#show_dst").click(function()
     showing_seg_dist_table = !showing_seg_dist_table;
     
     var table = $('#segment-distances-table');
-    revealDOMElement(table, showing_seg_dist_table);
+    revealDOMElements(table, showing_seg_dist_table);
 //    if(!showing_seg_dist_table)
 //    {
 //        var elements = [ball, ball2, linea];

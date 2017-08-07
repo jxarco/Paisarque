@@ -57,12 +57,15 @@ function addScript( url, callback ) {
 /*
 * Hide or show DOM element passed as parameter
 */
-function revealDOMElement( element, showing )
+function revealDOMElements( elements, showing )
 {   
-    if(showing)
-        element.fadeIn();
-    else
-        element.fadeOut();
+    var list = [].concat(elements);
+    
+    for(var i = 0; i < list.length; ++i)
+        if(showing)
+            list[i].fadeIn();
+        else
+            list[i].fadeOut();
 }
 
 /*

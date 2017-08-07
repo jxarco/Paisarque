@@ -51,8 +51,8 @@ button:hover{
 /*********************************************************/
 /* inicio.php */
 
-#textUser{
-/*    margin-left: 15px;*/
+.textUser{
+    cursor: default !important;
 }
 
 .btn{
@@ -97,6 +97,10 @@ button:hover{
 /*********************************************************/
 /* modelo.php */
 
+.tablink{
+    cursor: pointer;
+}
+
 .active a{
     color: black !important;
     border: none !important;
@@ -109,7 +113,6 @@ button:hover{
 }
 
 #placeholder {
-/*    height: calc(100vh - 275px);*/
     background-image: url("../data/loading.gif");
     background-repeat: no-repeat;
     background-size: 15em;

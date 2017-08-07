@@ -259,7 +259,7 @@ Project.prototype.insertMeasure = function( camera, x1, x2, distance, display )
     bodyTable.append(row);
     
     showing_dist_table = display;
-    revealDOMElement(table, showing_dist_table);
+    revealDOMElements(table, showing_dist_table);
     
     this._measures.push( {
         "id": id,
@@ -304,7 +304,7 @@ Project.prototype.insertSegmentMeasure = function( points, distance, display )
     bodyTable.append(row);
     
     showing_seg_dist_table = display;
-    revealDOMElement(table, showing_seg_dist_table);
+    revealDOMElements(table, showing_seg_dist_table);
     
     this._segments.push( {
         "id": id,
