@@ -223,12 +223,7 @@ function init(current_project, meshURL, textureURL)
         ball.position = position;
         
         // set ball parent
-        var parentInverse = mat4.create();
-        var sonGlobal = mat4.create();
-        mat4.invert(parentInverse, obj.getGlobalMatrix());
-        sonGlobal = ball.getGlobalMatrix();
-        obj.addChild(ball);
-        mat4.multiply(ball._local_matrix, parentInverse, sonGlobal);
+        setParent(obj, ball);
 
         ball.update = function(dt)
         {
@@ -323,6 +318,9 @@ function init(current_project, meshURL, textureURL)
                 context.onmousedown = function(e) {};
                 setting_rotation = false;
                 scene.root.children[1].flags.visible = false;
+                // prevent adding new rotations
+                subs = 0;
+                adds = 0;
                 
                 revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
                 destroySceneElements(scene.root.children, "config");
@@ -693,15 +691,15 @@ function medirArea(points)
     area /= Math.pow(project._meter, 2);
     var msg = "AREA: " + area;
     putCanvasMessage(msg, 5000, {type: "response"});
-    console.log(area);
+//    console.log(area);
 }
 
 function viewMeasure(id)
 {
     // clear first
+    destroySceneElements(scene.root.children, "config");// clear first
     destroySceneElements(scene.root.children, "config");
     
-//    var console.log(id);
     var measure = project.getMeasure(id);
     var x1 = [measure.x1[0], measure.x1[1], measure.x1[2]];
     var x2 = [measure.x2[0], measure.x2[1], measure.x2[2]];
@@ -718,7 +716,7 @@ function viewMeasure(id)
         ball.flags.depth_test = false;
         ball.flags.ignore_collisions = true;
         ball.position = points[i];
-        scene.root.addChild(ball);        
+        scene.root.addChild(ball);
     }
     
     var vertices = x1.concat(x2);
@@ -732,7 +730,7 @@ function viewMeasure(id)
     linea.color = [0.3,0.2,0.8,1];
     linea.flags.depth_test = false;
     scene.root.addChild(linea);
-
+    
     // change global camera
     camera.position = measure.camera_position;
     camera.target = measure.camera_target;
@@ -816,17 +814,27 @@ function modifyRotations(slider)
 
     obj.rotate(to_rotate, axis);
     _dvalue = slider.value;
-    
 }
 
 function enableSetRotation()
 {
+    if(project._rotations.length)
+        if(!confirm("Ya hay rotaciones por defecto en este proyecto. Si continuas se perderán todas las distancias medidas."))
+            return;
+        
+    // clear first
+    destroySceneElements(scene.root.children, "config");
+    project._measures = [];
+    project._segments = [];
+    $("#segment-distances-table").find("tbody").empty();
+    $("#distances-table").find("tbody").empty();
+    
     setting_rotation = !setting_rotation;
     scene.root.children[1].flags.visible = setting_rotation; // grid
     
     if(setting_rotation)
     {
-        putCanvasMessage("Usa los sliders o bien mantén pulsadas las teclas A, S y D mientras arrastras para rotar en cada eje. (¡Guarda al acabar!)", 8000, {type: "help"});
+        putCanvasMessage("Usa los sliders o bien mantén pulsadas las teclas A, S y D mientras arrastras para rotar en cada eje. (¡Guarda al acabar!)", 5000, {type: "help"});
         
         $("#cardinal-axis").fadeIn();
         $('.sliders').fadeIn();

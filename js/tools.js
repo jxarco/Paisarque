@@ -114,6 +114,27 @@ function initMap()
     });    
 }
 
+
+/*
+* @param parent: node to add child to it
+* @param son: node to transform 
+* @return object with two nodes
+*/
+function setParent(parent, son)
+{
+    var parentInverse = mat4.create();
+    var sonGlobal = mat4.create();
+    mat4.invert(parentInverse, parent.getGlobalMatrix());
+    sonGlobal = son.getGlobalMatrix();
+    parent.addChild(son);
+    mat4.multiply(son._local_matrix, parentInverse, sonGlobal);
+    
+    return {
+        "parent": parent,
+        "son": son
+    }
+}
+
 /*
 * @param elements: nodes list
 * @param description: delete only by description
