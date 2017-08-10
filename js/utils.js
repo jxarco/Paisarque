@@ -6,6 +6,10 @@ var KEY_D = 68;
 var KEY_F = 70;
 var KEY_SPACE = 32;
 
+var PLANTA = 0;
+var ALZADO = 1;
+var PERFIL = 2;
+
 // default user
 var current_user = "guest";
 

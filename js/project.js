@@ -5,7 +5,8 @@
 
 var last_project_id         = 0;
 var last_measure_id         = 0;
-var last_seg_measure_id     = 0;
+var last_seg_measure_id     = 100;
+var last_area_measure_id    = 1000;
 
 function Project( data, user )
 {
@@ -21,6 +22,7 @@ Project.prototype._ctor = function( data )
     this._textures      = [];
     this._measures      = [];
     this._segments      = [];
+    this._areas         = [];
     
 	this.FROMJSON( data );
 }
@@ -151,11 +153,11 @@ Project.prototype.deleteAnotation = function( id )
     
     // scene
     for(var i = 0; i < obj.children.length; ++i)
-        if(obj.children[i].id == id)
-        {
-            obj.children[i].destroy();
-            return;
-        }
+    if(obj.children[i].id == id)
+    {
+        obj.children[i].destroy();
+        return;
+    }
 }
 
 /*
@@ -214,6 +216,16 @@ Project.prototype.getMeasurements = function()
     return this._measures;
 }
 
+Project.prototype.getSegmentMeasurements = function()
+{
+    return this._segments;
+}
+
+Project.prototype.getAreas = function()
+{
+    return this._areas;
+}
+
 Project.prototype.getMeasure = function(id)
 {
     for(var i = 0; i < this._measures.length; i++)
@@ -221,16 +233,18 @@ Project.prototype.getMeasure = function(id)
             return this._measures[i];
 }
 
-Project.prototype.getSegmentMeasurements = function()
-{
-    return this._segments;
-}
-
 Project.prototype.getSegmentMeasure = function(id)
 {
     for(var i = 0; i < this._segments.length; i++)
         if(this._segments[i].id == id)
             return this._segments[i];
+}
+
+Project.prototype.getArea = function(id)
+{
+    for(var i = 0; i < this._areas.length; i++)
+        if(this._areas[i].id == id)
+            return this._areas[i];
 }
 
 /*
@@ -296,7 +310,7 @@ Project.prototype.insertSegmentMeasure = function( points, distance, display )
     var bodyTable = table.find('tbody');
     var id = last_seg_measure_id++;
     
-    var row = "<tr onclick='viewSegmentMeasure(" + id + ")' id=" + id + " a class='pointer'>" + 
+    var row = "<tr onclick='viewClosedMeasure(" + id + ")' id=" + id + " a class='pointer'>" + 
     "<td>" + (points.length - 1) + "</td>" + 
     "<td>" + Math.round(distance * 1000) / 1000 + "</td>" + 
     "</tr>";
@@ -310,6 +324,44 @@ Project.prototype.insertSegmentMeasure = function( points, distance, display )
         "id": id,
         "points": points,
         "distance": distance
+    } );
+}
+
+/*
+*   @prototype insertArea
+*   Push a new area measure to the list project
+*   @param points: list of vertices
+*   @param display: show or not the table after inserting measure
+*/
+
+Project.prototype.insertArea = function( points, area, index, display )
+{   
+//    if(!area)
+//        return;
+    
+    var table = $('#areas-table');
+    var bodyTable = table.find('tbody');
+    var id = last_area_measure_id++;
+    
+    var vista = index === 0 ? "Planta" : "Alzado";
+    
+    var row = "<tr onclick='viewClosedMeasure(" + id + ", true)' id=" + id + " a class='pointer'>" + 
+    "<td>" + vista + "</td>" + 
+    "<td>" + Math.round(area * 1000) / 1000 + "</td>" + 
+    "</tr>";
+    
+    bodyTable.append(row);
+    
+    showing_areas_table = display;
+    revealDOMElements(table, showing_areas_table);
+    
+    console.log("pushing");
+    
+    this._areas.push( {
+        "id": id,
+        "points": points,
+        "index": index,
+        "area": area
     } );
 }
 
@@ -382,6 +434,11 @@ Project.prototype.FROMJSON = function( data )
     
     for(var i = 0; i < len; i++)
         this.insertSegmentMeasure( data.segmentos[i].points, data.segmentos[i].distance, false );
+    
+    len = data.areas ? data.areas.length : 0;
+    
+    for(var i = 0; i < len; i++)
+        this.insertArea( data.areas[i].points, data.segmentos[i].area, data.segmentos[i].index, false );
 }
 
 /*  
@@ -415,7 +472,8 @@ Project.prototype.save = function( overwrite, extra )
         "extra": this._extra,
         "anotaciones": this._anotations,
         "medidas": this._measures,
-        "segmentos": this._segments
+        "segmentos": this._segments,
+        "areas": this._areas
     };
         
     $.ajax({

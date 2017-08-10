@@ -167,7 +167,7 @@
                                         </a>
                                     </div>
                                     <div class="w3-col m1 w3-center" style="margin: 15px;">
-                                        <a id="show_areas" class="btn tool-btn">
+                                        <a id="show_areat" class="btn tool-btn">
                                             <div class="info_hover_box">Mostrar áreas medidas (por hacer)</div>
                                             <i class="material-icons">filter_3</i>
                                         </a>
@@ -183,9 +183,13 @@
                                                     <div class="info_hover_box">Configura el metro antes de medir segmentos</div>
                                                     <i class="material-icons">timeline</i>
                                                 </a>
-                                                <a id="measure-areas-btn" onclick="medirSegmentos(true)" class="btn tool-btn nodisplay measures-btns">
+                                                <a id="measure-areas-btn" onclick="medirSegmentos(true, 0)" class="btn tool-btn nodisplay measures-btns">
                                                     <div class="info_hover_box">Configura el metro antes de medir areas</div>
                                                     <i class="material-icons">crop_din</i>
+                                                </a>
+                                                <a id="measure-areas2-btn" onclick="medirSegmentos(true, 1)" class="btn tool-btn nodisplay measures-btns">
+                                                    <div class="info_hover_box">Configura el metro antes de medir areas</div>
+                                                    <i class="material-icons">crop_portrait</i>
                                                 </a>
                                         </div>
                                     </div>
@@ -213,6 +217,17 @@
                                 <tbody>
                                 </tbody>
                             </table>
+                          <table class="table table-striped table-hover tables" id="areas-table">
+                                 <thead>
+                                    <tr>
+                                        <th>Vista</th>
+                                        <th>Area (m2)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+
                       </div>
 
                       <div id="Notas" class="w3-container tab" style="display:none">

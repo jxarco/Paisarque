@@ -113,12 +113,26 @@ $("#show_dt").click(function()
 */
 $("#show_dst").click(function() 
 {
-    console.log("showing/hiding segments distances table");
+//    console.log("showing/hiding segments distances table");
     showing_seg_dist_table = !showing_seg_dist_table;
     
     var table = $('#segment-distances-table');
     revealDOMElements(table, showing_seg_dist_table);
     if(!showing_seg_dist_table)
+        destroySceneElements(obj.children, "config");
+});
+
+/*
+*   Button: Show/Hide the area measured table
+*/
+$("#show_areat").click(function() 
+{
+//    console.log("showing/hiding areas table");
+    showing_areas_table = !showing_areas_table;
+    
+    var table = $('#areas-table');
+    revealDOMElements(table, showing_areas_table);
+    if(!showing_areas_table)
         destroySceneElements(obj.children, "config");
 });
 
