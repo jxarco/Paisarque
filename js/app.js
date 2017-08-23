@@ -343,7 +343,6 @@ function anotar(modoAnotacion)
         $("#desAnot").css('opacity', '1');
         $("#actAnot").css('opacity', '0.2');
         
-        
         context.onmousedown = function(e) 
         {
             var ray = camera.getRay( e.canvasx, e.canvasy );
@@ -353,6 +352,7 @@ function anotar(modoAnotacion)
             if (node)
                 $('#modalText').modal('show');
         }
+        
     } else if (!modoAnotacion) {
         console.log("Modo anotación desactivado");
         $("#desAnot").css('opacity', '0.2');
@@ -365,14 +365,8 @@ function anotar(modoAnotacion)
 function changeVizAnotInCanvas(showing)
 {
     for(var i = 0; i < obj.children.length; i++)
-    {
-        var current = obj.children[i];
-
-        if(!showing)
-            current.flags.visible = false;
-        else
-            current.flags.visible = true;
-    }
+        obj.children[i].flags.visible = showing;
+        
 }
 
 /* ************************************************* */
@@ -387,7 +381,6 @@ function medirMetro()
     
     context.onmousedown = function(e) 
     {
-        
         if (primerPunto) {
         
             var result = vec3.create();
@@ -395,17 +388,8 @@ function medirMetro()
             var node = scene.testRay( ray, result, undefined, 0x1, true );
             
             if (node) {
-                var ball_first = new RD.SceneNode();
-                ball_first.description = "config";
-                ball_first.color = [0,1,0,1];
-                ball_first.mesh = "sphere";
-                ball_first.shader = "phong";
-                ball_first.layers = 0x4;
-                ball_first.flags.ignore_collisions = true;
-                scene.root.addChild(ball_first);                
-                ball_first.position = result;
+                Indication.SceneIndication(scene, result);
                 firstPoint = result;
-                
                 primerPunto = false;
                 segundoPunto = true;
             }
@@ -418,15 +402,7 @@ function medirMetro()
             
             // Si ha habido colision, se crea un punto y se abre una ventana de texto para escribir la anotacion
             if (node) {
-                var ball_sec = new RD.SceneNode();
-                ball_sec.description = "config";
-                ball_sec.color = [0,1,0,1];
-                ball_sec.mesh = "sphere";
-                ball_sec.shader = "phong";
-                ball_sec.layers = 0x4;
-                ball_sec.flags.ignore_collisions = true;
-                scene.root.addChild(ball_sec);                
-                ball_sec.position = result;
+                Indication.SceneIndication(scene, result);
                 secondPoint = result;
                 
                 var newPoint = vec3.create();
@@ -465,8 +441,6 @@ function medirDistancia()
     
     var primerPunto     = true;
     var segundoPunto    = false;
-    var ball_first      = null;
-    var ball_sec        = null;
     
     context.onmousedown = function(e) 
     {
@@ -478,20 +452,11 @@ function medirDistancia()
             var node = scene.testRay( ray, result, undefined, 0x1, true );
             
             if (node) {
-                ball_first = new RD.SceneNode();
-                ball_first.description = "config";
-                ball_first.color = [0.3,0.8,0.1,1];
-                ball_first.mesh = "sphere";
-                ball_first.shader = "phong";
-                ball_first.layers = 0x4;
-                ball_first.flags.ignore_collisions = true;
-                scene.root.addChild(ball_first);                
-                ball_first.position = result;
+                Indication.SceneIndication(scene, result);
                 firstPoint = result;
+                primerPunto = false;
+                segundoPunto = true;
             }
-            
-            primerPunto = false;
-            segundoPunto = true;
             
         } else if (segundoPunto && keys[KEY_S]) {
             
@@ -501,15 +466,7 @@ function medirDistancia()
             
             // Si ha habido colision, se crea un punto y se abre una ventana de texto para escribir la anotacion
             if (node) {
-                ball_sec = new RD.SceneNode();
-                ball_sec.description = "config";
-                ball_sec.color = [0.3,0.8,0.1,1];
-                ball_sec.mesh = "sphere";
-                ball_sec.shader = "phong";
-                ball_sec.layers = 0x4;
-                ball_sec.flags.ignore_collisions = true;
-                scene.root.addChild(ball_sec);                
-                ball_sec.position = result;
+                Indication.SceneIndication(scene, result);
                 secondPoint = result;
                 
                 var newPoint = vec3.create();
@@ -519,7 +476,6 @@ function medirDistancia()
                 
                 var distance = vec3.length(newPoint);
                 var distance_in_meters = distance / project._meter;
-//                console.log(distance_in_meters);
                 
                 segundoPunto = false;
                 
@@ -606,17 +562,7 @@ function medirSegmentos(area, vista)
                     result[viewIndex] = points[0][viewIndex];
             }
             
-            var ball = new RD.SceneNode();
-            ball.description = "config";
-            ball.color = [0.3,0.8,0.1,1];
-            ball.mesh = "sphere";
-            ball.shader = "phong";
-            ball.layers = 0x4;
-            ball.flags.ignore_collisions = true;
-            ball.flags.depth_test = false;
-            scene.root.addChild(ball);   
-            console.log(scene.root.children.length);
-            ball.position = result;
+            var ball = Indication.SceneIndication(scene, result, {depth_test: false});
             points.push(result);    
         }
         
@@ -727,18 +673,7 @@ function viewMeasure(id)
     var points = [x1, x2];
     
     for(var i = 0; i < points.length; ++i)
-    {
-        var ball = new RD.SceneNode();
-        ball.color = [0.3,0.2,0.8,1];
-        ball.description = "config";
-        ball.mesh = "sphere";
-        ball.scaling = 1.25;
-        ball.layers = 0x4;
-        ball.flags.depth_test = false;
-        ball.flags.ignore_collisions = true;
-        ball.position = points[i];
-        scene.root.addChild(ball);
-    }
+        Indication.SceneIndication(scene, points[i], {depth_test: false});
     
     var vertices = x1.concat(x2);
     var mesh = GL.Mesh.load({ vertices: vertices }); 
@@ -774,47 +709,36 @@ function viewClosedMeasure(id, area)
     
     var points = measure.points;
     
+        for(var i = 0; i < points.length; ++i)
+        Indication.SceneIndication(scene, [points[i][0], points[i][1], points[i][2]], {depth_test: false});
+    
+    var vertices = [];
     for(var i = 0; i < points.length; ++i)
     {
-        var ball = new RD.SceneNode();
-        ball.color = [0.3,0.2,0.8,1];
-        ball.mesh = "sphere";
-        ball.description = "config";
-        ball.scaling = 1.25;
-        ball.layers = 0x4;
-        ball.flags.ignore_collisions = true;
-        ball.flags.depth_test = false;
-        ball.position = [points[i][0], points[i][1], points[i][2]];
-        scene.root.addChild(ball);                      
+        vertices.push(points[i][0]);
+        vertices.push(points[i][1]);
+        vertices.push(points[i][2]);
+
+            if(i)
+            {
+                vertices.push(points[i][0]);
+                vertices.push(points[i][1]);
+                vertices.push(points[i][2]);
+            }
     }
-    
-        var vertices = [];
-        for(var i = 0; i < points.length; ++i)
-        {
-            vertices.push(points[i][0]);
-            vertices.push(points[i][1]);
-            vertices.push(points[i][2]);
 
-                if(i)
-                {
-                    vertices.push(points[i][0]);
-                    vertices.push(points[i][1]);
-                    vertices.push(points[i][2]);
-                }
-        }
-                
 
-        var mesh = GL.Mesh.load({ vertices: vertices }); 
-        renderer.meshes["line"] = mesh;
-        var linea = new RD.SceneNode();
-        linea.description = "config";
-        linea.flags.ignore_collisions = true;
-        linea.primitive = gl.LINES;
-        linea.mesh = "line";
-        linea.color = [0.3,0.2,0.8,1];
-        linea.flags.depth_test = false;
+    var mesh = GL.Mesh.load({ vertices: vertices }); 
+    renderer.meshes["line"] = mesh;
+    var linea = new RD.SceneNode();
+    linea.description = "config";
+    linea.flags.ignore_collisions = true;
+    linea.primitive = gl.LINES;
+    linea.mesh = "line";
+    linea.color = [0.3,0.2,0.8,1];
+    linea.flags.depth_test = false;
 
-        scene.root.addChild(linea);
+    scene.root.addChild(linea);
 }
 
 /* ************************************************* */
@@ -911,8 +835,8 @@ var resize = function()
     context.canvas.height  = placer.clientHeight;
     context.viewport(0, 0, context.canvas.width, context.canvas.height);
 
-    if(camera){
+    if(camera)
         camera.perspective(camera.fov, placer.clientWidth / placer.clientHeight, camera.near, camera.far);
-    }
+    
     console.log('Resize');
 }
