@@ -186,7 +186,7 @@ function init(current_project, meshURL, textureURL)
     renderer.loadTexture(obj.texture, renderer.default_texture_settings);
     
     obj.scale([5,5,5]);
-    pivot.addChild( obj );
+//    pivot.addChild( obj );
     
     var grid = new RD.SceneNode();
     

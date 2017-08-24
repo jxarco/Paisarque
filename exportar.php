@@ -6,12 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Exportar PaisArque</title>
-
+    <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/custom.min.css" rel="stylesheet">
     <link href="css/estilo.css" rel="stylesheet">
     <link href="css/header.css" rel="stylesheet">
+    <link href="css/dialog.css" rel="stylesheet">
     <link rel="stylesheet" href="css/RWD.css"> <!-- responsive web design -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -58,9 +59,11 @@ s</head>
             <a class="w3-bar-item w3-button w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
         </div>
         
-        <content class="row"><div class="col-lg-12" style="margin-top: 2.5% !important;">
+        <content class="row"><div class="col-lg-12" style="margin-top:46px">
             <h2>Opciones de exportación</h2>
         </div>
+            
+            
         <!--Aqui tendrian que haber diferentes opciones de export (jpg/pdf):
         <br>
         - Modelo 3D con sin info/medidas/anotaciones
@@ -81,21 +84,23 @@ s</head>
             echo '<a href="';
             echo 'data/' . $_GET['r'] . '.json"';
             echo 'download="" title="Descargar archivo de configuración" type="button" class="btn btn-default">Descargar archivo de configuración</a>';
-            echo '<a href="';
-            echo 'data/' . $_GET['r'] . '_anotacion.json"';
-            echo 'download="" title="Descargar archivo de anotaciones" type="button" class="btn btn-default">Descargar archivo de anotaciones</a>';
         ?>
 
         <br>
+        
+        <button onclick="testDialog()">TEST</button>
             
-            </content>
+            
+            
+        </content>
         
         <footer>
         </footer><!--   footer end-->
             
 
          <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="js/extra/bootstrap.min.js"></script>
         <script src="js/extra/custom.js"></script>

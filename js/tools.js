@@ -203,3 +203,30 @@ function putCanvasMessage(text, ms, options)
     }, ms);
     last_message_id++;
 }
+
+/*
+* @
+*/
+
+function testDialog()
+{
+   var canvas = $("body");
+    var html = "<div " +
+                  "class='draggable ui-widget-content' " +
+                  "style='" +
+                  "width: 30%; " +
+                  "min-width: 100px; " +
+                  "margin-left: 35%; " +
+                  "text-align: center;'>" +
+                  "<h5>Dialog</h5>" +// text 
+                  "<div class='dialog-option' style='display: flex;'>" +
+                    "<button class='dialog-btn'>P1</button>" +
+                    "</div>" +
+                  "<div class='dialog-option' style='display: flex;'>" +
+                    "<button class='dialog-btn'>P2</button>" +
+                    "</div>" +
+                "</div>";
+    canvas.append(html);
+    
+    $( ".draggable" ).draggable();
+}
