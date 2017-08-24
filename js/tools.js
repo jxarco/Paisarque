@@ -210,23 +210,23 @@ function putCanvasMessage(text, ms, options)
 
 function testDialog()
 {
-   var canvas = $("body");
+   var location = $("#placeholder");
     var html = "<div " +
                   "class='draggable ui-widget-content' " +
                   "style='" +
                   "width: 30%; " +
-                  "min-width: 100px; " +
                   "margin-left: 35%; " +
+                  "margin-top: 20px; " +
                   "text-align: center;'>" +
                   "<h5>Dialog</h5>" +// text 
                   "<div class='dialog-option' style='display: flex;'>" +
-                    "<button class='dialog-btn'>P1</button>" +
+                    "<button id='add-dialog' class='dialog-btn'>Añadir punto</button>" +
                     "</div>" +
                   "<div class='dialog-option' style='display: flex;'>" +
-                    "<button class='dialog-btn'>P2</button>" +
+                    "<button id='end-dialog' class='dialog-btn'>Finalizar</button>" +
                     "</div>" +
                 "</div>";
-    canvas.append(html);
+    location.append(html);
     
     $( ".draggable" ).draggable();
 }

@@ -14,6 +14,7 @@
         <link href="css/custom.min.css" rel="stylesheet">
         <link href="css/estilo.css" rel="stylesheet">
         <link href="css/header.css" rel="stylesheet">
+        <link href="css/dialog.css" rel="stylesheet">
         <link href="css/verticalText.css" rel="stylesheet">
         <link href="css/rangeslider.css" rel="stylesheet">
         <link rel="stylesheet" href="css/RWD.css"> <!-- responsive web design -->
@@ -149,7 +150,7 @@
                                         </a>
                                     </div>
                                     <div class="w3-col m1 w3-center" style="margin: 15px;">
-                                        <a id="measure-btn" onclick="medirDistancia()" class="btn tool-btn nodisplay measures-btns">
+                                        <a id="measure-btn" onclick="testDialogDistance()" class="btn tool-btn nodisplay measures-btns">
                                             <div class="info_hover_box">Configura el metro antes de medir</div>
                                             <i class="material-icons">space_bar</i>
                                         </a>
@@ -168,21 +169,17 @@
                                     </div>
                                     <div class="w3-col m1 w3-center" style="margin: 15px;">
                                         <a id="show_areat" class="btn tool-btn">
-                                            <div class="info_hover_box">Mostrar áreas medidas (por hacer)</div>
+                                            <div class="info_hover_box">Mostrar áreas medidas</div>
                                             <i class="material-icons">filter_3</i>
                                         </a>
                                     </div>
                                     <div class="w3-col m1 w3-center" style="margin: 15px;">
                                         <a id="measure-opt-btn" class="btn tool-btn">
-                                            <div class="info_hover_box">Otras mediciones</div>
+                                            <div class="info_hover_box">Medir areas</div>
                                             <i class="material-icons">add_circle_outline</i>
                                         </a>
                                         
                                         <div class="sub-btns">
-                                                <a id="measure-seg-btn" onclick="medirSegmentos()" class="btn tool-btn nodisplay measures-btns">
-                                                    <div class="info_hover_box">Configura el metro antes de medir segmentos</div>
-                                                    <i class="material-icons">timeline</i>
-                                                </a>
                                                 <a id="measure-areas-btn" onclick="medirSegmentos(true, 0)" class="btn tool-btn nodisplay measures-btns">
                                                     <div class="info_hover_box">Configura el metro antes de medir areas</div>
                                                     <i class="material-icons">crop_din</i>
@@ -302,7 +299,8 @@
         </footer><!--   footer end-->
     
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="js/extra/bootstrap.min.js"></script>
         <script src="js/extra/custom.js"></script>

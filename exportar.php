@@ -12,7 +12,6 @@
     <link href="css/custom.min.css" rel="stylesheet">
     <link href="css/estilo.css" rel="stylesheet">
     <link href="css/header.css" rel="stylesheet">
-    <link href="css/dialog.css" rel="stylesheet">
     <link rel="stylesheet" href="css/RWD.css"> <!-- responsive web design -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -88,10 +87,6 @@ s</head>
 
         <br>
         
-        <button onclick="testDialog()">TEST</button>
-            
-            
-            
         </content>
         
         <footer>

@@ -32,10 +32,9 @@ function parseJSON(json)
     
     if(project._meter !== -1)
     {
-        $("#measure-btn").find("div").html("Medir distancia recta");
-        $("#measure-seg-btn").find("div").html("Medir por segmentos");
-        $("#measure-areas-btn").find("div").html("Medir area de planta");
-        $("#measure-areas2-btn").find("div").html("Medir area de alzado");
+        $("#measure-btn").find("div").html("Medir distancias");
+        $("#measure-areas-btn").find("div").html("Area de planta");
+        $("#measure-areas2-btn").find("div").html("Area de alzado");
         $(".measures-btns").css('opacity', '1');
     }
     
@@ -186,7 +185,7 @@ function init(current_project, meshURL, textureURL)
     renderer.loadTexture(obj.texture, renderer.default_texture_settings);
     
     obj.scale([5,5,5]);
-//    pivot.addChild( obj );
+    pivot.addChild( obj );
     
     var grid = new RD.SceneNode();
     
@@ -325,7 +324,8 @@ function init(current_project, meshURL, textureURL)
                 destroySceneElements(scene.root.children, "config");
                 $("#myCanvas").css("cursor", "default");
                 $("#measure-opt-btn").find("i").html("add_circle_outline");
-                $(".sub-btns").hide(); 
+                $(".sub-btns").hide();
+                $(".draggable").remove();
             }
     }
     
@@ -411,9 +411,9 @@ function medirMetro()
                 newPoint[2] = Math.abs(firstPoint[2] - secondPoint[2]);
                 
                 project._meter = vec3.length(newPoint);
-                $("#measure-btn").find("div").html("Medir distancia recta");
-                $("#measure-seg-btn").find("div").html("Medir por segmentos");
-                $("#measure-areas-btn").find("div").html("Medir area");
+                $("#measure-btn").find("div").html("Medir distancias");
+                $("#measure-areas-btn").find("div").html("Area de planta");
+                $("#measure-areas2-btn").find("div").html("Area de alzado");
                 $(".measures-btns").css('opacity', '1');
                 
                 segundoPunto = false;
@@ -427,78 +427,133 @@ function medirMetro()
     
 }   
 
-function medirDistancia()
+function testDialogDistance()
 {
     if(project._meter === -1)
         return;
     
-    $("#myCanvas").css("cursor", "crosshair");
-    
     // clear first
     destroySceneElements(scene.root.children, "config");
+    $(".draggable").remove();
     
-    putCanvasMessage("Selecciona dos puntos manteniendo la letra S!", 2500);
+    // open dialog
+    testDialog();
     
-    var primerPunto     = true;
-    var segundoPunto    = false;
+    putCanvasMessage("Usa el dialog para medir", 2500);
     
-    context.onmousedown = function(e) 
-    {
+    window.tmp = [];
+    window.indications = [];
+    
+    $("#add-dialog").click(function(){
         
-        if (primerPunto && keys[KEY_S]) {
+        $("#myCanvas").css("cursor", "crosshair");
         
+        context.onmousedown = function(e) 
+        {
             var result = vec3.create();
             var ray = camera.getRay( e.canvasx, e.canvasy );
             var node = scene.testRay( ray, result, undefined, 0x1, true );
             
             if (node) {
-                Indication.SceneIndication(scene, result);
-                firstPoint = result;
-                primerPunto = false;
-                segundoPunto = true;
+                var ind = new SceneIndication(scene, result);
+                window.indications.push(ind);
+                window.tmp.push(result);
+                
+                context.onmousedown = function(e) {}
+                $("#myCanvas").css("cursor", "default");
             }
             
-        } else if (segundoPunto && keys[KEY_S]) {
-            
-            var result = vec3.create();
-            var ray = camera.getRay( e.canvasx, e.canvasy );
-            var node = scene.testRay( ray, result, undefined, 0x1, true );
-            
-            // Si ha habido colision, se crea un punto y se abre una ventana de texto para escribir la anotacion
-            if (node) {
-                Indication.SceneIndication(scene, result);
-                secondPoint = result;
-                
-                var newPoint = vec3.create();
-                newPoint[0] = Math.abs(firstPoint[0] - secondPoint[0]);
-                newPoint[1] = Math.abs(firstPoint[1] - secondPoint[1]);
-                newPoint[2] = Math.abs(firstPoint[2] - secondPoint[2]);
-                
-                var distance = vec3.length(newPoint);
-                var distance_in_meters = distance / project._meter;
-                
-                segundoPunto = false;
-                
-                var x1 = [firstPoint[0], firstPoint[1], firstPoint[2]];
-                var x2 = [secondPoint[0], secondPoint[1], secondPoint[2]];
-                
-                var vertices = x1.concat(x2);
+            if(window.tmp.length > 1)
+            {
+                var vertices = [];
+                destroySceneElements(scene.root.children, "config-tmp");
+
+                for(var i = 0; i < window.tmp.length; ++i)
+                {
+                    vertices.push(window.tmp[i][0]);
+                    vertices.push(window.tmp[i][1]);
+                    vertices.push(window.tmp[i][2]);
+
+                        if(i)
+                        {
+                            vertices.push(window.tmp[i][0]);
+                            vertices.push(window.tmp[i][1]);
+                            vertices.push(window.tmp[i][2]);
+                        }
+                }
+
                 var mesh = GL.Mesh.load({ vertices: vertices }); 
                 renderer.meshes["line"] = mesh;
                 var linea = new RD.SceneNode();
-                linea.description = "config";
+                linea.description = "config-tmp";
                 linea.flags.ignore_collisions = true;
                 linea.primitive = gl.LINES;
                 linea.mesh = "line";
-                linea.color = [0.3,0.8,0.1,1];
+                linea.color = [0.9,0.7,0.7,1];
                 linea.flags.depth_test = false;
-                scene.root.addChild(linea);
-                
-                project.insertMeasure(camera, firstPoint, secondPoint, distance_in_meters, true);
-                $("#myCanvas").css("cursor", "default");
+                scene.root.addChild(linea);        
             }
         }
-    } 
+    });
+    
+    $("#end-dialog").click(function(){
+        
+        if(window.tmp.length < 2)
+            return;
+        
+        var units = 0;
+             
+        for(var i = 0; i < window.tmp.length - 1; ++i)
+        {
+            var newPoint = vec3.create();
+            var cur = window.tmp[i];
+            var next = window.tmp[i+1];
+            newPoint[0] = Math.abs(cur[0] - next[0]);
+            newPoint[1] = Math.abs(cur[1] - next[1]);
+            newPoint[2] = Math.abs(cur[2] - next[2]);
+
+            units += vec3.length(newPoint);
+        }
+
+        var distance = units / project._meter;
+        var vertices = [];
+
+        for(var i = 0; i < window.tmp.length; ++i)
+            {
+                vertices.push(window.tmp[i][0]);
+                vertices.push(window.tmp[i][1]);
+                vertices.push(window.tmp[i][2]);
+
+                    if(i)
+                    {
+                        vertices.push(window.tmp[i][0]);
+                        vertices.push(window.tmp[i][1]);
+                        vertices.push(window.tmp[i][2]);
+                    }
+            }
+                
+        destroySceneElements(scene.root.children, "config-tmp");
+        
+        var mesh = GL.Mesh.load({ vertices: vertices }); 
+        renderer.meshes["line"] = mesh;
+        var linea = new RD.SceneNode();
+        linea.description = "config";
+        linea.flags.ignore_collisions = true;
+        linea.primitive = gl.LINES;
+        linea.mesh = "line";
+        linea.color = [0.3,0.8,0.1,1];
+        linea.flags.depth_test = false;
+        scene.root.addChild(linea);
+        
+        // rremove dialog
+        $(".draggable").remove();
+        
+        if(window.tmp.length === 2)
+            project.insertMeasure(camera, window.tmp[0], window.tmp[1], distance, true);
+        else 
+            project.insertSegmentMeasure(window.tmp, distance, true);
+        
+    });
 }
 
 function medirSegmentos(area, vista)
@@ -673,7 +728,7 @@ function viewMeasure(id)
     var points = [x1, x2];
     
     for(var i = 0; i < points.length; ++i)
-        Indication.SceneIndication(scene, points[i], {depth_test: false});
+        var p = new SceneIndication(scene, points[i], {depth_test: false, type: "view"});
     
     var vertices = x1.concat(x2);
     var mesh = GL.Mesh.load({ vertices: vertices }); 

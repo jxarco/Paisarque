@@ -1,22 +1,22 @@
 /**
-* Indication class return scene nodes as balls to 
+* SceneIndication class return scene nodes as balls to 
 * indicate distances configurations
 * @class Indication
 */
 
-function Indication()
+function SceneIndication(scene, position, options)
 {
-	if(this.constructor !== Annotation)
+	if(this.constructor !== SceneIndication)
 		throw("You must use new to create a new annotation");
-	this._ctor();
+    this._ctor(scene, position, options);
 }
 
 /*
-*  @class Indication
+*  @class SceneIndication
 *  @prototype SceneIndication
 *  returns the scene node created
 */
-Indication.prototype.SceneIndication = function(scene, position, options)
+SceneIndication.prototype._ctor = function(scene, position, options)
 {
     var ball = new RD.SceneNode();
     ball.description = "config";
@@ -31,7 +31,13 @@ Indication.prototype.SceneIndication = function(scene, position, options)
     options = options || {};
     
     if(options)
-        ball.flags.depth_test = options.depth_test;
+        {
+            ball.flags.depth_test = options.depth_test;
+            if(options.type == "view"){
+                ball.color = [0.3,0.2,0.8,1];           
+                ball.shader = null;
+            }
+        }
     
-    return ball;
+    this._body = ball;
 }

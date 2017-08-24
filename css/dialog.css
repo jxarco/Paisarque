@@ -12,6 +12,9 @@ input{
     background-color: rgba(80, 80, 80, 1);
     border-radius: 3px;
     cursor: move;
+    min-width: 100px;
+    max-width: 225px;
+    position: absolute;
 }
 
 .dialog-option{
@@ -20,7 +23,7 @@ input{
 
 .dialog-btn{
     background: linear-gradient(rgb(80, 80, 80), rgb(110, 110, 110));
-    box-shadow: 0px 0px 4px black;
+    box-shadow: 0px 0px 2px black;
     color: darkgrey;
     border: 1px solid black;
     width: 80%;
@@ -31,6 +34,7 @@ input{
 
 .dialog-btn:hover{
     background: rgb(200, 200, 200);
-    text-shadow: 0px 0px 2px black;
+    text-shadow: 0px 0px 1px black;
+    color: whitesmoke;
 }
 
