@@ -181,7 +181,7 @@ function init(current_project, meshURL, textureURL)
         
     };
 
-    renderer.loadMesh(obj.mesh, makeVisible);
+    //renderer.loadMesh(obj.mesh, makeVisible);
     renderer.loadTexture(obj.texture, renderer.default_texture_settings);
     
     obj.scale([5,5,5]);

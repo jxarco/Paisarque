@@ -219,10 +219,10 @@ button:hover{
 }
 
 .tool-btn{
-    width: 35px !important;
-    height: 35px !important;
-    padding-top: 30% !important;
-    padding-left: 30% !important;
+    width: 35px;
+    height: 35px;
+    padding-top: 5px;
+    padding-left: 5px;
     background: lightgray;   
     margin: 2px;
     vertical-align: middle;
@@ -230,8 +230,8 @@ button:hover{
 
 .tool-btn.anot{
     margin-bottom: 5%;
-    padding-top: 2.75% !important;
-    padding-left: 2.75% !important;
+    padding-top: 5px;
+    padding-left: 5px;
     margin: 12.5px;
 }
 
