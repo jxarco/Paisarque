@@ -127,8 +127,8 @@ function systemReady()
     
     var tableInicio = document.getElementById("tableInicio");
     if (tableInicio != null) {
-        var userElement = document.getElementById("textUser");        
-        var pathElements = "data/" + userElement.text;
+        var userElement = document.querySelector(".textUser");        
+        var pathElements = "data/" + userElement;
     }
     
     
