@@ -1,24 +1,92 @@
-.icon-bar {
+@import url("https://fonts.googleapis.com/css?family=Lato");
+
+#miniTools {
+    height: 175px;
     width: 100%;
-    background-color: #555;
-    overflow: auto;
+    z-index: 100;
 }
 
-.icon-bar a {
+.tabs {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    float: none;
+    list-style: none;
+    position: relative;
+    margin: 5px 0 0 0;
+    text-align: left;
+}
+.tabs li {
     float: left;
-    width: 33.333%;
-    text-align: center;
-    padding: 6px 0;
-    transition: all 0.3s ease;
-    color: white;
-    font-size: 26px;
+    display: block;
+}
+.tabs input[type="radio"] {
+    position: absolute;
+    top: 0;
+    left: -9999px;
+}
+.tabs label {
+    display: block;
+    padding: 14px 21px;
+    border-radius: 2px 2px 0 0;
+    font-size: 14px;
+    font-weight: normal;
+    background-color: rgba(62, 164, 155, 0.3);
     cursor: pointer;
+    position: relative;
+    top: 4px;
+    -moz-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+.tabs label:hover {
+    background-color: rgba(62, 164, 155, 0.5);
+}
+.tabs .tab-content {
+    display: none;
+    overflow-y: scroll;
+    width: 100%;
+    height: 110px;
+    font-size: 17px;
+    line-height: 25px;
+    padding: 20px;
+    position: absolute;
+    top: 53px;
+    left: 0;
+    background: rgb(225, 225, 225);
 }
 
-.icon-bar a:hover {
-    background-color: #000;
+.tabs .tab-content::-webkit-scrollbar { 
+    display: none; 
 }
 
-.active {
-    background-color: rgb(62, 164, 155) !important;
+.tabs [id^="tab"]:checked + label {
+    top: 0;
+    padding-top: 17px;
+    background-color: rgba(62, 164, 155, 1);
+}
+.tabs [id^="tab"]:checked ~ [id^="tab-content"] {
+    display: block;
+}
+
+p.link {
+    clear: both;
+    margin: 380px 0 0 15px;
+}
+p.link a {
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    color: #fff;
+    padding: 5px 10px;
+    margin: 0 5px;
+    background-color: #612e76;
+    -moz-transition: all 0.2s ease-in;
+    -o-transition: all 0.2s ease-in;
+    -webkit-transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in;
+}
+p.link a:hover {
+    background-color: rgba(62, 164, 155, 0.5);
 }

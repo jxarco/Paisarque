@@ -39,7 +39,7 @@ function parseJSON(json)
     }
     
     if(project._description !== "nodesc")
-        $("#comment").val(project._description);
+        $(".pro-info").val(project._description);
     
     /****************************************************************/
     /* render stuff*/
@@ -181,7 +181,7 @@ function init(current_project, meshURL, textureURL)
         
     };
 
-    //renderer.loadMesh(obj.mesh, makeVisible);
+    renderer.loadMesh(obj.mesh, makeVisible);
     renderer.loadTexture(obj.texture, renderer.default_texture_settings);
     
     obj.scale([5,5,5]);

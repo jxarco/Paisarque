@@ -61,7 +61,7 @@ $('#message-text').keyup(function(e)
         $("#saveTextButton").click();    
 });
 
-$('#comment').keyup(function(e) 
+$('.pro-info').keyup(function(e) 
 {
     e.preventDefault();
     project._description = $(this).val();
@@ -84,7 +84,7 @@ $("#delete-anot-btn").click(function()
 *   Button: Change visibility of the annotations
 *   in canvas
 */
-$("#viz_on").click(function() 
+$(".viz_on").click(function() 
 {
     viz_anotations = !viz_anotations;
     changeVizAnotInCanvas(viz_anotations);
