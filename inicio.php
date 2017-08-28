@@ -37,15 +37,15 @@
         <!-- Navbar -->
         <div class="w3-top">
           <div class="w3-bar w3-card-2">
-            <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="showNavBar()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
+            <a class="w3-bar-item w3-button w3-padding-large w3-hide-large w3-right" href="javascript:void(0)" onclick="showNavBar()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
             <a id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
-            <a class="w3-bar-item w3-button w3-padding-large w3-hide-small textUser">username</a>
-            <a class="w3-bar-item w3-button w3-padding-large w3-hide-small logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+            <a class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium textUser">username</a>
+            <a class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
           </div>
         </div>
 
         <!-- Navbar on small screens -->
-        <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
+        <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-top" style="margin-top:46px">
           <a class="w3-bar-item w3-button w3-padding-large textUser">username</a>
             <a class="w3-bar-item w3-button w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
         </div>
