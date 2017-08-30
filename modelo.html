@@ -19,6 +19,7 @@
         <link href="css/verticalText.css" rel="stylesheet">
         <link href="css/rangeslider.css" rel="stylesheet">
         <link rel="stylesheet" href="css/RWD.css"> <!-- responsive web design -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -63,8 +64,8 @@
             <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Info</a>
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Exportar</a>
             <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Ayuda</a>
-            <a class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium textUser">username</a>
-            <a class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+            <a class="w3-bar-item w3-button w3-right w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+            <a class="w3-bar-item w3-button w3-right w3-padding-large textUser">username</a>
               
           </div>
         </div>
@@ -75,8 +76,6 @@
             <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large">Información</a>
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large">Exportar</a>
             <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large">Ayuda</a>
-            <a class="w3-bar-item w3-button w3-padding-large textUser">username</a>
-            <a class="w3-bar-item w3-button w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
         </div>
       
         <div id="" class="w3-row w3-hide-large" style="margin-top: 46px;">
@@ -247,11 +246,11 @@
                                         </a>
                                         
                                         <div class="sub-btns">
-                                                <a id="measure-areas-btn" onclick="medirSegmentos(true, 0)" class="btn tool-btn nodisplay measures-btns">
+                                                <a id="measure-areas-btn" onclick="medirArea(0)" class="btn tool-btn nodisplay measures-btns">
                                                     <div class="info_hover_box">Configura el metro antes de medir areas</div>
                                                     <i class="material-icons">crop_din</i>
                                                 </a>
-                                                <a id="measure-areas2-btn" onclick="medirSegmentos(true, 1)" class="btn tool-btn nodisplay measures-btns">
+                                                <a id="measure-areas2-btn" onclick="medirArea(1)" class="btn tool-btn nodisplay measures-btns">
                                                     <div class="info_hover_box">Configura el metro antes de medir areas</div>
                                                     <i class="material-icons">crop_portrait</i>
                                                 </a>

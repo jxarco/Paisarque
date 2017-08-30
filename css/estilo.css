@@ -328,6 +328,23 @@ button:hover{
 }
 
 /* -------------------------------------------- */
+/* text css (information) */
+
+.kawaii{
+    background-color: rgba(62, 164, 155, 0.3);
+    border: 1px solid rgba(62, 164, 155, 0.7);
+    border-radius: 5px;
+    box-shadow: 0px 0px 3px black;
+    padding: 15px;
+    width: 75%;
+    margin-top: 10px;
+}
+
+.kawaii.warning{
+    background-color: rgba(200, 200, 0, 0.3);
+}
+
+/* -------------------------------------------- */
 /* sliders */
 
 .sliders{

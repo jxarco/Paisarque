@@ -442,7 +442,6 @@ function testDialogDistance()
     putCanvasMessage("Usa el dialog para medir", 2500);
     
     window.tmp = [];
-    window.indications = [];
     
     $("#add-dialog").click(function(){
         
@@ -456,7 +455,6 @@ function testDialogDistance()
             
             if (node) {
                 var ind = new SceneIndication(scene, result);
-                window.indications.push(ind);
                 window.tmp.push(result);
                 
                 context.onmousedown = function(e) {}
@@ -556,165 +554,188 @@ function testDialogDistance()
     });
 }
 
-function medirSegmentos(area, vista)
+function medirArea(vista)
 {
     if(project._meter === -1)
         return;
-
-    $("#myCanvas").css("cursor", "crosshair");
+    
+     // clear first
+    destroySceneElements(scene.root.children, "config");
+    $(".draggable").remove();
+    
+    // open dialog
+    testDialog();
+    
+    putCanvasMessage("Usa el dialog para medir", 2500);
     $(".sub-btns").hide();
     $("#measure-opt-btn").find("i").html("add_circle_outline");
     
-    var viewIndex = null;
+    window.tmp = [];
+
+    var index = null;
     
-    if(area)
-        switch(vista)
-        {
-            case PLANTA:
-                viewIndex = 1;
-                camera.lookAt( [0, 200, -1], [0,0,0], [0,1,0] );
-                break;
-            case ALZADO:
-                viewIndex = 2;
-                camera.lookAt( [0, 25, 125], [0,25,0], [0,1,0] );
-                break;
-        }
-        
-        
-    // clear first
-    destroySceneElements(scene.root.children, "config");
-    
-    putCanvasMessage("Selecciona los vértices de los segmentos haciendo click mientras pulsas 'S'. Recuérda que para el último tienes que mantener la 'F'!", 5000);
-    
-    var points              = [];
-    var distance            = 0;
-    var started_segments    = true;
-    
-    context.onmousedown = function(e) 
+    switch(vista)
     {
-        if((!keys[KEY_S] && !keys[KEY_F]) || !started_segments)
-            return;
+        case PLANTA:
+            index = 1;
+            camera.lookAt( [0, 200, -1], [0,0,0], [0,1,0] );
+            break;
+        case ALZADO:
+            index = 2;
+            camera.lookAt( [0, 25, 125], [0,25,0], [0,1,0] );
+            break;
+    }
+    
+    $("#add-dialog").click(function(){
         
-        var result = vec3.create();
-        var ray = camera.getRay( e.canvasx, e.canvasy );
-        var node = scene.testRay( ray, result, undefined, 0x1, true );
-
-        if (node) {
-            
-            // test if the last vertex completes a closed measure
-            for(var i = 0; i < points.length; ++i)
-            {
-                var newPoint = vec3.create();
-                newPoint[0] = Math.abs(points[i][0] - result[0]);
-                newPoint[1] = Math.abs(points[i][1] - result[1]);
-                newPoint[2] = Math.abs(points[i][2] - result[2]);
-
-                var units = vec3.length(newPoint);
-                if(units < 1.5)
-                    result = points[i];    
-                // set x or y to same as first point
-                else if( area && points.length )
-                    result[viewIndex] = points[0][viewIndex];
-            }
-            
-            var ball = Indication.SceneIndication(scene, result, {depth_test: false});
-            points.push(result);    
-        }
+        $("#myCanvas").css("cursor", "crosshair");
         
-         if(keys[KEY_F])
-         {   
-             var units = 0;
-             
-            for(var i = 0; i < points.length - 1; ++i)
-            {
-                var newPoint = vec3.create();
-                newPoint[0] = Math.abs(points[i][0] - points[i + 1][0]);
-                newPoint[1] = Math.abs(points[i][1] - points[i + 1][1]);
-                newPoint[2] = Math.abs(points[i][2] - points[i + 1][2]);
-
-                units += vec3.length(newPoint);
-            }
-             
-             var distance = units / project._meter;
+        context.onmousedown = function(e) 
+        {
+            var result = vec3.create();
+            var ray = camera.getRay( e.canvasx, e.canvasy );
+            var node = scene.testRay( ray, result, undefined, 0x1, true );
             
-            started_segments = false;
-            
-            var vertices = [];
-            
-            for(var i = 0; i < points.length; ++i)
+            if (node) {
+                var points = window.tmp;
+                /*for(var i = 0; i < points.length; ++i)
                 {
-                    vertices.push(points[i][0]);
-                    vertices.push(points[i][1]);
-                    vertices.push(points[i][2]);
-                    
-                        if(i)
-                        {
-                            vertices.push(points[i][0]);
-                            vertices.push(points[i][1]);
-                            vertices.push(points[i][2]);
-                        }
+                    var newPoint = vec3.create();
+                    newPoint[0] = Math.abs(points[i][0] - result[0]);
+                    newPoint[1] = Math.abs(points[i][1] - result[1]);
+                    newPoint[2] = Math.abs(points[i][2] - result[2]);
+
+                    var units = vec3.length(newPoint);
+                    if(units < 1.5)
+                        result = points[i];    
+                    // set x or y to same as first point
+                    else if( points.length )
+                        result[index] = points[0][index];
+                }*/
+                
+                var ind = new SceneIndication(scene, result, {depth_test: false});
+                window.tmp.push(result);
+                
+                if(points.length == 1)
+                {
+                    console.log("ewferwfrf")
+                    var plane = new RD.SceneNode();
+                    plane.mesh = "planeXZ";
+                    plane.color = [0.5,0.5,0.8, 0.6];
+                    plane.position = points[0];
+                    plane.scaling = 150;
+                    plane.blend_mode = 1;
+                    scene.root.addChild(plane);  
                 }
                 
+                context.onmousedown = function(e) {}
+                $("#myCanvas").css("cursor", "default");
+            }
             
-            var mesh = GL.Mesh.load({ vertices: vertices }); 
-            renderer.meshes["line"] = mesh;
-            var linea = new RD.SceneNode();
-            linea.description = "config";
-            linea.flags.ignore_collisions = true;
-            linea.primitive = gl.LINES;
-            linea.mesh = "line";
-            linea.color = [0.3,0.8,0.1,1];
-            linea.flags.depth_test = false;
-            scene.root.addChild(linea);
-            
-            $("#myCanvas").css("cursor", "default");
-             
-            if(area)
-                 medirArea(points, vista); 
-            else
-                project.insertSegmentMeasure(points, distance, true);
-             
-            return;
-        }
-    } 
-}
+            if(window.tmp.length > 1)
+            {
+                var vertices = [];
+                destroySceneElements(scene.root.children, "config-tmp");
 
-function medirArea(points, index)
-{
-    var points2D = [];
-    var p2D = null;
+                for(var i = 0; i < window.tmp.length; ++i)
+                {
+                    vertices.push(window.tmp[i][0]);
+                    vertices.push(window.tmp[i][1]);
+                    vertices.push(window.tmp[i][2]);
+
+                        if(i)
+                        {
+                            vertices.push(window.tmp[i][0]);
+                            vertices.push(window.tmp[i][1]);
+                            vertices.push(window.tmp[i][2]);
+                        }
+                }
+
+                var mesh = GL.Mesh.load({ vertices: vertices }); 
+                renderer.meshes["line"] = mesh;
+                var linea = new RD.SceneNode();
+                linea.description = "config-tmp";
+                linea.flags.ignore_collisions = true;
+                linea.primitive = gl.LINES;
+                linea.mesh = "line";
+                linea.color = [0.9,0.7,0.7,1];
+                linea.flags.depth_test = false;
+                scene.root.addChild(linea);        
+            }
+        }
+    });
     
-    for(var i = 0; i < points.length; ++i)
-    {
-        if(index === 0)
-            p2D = vec2.fromValues(points[i][0], points[i][2]);
-        if(index === 1)
-            p2D = vec2.fromValues(points[i][0], points[i][1]);
-        if(index === 2)
-            p2D = vec2.fromValues(points[i][1], points[i][2]);
-        points2D.push(p2D);
-    }
-    
-//    console.log(points);
-    console.log(points2D);
-    
-    var adds = 0;
-    var subs = 0;
-    
-    for(var i = 0; i < points2D.length - 1; ++i)
-    {
-        var current = points2D[i];
-        var next = points2D[i+1];
+    $("#end-dialog").click(function(){
         
-        adds += current[0] * next[1];
-        subs += current[1] * next[0];
-    }
-    
-    var area = Math.abs(0.5 * (adds - subs));
-    area /= Math.pow(project._meter, 2);
-    var msg = "AREA: " + area;
-    putCanvasMessage(msg, 5000, {type: "response"});
-    project.insertArea(points2D, area, index, true);
+        if(window.tmp.length < 2)
+            return;
+        
+        var vertices = [];
+
+        for(var i = 0; i < window.tmp.length; ++i)
+        {
+            vertices.push(window.tmp[i][0]);
+            vertices.push(window.tmp[i][1]);
+            vertices.push(window.tmp[i][2]);
+
+                if(i)
+                {
+                    vertices.push(window.tmp[i][0]);
+                    vertices.push(window.tmp[i][1]);
+                    vertices.push(window.tmp[i][2]);
+                }
+        }
+                
+        destroySceneElements(scene.root.children, "config-tmp");
+        
+        var mesh = GL.Mesh.load({ vertices: vertices }); 
+        renderer.meshes["line"] = mesh;
+        var linea = new RD.SceneNode();
+        linea.description = "config";
+        linea.flags.ignore_collisions = true;
+        linea.primitive = gl.LINES;
+        linea.mesh = "line";
+        linea.color = [0.3,0.8,0.1,1];
+        linea.flags.depth_test = false;
+        scene.root.addChild(linea);
+        
+        // rremove dialog
+        $(".draggable").remove();
+        
+        var points2D = [];
+        var p2D = null;
+        var points = window.tmp;
+
+        for(var i = 0; i < points.length; ++i)
+        {
+            if(index === 0)
+                p2D = vec2.fromValues(points[i][0], points[i][2]);
+            if(index === 1)
+                p2D = vec2.fromValues(points[i][0], points[i][1]);
+            if(index === 2)
+                p2D = vec2.fromValues(points[i][1], points[i][2]);
+            points2D.push(p2D);
+        }
+
+        var adds = 0;
+        var subs = 0;
+
+        for(var i = 0; i < points2D.length - 1; ++i)
+        {
+            var current = points2D[i];
+            var next = points2D[i+1];
+
+            adds += current[0] * next[1];
+            subs += current[1] * next[0];
+        }
+
+        var area = Math.abs(0.5 * (adds - subs));
+        area /= Math.pow(project._meter, 2);
+        var msg = "AREA: " + area;
+        putCanvasMessage(msg, 5000, {type: "response"});
+        project.insertArea(points2D, area, index, true);
+        
+    });
 }
 
 function viewMeasure(id)
@@ -765,7 +786,7 @@ function viewClosedMeasure(id, area)
     var points = measure.points;
     
         for(var i = 0; i < points.length; ++i)
-        Indication.SceneIndication(scene, [points[i][0], points[i][1], points[i][2]], {depth_test: false});
+            var p = new SceneIndication(scene, [points[i][0], points[i][1], points[i][2]], {depth_test: false, type: "view"});
     
     var vertices = [];
     for(var i = 0; i < points.length; ++i)

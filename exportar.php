@@ -14,6 +14,7 @@
     <link href="css/header.css" rel="stylesheet">
     <link rel="stylesheet" href="css/RWD.css"> <!-- responsive web design -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -39,27 +40,27 @@ s</head>
             <a class="w3-bar-item w3-button w3-padding-large w3-hide-large w3-right" onclick="showNavbar()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
             <a onclick="loadContent('inicio.php')" id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
             <a onclick="loadContent('modelo.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">3D</a>
-            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Info</a>
+            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Aportaciones</a>
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Exportar</a>
             <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Ayuda</a>
-            <a id="textUser" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">username</a>
-            <a class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
-              
+            <a class="w3-bar-item w3-button w3-right w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+            <a id="textUser" class="w3-bar-item w3-button w3-right w3-padding-large">username</a>
           </div>
         </div>
 
         <!-- Navbar on small screens -->
         <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-top" style="margin-top:46px">
             <a onclick="loadContent('modelo.html')" class="w3-bar-item w3-button w3-padding-large">3D</a>
-            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large">Información</a>
+            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large">Aportaciones</a>
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large">Exportar</a>
             <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large">Ayuda</a>
-            <a class="w3-bar-item w3-button w3-padding-large textUser">username</a>
-            <a class="w3-bar-item w3-button w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
         </div>
         
         <content class="row"><div class="col-lg-12" style="margin-top:46px">
-            <h2>Opciones de exportación</h2>
+            
+            <h2 class="w3-xxlarge" style="font-family: Oswald !important;"><b>EXPORTAR</b></h2>
+            <br>
+            
         </div>
             
             

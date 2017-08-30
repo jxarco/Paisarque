@@ -14,6 +14,7 @@
     <link href="css/estilo.css" rel="stylesheet">
     <link rel="stylesheet" href="css/RWD.css"> <!-- responsive web design -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -28,6 +29,12 @@
             }
         }
     </script>
+    
+    <style>
+        h1, h2, h3, h4, h5, h6{
+            font-family: Oswald;
+        }
+    </style>
 
 </head>
     <body class="container">
@@ -40,11 +47,11 @@
             <!--   END TOOGLE NAVIGATION           -->
             <a onclick="loadContent('inicio.php')" id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
             <a onclick="loadContent('modelo.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">3D</a>
-            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Info</a>
+            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Aportaciones</a>
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Exportar</a>
             <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Ayuda</a>
-            <a class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium textUser">username</a>
-            <a class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+            <a class="w3-bar-item w3-button w3-right w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+            <a class="w3-bar-item w3-button w3-right w3-padding-large textUser">username</a>
               
           </div>
         </div>
@@ -52,40 +59,40 @@
         <!-- Navbar on small screens -->
         <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-top" style="margin-top:46px">
             <a onclick="loadContent('modelo.html')" class="w3-bar-item w3-button w3-padding-large">3D</a>
-            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large">Información</a>
+            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large">Aportaciones</a>
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large">Exportar</a>
             <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large">Ayuda</a>
-            <a class="w3-bar-item w3-button w3-padding-large textUser">username</a>
-            <a class="w3-bar-item w3-button w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
         </div>
         
         <content class="row"><div class="col-lg-12" style="margin-top: 46px;">
-            <h2>Tutoriales</h2>
             
+            <h2 class="w3-xxlarge"><b>TUTORIALES</b></h2>
+            <br>
             <ul  class="nav nav-tabs">
-                
                 <li class="active"> <a href="#uno" data-toggle="tab" aria-expanded="true">Tomar las fotografías</a> </li>
                 <li> <a href="#dos" data-toggle="tab" aria-expanded="true">Crear el modelo 3D</a></li>
                 <li> <a href="#tres" data-toggle="tab" aria-expanded="true">Usar el visualizador</a> </li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane fade active in" id="uno">
-                  <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
-                </div>
-                <div class="tab-pane fade" id="dos">
-                    <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+                  <p>La fotogrametría es un proceso de toma de fotos para la modelación de un objeto real al mundo 3D. A continuación podrás ver un tutorial en el que aprenderás a tomar unas buenas fotografías para, más adelante, reconstruir la escena en un archivo OBJ y poder visualizarlo en nuestra página.</p>
                     <br/>
                     <div align="center" class="embed-responsive embed-responsive-16by9">
-                         <iframe width="560" height="315" src="https://www.youtube.com/embed/6W3R5ItkREk" frameborder="0" allowfullscreen></iframe>
+                         <iframe src="https://www.youtube.com/embed/nAlfN-FGcYw" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="dos">
+                    <p>¿Dices que tienes unas buenas fotografías para crear un objeto pero no sabes como reconstruirlo? Aquí tienes un tutorial sobre cómo modelar tu objeto a partir de las fotografías tomadas anteriormente. Asegúrate de haber tomado las medidas necesarias y haber realizado el proceso de fotogrametría correctamente.</p>
+                    <br/>
+                    <div align="center" class="embed-responsive embed-responsive-16by9">
+                         <iframe src="https://www.youtube.com/embed/6W3R5ItkREk" frameborder="0" allowfullscreen></iframe>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="tres">
                     <h4>Información</h4>
-                    <p>Usa el cuadro de texto para añadir una breve descripción sobre el proyecto. Una vez acabado, guarda los cambios en Herramientas con el botón <b>Guardar proyecto</b></p>
-                    <a class="btn tool-btn info">
-                        <i class="material-icons">save</i>
-                    </a>
-                    <br><br>
+                    <p class="kawaii">Usa el cuadro de texto para añadir una breve descripción sobre el proyecto. Una vez acabado, guarda los cambios en Herramientas con el botón '<b>Guardar proyecto</b>'</p>
+                    
+                    <br>
                     
                     <h4>Herramientas</h4>
 
@@ -93,52 +100,52 @@
                     <a class="btn tool-btn info">
                         <i class="material-icons">3d_rotation</i>
                     </a>
-                    <p>Usa las barras que aparecerán en la parte superior izquierda para rotar el objeto 3D a tu gusto. Puedes hacerlo guiándote por los ejes cardinales o por cualquier otra base. Una vez hecho, !no olvides guardar! Realizando esto, no tendrás que volver a rotar la cámara buscando la posición idónea de tu modelo.</p><br>
+                    <p class="kawaii">Usa las barras que aparecerán en la parte superior izquierda para rotar el objeto 3D a tu gusto. Puedes hacerlo guiándote por los ejes cardinales o por cualquier otra base. Una vez hecho, !no olvides guardar! Realizando esto, no tendrás que volver a rotar la cámara buscando la posición idónea de tu modelo.</p>
+                    <p class="kawaii">Si crees que las barras no son lo suficientemente precisas para realizar tu rotación, prueba a pulsar las teclas A, S, D de tu teclado mientras rotas el objeto. Cada tecla corresponde a un eje diferente.</p><br>
                     
                     <h6>Guardar estado del proyecto</h6>
                     <a class="btn tool-btn info">
                         <i class="material-icons">save</i>
                     </a>
-                    <p>parte superior izquierdaparte superior izquierdaparte superior izquierdaparte superior izquierdaparte superior izquierdaparte superior izquierdaparte superior izquierdaparte superior izquierdaparte superior izquierdaparte superior izquierdaparte superior izquierdaparte superior izquierdaparte superior izquierda</p><br>
+                    <p class="kawaii">Utiliza esta herramienta para decirnos todos los cambios aplicados al proyecto. Siempre después de rotar, medir o cualquier otra acción, recuerda guardar.
+                    <p class="kawaii warning">Si no se usa al acabar, tendrás que volver a realizar todos los cambios.</p><br>
                     
                     <h6>Configurar la distancia relativa a un metro</h6>
                     <a class="btn tool-btn info">
                         <i class="material-icons">settings</i>
                     </a>
-                    <p>aparecerán en la parteaparecerán en la parteaparecerán en la parteaparecerán en la parteaparecerán en la parteaparecerán en la parteaparecerán en la parteaparecerán en la parteaparecerán en la parteaparecerán en la parteaparecerán en la parte</p><br>
+                    <p class="kawaii">En PaisArque no sabemos cómo de grande es tu modelo. Por ello necesitamos alguna información relacionada con la escala. Por ejemplo, con saber cuánto mide un metro en la aplicación.</p>
+                    <p class="kawaii">Selecciona dos puntos la distancia entre los cuales sea igual a un metro en la realidad. Una vez hecho la distancia quedará configurada y las mediciones ya estarán disponibles.</p>
+                    <p class="kawaii warning">Si no existe esta configuración, cualquier medición estará deshabilitada.</p><br>
                     
-                    <h6>Medir distancia recta de origen a destino</h6>
+                    <h6>Medir distancia</h6>
                     <a class="btn tool-btn info">
                         <i class="material-icons">space_bar</i>
                     </a>
-                    <p>Usa las barras queUsa las barras queUsa las barras queUsa las barras queUsa las barras queUsa las barras queUsa las barras queUsa las barras queUsa las barras queUsa las barras queUsa las barras queUsa las barras queUsa las barras que</p><br>
-                    
-                    <h6>Medir distancia mediante segmentos</h6>
-                    <a class="btn tool-btn info">
-                        <i class="material-icons">timeline</i>
-                    </a>
-                    <p>ejes cardinales o porejes cardinales o porejes cardinales o porejes cardinales o porejes cardinales o porejes cardinales o porejes cardinales o porejes cardinales o porejes cardinales o porejes cardinales o por</p><br>
+                    <p class="kawaii">Este es el medidor por defecto de la aplicación. Dispone de dos botones, añadir punto y finalizar medición.</p>
+                    <p class="kawaii">Haz click en añadir punto cuando la cámara esté en su sitio. Aplica esta regla las veces que sea necesaria para crear, ya sea una distancia única OR-DST o una medición por segmentos. Al finalizar, la medición quedará guardada en las tablas.</p>
+                    <p class="kawaii warning">Asegúrate de finalizar la medición con el botón correspondiente y de guardar el proyecto si quieres que las tablas guarden su estado.</p><br>
                     
                     <h6>Mostrar tabla de distancias origen-destino</h6>
                     <a class="btn tool-btn info">
                         <i class="material-icons">filter_1</i>
                     </a>
-                    <p>para rotar el objeto 3Dpara rotar el objeto 3Dpara rotar el objeto 3Dpara rotar el objeto 3Dpara rotar el objeto 3Dpara rotar el objeto 3Dpara rotar el objeto 3Dpara rotar el objeto 3Dpara rotar el objeto 3Dpara rotar el objeto 3D</p><br>
+                    <p class="kawaii">Mostrar las tablas que contienen todas las mediciones de dos puntos. Muestran las coordenadas de los puntos y la distancia entre ellos. Vuelve a clicar para esconder.</p><br>
                     
                     <h6>Mostrar tabla de distancias por segmentos</h6>
                     <a class="btn tool-btn info">
                         <i class="material-icons">filter_2</i>
                     </a>
-                    <p>a tu gusto. Puedesa tu gusto. Puedesa tu gusto. Puedesa tu gusto. Puedesa tu gusto. Puedesa tu gusto. Puedesa tu gusto. Puedesa tu gusto. Puedesa tu gusto. Puedesa tu gusto. Puedesa tu gusto. Puedesa tu gusto. Puedesa tu gusto. Puedesa tu gusto. Puedesa tu gusto. Puedesa tu gusto. Puedes</p><br>
+                    <p class="kawaii">Mostrar las tablas que contienen todas las mediciones por segmentos. Muestran el número de segmentos de la medición y la suma de la longitud de todos ellos. Vuelve a clicar para esconder.</p><br>
                     
                     <h6>Mostrar áreas calculadas</h6>
                     <a class="btn tool-btn info">
                         <i class="material-icons">filter_3</i>
                     </a>
-                    <p>hacerlo guiándote por loshacerlo guiándote por loshacerlo guiándote por loshacerlo guiándote por loshacerlo guiándote por loshacerlo guiándote por loshacerlo guiándote por loshacerlo guiándote por loshacerlo guiándote por loshacerlo guiándote por loshacerlo guiándote por loshacerlo guiándote por loshacerlo guiándote por los</p><br>
+                    <p class="kawaii">Mostrar las tablas que contienen todas las areas calculadas. Muestran el tipo de area calculada y el area en m2. Vuelve a clicar para esconder.</p><br>
                     
                     <h4>Anotaciones</h4>
-                    <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+                    <p class="kawaii">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
 
                   
                 </div>
