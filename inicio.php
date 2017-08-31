@@ -17,37 +17,17 @@
         <link rel="stylesheet" href="css/RWD.css"> <!-- responsive web design -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    
-        <script type="text/javascript">
-            // Used to toggle the menu on small screens when clicking on the menu button
-            function showNavBar() {
-                var x = document.getElementById("navDemo");
-                if (x.className.indexOf("w3-show") == -1) {
-                    x.className += " w3-show";
-                } else { 
-                    x.className = x.className.replace(" w3-show", "");
-                }
-            }
-        </script>
-        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">        
     </head>
     <body>
         
         <!-- Navbar -->
         <div class="w3-top">
           <div class="w3-bar w3-card-2">
-            <a class="w3-bar-item w3-button w3-padding-large w3-hide-large w3-right" href="javascript:void(0)" onclick="showNavBar()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
             <a id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
-            <a class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium textUser">username</a>
-            <a class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+            <a class="w3-bar-item w3-button w3-right w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+            <a class="w3-bar-item w3-button w3-right w3-padding-large textUser">username</a>
           </div>
-        </div>
-
-        <!-- Navbar on small screens -->
-        <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-top" style="margin-top:46px">
-          <a class="w3-bar-item w3-button w3-padding-large textUser">username</a>
-            <a class="w3-bar-item w3-button w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
         </div>
         
         <content class="container" id="all">

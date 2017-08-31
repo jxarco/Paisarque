@@ -161,7 +161,6 @@ function init(current_project, meshURL, textureURL)
     
     if(!rotaciones.length)
         console.log("No default rotations");
-//        alert("No default rotations. Go to Tools and set a default rotation matrix");
     else
     {
         obj._rotation[0] = rotaciones[0].r0;
@@ -188,7 +187,6 @@ function init(current_project, meshURL, textureURL)
     pivot.addChild( obj );
     
     var grid = new RD.SceneNode();
-    
     var grid_mesh = GL.Mesh.grid({size:5});
     renderer.meshes["grid"] = grid_mesh;
     grid.flags.visible = false;
@@ -288,45 +286,23 @@ function init(current_project, meshURL, textureURL)
         keys[e.keyCode] = false;        
         
         if(e.keyCode === 13) // Enter
-            {
-                if(!setting_rotation)
-                    return;
-                
-                setting_rotation = false;
-                scene.root.children[1].flags.visible = setting_rotation;
-    
-                if(setting_rotation)
-                {
-                    $("#cardinal-axis").fadeIn();
-                    $('.sliders').fadeIn();        
-                }
-                else
-                {
-                    $("#cardinal-axis").fadeOut();
-                    $('.sliders').fadeOut();        
-                }
-                
-                project.setRotations(obj._rotation);
-            }
+        {
+            if(!setting_rotation)
+                return;
+
+            setting_rotation = false;
+            scene.root.children[1].flags.visible = setting_rotation;
+
+            if(setting_rotation)
+                revealDOMElements([$("#cardinal-axis"), $('.sliders')], true);
+            else
+                revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
+
+            project.setRotations(obj._rotation);
+        }
         
         if(e.keyCode === 27) // ESC
-            {
-                // disable all features
-                putCanvasMessage("Cancelado", 1000);
-                context.onmousedown = function(e) {};
-                setting_rotation = false;
-                scene.root.children[1].flags.visible = false;
-                // prevent adding new rotations
-                subs = 0;
-                adds = 0;
-                
-                revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
-                destroySceneElements(scene.root.children, "config");
-                $("#myCanvas").css("cursor", "default");
-                $("#measure-opt-btn").find("i").html("add_circle_outline");
-                $(".sub-btns").hide();
-                $(".draggable").remove();
-            }
+            disableAllFeatures();
     }
     
     context.captureMouse(true);
@@ -566,25 +542,13 @@ function medirArea(vista)
     // open dialog
     testDialog();
     
-    putCanvasMessage("Usa el dialog para medir", 2500);
+    putCanvasMessage("Añade puntos sobre el plano de planta.", 3000);
+    putCanvasMessage("El último punto debe coincidir con el primero.", 5000, {type: "alert"});
     $(".sub-btns").hide();
     $("#measure-opt-btn").find("i").html("add_circle_outline");
     
     window.tmp = [];
-
-    var index = null;
-    
-    switch(vista)
-    {
-        case PLANTA:
-            index = 1;
-            camera.lookAt( [0, 200, -1], [0,0,0], [0,1,0] );
-            break;
-        case ALZADO:
-            index = 2;
-            camera.lookAt( [0, 25, 125], [0,25,0], [0,1,0] );
-            break;
-    }
+    var index = vista === PLANTA ? 1 : 2;
     
     $("#add-dialog").click(function(){
         
@@ -592,47 +556,74 @@ function medirArea(vista)
         
         context.onmousedown = function(e) 
         {
+            var points = window.tmp;
             var result = vec3.create();
+            // normal depending on the type of area
+            var normal = vista === PLANTA ? vec3.fromValues(0, 1, 0) : vec3.fromValues(1, 0, 0);
             var ray = camera.getRay( e.canvasx, e.canvasy );
-            var node = scene.testRay( ray, result, undefined, 0x1, true );
+            var node = null;
+            
+            if(window.tmp.length){
+                result = camera.getRayPlaneCollision( e.canvasx, e.canvasy, points[0], normal);
+                node = true;
+            }
+            else
+                node = scene.testRay( ray, result, undefined, 0x1, true );
             
             if (node) {
-                var points = window.tmp;
-                /*for(var i = 0; i < points.length; ++i)
+                
+                if(points.length > 1)
                 {
                     var newPoint = vec3.create();
-                    newPoint[0] = Math.abs(points[i][0] - result[0]);
-                    newPoint[1] = Math.abs(points[i][1] - result[1]);
-                    newPoint[2] = Math.abs(points[i][2] - result[2]);
+                    newPoint[0] = Math.abs(points[0][0] - result[0]);
+                    newPoint[1] = Math.abs(points[0][1] - result[1]);
+                    newPoint[2] = Math.abs(points[0][2] - result[2]);
 
                     var units = vec3.length(newPoint);
                     if(units < 1.5)
-                        result = points[i];    
-                    // set x or y to same as first point
-                    else if( points.length )
-                        result[index] = points[0][index];
-                }*/
+                        result = points[0];            
+                }
                 
                 var ind = new SceneIndication(scene, result, {depth_test: false});
                 window.tmp.push(result);
                 
                 if(points.length == 1)
                 {
-                    console.log("ewferwfrf")
                     var plane = new RD.SceneNode();
                     plane.mesh = "planeXZ";
-                    plane.color = [0.5,0.5,0.8, 0.6];
+                    plane.description = "config";
+                    plane.color = [0.5,0.5,0.8, 0.75];
                     plane.position = points[0];
-                    plane.scaling = 150;
+                    plane.scaling = 500;
                     plane.blend_mode = 1;
+                    if(vista === ALZADO)
+                        plane.rotate(90 * DEG2RAD, RD.FRONT);
                     scene.root.addChild(plane);  
+                    
+                    var grid = new RD.SceneNode();
+                    var grid_mesh = GL.Mesh.grid({size:10});
+                    renderer.meshes["grid"] = grid_mesh;
+                    grid.description = "config";
+                    grid.mesh = "grid";
+                    grid.position = points[0];
+                    grid.primitive = gl.LINES;
+                    grid.color = [0.5, 0.5, 0.5, 1];
+                    grid.scale([50, 50, 50]);
+                    if(vista === ALZADO)
+                        grid.rotate(90 * DEG2RAD, RD.FRONT);
+                    scene.root.addChild(grid);
+                    
+                    // set opacity to the main object
+                    // idea: plane over obj
+                    obj.blend_mode = 1;
+                    obj.opacity = 0.9;
                 }
                 
                 context.onmousedown = function(e) {}
                 $("#myCanvas").css("cursor", "default");
             }
-            
-            if(window.tmp.length > 1)
+           
+            if(points.length > 1)
             {
                 var vertices = [];
                 destroySceneElements(scene.root.children, "config-tmp");
@@ -660,6 +651,7 @@ function medirArea(vista)
                 linea.mesh = "line";
                 linea.color = [0.9,0.7,0.7,1];
                 linea.flags.depth_test = false;
+                
                 scene.root.addChild(linea);        
             }
         }
@@ -699,21 +691,15 @@ function medirArea(vista)
         linea.flags.depth_test = false;
         scene.root.addChild(linea);
         
-        // rremove dialog
-        $(".draggable").remove();
-        
         var points2D = [];
         var p2D = null;
         var points = window.tmp;
 
         for(var i = 0; i < points.length; ++i)
         {
-            if(index === 0)
-                p2D = vec2.fromValues(points[i][0], points[i][2]);
-            if(index === 1)
-                p2D = vec2.fromValues(points[i][0], points[i][1]);
-            if(index === 2)
-                p2D = vec2.fromValues(points[i][1], points[i][2]);
+            // planta > index = 1
+            // alzado > index = 2
+            p2D = index == 1 ? vec2.fromValues(points[i][0], points[i][2]) : vec2.fromValues(points[i][1], points[i][2]);
             points2D.push(p2D);
         }
 
@@ -735,6 +721,8 @@ function medirArea(vista)
         putCanvasMessage(msg, 5000, {type: "response"});
         project.insertArea(points2D, area, index, true);
         
+        //clear all
+        disableAllFeatures();
     });
 }
 
@@ -904,6 +892,28 @@ function enableSetRotation()
 }
 
 /* ************************************************* */
+
+function disableAllFeatures()
+{
+    putCanvasMessage("Hecho!", 1000);
+    context.onmousedown = function(e) {};
+    setting_rotation = false;
+    scene.root.children[1].flags.visible = false;
+    // prevent adding new rotations
+    subs = 0;
+    adds = 0;
+
+    revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
+    destroySceneElements(scene.root.children, "config");
+    $("#myCanvas").css("cursor", "default");
+    $("#measure-opt-btn").find("i").html("add_circle_outline");
+    $(".sub-btns").hide();
+    $(".draggable").remove();
+
+    // obj properties
+    obj.blend_mode = 0;
+    obj.opacity = 1;
+}
 
 var resize = function() 
 {

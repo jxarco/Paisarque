@@ -196,7 +196,6 @@ function putCanvasMessage(text, ms, options)
     // default css types if it has
     $(id).addClass(options.type);
     $(id).fadeIn();
-    
 
     setTimeout(function(){
         $(id).fadeOut();
@@ -215,7 +214,7 @@ function testDialog()
                   "class='draggable ui-widget-content' " +
                   "style='" +
                   "width: 30%; " +
-                  "margin-left: 35%; " +
+                  "margin-left: 5%; " +
                   "margin-top: 20px; " +
                   "text-align: center;'>" +
                   "<h5>Dialog</h5>" +// text 
