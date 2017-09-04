@@ -333,7 +333,7 @@ $('#cargarProyecto').click( function()
     $('#GSCCModal').model('hide');
 });
 
-$("#test").click(function(){
+$(".save").click(function(){
    project.save(); 
 });
 

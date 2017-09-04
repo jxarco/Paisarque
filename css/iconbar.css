@@ -1,11 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Lato");
 
-#miniTools {
-    height: 175px;
-    width: 100%;
-    z-index: 100;
-}
-
 .tabs {
     margin: 0;
     padding: 0;
@@ -56,6 +50,35 @@
     left: 0;
     background: rgb(225, 225, 225);
 }
+
+.tabs .tab-content-large {
+    display: none;
+    overflow-y: scroll;
+    width: 100%;
+    height: calc(100vh - 100px);
+    font-size: 17px;
+    line-height: 25px;
+    padding: 20px;
+    position: absolute;
+    top: 53px;
+    left: 0;
+    background: rgb(225, 225, 225);
+}
+
+.tabs .tab-content-extra {
+    display: none;
+    overflow-y: scroll;
+    width: 100%;
+    min-height: 200px;
+    font-size: 17px;
+    line-height: 25px;
+    padding: 20px;
+    position: absolute;
+    top: 53px;
+    left: 0;
+    background: rgb(225, 225, 225);
+}
+
 
 .tabs .tab-content::-webkit-scrollbar { 
     display: none; 

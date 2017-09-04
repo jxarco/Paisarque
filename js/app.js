@@ -1,4 +1,4 @@
-var project         = null;
+var project         = window.project || null;
 var obj             = null;
 var placer          = null;
 var context         = null;
@@ -27,8 +27,15 @@ var adds                = 0;
 
 function parseJSON(json)
 {
-    if(project === null)
+    if(project === null){
         project = new Project( json, current_user );
+    } 
+    
+    // update extra list if update needed
+    if(sessionStorage.getItem("update"))
+        project._extra = JSON.parse(sessionStorage.getItem("extra"));
+    else
+        sessionStorage.setItem("extra", JSON.stringify(project._extra));
     
     if(project._meter !== -1)
     {
@@ -151,8 +158,15 @@ function init(current_project, meshURL, textureURL)
     obj.color = [1,1,1,1];
     obj.mesh = meshURL;
     
+//    var cube = new RD.SceneNode();
+//    cube.mesh = "cube";
+//    cube.scaling = 50;
+//    cube.texture = "data/cubemap.png";
+//    scene.root.addChild(cube);
+    
     // tenemos que pensar el caso en que haya mas de una textura
     if (!isArray(textureURL)) {
+        console.log(textureURL);
         obj.texture = textureURL;
     }
     
@@ -172,12 +186,12 @@ function init(current_project, meshURL, textureURL)
     }
     
     var makeVisible = function () {
+        $("#placeholder").css("background-image", "none");
         $('#myCanvas').css({"opacity": 0, "visibility": "visible"}).animate({"opacity": 1.0}, 1000);
         putCanvasMessage("Recuerda: guarda el proyecto al realizar cambios!", 3000);
         putCanvasMessage("Puedes cancelar cualquier acción con la tecla ESC", 3000);
         if(!rotaciones.length)
-            putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "alert"});    
-        
+            putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "alert"}); 
     };
 
     renderer.loadMesh(obj.mesh, makeVisible);
@@ -196,8 +210,6 @@ function init(current_project, meshURL, textureURL)
     grid.color = [0.5, 0.5, 0.5, 1];
     grid.scale([50, 50, 50]);
     scene.root.addChild(grid);
-        
-    // se listan las anotaciones que hay en el fichero correspondiente que es el nombre del proyecto _anotaciones y se dibujan con un circulo rojo en la mesh
     
     var anotaciones = project.getAnnotations();
     
@@ -259,6 +271,7 @@ function init(current_project, meshURL, textureURL)
     context.onmousemove = function(e)
     {
         mouse = [e.canvasx, gl.canvas.height - e.canvasy];
+        
         if (e.dragging && e.leftButton) {
             camera.orbit(-e.deltax * 0.1 * _dt, RD.UP,  camera._target);
             camera.orbit(-e.deltay * 0.1 * _dt, camera._right, camera._target );
@@ -408,7 +421,7 @@ function medirMetro()
     });
 }   
 
-function testDialogDistance()
+function testDistance()
 {
     if(project._meter === -1)
         return;
@@ -621,7 +634,7 @@ function medirArea(vista)
                     // set opacity to the main object
                     // idea: plane over obj
                     obj.blend_mode = 1;
-                    obj.opacity = 0.9;
+                    obj.opacity = 0.75;
                 }
                 
                 context.onmousedown = function(e) {}
@@ -775,8 +788,7 @@ function viewClosedMeasure(id, area)
         measure = project.getArea(id) || {};
     else 
         measure = project.getSegmentMeasure(id) || {};
-    
-    console.log(measure);
+//    console.log(measure);
     
     var points = measure.points;
     

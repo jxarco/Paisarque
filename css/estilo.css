@@ -120,6 +120,7 @@ button:hover{
     padding:0;
     margin-top: 46px;
     height: calc(100vh - 46px);
+    width: calc(100% - 350px);
 /*    border: 3px solid green;*/
 /*    position: absolute;*/
 }
@@ -135,6 +136,8 @@ button:hover{
 
 #tools{
     height: calc(100vh - 46px);
+    width: 350px;
+    margin-top: 46px;
 }
 
 #myCanvas {
@@ -214,10 +217,10 @@ button:hover{
 }
 
 .drag-cont-over{
-    background: rgba(255, 0, 0, 0.1);
+/*    background: rgba(255, 0, 0, 0.1);*/
     border-style: dotted;
-    border-color: rgba(132, 132, 232, 0.9) !important;
-    color: #e3403a;
+    border-color: rgba(255, 0, 0, 0.9) !important;
+/*    color: #e3403a;*/
     text-decoration: none;
     -webkit-transition: all 250ms linear;
     transition: all 250ms linear;
@@ -236,6 +239,7 @@ button:hover{
     background: lightgray;   
     margin: 2px;
     vertical-align: middle;
+    color: rgb(30, 30, 30) !important;
 }
 
 .tool-btn.anot{
@@ -279,7 +283,7 @@ button:hover{
     font-weight: 200;
     margin-top: -50px;
     margin-left: -120px;
-    z-index: 10 !important;
+    z-index: 100 !important;
 }
 
 @media only screen and (max-width: 993px) {

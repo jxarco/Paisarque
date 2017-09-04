@@ -18,6 +18,10 @@ var LOADER = {
             loadJSON();
         window.onresize = resize;
         init_sliders(); // canvas rotations
+    },
+    loadExtra: function(){
+        if(current_project !== null)
+            loadExtraJSON();
     }
 };
 
@@ -112,6 +116,46 @@ function initMap()
         map: map,
         title: location
     });    
+}
+
+function parseExtraJSON(json)
+{
+//    console.log(json);
+    if(!json.extra){
+        console.err("empty");
+        return;
+    }
+    var el = null;
+    for(var e in json.extra){
+        el = json.extra[e];
+        if (el.type == "image") {
+            $("#imagenes").append(build[el.type](el.data));
+        } else if (el.type == "text") {
+            $("#texto").append(build[el.type](el.data));
+        } else if (el.type == "pdf") {
+            $("#pdfs").append(build[el.type](el.data));
+        } else if (el.type == "youtube") {
+            $("#videos").append(build[el.type](el.data));
+        }
+    }
+
+}
+            
+var build = {};
+build.pdf = function(url){
+    var t = "<div class='embed-responsive' style='padding-bottom:75vh'>"
+        t+= "<object data='"+url+"' type='application/pdf' width='100%' height='100%'></object>"
+        t+= "</div>";
+    return t;    
+}
+build.text = function(text){
+    return '<p>'+text+'</p></br>';
+}
+build.youtube = function(id){
+    return '<div align="center" class="embed-responsive embed-responsive-16by9"><iframe width="560" height="315" src="https://www.youtube.com/embed/'+id+'" frameborder="0" allowfullscreen></iframe></div>';
+}
+build.image = function(data){
+    return '<img src="'+data+'" class="img-responsive" alt="Responsive image">';
 }
 
 

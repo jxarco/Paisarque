@@ -34,19 +34,6 @@
                     x.className = x.className.replace(" w3-show", "");
                 }
             }
-            
-            function openTab(evt, tabName) {
-              $(".tab").hide();
-              $(".tablink").removeClass("w3-border-grey");
-              $(".tablink").removeClass("w3-border-white").addClass("w3-border-white");
-              $("#" + tabName).show();
-              var id = "#" + evt.currentTarget.firstElementChild.id;
-              $(id).addClass("w3-border-grey");
-            }
-            
-            function openMiniTab() {
-              $("#miniTools").append("<button>VA</button>");
-            }
         </script>
 
     </head>
@@ -61,7 +48,7 @@
             <!--   END TOOGLE NAVIGATION           -->
             <a onclick="loadContent('inicio.php')" id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
             <a onclick="loadContent('modelo.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">3D</a>
-            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Info</a>
+            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Aportaciones</a>
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Exportar</a>
             <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Ayuda</a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
@@ -73,7 +60,7 @@
         <!-- Navbar on small screens -->
         <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-top" style="margin-top:46px">
             <a onclick="loadContent('modelo.html')" class="w3-bar-item w3-button w3-padding-large">3D</a>
-            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large">Información</a>
+            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large">Aportaciones</a>
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large">Exportar</a>
             <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large">Ayuda</a>
         </div>
@@ -115,6 +102,9 @@
                             <a class="btn tool-btn anot viz_on">
                                     <i class="material-icons">visibility_off</i>
                             </a>
+                            <a class="btn tool-btn save">
+                                <i class="material-icons">save</i>
+                            </a>
                             
                         </div>
                     </li>
@@ -140,7 +130,7 @@
         </div>
         
         <div class="w3-row">
-            <div class="w3-col w3-container myPlaceholder" style="width:80%" id="placeholder">
+            <div class="w3-col w3-container myPlaceholder" id="placeholder">
               
                 <!--      CANVAS          -->
                 <div class="col-sm-10 text-left" id= "myCanvas"></div>
@@ -169,99 +159,108 @@
                 
             </div>
                     
-            <div class="w3-col w3-container w3-hide-medium" style="width:20%; margin-top: 46px;" id="tools">
+            <div class="w3-col w3-container w3-hide-medium w3-hide-small" id="tools">
                 
-                      <div class="w3-row">
-                        <a onclick="openTab(event, 'Info');">
-                          <div id="info_Tab" class="w3-third tablink w3-bottombar w3-border-grey w3-hover-teal w3-padding">Info</div>
-                        </a>
-                        <a onclick="openTab(event, 'Tools');">
-                          <div id="tools_Tab" class="w3-third tablink w3-bottombar w3-border-white w3-hover-teal w3-padding">Tools</div>
-                        </a>
-                        <a onclick="openTab(event, 'Notas');">
-                          <div id="notas_Tab" class="w3-third tablink w3-bottombar w3-border-white w3-hover-teal w3-padding">Notas</div>
-                        </a>
-                      </div>
-
-                      <div id="Info" class="w3-container tab" style="display:block">
-                          <br>  
-                          <div id="descripcion">
-                                <label for="comment">Descripción</label>
-                                <textarea style="width:100%;height:100px; resize: none;" class="form-control pro-info" rows="5" id="comment"></textarea>
+                <ul class="tabs" role="tablist">
+<!--                info-->
+                    <li>
+                        <input type="radio" name="tabs-large" id="tab1-large" checked />
+                        <label for="tab1-large" 
+                               role="tab" 
+                               aria-selected="true" 
+                               aria-controls="panel1-large" 
+                               tabindex="0">Información</label>
+                        <div id="tab-content1-large" 
+                             class="tab-content-large" 
+                             role="tabpanel" 
+                             aria-labelledby="informacion" 
+                             aria-hidden="false">
+                            <label for="comment">Descripción</label>
+                            <textarea style="width:100%;height:100px; resize: none;" class="form-control pro-info" rows="5" id="comment"></textarea>
+                            <br>
+                            <label for="comment">Ubicación</label>
+                            <div id="map"></div>
                         </div>
-                        <br>    
-                        <label for="comment">Ubicación</label>
-                        <div id="map"></div>
-                      </div>
+                    </li>
+                    
+<!--                tools-->
+                    <li>
+                        <input type="radio" name="tabs-large" id="tab2-large" />
+                        <label for="tab2-large"
+                               role="tab" 
+                               aria-selected="false" 
+                               aria-controls="panel2-large" 
+                               tabindex="0">Tools</label>
+                        <div id="tab-content2-large" 
+                             class="tab-content-large"
+                             role="tabpanel" 
+                             aria-labelledby="tools" 
+                             aria-hidden="true">
+                            
+                            <div class="w3-col m1 w3-center" style="margin: 15px;">
+                                <a onclick="enableSetRotation()" class="btn tool-btn">
+                                    <div class="info_hover_box">Configurar rotaciones por defecto</div>
+                                    <i class="material-icons">3d_rotation</i>
+                                </a>
+                            </div>
+                            <div class="w3-col m1 w3-center" style="margin: 15px;">
+                                <a class="btn tool-btn save">
+                                    <div class="info_hover_box">Guardar cambios del proyecto</div>
+                                    <i class="material-icons">save</i>
+                                </a>
+                            </div>
+                            <div class="w3-col m1 w3-center" style="margin: 15px;">
+                                <a id="restore-meter" class="btn tool-btn">
+                                    <div class="info_hover_box">Resetear escala</div>
+                                    <i class="material-icons">settings_backup_restore</i>
+                                </a>
+                            </div>
+                            <div class="w3-col m1 w3-center" style="margin: 15px;">
+                                <a onclick="medirMetro()" class="btn tool-btn">
+                                    <div class="info_hover_box">Definir un metro</div>
+                                    <i class="material-icons">settings</i>
+                                </a>
+                            </div>
+                            <div class="w3-col m1 w3-center" style="margin: 15px;">
+                                <a id="measure-btn" onclick="testDistance()" class="btn tool-btn nodisplay measures-btns">
+                                    <div class="info_hover_box">Configura el metro antes de medir</div>
+                                    <i class="material-icons">space_bar</i>
+                                </a>
+                            </div>
+                            <div class="w3-col m1 w3-center" style="margin: 15px;">
+                                <a id="show_dt" class="btn tool-btn">
+                                    <div class="info_hover_box">Mostrar distancias medidas</div>
+                                    <i class="material-icons">filter_1</i>
+                                </a>
+                            </div>
+                            <div class="w3-col m1 w3-center" style="margin: 15px;">
+                                <a id="show_dst" class="btn tool-btn">
+                                    <div class="info_hover_box">Mostrar distancias medidas por segmentos</div>
+                                    <i class="material-icons">filter_2</i>
+                                </a>
+                            </div>
+                            <div class="w3-col m1 w3-center" style="margin: 15px;">
+                                <a id="show_areat" class="btn tool-btn">
+                                    <div class="info_hover_box">Mostrar áreas medidas</div>
+                                    <i class="material-icons">filter_3</i>
+                                </a>
+                            </div>
+                            <div class="w3-col m1 w3-center" style="margin: 15px;">
+                                <a id="measure-opt-btn" class="btn tool-btn">
+                                    <div class="info_hover_box">Medir areas</div>
+                                    <i class="material-icons">add_circle_outline</i>
+                                </a>
 
-                      <div id="Tools" class="w3-container tab" style="display:none">
-                          
-                          <div class="w3-row">
-                                    <div class="w3-col m1 w3-center" style="margin: 15px;">
-                                        <a onclick="enableSetRotation()" class="btn tool-btn">
-                                            <div class="info_hover_box">Configurar rotaciones por defecto</div>
-                                            <i class="material-icons">3d_rotation</i>
+                                <div class="sub-btns">
+                                        <a id="measure-areas-btn" onclick="medirArea(0)" class="btn tool-btn nodisplay measures-btns">
+                                            <div class="info_hover_box">Configura el metro antes de medir areas</div>
+                                            <i class="material-icons">crop_din</i>
                                         </a>
-                                    </div>
-                                    <div class="w3-col m1 w3-center" style="margin: 15px;">
-                                        <a id="test" class="btn tool-btn">
-                                            <div class="info_hover_box">Guardar cambios del proyecto</div>
-                                            <i class="material-icons">save</i>
+                                        <a id="measure-areas2-btn" onclick="medirArea(1)" class="btn tool-btn nodisplay measures-btns">
+                                            <div class="info_hover_box">Configura el metro antes de medir areas</div>
+                                            <i class="material-icons">crop_portrait</i>
                                         </a>
-                                    </div>
-                                    <div class="w3-col m1 w3-center" style="margin: 15px;">
-                                        <a id="restore-meter" class="btn tool-btn">
-                                            <div class="info_hover_box">Resetear escala</div>
-                                            <i class="material-icons">settings_backup_restore</i>
-                                        </a>
-                                    </div>
-                                    <div class="w3-col m1 w3-center" style="margin: 15px;">
-                                        <a onclick="medirMetro()" class="btn tool-btn">
-                                            <div class="info_hover_box">Definir un metro</div>
-                                            <i class="material-icons">settings</i>
-                                        </a>
-                                    </div>
-                                    <div class="w3-col m1 w3-center" style="margin: 15px;">
-                                        <a id="measure-btn" onclick="testDialogDistance()" class="btn tool-btn nodisplay measures-btns">
-                                            <div class="info_hover_box">Configura el metro antes de medir</div>
-                                            <i class="material-icons">space_bar</i>
-                                        </a>
-                                    </div>
-                                    <div class="w3-col m1 w3-center" style="margin: 15px;">
-                                        <a id="show_dt" class="btn tool-btn">
-                                            <div class="info_hover_box">Mostrar distancias medidas</div>
-                                            <i class="material-icons">filter_1</i>
-                                        </a>
-                                    </div>
-                                    <div class="w3-col m1 w3-center" style="margin: 15px;">
-                                        <a id="show_dst" class="btn tool-btn">
-                                            <div class="info_hover_box">Mostrar distancias medidas por segmentos</div>
-                                            <i class="material-icons">filter_2</i>
-                                        </a>
-                                    </div>
-                                    <div class="w3-col m1 w3-center" style="margin: 15px;">
-                                        <a id="show_areat" class="btn tool-btn">
-                                            <div class="info_hover_box">Mostrar áreas medidas</div>
-                                            <i class="material-icons">filter_3</i>
-                                        </a>
-                                    </div>
-                                    <div class="w3-col m1 w3-center" style="margin: 15px;">
-                                        <a id="measure-opt-btn" class="btn tool-btn">
-                                            <div class="info_hover_box">Medir areas</div>
-                                            <i class="material-icons">add_circle_outline</i>
-                                        </a>
-                                        
-                                        <div class="sub-btns">
-                                                <a id="measure-areas-btn" onclick="medirArea(0)" class="btn tool-btn nodisplay measures-btns">
-                                                    <div class="info_hover_box">Configura el metro antes de medir areas</div>
-                                                    <i class="material-icons">crop_din</i>
-                                                </a>
-                                                <a id="measure-areas2-btn" onclick="medirArea(1)" class="btn tool-btn nodisplay measures-btns">
-                                                    <div class="info_hover_box">Configura el metro antes de medir areas</div>
-                                                    <i class="material-icons">crop_portrait</i>
-                                                </a>
-                                        </div>
-                                    </div>
+                                </div>
                             </div>
                           
                             <table class="table table-striped table-hover tables" id="distances-table">
@@ -286,6 +285,7 @@
                                 <tbody>
                                 </tbody>
                             </table>
+                            
                           <table class="table table-striped table-hover tables" id="areas-table">
                                  <thead>
                                     <tr>
@@ -296,12 +296,24 @@
                                 <tbody>
                                 </tbody>
                             </table>
-
-                      </div>
-
-                      <div id="Notas" class="w3-container tab" style="display:none">
-                        
-                          <div class="modal fade" id="modalText" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <input type="radio" name="tabs-large" id="tab3-large" />
+                        <label for="tab3-large" 
+                               role="tab" 
+                               aria-selected="false" 
+                               aria-controls="panel3-large" 
+                               tabindex="0">Anotaciones</label>
+                        <div id="tab-content3-large" 
+                             class="tab-content-large" 
+                             role="tabpanel" 
+                             aria-labelledby="anotaciones" 
+                             aria-hidden="true">
+                          
+                            <div class="modal fade" id="modalText" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                               <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                   <div class="modal-header">
@@ -358,8 +370,11 @@
                                     Arrastra aquí: eliminar anotación
                                 </div>
                             </div>
-                          
-                      </div>
+                            
+                        </div>
+                    </li>
+                </ul>
+                
             </div>
         </div>
         

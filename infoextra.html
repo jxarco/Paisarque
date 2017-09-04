@@ -12,6 +12,7 @@
     <link href="css/custom.min.css" rel="stylesheet">
     <link href="css/header.css" rel="stylesheet">
     <link href="css/estilo.css" rel="stylesheet">
+    <link href="css/iconbar.css" rel="stylesheet">
     <link rel="stylesheet" href="css/RWD.css"> <!-- responsive web design -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
@@ -64,27 +65,88 @@
             <h2 class="w3-xxlarge" style="font-family: Oswald !important;"><b>APORTACIONES</b></h2>
             <br>
             
-            <ul  class="nav nav-tabs">
-                <li class="active"><a href="#imagenes" data-toggle="tab" aria-expanded="true">Imágenes</a></li>
-                <li> <a href="#pdfs" data-toggle="tab" aria-expanded="true">PDFs</a> </li>
-                <li> <a href="#texto" data-toggle="tab" aria-expanded="true">Texto</a> </li>
-                <li> <a href="#videos" data-toggle="tab" aria-expanded="true">Videos</a> </li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane fade active in" id="imagenes">
-                    
-                </div>
-                <div class="tab-pane fade" id="pdfs">
-                  
-                </div>
-                <div class="tab-pane fade" id="texto">
-                 
-                </div>
-                <div class="tab-pane fade" id="videos">
-                  
-                </div>
-            </div>
+            <ul class="tabs" role="tablist">
+                    <li>
+                        <input type="radio" name="tabs" id="tab1" checked />
+                        <label for="tab1" 
+                               role="tab" 
+                               aria-selected="true" 
+                               aria-controls="panel1" 
+                               tabindex="0">Imágenes</label>
+                        <div id="tab-content1" 
+                             class="tab-content-extra" 
+                             role="tabpanel" 
+                             aria-labelledby="imagenes" 
+                             aria-hidden="false">
+                            
+                            <div id="imagenes">
+                                <button id="testing">add image from url</button>
+                                <input id="image-url" style="height: 50px; width: 300px;">
+                            </div>
+                            
+                        </div>
+                    </li>
 
+                    <li>
+                        <input type="radio" name="tabs" id="tab2" />
+                        <label for="tab2"
+                               role="tab" 
+                               aria-selected="false" 
+                               aria-controls="panel2" 
+                               tabindex="0">PDF's</label>
+                        <div id="tab-content2" 
+                             class="tab-content-extra" 
+                             role="tabpanel" 
+                             aria-labelledby="pdfs" 
+                             aria-hidden="true">
+                            
+                            <div id="pdfs">
+                                
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li>
+                        <input type="radio" name="tabs" id="tab3" />
+                        <label for="tab3" 
+                               role="tab" 
+                               aria-selected="false" 
+                               aria-controls="panel3" 
+                               tabindex="0">Texto</label>
+                        <div id="tab-content3" 
+                             class="tab-content-extra" 
+                             role="tabpanel" 
+                             aria-labelledby="textos" 
+                             aria-hidden="true">
+                            
+                            <div id="texto">
+                                
+                            </div>
+                            
+                        </div>
+                    </li>
+                
+                    <li>
+                        <input type="radio" name="tabs" id="tab4" />
+                        <label for="tab4" 
+                               role="tab" 
+                               aria-selected="false" 
+                               aria-controls="panel4" 
+                               tabindex="0">Vídeos</label>
+                        <div id="tab-content" 
+                             class="tab-content-extra" 
+                             role="tabpanel" 
+                             aria-labelledby="videos" 
+                             aria-hidden="true">
+                            
+                            <div id="videos">
+                                
+                            </div>
+                            
+                        </div>
+                    </li>
+                </ul>
         </div></content><!--  content end-->
         
         <footer>
@@ -104,55 +166,24 @@
         <script src="litefile/litefileserver.js"></script>
         <script src="litefile/js/codeLite.js"></script>
         <script src="js/utils.js"></script>
-       <script type="text/javascript">
+        <script type="text/javascript">
             PAS.recover(); // load paisarque session
         </script>
+        <script src="js/app.js"></script>
         <script src="js/tools.js"></script>
         <script src="js/events.js"></script>
         <script>
+            LOADER.loadExtra();
+            window.extra = JSON.parse(sessionStorage.getItem("extra"));
             
-            function parseJSON(json)
-            {
-                console.log(json)
-                if(!json.extra){
-                    console.err("empty");
-                    return
-                }
-                var el = null;
-                for(var e in json.extra){
-                    el = json.extra[e];
-                    if (el.type == "image") {
-                        $("#imagenes").append(build[el.type](el.data));
-                    } else if (el.type == "text") {
-                        $("#texto").append(build[el.type](el.data));
-                    } else if (el.type == "pdf") {
-                        $("#pdfs").append(build[el.type](el.data));
-                    } else if (el.type == "youtube") {
-                        $("#videos").append(build[el.type](el.data));
-                    }
-                }
+            $("#testing").click(function(){
+                var data = $("#image-url").val();
                 
-            }
+                window.extra.push({type: "image", data: data});
+                sessionStorage.setItem("extra", JSON.stringify(window.extra));
+                sessionStorage.setItem("update", 1);
+            });
             
-            var build = {};
-            build.pdf = function(url){
-                var t = "<div class='embed-responsive' style='padding-bottom:75vh'>"
-                    t+= "<object data='"+url+"' type='application/pdf' width='100%' height='100%'></object>"
-                    t+= "</div>";
-                return t;    
-            }
-            
-            build.text = function(text){
-                return '<p>'+text+'</p></br>';
-            }
-            
-            build.youtube = function(id){
-                return '<div align="center" class="embed-responsive embed-responsive-16by9"><iframe width="560" height="315" src="https://www.youtube.com/embed/'+id+'" frameborder="0" allowfullscreen></iframe></div>';
-            }
-            build.image = function(data){
-                return '<img src="'+data+'" class="img-responsive" alt="Responsive image">';
-            }
-                 
         </script>
     </body>
     
