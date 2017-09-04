@@ -207,25 +207,35 @@ function putCanvasMessage(text, ms, options)
 * @
 */
 
-function testDialog()
+function testDialog(options)
 {
-   var location = $("#placeholder");
+    options = options || {};
+    
+    var upperbtn = options.upperbtn || "Añadir punto";
+    var lowerbtn = options.lower || "Finalizar";
+    
+    var location = $("#placeholder");
     var html = "<div " +
                   "class='draggable ui-widget-content' " +
                   "style='" +
                   "width: 30%; " +
-                  "margin-left: 5%; " +
+                  "margin-left: 60%; " +
                   "margin-top: 20px; " +
                   "text-align: center;'>" +
-                  "<h5>Dialog</h5>" +// text 
+                  "<h5>Herramientas</h5>" +// text 
                   "<div class='dialog-option' style='display: flex;'>" +
-                    "<button id='add-dialog' class='dialog-btn'>Añadir punto</button>" +
+                    "<button id='add-dialog' class='dialog-btn'>" + upperbtn + "</button>" +
                     "</div>" +
                   "<div class='dialog-option' style='display: flex;'>" +
-                    "<button id='end-dialog' class='dialog-btn'>Finalizar</button>" +
+                    "<button id='end-dialog' class='dialog-btn'>" + lowerbtn + "</button>" +
                     "</div>" +
                 "</div>";
-    location.append(html);
     
+    location.append(html);
     $( ".draggable" ).draggable();
+    
+    if(options.hideupper)
+        $("#add-dialog").hide();
+    if(options.hidelower)
+        $("#end-dialog").hide();
 }

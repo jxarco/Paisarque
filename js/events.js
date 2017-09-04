@@ -67,12 +67,18 @@ $('.pro-info').keyup(function(e)
     project._description = $(this).val();
 });
 
+/*
+*   Button: Clear configuration of meter in the project
+*/
+$("#restore-meter").click(function(){
+    project.restoreMeter();
+})
 
 /*
 *   Button: Delete all annotations in project
 */
-$("#delete-anot-btn").click(function() 
-{
+$("#delete-anot-btn").click(function() {
+    
     if(!project.getAnnotations().length)
         return;
     

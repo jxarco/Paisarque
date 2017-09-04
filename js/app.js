@@ -350,57 +350,62 @@ function changeVizAnotInCanvas(showing)
 
 function medirMetro()
 {
-    putCanvasMessage("Selecciona dos puntos, la linea recta que los une corresponderá a un metro", 2500);
-    
-    var primerPunto     = true;
-    var segundoPunto    = false;
-    
-    context.onmousedown = function(e) 
+    if(project._meter !== -1)
     {
-        if (primerPunto) {
+        putCanvasMessage("La configuración del metro ya ha sido realizada en este proyecto. Use la herramienta 'Reset' en el menú de herramientas.", 5000, {type: "error"});    
+        return;
+    }
+    
+    // clear first
+    destroySceneElements(scene.root.children, "config");
+    $(".draggable").remove();
+    
+    testDialog({hidelower: true, upperbtn: "Seleccionar"}); // open dialog
+    putCanvasMessage("Selecciona dos puntos, la linea recta que los une corresponderá a un metro", 2500);
+    window.tmp = [];
+    
+    $("#add-dialog").click(function(){
         
+        $("#myCanvas").css("cursor", "crosshair");
+        
+        context.onmousedown = function(e) 
+        {
             var result = vec3.create();
             var ray = camera.getRay( e.canvasx, e.canvasy );
             var node = scene.testRay( ray, result, undefined, 0x1, true );
             
             if (node) {
-                Indication.SceneIndication(scene, result);
-                firstPoint = result;
-                primerPunto = false;
-                segundoPunto = true;
-            }
-            
-        } else if (segundoPunto) {
-            
-            var result = vec3.create();
-            var ray = camera.getRay( e.canvasx, e.canvasy );
-            var node = scene.testRay( ray, result, undefined, 0x1, true );
-            
-            // Si ha habido colision, se crea un punto y se abre una ventana de texto para escribir la anotacion
-            if (node) {
-                Indication.SceneIndication(scene, result);
-                secondPoint = result;
+                var ind = new SceneIndication(scene, result);
+                window.tmp.push(result);
+                context.onmousedown = function(e) {}
+                $("#myCanvas").css("cursor", "default");
                 
-                var newPoint = vec3.create();
-                newPoint[0] = Math.abs(firstPoint[0] - secondPoint[0]);
-                newPoint[1] = Math.abs(firstPoint[1] - secondPoint[1]);
-                newPoint[2] = Math.abs(firstPoint[2] - secondPoint[2]);
-                
-                project._meter = vec3.length(newPoint);
-                $("#measure-btn").find("div").html("Medir distancias");
-                $("#measure-areas-btn").find("div").html("Area de planta");
-                $("#measure-areas2-btn").find("div").html("Area de alzado");
-                $(".measures-btns").css('opacity', '1');
-                
-                segundoPunto = false;
-            
-                setTimeout(function(){
-                    destroySceneElements(scene.root.children, "config");
-                }, 500);
+                if(window.tmp.length === 2)
+                    $("#end-dialog").click();
             }
         }
-    } 
+    });
     
+    $("#end-dialog").click(function(){
+        
+        var newPoint = vec3.create();
+        var cur = window.tmp[0];
+        var next = window.tmp[1];
+        newPoint[0] = Math.abs(cur[0] - next[0]);
+        newPoint[1] = Math.abs(cur[1] - next[1]);
+        newPoint[2] = Math.abs(cur[2] - next[2]);
+
+        project._meter = vec3.length(newPoint);
+        $(".draggable").remove();
+        $("#measure-btn").find("div").html("Medir distancias");
+        $("#measure-areas-btn").find("div").html("Area de planta");
+        $("#measure-areas2-btn").find("div").html("Area de alzado");
+        $(".measures-btns").css('opacity', '1');
+
+        setTimeout(function(){
+            destroySceneElements(scene.root.children, "config");
+        }, 500);
+    });
 }   
 
 function testDialogDistance()
@@ -519,7 +524,7 @@ function testDialogDistance()
         linea.flags.depth_test = false;
         scene.root.addChild(linea);
         
-        // rremove dialog
+        // remove dialog
         $(".draggable").remove();
         
         if(window.tmp.length === 2)
@@ -719,7 +724,9 @@ function medirArea(vista)
         area /= Math.pow(project._meter, 2);
         var msg = "AREA: " + area;
         putCanvasMessage(msg, 5000, {type: "response"});
-        project.insertArea(points2D, area, index, true);
+        
+        // passing 3d points list
+        project.insertArea(points, area, index, true);
         
         //clear all
         disableAllFeatures();
@@ -773,8 +780,8 @@ function viewClosedMeasure(id, area)
     
     var points = measure.points;
     
-        for(var i = 0; i < points.length; ++i)
-            var p = new SceneIndication(scene, [points[i][0], points[i][1], points[i][2]], {depth_test: false, type: "view"});
+    for(var i = 0; i < points.length; ++i)
+        var p = new SceneIndication(scene, points[i], {depth_test: false, type: "view"});
     
     var vertices = [];
     for(var i = 0; i < points.length; ++i)

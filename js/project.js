@@ -211,6 +211,18 @@ Project.prototype.setRotations = function( rotation )
 *   @class Project
 */
 
+Project.prototype.restoreMeter = function()
+{
+    for(var i = 0; i < this._measures.length; ++i)
+    {
+        var msr = this._measures[i];
+        msr.distance = msr.distance * this._meter;
+    }
+    
+    putCanvasMessage("Actualiza la página para ver los cambios en las tablas.", 3000, {type: "alert"});
+    this._meter = -1;
+}
+
 Project.prototype.getMeasurements = function()
 {
     return this._measures;
