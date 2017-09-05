@@ -290,7 +290,8 @@ $("#formUploadProject").on('submit', function(e)
         "extra": listaExtra,
         "anotaciones": [],
         "medidas": [],
-        "segmentos": []
+        "segmentos": [],
+        "areas": []
     };
         
     var fileNameString = "data/" + user + "/" + project_id + '.json';

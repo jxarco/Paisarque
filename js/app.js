@@ -172,7 +172,7 @@ function init(current_project, meshURL, textureURL)
     
     // tenemos que pensar el caso en que haya mas de una textura
     if (!isArray(textureURL)) {
-        console.log(textureURL);
+//        console.log(textureURL);
         obj.texture = textureURL;
     }
     
@@ -200,8 +200,8 @@ function init(current_project, meshURL, textureURL)
             putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "alert"}); 
     };
 
-//    renderer.loadMesh(obj.mesh, makeVisible);
-//    renderer.loadTexture(obj.texture, renderer.default_texture_settings);
+    renderer.loadMesh(obj.mesh, makeVisible);
+    renderer.loadTexture(obj.texture, renderer.default_texture_settings);
     
     obj.scale([5,5,5]);
     pivot.addChild( obj );

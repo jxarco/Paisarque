@@ -355,7 +355,7 @@ Project.prototype.insertArea = function( points, area, index, display )
     var bodyTable = table.find('tbody');
     var id = last_area_measure_id++;
     
-    var vista = index === 0 ? "Planta" : "Alzado";
+    var vista = index === 1 ? "Planta" : "Alzado";
     
     var row = "<tr onclick='viewClosedMeasure(" + id + ", true)' id=" + id + " a class='pointer'>" + 
     "<td>" + vista + "</td>" + 
@@ -367,7 +367,7 @@ Project.prototype.insertArea = function( points, area, index, display )
     showing_areas_table = display;
     revealDOMElements(table, showing_areas_table);
     
-    console.log("pushing");
+    console.log(points);
     
     this._areas.push( {
         "id": id,
@@ -450,7 +450,17 @@ Project.prototype.FROMJSON = function( data )
     len = data.areas ? data.areas.length : 0;
     
     for(var i = 0; i < len; i++)
-        this.insertArea( data.areas[i].points, data.segmentos[i].area, data.segmentos[i].index, false );
+        {
+            var points = [];
+            for(var j = 0; j < data.areas[i].points.length; j++)
+                {
+                    var obj = data.areas[i].points[j];
+                    var point = [obj[0], obj[1], obj[2]];
+                    points.push(point);
+                }
+            this.insertArea( points, data.areas[i].area, data.areas[i].index, false );    
+        }
+        
 }
 
 /*  
