@@ -25,7 +25,6 @@ var PAS = {
             session = JSON.parse(localStorage.session);
             current_user = session.user.username;    
         }
-            
     }
 }
 
@@ -111,23 +110,6 @@ function loadJSON()
         }
     });
 }
-
-function loadExtraJSON()
-{
-    $.ajax({dataType: "json",
-        url: "data/" + current_project + '.json',
-        error: function(error)
-            {
-                console.log(error)
-            },
-            success:function(data)
-            {
-                if(window.parseExtraJSON)
-                    parseExtraJSON(data);
-            }
-    });
-}
-
 
 /*
 * Sliders initialization

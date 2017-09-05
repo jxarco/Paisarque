@@ -32,10 +32,16 @@ function parseJSON(json)
     } 
     
     // update extra list if update needed
-    if(sessionStorage.getItem("update"))
-        project._extra = JSON.parse(sessionStorage.getItem("extra"));
-    else
+    if(!sessionStorage.getItem("update")){
         sessionStorage.setItem("extra", JSON.stringify(project._extra));
+    }
+    else if(sessionStorage.getItem("update") == 1)
+    {
+        project._extra = JSON.parse(sessionStorage.getItem("extra"));
+        sessionStorage.setItem("update", 0);
+        console.log("updated extra!!!");
+    }
+        
     
     if(project._meter !== -1)
     {
@@ -194,8 +200,8 @@ function init(current_project, meshURL, textureURL)
             putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "alert"}); 
     };
 
-    renderer.loadMesh(obj.mesh, makeVisible);
-    renderer.loadTexture(obj.texture, renderer.default_texture_settings);
+//    renderer.loadMesh(obj.mesh, makeVisible);
+//    renderer.loadTexture(obj.texture, renderer.default_texture_settings);
     
     obj.scale([5,5,5]);
     pivot.addChild( obj );

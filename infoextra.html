@@ -13,6 +13,7 @@
     <link href="css/header.css" rel="stylesheet">
     <link href="css/estilo.css" rel="stylesheet">
     <link href="css/iconbar.css" rel="stylesheet">
+    <link href="css/infoextra.css" rel="stylesheet">
     <link rel="stylesheet" href="css/RWD.css"> <!-- responsive web design -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
@@ -79,9 +80,11 @@
                              aria-labelledby="imagenes" 
                              aria-hidden="false">
                             
+                            <h6 style="font-family: Lato !important;">Desplázate al apartado 3D para guardar los cambios!</h6>
+                            
                             <div id="imagenes">
-                                <button id="testing">add image from url</button>
-                                <input id="image-url" style="height: 50px; width: 300px;">
+                                <button id="testing">Añadir imágen desde url</button>
+                                <input id="image-url">
                             </div>
                             
                         </div>
@@ -173,8 +176,8 @@
         <script src="js/tools.js"></script>
         <script src="js/events.js"></script>
         <script>
-            LOADER.loadExtra();
             window.extra = JSON.parse(sessionStorage.getItem("extra"));
+            LOADER.loadExtra(window.extra);
             
             $("#testing").click(function(){
                 var data = $("#image-url").val();
@@ -182,6 +185,7 @@
                 window.extra.push({type: "image", data: data});
                 sessionStorage.setItem("extra", JSON.stringify(window.extra));
                 sessionStorage.setItem("update", 1);
+                document.location = "infoextra.html?r=" + current_project;
             });
             
         </script>
