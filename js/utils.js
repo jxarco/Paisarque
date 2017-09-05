@@ -155,6 +155,7 @@ function drop(ev) {
     if(ev.target.id === "drag-cont")
     {
         $("#drag-cont").removeClass("drag-cont-over");
+//        console.log(data);
         project.deleteAnotation(data);
     }
 }

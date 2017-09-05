@@ -117,13 +117,18 @@ Project.prototype.deleteAnotation = function( id )
     //anotations list
     var index = null;
 	for(var i = 0; i < this._anotations.length; ++i)
-        if(this._anotations[i].id == id)
-                index = i;
+        if(this._anotations[i].id == id){
+            index = i;
+            break;
+        }
+                
          
     if(index === null)
         throw("no annotation to delete");
     
     //table
+//    console.log($("#" + (index)));
+//    console.log($("#" + (index+1)));
     $("#" + (index+1)).remove();
     
     // reorder table

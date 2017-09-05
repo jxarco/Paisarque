@@ -237,7 +237,7 @@ function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id)
 * @param ms: time to display before hidding
 * @param options: color, background-color, font-size 
 */
-var last_message_id = 0;
+var last_message_id = 999;
 function putCanvasMessage(text, ms, options)
 {
     var options = options || {};
