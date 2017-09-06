@@ -124,8 +124,8 @@ button:hover{
     padding:0;
     margin-top: 46px;
     height: calc(100vh - 46px);
-    width: calc(100% - 350px);
-    max-width: calc(100% - 350px);
+    width: calc(100% - 355px);
+    max-width: calc(100% - 355px);
     float: left;
     overflow-y: hidden;
     
@@ -151,22 +151,18 @@ button:hover{
 }
 
 #dragbar{
-   background-color: rgb(162, 162, 162);   
-   height: calc(100vh - 46px);
-   float: right;
-   width: 2px;
-   cursor: col-resize;
-}
-
-#dragbar:hover{
-    width: 6px;
-    transition: 0.5;
+    background-color: rgb(162, 162, 162);   
+    height: calc(100vh - 46px);
+    float: right;
+    width: 2px;
+    cursor: col-resize;
+    opacity: 0.3;
 }
 
 #ghostbar{
     width: 2px;
     background-color: #000;
-    opacity: 0.3;
+    opacity: 0.1;
     position: absolute;
     cursor: col-resize;
     z-index: 999
@@ -175,12 +171,11 @@ button:hover{
 #myCanvas {
     background-position: center;
     overflow: hidden;
-/*    display: none;*/
     visibility: hidden;
     z-index: 0 !important;
-/*    border: 3px solid blue;*/
-    height: 100%;
-    width: 100%;
+    width: 99.75%;
+    
+    /*    border: 3px solid blue;*/
 }
 
 #cont-msg{

@@ -449,13 +449,15 @@
                    if (dragging) 
                    {
                        var percentage = (e.pageX / window.innerWidth) * 100;
-                       var mainPercentage = 100-percentage;
+                       var mainPercentage = 100 - percentage;
 
                        $('#placeholder').css("width",percentage + "%");
                        $('#tools').css("width", mainPercentage + "%");
                        $('#ghostbar').remove();
                        $(document).unbind('mousemove');
                        dragging = false;
+                       
+                       APP.resize();
                    }
                 });
 
