@@ -29,18 +29,8 @@ function parseJSON(json)
 {
     if(project === null){
         project = new Project( json, current_user, {no_construct: false} );
+        project.check();
     } 
-    
-    if(project._meter !== -1)
-    {
-        $("#measure-btn").find("div").html("Medir distancias");
-        $("#measure-areas-btn").find("div").html("Area de planta");
-        $("#measure-areas2-btn").find("div").html("Area de alzado");
-        $(".measures-btns").css('opacity', '1');
-    }
-    
-    if(project._description !== "nodesc")
-        $(".pro-info").val(project._description);
     
     /****************************************************************/
     /* render stuff*/
@@ -188,8 +178,8 @@ function init(current_project, meshURL, textureURL)
             putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "alert"}); 
     };
 
-    renderer.loadMesh(obj.mesh, makeVisible);
-    renderer.loadTexture(obj.texture, renderer.default_texture_settings);
+//    renderer.loadMesh(obj.mesh, makeVisible);
+//    renderer.loadTexture(obj.texture, renderer.default_texture_settings);
     
     obj.scale([5,5,5]);
     pivot.addChild( obj );
@@ -337,7 +327,7 @@ function anotar(modoAnotacion)
         }
         
     } else if (!modoAnotacion) {
-        console.log("Modo anotación desactivado");
+//        console.log("Modo anotación desactivado");
         $("#desAnot").css('opacity', '0.2');
         $("#actAnot").css('opacity', '1');
         context.onmousedown = function(e) {}
@@ -404,9 +394,6 @@ function medirMetro()
 
         project._meter = vec3.length(newPoint);
         $(".draggable").remove();
-        $("#measure-btn").find("div").html("Medir distancias");
-        $("#measure-areas-btn").find("div").html("Area de planta");
-        $("#measure-areas2-btn").find("div").html("Area de alzado");
         $(".measures-btns").css('opacity', '1');
 
         setTimeout(function(){

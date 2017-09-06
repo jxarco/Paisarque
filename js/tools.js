@@ -18,7 +18,7 @@ var LOADER = {
     load: function(){
         if(current_project !== null)
             loadJSON();
-        window.onresize = resize;
+        window.onresize = APP.resize;
         init_sliders(); // canvas rotations
     },
     loadExtra: function(){

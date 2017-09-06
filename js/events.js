@@ -176,8 +176,9 @@ $(".viz_on").click(function()
     changeVizAnotInCanvas(viz_anotations);
     
     var extra = viz_anotations === false ? "" : "_off";
-    var tooltip = viz_anotations === false ? "Mostrar anotaciones" : "Esconder anotaciones";
-    $(this).html( "<div class='info_hover_box'>" + tooltip + "</div><i class='material-icons'>visibility" + extra + "</i>" );
+    var tooltip = viz_anotations === false ? "Mostrar" : "Esconder";
+    $(this).html( "<i class='material-icons'>visibility" + extra + "</i>" +
+                "<p class='info_hover_box'>" + tooltip + "</p>");
 });
 
 /*

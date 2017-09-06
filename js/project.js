@@ -520,6 +520,22 @@ Project.prototype.save = function( overwrite, extra )
     });
 }
 
+
+/*  
+*   @prototype check
+*   Cambiamos propiedades de la página dependiendo de 
+*   atributos del proyecto
+*/
+Project.prototype.check = function()
+{
+    if(this._meter !== -1)
+        $(".measures-btns").css('opacity', '1');
+    
+    if(this._description !== "nodesc")
+        $(".pro-info").val(this._description);
+}
+
+
 /*  
 *   @prototype fill
 *   Crea un proyecto a partir de un string con los datos

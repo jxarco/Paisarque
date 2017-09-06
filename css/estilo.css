@@ -232,21 +232,44 @@ button:hover{
 }
 
 .tool-btn{
-    width: 35px;
-    height: 35px;
-    padding-top: 5px;
-    padding-left: 5px;
+    width: 60px;
+    height: 60px;
+    padding-top: 15px;
+/*    padding-left: 15px;*/
     background: lightgray;   
-    margin: 2px;
     vertical-align: middle;
     color: rgb(30, 30, 30) !important;
 }
 
-.tool-btn.anot{
-    margin-bottom: 5%;
+.info_hover_box{
+    display: none;
+    width: 100%;
+    font-size: 10px;
+}
+
+.tool-btn:hover{
+    color: rgb(62, 164, 155) !important;
+    margin-left: -20px;
+    width: 95px;
+    transition: 0.8s;
+    
     padding-top: 5px;
-    padding-left: 5px;
-    margin: 12.5px;
+}
+
+.tool-btn:hover p {
+    display: block;
+    transition: 4s;
+    text-align: center;
+}
+
+.m2{
+    margin: 23px;
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+.tool-btn.anot{
+    margin: 5px;
 }
 
 .tool-btn.info{
@@ -258,32 +281,8 @@ button:hover{
     color: black !important;
 }
 
-
 .tool-btn.nodisplay{
     opacity: 0.2;
-}
-
-
-.tool-btn:active{
-    color: #bbccff !important;
-}
-
-.tool-btn:hover{
-    color: #bbccff !important;
-}
-
-.tool-btn div{
-    visibility: hidden;
-    transition: visibility 0s, opacity 0.3s linear;
-    position: absolute;
-    padding: 10px;
-    background-color: rgba(70, 70, 70, 0.75);
-    color: #fff;
-    font-size: 17;
-    font-weight: 200;
-    margin-top: -50px;
-    margin-left: -120px;
-    z-index: 100 !important;
 }
 
 @media only screen and (max-width: 993px) {
@@ -291,12 +290,6 @@ button:hover{
     .tool-btn div{
         margin-left: 0px !important;
     }
-}
-
-.tool-btn:hover div {
-    visibility: visible;
-    opacity: 1;
-    text-align: center;
 }
 
 .sub-btns{
