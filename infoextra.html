@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Info PaisArque</title>
+    <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png"> 
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -83,8 +84,12 @@
                             <h6 style="font-family: Lato !important;">Desplázate al apartado 3D para guardar los cambios!</h6>
                             
                             <div id="imagenes">
-                                <button id="testing">Añadir imágen desde url</button>
-                                <input id="image-url">
+                                <div id="url-loc">
+                                    <input id="image-url" placeholder="Cargar desde URL">
+                                    <i class="material-icons extra-btn" id="testing">add_circle</i>
+                                    <i class="material-icons extra-btn" id="testing" data-style="slide-up"  data-toggle="modal" data-target="#TESTModal"  >file_upload</i>
+                                    <i class="material-icons extra-btn" id="refresh">refresh</i>
+                                </div>
                             </div>
                             
                         </div>
@@ -150,7 +155,41 @@
                         </div>
                     </li>
                 </ul>
-        </div></content><!--  content end-->
+        </div>
+        
+        <div id="TESTModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+             <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
+                    <h4 class="modal-title" id="myModalLabel">Subir imagen</h4>
+                  </div>
+                  <div class="modal-body" id="idModalBody">
+                      <form class="form-horizontal" id="formAddImage" method="POST" role="form" enctype="multipart/form-data">
+                        <fieldset id="fieldset">
+                            <div class="form-group">
+                                <label for="image" class="col-lg-2 control-label">Imagen</label>
+                                <div class="col-lg-10">
+                                    <input type="file" class="form-control" id="image" name="image">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="modal-footer">
+                            <div class="form-group">
+                                <div class="col-lg-10 col-lg-offset-2">
+                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                    <button type="submit" name="submit" value="send" class="btn btn-primary" >Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+        
+            
+        </content><!--  content end-->
         
         <footer>
         
@@ -168,6 +207,7 @@
         <script type="text/javascript" src="js/extra/rendeer.js"></script>
         <script src="litefile/litefileserver.js"></script>
         <script src="litefile/js/codeLite.js"></script>
+        <script src="js/project.js"></script>
         <script src="js/utils.js"></script>
         <script type="text/javascript">
             PAS.recover(); // load paisarque session
@@ -176,18 +216,7 @@
         <script src="js/tools.js"></script>
         <script src="js/events.js"></script>
         <script>
-            window.extra = JSON.parse(sessionStorage.getItem("extra"));
-            LOADER.loadExtra(window.extra);
-            
-            $("#testing").click(function(){
-                var data = $("#image-url").val();
-                
-                window.extra.push({type: "image", data: data});
-                sessionStorage.setItem("extra", JSON.stringify(window.extra));
-                sessionStorage.setItem("update", 1);
-                document.location = "infoextra.html?r=" + current_project;
-            });
-            
+            LOADER.loadExtra();
         </script>
     </body>
     

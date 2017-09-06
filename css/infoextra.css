@@ -6,25 +6,29 @@
     margin-top: 10px;
 }
 
-#testing{
-    height: 50px; 
-    width: 200px;   
-    background: linear-gradient(rgb(42, 134, 125), rgb(62, 164, 155));
-    box-shadow: 0 0 2px black;
-    border: none;
+.extra-btn{
+/*    box-shadow: 0 0 2px black;*/
+    padding-top: 12px !important;
+    border: none !important;
     outline: none;
-    color: white;
-    font-size: 15px;
+    color: gray;
+    cursor: pointer;
+    margin-left: 10px;
 }
 
-#testing:hover{
-    background: linear-gradient(rgb(82, 184, 175), rgb(92, 194, 185)) !important;
-    color: rgb(50, 50, 50);
+.extra-btn:hover{
+    color: rgb(82, 184, 175);
 }
 
 #image-url{
     height: 50px; 
-    width: 200px;   
+    width: 200px;  
+    padding: 5px;
+}
+
+#url-loc{
+/*    border: 3px solid red; */
+    display: flex;
 }
 
 /* @text */

@@ -8,11 +8,12 @@ var last_measure_id         = 0;
 var last_seg_measure_id     = 100;
 var last_area_measure_id    = 1000;
 
-function Project( data, user )
+function Project( data, user, flags )
 {
 	if(this.constructor !== Project)
 		throw("You must use new to create a Project");
-	this._ctor( data );
+    if(!flags.no_construct)
+	   this._ctor( data );
     this._user = user;
 }
 
@@ -28,20 +29,13 @@ Project.prototype._ctor = function( data )
 }
 
 /*
-*   @prototype insertExtra
+*   @prototype pushExtra
 *   Insert extra information to the _extra list.
 *   @param type: data type (pdf, image, etc)
 *   @param data: path to data (or link)
 */
-Project.prototype.insertExtra = function( type, data )
+Project.prototype.pushExtra = function( type, data )
 {
-    var dataURL = "";
-    
-//	if(type === 'pdf' || type === 'image')
-//        dataURL = 'data/' + this._user + '/' + this._id + '/';
-//    if(type === 'text' || type === 'youtube')
-//        dataURL = data;
-    
     this._extra.push( {
         type: type,
         data: data
@@ -387,6 +381,11 @@ Project.prototype.insertArea = function( points, area, index, display )
 *   @class Project
 */
 
+/*  
+*   @prototype FROMJSON
+*   Crear el proyecto a partir del json creado
+*   @param data
+*/
 Project.prototype.FROMJSON = function( data )
 {
     data = data || {};
@@ -519,6 +518,36 @@ Project.prototype.save = function( overwrite, extra )
                 console.log(error);
             }
     });
+}
+
+/*  
+*   @prototype fill
+*   Crea un proyecto a partir de un string con los datos
+*   @param data
+*/
+Project.prototype.fill = function( data )
+{
+//    console.log(data);
+    var copy = JSON.parse(data);
+    
+    this._json = copy._json;
+    this._id = copy._id;
+    this._uid = copy._uid;
+    this._description = copy._description;
+    this._author = copy._author;
+    this._location = copy._location;
+    this._coordinates = copy._coordinates;
+    this._render = copy._render;
+    this._rotations = copy._rotations;
+    this._mesh = copy._mesh;
+    this._textures = copy._textures;
+    this._anotations = copy._anotations;
+    
+    this._extra = copy._extra;
+    this._meter = copy._meter;
+    this._measures = copy._measures;
+    this._segments = copy._segments;
+    this._areas = copy._areas;
 }
 
 Project.prototype.delete = function()

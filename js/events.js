@@ -3,6 +3,75 @@ var pdfLinkCounter = 0;
 var imagenLinkCounter = 0;
 var textLinkCounter = 0;
 
+/* EXTRA STUFF */
+
+$("#testing").click(function(){
+    var data = $("#image-url").val();
+
+    if(data == "")
+        return 0;
+        
+    copy.pushExtra("image", data);
+    $("#image-url").html("");
+    parseExtraJSON(copy._extra);
+});
+
+$("#refresh").click(function(){
+    parseExtraJSON(copy._extra);
+});
+
+$("#formAddImage").on('submit', function(e)
+{
+    console.log("uploading image");
+    e.preventDefault();
+    $('#TESTModal').modal('hide');   
+    
+    //Cogemos los valores y quitamos el comportamiento por defecto del botón submit
+    var values = getFormValues(this);
+    
+    /*       guest/grave       */
+    var project_id = current_project;
+
+    // Enviar tambien la informacion de en que usuario estamos
+    // para subir los ficheros a la carpeta que le corresponde
+    
+    var formData = new FormData(this);
+    var user = getQueryVariable("user") || "guest";
+    formData.append("user", user);
+    formData.append("id", project_id);
+    
+    var urlImage = project_id + "/"; 
+    
+    $(':file').each(function() {
+        
+        if ($(this)[0]["value"] == ""){
+            alert("Asegúrate de subir una imagen!");
+            return 0;
+        }
+        
+    });
+    
+    $('#loadingModal').modal('show');   
+    
+    $.ajax( {
+        url: 'uploadImage.php',
+        type: 'POST',
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false, 
+        success: function(data) {
+            $('#loadingModal').modal('hide');               
+        }
+    } );
+    
+    // Resetear campos del form
+    $(this).trigger("reset");
+    
+});
+
+
+
 /*
 *   Button: Insert annotation to project
 */
@@ -165,13 +234,9 @@ $("#formUploadProject").on('submit', function(e)
 {
     console.log("uploading project");
     e.preventDefault();
-    
-    
-    
     $('#GSCCModal').modal('hide');   
     
     //Cogemos los valores y quitamos el comportamiento por defecto del botón submit
-    
     var values = getFormValues(this);
     
     // Por si el nombre del proyecto tiene espacios!
@@ -181,17 +246,7 @@ $("#formUploadProject").on('submit', function(e)
     // para subir los ficheros a la carpeta que le corresponde
     
     var formData = new FormData(this);
-    
-    var user = "guest";
-    var query = window.location.search.substring(1);
-    var vars = query.split("?");
-    
-    for (var i=0;i<vars.length;i++) {
-        var pair = vars[i].split("=");
-        if(pair[0] == "user") {
-            user = pair[1];
-        }
-    }
+    var user = getQueryVariable("user") || "guest";
     formData.append("user", user);
     
     var urlMesh = project_id + "/"; 

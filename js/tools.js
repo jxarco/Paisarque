@@ -4,6 +4,8 @@ var current_project = getQueryVariable("r") || default_project;
 var proj_to_delete = "test";
 var delete_project_active = false;
 
+var copy = null;
+
 // LOAD DATA FROM JSON
 
 // prevent of NO LOGIN
@@ -19,17 +21,14 @@ var LOADER = {
         window.onresize = resize;
         init_sliders(); // canvas rotations
     },
-    loadExtra: function(data){
+    loadExtra: function(){
+        var data = sessionStorage.getItem("project");
+        if(copy === null){
+            console.log("creating new");
+            copy = new Project({}, current_user, {no_construct: true});
+            copy.fill(data);
+        }
         
-        if(current_project !== null)
-            {
-//                var data = window.extra;
-                if(window.parseExtraJSON)
-                    parseExtraJSON(data);
-                else 
-                    console.log("claro q no");
-            }
-            
     }
 };
 
@@ -77,23 +76,26 @@ function deleteProject(user, project)
     });
 };
 
-function loadContent(url, project)
+function loadContent(url, id)
 {
     if(!delete_project_active)
     {
         console.log("loading content " + url);
         
         if(url === 'inicio.php')
-        {
             document.location.href = url+"?user=" + current_user;
-            return;
+        else if(url === 'modelo.html')
+            document.location.href = url+"?r="+(id || current_project).toString();    
+        else {
+            // pass project information to reload it later
+            sessionStorage.setItem("project", JSON.stringify(project));
+            document.location.href = url+"?r="+(id || current_project).toString();    
         }
-        else
-            document.location.href = url+"?r="+(project || current_project).toString();    
+            
     }
     else
     {
-        var dproject = project.split('/')[1];
+        var dproject = id.split('/')[1];
         deleteProject(current_user, dproject);
     }
 }
@@ -130,9 +132,15 @@ function parseExtraJSON(json)
 {
 //    console.log(json);
     if(!json){
-        console.err("empty");
+        console.error("empty");
         return;
     }
+    
+    $("img").remove();
+    $("#texto").empty();
+    $("#pdfs").empty();
+    $("#videos").empty();
+    
     var el = null;
     for(var e in json){
         el = json[e];
