@@ -38,7 +38,8 @@ SceneIndication.prototype.ball = function(scene, position, options)
                 ball.shader = null;
             }
             ball.id = options.id;
-            ball.color = options.color;
+            if(options.color)
+                ball.color = options.color;
         }
             
     if(scene !== null)

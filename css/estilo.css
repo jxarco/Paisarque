@@ -8,6 +8,10 @@ body, html{
     width: 100% !important;
     height: 100% !important;
 /*    overflow-y: hidden;*/
+    
+    -webkit-user-select: none; /* Chrome/Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+ */
 }
 
 content{
@@ -121,8 +125,11 @@ button:hover{
     margin-top: 46px;
     height: calc(100vh - 46px);
     width: calc(100% - 350px);
-/*    border: 3px solid green;*/
-/*    position: absolute;*/
+    max-width: calc(100% - 350px);
+    float: left;
+    overflow-y: hidden;
+    
+    /*    border: 1px solid green;*/
 }
 
 @media only screen and (max-width: 993px) {
@@ -135,9 +142,34 @@ button:hover{
 }
 
 #tools{
+    float: right;
     height: calc(100vh - 46px);
     width: 350px;
+    min-width: 350px;
     margin-top: 46px;
+/*    border: 1px solid blue;*/
+}
+
+#dragbar{
+   background-color: rgb(162, 162, 162);   
+   height: calc(100vh - 46px);
+   float: right;
+   width: 2px;
+   cursor: col-resize;
+}
+
+#dragbar:hover{
+    width: 6px;
+    transition: 0.5;
+}
+
+#ghostbar{
+    width: 2px;
+    background-color: #000;
+    opacity: 0.3;
+    position: absolute;
+    cursor: col-resize;
+    z-index: 999
 }
 
 #myCanvas {
