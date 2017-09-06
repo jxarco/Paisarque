@@ -8,7 +8,6 @@ var KEY_SPACE = 32;
 
 var PLANTA = 0;
 var ALZADO = 1;
-var PERFIL = 2;
 
 // default user
 var current_user = "guest";
@@ -101,35 +100,15 @@ function loadJSON()
             success:function(data)
             {
             $('#project').html(data.id + "<span class='caret'></span>");
-            if(window.parseJSON)
+            if(APP.parseJSON)
             {
-                parseJSON(data);
+                APP.parseJSON(data);
                 // LOAD ALWAYS AFTER GETTING DATA
                 loadMapsAPI();
             }
         }
     });
 }
-
-/*
-* Sliders initialization
-*/
-
-var init_sliders = function() {
-  var slider = document.querySelector('#s1');
-  var slider2 = document.querySelector('#s2');
-  var slider3 = document.querySelector('#s2');
-  
-  $(document).on('input', 'input[type="range"]', function(e) {
-      modifyRotations(e.currentTarget);
-  });
-  
-  $('input[type=range]').rangeslider({
-    polyfill: false
-  });
-    
-};
-
 
 /*
 *  Dragging stuff

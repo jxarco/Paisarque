@@ -88,47 +88,26 @@ $("#formAddImage").on('submit', function(e)
 */
 $("#saveTextButton").click(function(e)
 {
-    var ball = new RD.SceneNode();
     var id = project.getAnnotations().length + 1;
-    
-    ball.color = [1,0,0,1];
-    ball.id = id;
-    ball.shader = "phong";
-    ball.mesh = "sphere";
-    ball.layers = 0x4;
-    ball.flags.ignore_collisions = true;
-    ball.active = false;
-    ball.time = 0.0;
-//    scene.root.addChild(ball);
+    var ind = new SceneIndication();
+    ind = ind.ball(null, APP.result, {id: id, color: [1,0,0,1]});
+    ind.active = false;
+    ind.time = 0.0;
 
-    ball.update = function(dt)
+    ind.update = function(dt)
     {
         this.time += dt;
-            
         if(!this.active)
             this.color = [1,0,0,1];
         else
             this.color = [1, 0.3 + Math.sin(this.time*5), 0.3 + Math.sin(this.time*5), 1];
     }
+    
+    setParent(obj, ind);
 
-    ball.position = result;
-    
-    // set ball parent
-    var parentInverse = mat4.create();
-    var sonGlobal = mat4.create();
-    mat4.invert(parentInverse, obj.getGlobalMatrix());
-    sonGlobal = ball.getGlobalMatrix();
-    obj.addChild(ball);
-    mat4.multiply(ball._local_matrix, parentInverse, sonGlobal);
-
-    // se coge el texto correspondiente
-    var text = document.getElementById("message-text").value;
-    
-    // vaciar texto
-    document.getElementById("message-text").value = "";
-    
     // se anade a la lista de anotaciones del proyecto
-    project.insertAnotation(id, camera, result, text);
+    project.insertAnotation(id, camera, APP.result, $("#message-text").val());
+    $("#message-text").val("")
 });
 
 /*
@@ -167,16 +146,27 @@ $("#delete-anot-btn").click(function() {
 });
 
 /*
+*   Button: Enable deleting a project at the main page
+*/
+$("#delete-project").click(function() {
+    
+    delete_project_active = true;
+    alert("Selecciona proyecto a eliminar:");
+});
+
+
+/*
 *   Button: Change visibility of the annotations
 *   in canvas
 */
 $(".viz_on").click(function() 
 {
-    viz_anotations = !viz_anotations;
-    changeVizAnotInCanvas(viz_anotations);
+    if(obj.children.length)
+        var visible = obj.children[0].flags.visible;
+    APP.showElements(obj.children, visible);
     
-    var extra = viz_anotations === false ? "" : "_off";
-    var tooltip = viz_anotations === false ? "Mostrar" : "Esconder";
+    var extra = visible === false ? "" : "_off";
+    var tooltip = visible === false ? "Mostrar" : "Esconder";
     $(this).html( "<i class='material-icons'>visibility" + extra + "</i>" +
                 "<p class='info_hover_box'>" + tooltip + "</p>");
 });
@@ -187,12 +177,10 @@ $(".viz_on").click(function()
 $("#show_dt").click(function() 
 {
 //    console.log("showing/hiding distances table");
-    showing_dist_table = !showing_dist_table;
+    showing["t1"] = !showing["t1"];
     
     var table = $('#distances-table');
-    revealDOMElements(table, showing_dist_table);
-    if(!showing_dist_table)
-        destroySceneElements(obj.children, "config");
+    revealDOMElements(table, showing["t1"]);
 });
 
 /*
@@ -201,12 +189,10 @@ $("#show_dt").click(function()
 $("#show_dst").click(function() 
 {
 //    console.log("showing/hiding segments distances table");
-    showing_seg_dist_table = !showing_seg_dist_table;
+    showing["t2"] = !showing["t2"];
     
     var table = $('#segment-distances-table');
-    revealDOMElements(table, showing_seg_dist_table);
-    if(!showing_seg_dist_table)
-        destroySceneElements(obj.children, "config");
+    revealDOMElements(table, showing["t2"]);
 });
 
 /*
@@ -215,26 +201,24 @@ $("#show_dst").click(function()
 $("#show_areat").click(function() 
 {
 //    console.log("showing/hiding areas table");
-    showing_areas_table = !showing_areas_table;
+    showing["t3"] = !showing["t3"];
     
     var table = $('#areas-table');
-    revealDOMElements(table, showing_areas_table);
-    if(!showing_areas_table)
-        destroySceneElements(obj.children, "config");
+    revealDOMElements(table, showing["t3"]);
 });
 
 $("#measure-opt-btn").click(function(){
    
     if($(".sub-btns").css("display") == "none")
-        {
-            $(this).find("i").html("remove_circle_outline");
-            $(".sub-btns").show(); 
-        }
+    {
+        $(this).find("i").html("remove_circle_outline");
+        $(".sub-btns").show(); 
+    }
     else 
-        {
-            $(this).find("i").html("add_circle_outline");
-            $(".sub-btns").hide(); 
-        }
+    {
+        $(this).find("i").html("add_circle_outline");
+        $(".sub-btns").hide(); 
+    }
 });
 
 
@@ -264,7 +248,7 @@ $("#formUploadProject").on('submit', function(e)
     var urlMesh = project_id + "/"; 
     var urlTexture = project_id + "/"; 
     
-    var listaExtra = []; // hacer una lista de objetos de tipo {"type":"pdf",      "data":"data/wpbr.pdf"}, hay que mirar todos los que se suben, ver su nombre, url y que tipo son
+    var listaExtra = [];
     
     $(':file').each(function() {
         
@@ -425,7 +409,6 @@ $(".save").click(function(){
 $('#videoLink').click(function () 
 {
     var src = 'https://www.youtube.com/embed/VI04yNch1hU;autoplay=1';
-    // $('#introVideo').modal('show'); <-- remove this line
     $('#introVideo iframe').attr('src', src);
 });
 
@@ -436,7 +419,6 @@ $('#introVideo button.close').on('hidden.bs.modal', function ()
 
 $('#buttonYoutubeLink').click( function() 
 {
-    
     var stringYoutubeLink = '<div class="form-group"><label for="youtube' + (youtubeLinkCounter+1) + '" class="col-lg-2 control-label">Youtube Link</label><div class="col-lg-10"><input type="url" class="form-control" id="youtube' + (youtubeLinkCounter+1) + '" name="youtube' + (youtubeLinkCounter+1) + '"></div></div>';
         
     $('#fieldset').append(stringYoutubeLink);
@@ -445,7 +427,6 @@ $('#buttonYoutubeLink').click( function()
 
 $('#buttonPDFLink').click( function() 
 {
-    
     var stringPDFLink = '<div class="form-group"><label for="pdfLink' + (pdfLinkCounter+1) + '" class="col-lg-2 control-label">PDF Link</label><div class="col-lg-10"><input type="file" class="form-control" id="pdfLink' + (pdfLinkCounter+1) + '" name="pdfLink' + (pdfLinkCounter+1) + '"></div></div>';
         
     $('#fieldset').append(stringPDFLink);
@@ -454,7 +435,6 @@ $('#buttonPDFLink').click( function()
 
 $('#buttonImageLink').click( function() 
 {
-    
     var stringImageLink = '<div class="form-group"><label for="image' + (imagenLinkCounter+1) + '" class="col-lg-2 control-label">Image Link</label><div class="col-lg-10"><input type="file" class="form-control" id="image' + (imagenLinkCounter+1) + '" name="image' + (imagenLinkCounter+1)+ '" ></div></div>';
         
     $('#fieldset').append(stringImageLink);
@@ -463,7 +443,6 @@ $('#buttonImageLink').click( function()
 
 $('#buttonTextLink').click( function() 
 {
-    
     var stringTextLink = '<div class="form-group"><label for="text' + (textLinkCounter+1) + '" class="col-lg-2 control-label">Textos</label><div class="col-lg-10"><input type="text" class="form-control" id="text' + (textLinkCounter+1) + '" name="text' + (textLinkCounter+1) + '"></div></div>';
         
     $('#fieldset').append(stringTextLink);

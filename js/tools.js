@@ -32,15 +32,6 @@ var LOADER = {
 
 // FINISH GETTING DATA FROM JSONS
 
-function enable_project_delete()
-{
-    if(!delete_project_active)
-    {
-        delete_project_active = true;
-        alert("Select the project which has to be deleted");
-    }
-}
-
 function deleteProject(user, project)
 {
     if(!project.length)
@@ -55,19 +46,15 @@ function deleteProject(user, project)
         
     var project_to_delete = [
         "data/" + user + "/" + project + ".json",
-        "data/" + user + "/" + project + "_anotacion.json",
         "data/" + user + "/" + project,
     ]
     
     $.ajax({
       url: 'deleteFile.php',
       data: {'file' : project_to_delete[0],
-            'a_file': project_to_delete[1],
-            'folder': project_to_delete[2],
+            'folder': project_to_delete[1],
             },
       success: function (response) {
-//        console.log(response);
-//        alert("project has been deleted");
           document.location.href = 'inicio.php?user=' + user;
           delete_project_active = false;
       }
@@ -203,25 +190,6 @@ function setParent(parent, son)
     }
 }
 
-/*
-* @param elements: nodes list
-* @param description: delete only by description
-*/
-function destroySceneElements(elements, description)
-{
-    for(var i = 0; i < elements.length; ++i)
-    {
-        if(elements[i] === null)
-            return;
-        
-        if(!description)    
-            elements[i].destroy();
-        else if(description == elements[i].description)
-            elements[i].destroy();
-    }
-        
-}
-
 function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id)
 {
     camera.position = position_camera;
@@ -307,3 +275,22 @@ function testDialog(options)
     if(options.hidelower)
         $("#end-dialog").hide();
 }
+
+/*
+* Sliders initialization
+*/
+
+var init_sliders = function() {
+  var slider = document.querySelector('#s1');
+  var slider2 = document.querySelector('#s2');
+  var slider3 = document.querySelector('#s2');
+  
+  $(document).on('input', 'input[type="range"]', function(e) {
+      APP.modifyRotations(e.currentTarget);
+  });
+  
+  $('input[type=range]').rangeslider({
+    polyfill: false
+  });
+    
+};

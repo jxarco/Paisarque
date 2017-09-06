@@ -197,7 +197,7 @@
                              aria-hidden="true">
                             
                             <div class="w3-col m2 w3-center">
-                                <a onclick="enableSetRotation()" class="btn tool-btn">
+                                <a onclick="APP.enableSetRotation()" class="btn tool-btn">
                                     <i class="material-icons">3d_rotation</i>
                                     <br>
                                     <p class="info_hover_box">Rotaciones</p>
@@ -216,13 +216,13 @@
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
-                                <a onclick="medirMetro()" class="btn tool-btn">
+                                <a onclick="APP.medirMetro()" class="btn tool-btn">
                                     <i class="material-icons">settings</i>
                                     <p class="info_hover_box">Definir metro</p>
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
-                                <a id="measure-btn" onclick="testDistance()" class="btn tool-btn nodisplay measures-btns">
+                                <a id="measure-btn" onclick="APP.testDistance()" class="btn tool-btn nodisplay measures-btns">
                                     <i class="material-icons">space_bar</i>
                                     <p class="info_hover_box">Distancia</p>
                                 </a>
@@ -252,11 +252,11 @@
                                 </a>
 
                                 <div class="sub-btns">
-                                        <a id="measure-areas-btn" onclick="medirArea(0)" class="btn tool-btn nodisplay measures-btns">
+                                        <a id="measure-areas-btn" onclick="APP.medirArea(0)" class="btn tool-btn nodisplay measures-btns">
                                             <i class="material-icons">crop_din</i>
                                             <p class="info_hover_box">Planta</p>
                                         </a>
-                                        <a id="measure-areas2-btn" onclick="medirArea(1)" class="btn tool-btn nodisplay measures-btns">
+                                        <a id="measure-areas2-btn" onclick="APP.medirArea(1)" class="btn tool-btn nodisplay measures-btns">
                                             <i class="material-icons">crop_portrait</i>
                                             <p class="info_hover_box">Alzado</p>
                                         </a>
@@ -337,11 +337,11 @@
                                 <i class="material-icons">visibility_off</i>
                                 <p class="info_hover_box">Esconder</p>
                             </a>
-                            <a onclick="anotar(true)" class="btn tool-btn anot" id="actAnot">
+                            <a onclick="APP.anotar(true)" class="btn tool-btn anot" id="actAnot">
                                 <i class="material-icons">create</i>
                                 <p class="info_hover_box">Crear</p>
                             </a>
-                            <a onclick="anotar(false)" id="desAnot" class="btn tool-btn anot nodisplay">
+                            <a onclick="APP.anotar(false)" id="desAnot" class="btn tool-btn anot nodisplay">
                                 <i class="material-icons">remove_circle</i>
                                 <p class="info_hover_box">Dejar de crear</p>
                             </a>
@@ -401,7 +401,7 @@
             PAS.recover(); // load paisarque session
         </script>
         <script src="js/tools.js"></script>
-        <script src="js/apptest.js"></script>
+        <script src="js/app.js"></script>
         <script src="js/events.js"></script>    
         <script>
             LOADER.load();

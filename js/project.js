@@ -275,7 +275,7 @@ Project.prototype.insertMeasure = function( camera, x1, x2, distance, display )
     var bodyTable = table.find('tbody');
     var id = last_measure_id++;
     
-    var row = "<tr onclick='viewMeasure(" + id + ")' id=" + id + " a class='pointer'>" + 
+    var row = "<tr onclick='APP.viewMeasure(" + id + ")' id=" + id + " a class='pointer'>" + 
     "<td>" + Math.round(x1[0] * 100) / 100 + "</br>" + Math.round(x1[1] * 100) / 100 + "</br>" + Math.round(x1[2] * 100) / 100 + "</td>" + 
     "<td>" + Math.round(x2[0] * 100) / 100 + "</br>" + Math.round(x2[1] * 100) / 100 + "</br>" + Math.round(x2[2] * 100) / 100 + "</td>" + 
     "<td>" + Math.round(distance * 1000) / 1000 + "</td>" + 
@@ -283,8 +283,8 @@ Project.prototype.insertMeasure = function( camera, x1, x2, distance, display )
     
     bodyTable.append(row);
     
-    showing_dist_table = display;
-    revealDOMElements(table, showing_dist_table);
+    showing["t1"] = display;
+    revealDOMElements(table, display);
     
     this._measures.push( {
         "id": id,
@@ -321,15 +321,15 @@ Project.prototype.insertSegmentMeasure = function( points, distance, display )
     var bodyTable = table.find('tbody');
     var id = last_seg_measure_id++;
     
-    var row = "<tr onclick='viewClosedMeasure(" + id + ")' id=" + id + " a class='pointer'>" + 
+    var row = "<tr onclick='APP.viewClosedMeasure(" + id + ")' id=" + id + " a class='pointer'>" + 
     "<td>" + (points.length - 1) + "</td>" + 
     "<td>" + Math.round(distance * 1000) / 1000 + "</td>" + 
     "</tr>";
     
     bodyTable.append(row);
     
-    showing_seg_dist_table = display;
-    revealDOMElements(table, showing_seg_dist_table);
+    showing["t2"] = display;
+    revealDOMElements(table, display);
     
     this._segments.push( {
         "id": id,
@@ -356,17 +356,15 @@ Project.prototype.insertArea = function( points, area, index, display )
     
     var vista = index === 1 ? "Planta" : "Alzado";
     
-    var row = "<tr onclick='viewClosedMeasure(" + id + ", true)' id=" + id + " a class='pointer'>" + 
+    var row = "<tr onclick='APP.viewClosedMeasure(" + id + ", true)' id=" + id + " a class='pointer'>" + 
     "<td>" + vista + "</td>" + 
     "<td>" + Math.round(area * 1000) / 1000 + "</td>" + 
     "</tr>";
     
     bodyTable.append(row);
     
-    showing_areas_table = display;
-    revealDOMElements(table, showing_areas_table);
-    
-    console.log(points);
+    showing["t3"] = display;
+    revealDOMElements(table, display);
     
     this._areas.push( {
         "id": id,

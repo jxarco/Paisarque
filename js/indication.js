@@ -4,11 +4,11 @@
 * @class Indication
 */
 
-function SceneIndication(scene, position, options)
+function SceneIndication()
 {
 	if(this.constructor !== SceneIndication)
 		throw("You must use new to create a new annotation");
-    this._ctor(scene, position, options);
+//    return this._ctor(scene, position, options);
 }
 
 /*
@@ -16,7 +16,7 @@ function SceneIndication(scene, position, options)
 *  @prototype SceneIndication
 *  returns the scene node created
 */
-SceneIndication.prototype._ctor = function(scene, position, options)
+SceneIndication.prototype.ball = function(scene, position, options)
 {
     var ball = new RD.SceneNode();
     ball.description = "config";
@@ -25,7 +25,7 @@ SceneIndication.prototype._ctor = function(scene, position, options)
     ball.shader = "phong";
     ball.layers = 0x4;
     ball.flags.ignore_collisions = true;
-    scene.root.addChild(ball);                
+    
     ball.position = position;
     
     options = options || {};
@@ -37,7 +37,33 @@ SceneIndication.prototype._ctor = function(scene, position, options)
                 ball.color = [0.3,0.2,0.8,1];           
                 ball.shader = null;
             }
+            ball.id = options.id;
+            ball.color = options.color;
         }
+            
+    if(scene !== null)
+        scene.root.addChild(ball);                
     
-    this._body = ball;
+    return ball;
+}
+
+/*
+*  @class SceneIndication
+*  @prototype grid
+*  returns a scene node equal to a grid
+*/
+SceneIndication.prototype.grid = function(size, options)
+{
+    options = options || {};
+    
+    var grid = new RD.SceneNode();
+    var grid_mesh = GL.Mesh.grid({size:size});
+    renderer.meshes["grid"] = grid_mesh;
+    grid.flags.visible = options.visible;
+    grid.name = "grid";
+    grid.mesh = "grid";
+    grid.primitive = gl.LINES;
+    grid.color = [0.5, 0.5, 0.5, 1];
+    grid.scale([50, 50, 50]);
+    scene.root.addChild(grid);
 }
