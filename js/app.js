@@ -31,18 +31,6 @@ function parseJSON(json)
         project = new Project( json, current_user, {no_construct: false} );
     } 
     
-//    // update extra list if update needed
-//    if(!sessionStorage.getItem("update")){
-//        sessionStorage.setItem("extra", JSON.stringify(project._extra));
-//    }
-//    else if(sessionStorage.getItem("update") == 1)
-//    {
-//        project._extra = JSON.parse(sessionStorage.getItem("extra"));
-//        sessionStorage.setItem("update", 0);
-//        console.log("updated extra!!!");
-//    }
-//        
-    
     if(project._meter !== -1)
     {
         $("#measure-btn").find("div").html("Medir distancias");

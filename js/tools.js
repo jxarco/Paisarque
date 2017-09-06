@@ -23,11 +23,9 @@ var LOADER = {
     },
     loadExtra: function(){
         var data = sessionStorage.getItem("project");
-        if(copy === null){
-            console.log("creating new");
-            copy = new Project({}, current_user, {no_construct: true});
-            copy.fill(data);
-        }
+        copy = new Project({}, current_user, {no_construct: true});
+        copy.fill(data);
+        $("#refresh").click();
         
     }
 };

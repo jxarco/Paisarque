@@ -12,7 +12,7 @@ $("#testing").click(function(){
         return 0;
         
     copy.pushExtra("image", data);
-    $("#image-url").html("");
+    $("#image-url").val("");
     parseExtraJSON(copy._extra);
 });
 
@@ -40,18 +40,31 @@ $("#formAddImage").on('submit', function(e)
     formData.append("user", user);
     formData.append("id", project_id);
     
-    var urlImage = project_id + "/"; 
+    var urlImage = "data/" + project_id + "/"; 
     
     $(':file').each(function() {
+        var input = $(this);
         
-        if ($(this)[0]["value"] == ""){
-            alert("Asegúrate de subir una imagen!");
-            return 0;
-        }
+        if (input[0]["value"] == ""){
+                alert("Asegúrate de subir una imagen!");
+                return 0;
+            } else {
+                var auxList = input[0]["value"].split('\\');
+                var nameMesh = auxList[auxList.length - 1];
+                urlImage += nameMesh;
+            }
+        
+//        console.log(urlImage);
+        // add image to project
+        copy.pushExtra("image", urlImage);
         
     });
     
     $('#loadingModal').modal('show');   
+    
+    //  UNCOMMENT TO DEBUG
+    //  return 0;
+    //
     
     $.ajax( {
         url: 'uploadImage.php',
@@ -69,8 +82,6 @@ $("#formAddImage").on('submit', function(e)
     $(this).trigger("reset");
     
 });
-
-
 
 /*
 *   Button: Insert annotation to project
@@ -390,11 +401,24 @@ $('#cargarProyecto').click( function()
 });
 
 $(".save").click(function(){
-   project.save(); 
+    
+    if(copy === null)
+        project.save(); 
+    else
+    {
+        // save copy of the project
+        copy.save();
+        
+        // update the project copy in session storage
+        // to avoid getting a not updated version in next
+        // fills
+        sessionStorage.setItem("project", JSON.stringify(copy));
+    }
+    
 });
 
 /*
-*   Extra info stuff
+*   Opening more links in Extra info
 */
 
 $('#videoLink').click(function () 
