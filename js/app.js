@@ -705,7 +705,7 @@ var APP = {
             putCanvasMessage(msg, 5000, {type: "response"});
 
             // passing 3d points list
-            project.insertArea(points, area, index, true);
+            project.insertArea(points, area, index, "+++++", true);
 
             //clear all
             APP.disableAllFeatures();

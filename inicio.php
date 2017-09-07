@@ -7,7 +7,6 @@
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
         <title>PaisArque Application</title>
-
         <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">

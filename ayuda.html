@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Ayuda PaisArque</title>
-
+    <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png"> 
+    
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/custom.min.css" rel="stylesheet">
@@ -51,13 +52,14 @@
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Exportar</a>
             <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Ayuda</a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
-            <a class="w3-bar-item w3-button w3-right w3-padding-large textUser">username</a>
+            <a class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium textUser">username</a>
               
           </div>
         </div>
 
         <!-- Navbar on small screens -->
         <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-top" style="margin-top:46px">
+            <a class="w3-bar-item w3-button w3-padding-large textUser">username</a>
             <a onclick="loadContent('modelo.html')" class="w3-bar-item w3-button w3-padding-large">3D</a>
             <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large">Aportaciones</a>
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large">Exportar</a>

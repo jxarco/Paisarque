@@ -5,6 +5,7 @@ var proj_to_delete = "test";
 var delete_project_active = false;
 
 var copy = null;
+var imagesCounter = 0;
 
 // LOAD DATA FROM JSON
 
@@ -69,14 +70,19 @@ function loadContent(url, id)
         
         if(url === 'inicio.php')
             document.location.href = url+"?user=" + current_user;
-        else if(url === 'modelo.html')
-            document.location.href = url+"?r="+(id || current_project).toString();    
-        else {
-            // pass project information to reload it later
-            sessionStorage.setItem("project", JSON.stringify(project));
-            document.location.href = url+"?r="+(id || current_project).toString();    
-        }
+        else if(url === 'infoextra.html')
+        {
+            var preurl = document.location.pathname.split("/")[2];
+            if(preurl == "modelo.html")
+            {
+                // pass project information to reload it later
+                sessionStorage.setItem("project", JSON.stringify(project));        
+            }
             
+            document.location.href = url+"?r="+(id || current_project).toString();        
+        }
+        else
+            document.location.href = url+"?r="+(id || current_project).toString();    
     }
     else
     {
@@ -90,13 +96,13 @@ function loadMapsAPI()
     addScript( 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDrcNsufDO4FEmzoCO9X63ru59CUvCe2YI&callback=initMap' );
 }
 
-function initMap() 
+function initMap(lat, lng) 
 {
     // https://developers.google.com/maps/documentation/javascript/examples/infowindow-simple
                 
-    var latitud = project._coordinates.lat;
-    var longitud = project._coordinates.lng;
-    var location = project._location;
+    var latitud     = lat || project._coordinates.lat;
+    var longitud    = lng || project._coordinates.lng;
+    var location    = project._location;
     
     var marker = {lat: latitud, lng: longitud};
     
@@ -113,6 +119,22 @@ function initMap()
     });    
 }
 
+function setInput(id)
+{
+//    console.log(id);
+
+    $("#area-name").html("<textarea id='s_input'></textarea>");
+    $("#s_input").focus();
+    $("#s_input").keyup(function(e)
+    {
+        if(e.keyCode == 13){
+            project.getArea(id).name = $(this).val();
+            $("#area-name").html("<p onclick='setInput(" + id + ")'>" + $(this).val() + "</p>");
+            putCanvasMessage("Recuerda guardar...", 2000);
+        }
+    });
+}
+
 function parseExtraJSON(json)
 {
 //    console.log(json);
@@ -121,7 +143,9 @@ function parseExtraJSON(json)
         return;
     }
     
-    $("img").remove();
+    imagesCounter = 0;
+    
+    $(".imageli").remove();
     $("#texto").empty();
     $("#pdfs").empty();
     $("#videos").empty();
@@ -129,17 +153,24 @@ function parseExtraJSON(json)
     var el = null;
     for(var e in json){
         el = json[e];
-        if (el.type == "image") {
-            $("#imagenes").append(build(el.type, el.data));
-        } else if (el.type == "text") {
+        if (el.type == "image")
+        {
+            $(".imagenes-aqui").append(build(el.type, el.data));
+        }
+        else if (el.type == "text")
+        {
             $("#texto").append(build(el.type, el.data));
-        } else if (el.type == "pdf") {
+        }
+        else if (el.type == "pdf") {
             $("#pdfs").append(build(el.type, el.data));
-        } else if (el.type == "youtube") {
+        }
+        else if (el.type == "youtube")
+        {
             $("#videos").append(build(el.type, el.data));
         }
     }
-
+    
+    updateGallery();
 }
 
 /*
@@ -150,12 +181,9 @@ function parseExtraJSON(json)
 function build(type, data)
 {
     if(type == "pdf")
-    {
-        var t = "<div class='embed-responsive' style='padding-bottom:75vh'>"
-            t += "<object data='"+ data +"' type='application/pdf' width='100%' height='100%'></object>"
-            t += "</div>";
-        return t;        
-    }
+        return "<div class='embed-responsive' style='padding-bottom:75vh'>" +
+            "<object data='"+ data +"' type='application/pdf' width='100%' height='100%'></object>" +
+            "</div>";
     
     if(type == "text")
         return '<p>'+ data +'</p></br>';
@@ -163,9 +191,10 @@ function build(type, data)
     if(type == "youtube")
         return '<div align="center" class="embed-responsive embed-responsive-16by9"><iframe width="560" height="315" src="https://www.youtube.com/embed/'+ data +'" frameborder="0" allowfullscreen></iframe></div>';
     
-    if(type == "image")
-    {
-        return '<img src="'+ data +'" class="img-responsive image" alt="Responsive image"> ';
+    if(type == "image"){
+        var t =  '<li class="imageli"><img src="'+ data +'" class="img-responsive image image' + imagesCounter + '" onclick="select(this)" alt="Responsive image"></li>';
+        imagesCounter++;
+        return t;
     }
         
 }

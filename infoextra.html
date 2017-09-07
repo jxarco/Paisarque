@@ -49,13 +49,14 @@
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Exportar</a>
             <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Ayuda</a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
-            <a id="textUser" class="w3-bar-item w3-button w3-right w3-padding-large">username</a>
+            <a class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium textUser">username</a>
               
           </div>
         </div>
 
         <!-- Navbar on small screens -->
         <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-top" style="margin-top:46px">
+            <a class="w3-bar-item w3-button w3-padding-large textUser">username</a>
             <a onclick="loadContent('modelo.html')" class="w3-bar-item w3-button w3-padding-large">3D</a>
             <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large">Aportaciones</a>
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large">Exportar</a>
@@ -81,9 +82,18 @@
                              aria-labelledby="imagenes" 
                              aria-hidden="false">
                             
-                            <h6 style="font-family: Lato !important;">Desplázate al apartado 3D para guardar los cambios!</h6>
+                            <div style="display: flex; height: 50px;">
+                                <i class="material-icons extra-btn" onclick="deleteImage()">delete</i>
+                                <h6 class="tutorial"><i class="material-icons">arrow_back</i>Selecciona una o más imágenes y presiona aquí para borrar</h6>
+                                <i class="material-icons extra-btn" onclick="openMiniGallery()">view_carousel</i>
+                                <h6 class="tutorial"><i class="material-icons">arrow_back</i>Prueba el carrousel de fotos pulsando aquí</h6>
+                            </div>
                             
-                            <div id="imagenes">
+                            <div id="img-content" class="imagenes-aqui">
+                            
+                            </div>
+                            
+                            <div>
                                 <div id="url-loc">
                                     <input id="image-url" placeholder="Cargar desde URL">
                                     <i class="material-icons extra-btn" id="testing">add_circle</i>
@@ -91,9 +101,29 @@
                                     <i class="material-icons extra-btn" id="refresh">refresh</i>
                                     <i class="material-icons extra-btn save">save</i>
                                 </div>
+                                
+                                <!-- when small screens = no slider         -->
+                                <div id="small-screen-content" class="w3-hide-large imagenes-aqui">
+                                    <br>
+                                </div>
+                                
+                                <!-- when large screens = slider         -->
+                                <div id="wrapper" class="w3-hide-small w3-hide-medium">
+                                      <div id="gall-wrap">
+                                          <ul id="gall" class="imagenes-aqui">
+
+                                          </ul>
+                                           <!--controls-->
+                                          <div class="btns" id="next"><i class="fa fa-arrow-right"></i></div>
+                                          <div class="btns" id="previous"><i class="fa fa-arrow-left"></i></div>
+                                          <div id="counter"></div>
+
+                                      </div>
+                               </div>
+                                
                             </div>
-                            
                         </div>
+                        
                     </li>
 
                     <li>
@@ -188,7 +218,6 @@
                 </div>
               </div>
             </div>
-        
             
         </content><!--  content end-->
         
@@ -198,7 +227,8 @@
             
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="js/extra/bootstrap.min.js"></script>
         <script src="js/extra/custom.js"></script>
@@ -216,9 +246,12 @@
         <script src="js/app.js"></script>
         <script src="js/tools.js"></script>
         <script src="js/events.js"></script>
+        <script src="js/gallery.js"></script>
+    
         <script>
             LOADER.loadExtra();
+            updateGallery();
         </script>
+        
     </body>
-    
 </html>

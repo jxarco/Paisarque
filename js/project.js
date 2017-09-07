@@ -4,6 +4,7 @@
 */
 
 var last_project_id         = 0;
+var last_extra_id           = 0;
 var last_measure_id         = 0;
 var last_seg_measure_id     = 100;
 var last_area_measure_id    = 1000;
@@ -36,10 +37,35 @@ Project.prototype._ctor = function( data )
 */
 Project.prototype.pushExtra = function( type, data )
 {
+    last_extra_id = this._extra[this._extra.length-1].name.split("_")[1];
+    last_extra_id++;
+
     this._extra.push( {
         type: type,
-        data: data
+        data: data,
+        name: "extra_" + last_extra_id
     });
+}
+
+/*
+*   @prototype deleteExtra
+*   Delete one single extra information of the _extra list.
+*   @param type: data type (pdf, image, etc)
+*   @param data: path to data (or link)
+*/
+Project.prototype.deleteExtra = function( id )
+{
+    var index = null;
+    var searched = "extra_" + id;
+    
+    for(var i = 0; i < this._extra.length; i++){
+        if(this._extra[i].name == searched)
+            var index = i;
+    }
+    
+    if (index > -1) {
+        this._extra.splice(index, 1);
+    }
 }
 
 /*
@@ -217,9 +243,12 @@ Project.prototype.restoreMeter = function()
         var msr = this._measures[i];
         msr.distance = msr.distance * this._meter;
     }
-    
-    putCanvasMessage("Actualiza la página para ver los cambios en las tablas.", 3000, {type: "alert"});
+
     this._meter = -1;
+    
+    this.save();
+    document.location.href = "modelo.html?r=" + current_project;    
+    putCanvasMessage("Actualiza la página para ver los cambios en las tablas.", 3000, {type: "alert"});
 }
 
 Project.prototype.getMeasurements = function()
@@ -345,7 +374,7 @@ Project.prototype.insertSegmentMeasure = function( points, distance, display )
 *   @param display: show or not the table after inserting measure
 */
 
-Project.prototype.insertArea = function( points, area, index, display )
+Project.prototype.insertArea = function( points, area, index, name, display )
 {   
 //    if(!area)
 //        return;
@@ -353,11 +382,11 @@ Project.prototype.insertArea = function( points, area, index, display )
     var table = $('#areas-table');
     var bodyTable = table.find('tbody');
     var id = last_area_measure_id++;
-    
-    var vista = index === 1 ? "Planta" : "Alzado";
+    var style = index === 1 ? "Planta" : "Alzado";
     
     var row = "<tr onclick='APP.viewClosedMeasure(" + id + ", true)' id=" + id + " a class='pointer'>" + 
-    "<td>" + vista + "</td>" + 
+    "<td id='area-name'><p onclick='setInput(" + id + ")'>" + name + "</p></td>" + 
+    "<td>" + style + "</td>" + 
     "<td>" + Math.round(area * 1000) / 1000 + "</td>" + 
     "</tr>";
     
@@ -368,6 +397,7 @@ Project.prototype.insertArea = function( points, area, index, display )
     
     this._areas.push( {
         "id": id,
+        "name": name,
         "points": points,
         "index": index,
         "area": area
@@ -460,7 +490,7 @@ Project.prototype.FROMJSON = function( data )
                     var point = [obj[0], obj[1], obj[2]];
                     points.push(point);
                 }
-            this.insertArea( points, data.areas[i].area, data.areas[i].index, false );    
+            this.insertArea( points, data.areas[i].area, data.areas[i].index, data.areas[i].name, false );    
         }
         
 }
@@ -531,6 +561,10 @@ Project.prototype.check = function()
     
     if(this._description !== "nodesc")
         $(".pro-info").val(this._description);
+    
+    // coordinates
+    $("#lat").val(this._coordinates.lat);
+    $("#lon").val(this._coordinates.lng);
 }
 
 

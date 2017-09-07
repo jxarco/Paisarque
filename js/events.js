@@ -83,6 +83,11 @@ $("#formAddImage").on('submit', function(e)
     
 });
 
+
+
+
+// *******************************************************************************
+
 /*
 *   Button: Insert annotation to project
 */
@@ -126,6 +131,19 @@ $('.pro-info').keyup(function(e)
     project._description = $(this).val();
 });
 
+
+$('#coord-btn').click(function(e) 
+{
+    var lat = parseFloat($("#lat").val());
+    var lng = parseFloat($("#lon").val());
+    project._coordinates.lat = lat;
+    project._coordinates.lng = lng;
+    initMap(lat, lng);
+});
+
+$("#lat").keypress(onlyNumbers);
+$("#lon").keypress(onlyNumbers);
+
 /*
 *   Button: Clear configuration of meter in the project
 */
@@ -153,7 +171,6 @@ $("#delete-project").click(function() {
     delete_project_active = true;
     alert("Selecciona proyecto a eliminar:");
 });
-
 
 /*
 *   Button: Change visibility of the annotations

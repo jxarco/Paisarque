@@ -7,9 +7,9 @@
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         <title>PaisArque Application</title>
         <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
-        <!-- Bootstrap -->
+        <!--    CSS    -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" >
         <link href="css/custom.min.css" rel="stylesheet">
         <link href="css/estilo.css" rel="stylesheet">
         <link href="css/header.css" rel="stylesheet">
@@ -22,6 +22,8 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        
+        <!--   END CSS    -->
         
         <script type="text/javascript">
             // Used to toggle the menu on small screens when clicking on the menu button
@@ -50,13 +52,13 @@
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Exportar</a>
             <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Ayuda</a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
-            <a class="w3-bar-item w3-button w3-right w3-padding-large textUser">username</a>
-              
+            <a class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium textUser">username</a>
           </div>
         </div>
 
         <!-- Navbar on small screens -->
         <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-top" style="margin-top:46px">
+            <a class="w3-bar-item w3-button w3-padding-large textUser">username</a>
             <a onclick="loadContent('modelo.html')" class="w3-bar-item w3-button w3-padding-large">3D</a>
             <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large">Aportaciones</a>
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large">Exportar</a>
@@ -74,7 +76,7 @@
                                role="tab" 
                                aria-selected="true" 
                                aria-controls="panel1" 
-                               tabindex="0">Información</label>
+                               tabindex="0">Info</label>
                         <div id="tab-content1" 
                              class="tab-content" 
                              role="tabpanel" 
@@ -113,7 +115,7 @@
                                role="tab" 
                                aria-selected="false" 
                                aria-controls="panel3" 
-                               tabindex="0">Anotaciones</label>
+                               tabindex="0">Notas</label>
                         <div id="tab-content3" 
                              class="tab-content" 
                              role="tabpanel" 
@@ -127,21 +129,8 @@
             </div>
         </div>
         
-<!--
-        <div id="sidebar">
-            <div id="dragbar"></div>
-            sidebar
-        </div>
-        <div id="main">
-            main
-        </div>
--->
-        
         <div class="w3-row">
             <div class="w3-col w3-container myPlaceholder" id="placeholder">
-                
-                
-                <div id="dragbar"></div>
                 
                 <!--      CANVAS          -->
                 <div class="col-sm-10 text-left" id= "myCanvas"></div>
@@ -187,10 +176,18 @@
                              aria-labelledby="informacion" 
                              aria-hidden="false">
                             <label for="comment">Descripción</label>
-                            <textarea style="width:100%;height:100px; resize: none;" class="form-control pro-info" rows="5" id="comment"></textarea>
+                            <textarea class="form-control pro-info" rows="5" id="comment"></textarea>
                             <br>
                             <label for="comment">Ubicación</label>
                             <div id="map"></div>
+                            <br>
+                            <label for="comment">Coordenadas</label>
+                            <div style="display: flex;">
+                                <textarea id="lat" placeholder="LAT" class="form-control newcoord"></textarea>
+                                <textarea id="lon" placeholder="LON" class="form-control newcoord"></textarea>
+                                <button class="newcoord btn" id="coord-btn"><i class="material-icons">repeat</i></button>
+                            </div>
+                            
                         </div>
                     </li>
                     
@@ -222,7 +219,7 @@
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
-                                <a id="restore-meter" class="btn tool-btn">
+                                <a id="restore-meter" class="btn tool-btn nodisplay">
                                     <i class="material-icons">settings_backup_restore</i>
                                     <p class="info_hover_box">Reset escala</p>
                                 </a>
@@ -301,6 +298,7 @@
                           <table class="table table-striped table-hover tables" id="areas-table">
                                  <thead>
                                     <tr>
+                                        <th>Descripción</th>
                                         <th>Vista</th>
                                         <th>Area (m2)</th>
                                     </tr>
@@ -372,8 +370,8 @@
                             
                             <div id="deleting-div">
                                 <a class="btn tool-btn anot" id="delete-anot-btn">
-                                    <div class="info_hover_box">Borrar todas las anotaciones</div>
                                     <i class="material-icons">delete</i>
+                                    <p class="info_hover_box">Borrar todas</p>
                                 </a>
 
                                 <div id="drag-cont" ondrop="drop(event)" ondragleave="disallowDrop()" ondragover="allowDrop(event)">
@@ -419,49 +417,4 @@
         <script>
             LOADER.load();
         </script>
-    
-    
-    
-    <script>
-            var i = 0;
-            var dragging = false;
-               $('#dragbar').mousedown(function(e){
-                   e.preventDefault();
-
-                   dragging = true;
-                   var main = $('#tools');
-                   var ghostbar = $('<div>',
-                                    {id:'ghostbar',
-                                     css: {
-                                            height: main.outerHeight(),
-                                            top: main.offset().top,
-                                            left: main.offset().left
-                                           }
-                                    }).appendTo('body');
-
-                    $(document).mousemove(function(e){
-                      ghostbar.css("left",e.pageX+2);
-                   });
-
-                });
-
-               $(document).mouseup(function(e){
-                   if (dragging) 
-                   {
-                       var percentage = (e.pageX / window.innerWidth) * 100;
-                       var mainPercentage = 100 - percentage;
-
-                       $('#placeholder').css("width",percentage + "%");
-                       $('#tools').css("width", mainPercentage + "%");
-                       $('#ghostbar').remove();
-                       $(document).unbind('mousemove');
-                       dragging = false;
-                       
-                       APP.resize();
-                   }
-                });
-
-        </script>
-    
-    
 </html>
