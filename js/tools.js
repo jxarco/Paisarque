@@ -72,12 +72,10 @@ function loadContent(url, id)
             document.location.href = url+"?user=" + current_user;
         else if(url === 'infoextra.html')
         {
-            var preurl = document.location.pathname.split("/")[2];
-            if(preurl == "modelo.html")
-            {
+            var preurl = document.location.pathname;
+            if(preurl.includes("/modelo.html"))
                 // pass project information to reload it later
                 sessionStorage.setItem("project", JSON.stringify(project));        
-            }
             
             document.location.href = url+"?r="+(id || current_project).toString();        
         }
