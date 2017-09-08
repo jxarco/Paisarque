@@ -121,13 +121,13 @@ function setInput(id)
 {
 //    console.log(id);
 
-    $("#area-name").html("<textarea id='s_input'></textarea>");
+    $("#area-name" + id).html("<textarea id='s_input'></textarea>");
     $("#s_input").focus();
     $("#s_input").keyup(function(e)
     {
         if(e.keyCode == 13){
             project.getArea(id).name = $(this).val();
-            $("#area-name").html("<p onclick='setInput(" + id + ")'>" + $(this).val() + "</p>");
+            $("#area-name" + id).html("<p onclick='setInput(" + id + ")'>" + $(this).val() + "</p>");
             putCanvasMessage("Recuerda guardar...", 2000);
         }
     });

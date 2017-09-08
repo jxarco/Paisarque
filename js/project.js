@@ -384,8 +384,10 @@ Project.prototype.insertArea = function( points, area, index, name, display )
     var id = last_area_measure_id++;
     var style = index === 1 ? "Planta" : "Alzado";
     
+    var aux = "area-name" + id;
+    
     var row = "<tr onclick='APP.viewClosedMeasure(" + id + ", true)' id=" + id + " a class='pointer'>" + 
-    "<td id='area-name'><p onclick='setInput(" + id + ")'>" + name + "</p></td>" + 
+    "<td id='" + aux + "'><p onclick='setInput(" + id + ")'>" + name + "</p></td>" + 
     "<td>" + style + "</td>" + 
     "<td>" + Math.round(area * 1000) / 1000 + "</td>" + 
     "</tr>";

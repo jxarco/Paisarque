@@ -167,8 +167,8 @@ var APP = {
                 putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "alert"}); 
         };
 
-        renderer.loadMesh(obj.mesh, makeVisible);
-        renderer.loadTexture(obj.texture, renderer.default_texture_settings);
+//        renderer.loadMesh(obj.mesh, makeVisible);
+//        renderer.loadTexture(obj.texture, renderer.default_texture_settings);
 
         obj.scale([5,5,5]);
         pivot.addChild( obj );

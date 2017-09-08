@@ -325,12 +325,16 @@ button:hover{
 }
 
 .tool-btn.info{
-    padding-top: 6px !important;
-    padding-left: 6px !important;
+    width: 60px;
+    margin-left: 0px;
+    padding-top: 15px;
+    cursor: default;
 }
 
 .tool-btn.info:hover{
-    color: black !important;
+    width: 60px !important;
+    margin-left: 0px !important;
+    padding-top: 15px;
 }
 
 .tool-btn.nodisplay{
@@ -379,18 +383,66 @@ button:hover{
 /* -------------------------------------------- */
 /* text css (information) */
 
+@media only screen and (max-width: 993px) {
+    /* For medium and small */
+    .info-panel{
+        display: table-cell !important;
+    }
+
+    .kawaii{
+        width: 100% !important;
+    }
+    
+    .src:hover img{
+        display: none !important;
+    }
+    
+    .kawaii a{
+        cursor: default !important;
+    }
+}
+
+
+.info-panel{
+    display: flex;
+    margin: 5px;
+}
+
 .kawaii{
-    background-color: rgba(62, 164, 155, 0.3);
-    border: 1px solid rgba(62, 164, 155, 0.7);
-    border-radius: 5px;
-    box-shadow: 0px 0px 3px black;
+    background-color: rgba(120, 120, 120, 0.6);
+    color: white;
     padding: 15px;
-    width: 75%;
-    margin-top: 10px;
+    width: 25%;
+    text-align : justify;
+    margin: 5px;
+    border-bottom: 2px solid rgb(62, 164, 155);
+}
+
+.kawaii a{
+    color: navajowhite !important;
+    text-decoration: none !important;
+    cursor: pointer;
+}
+
+.src:hover img{
+    display: block;
+    visibility: visible;
+    opacity: 1;
+}
+
+.kawaii img{
+    display: none;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+    position: absolute;
+    padding: 10px;
+    margin-top: 35px;
+    margin-left: -120px;
 }
 
 .kawaii.warning{
-    background-color: rgba(200, 200, 0, 0.3);
+    border-bottom: 2px solid rgb(224, 224, 20);
 }
 
 /* -------------------------------------------- */
