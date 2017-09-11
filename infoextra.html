@@ -68,19 +68,19 @@
             <h2 class="w3-xxlarge" style="font-family: Oswald !important;"><b>APORTACIONES</b></h2>
             <br>
             
-            <ul class="tabs" role="tablist">
+            <ul class="tabs" role="tablist" id="info-extra-tab">
                     <li>
-                        <input type="radio" name="tabs" id="tab1" checked />
+                        <input type="radio" name="tabs" id="tab1" />
                         <label for="tab1" 
                                role="tab" 
-                               aria-selected="true" 
+                               aria-selected="false" 
                                aria-controls="panel1" 
                                tabindex="0">Imágenes</label>
                         <div id="tab-content1" 
                              class="tab-content-extra" 
                              role="tabpanel" 
                              aria-labelledby="imagenes" 
-                             aria-hidden="false">
+                             aria-hidden="true">
                             
                             <div style="display: flex; height: 50px;">
                                 <i class="material-icons extra-btn" onclick="deleteImage()">delete</i>
@@ -94,11 +94,11 @@
                             </div>
                             
                             <div>
-                                <div id="url-loc">
+                                <div class="url-loc">
                                     <input id="image-url" placeholder="Cargar desde URL">
-                                    <i class="material-icons extra-btn" id="testing">add_circle</i>
-                                    <i class="material-icons extra-btn" id="testing" data-style="slide-up"  data-toggle="modal" data-target="#TESTModal"  >file_upload</i>
-                                    <i class="material-icons extra-btn" id="refresh">refresh</i>
+                                    <i class="material-icons extra-btn add_extra" data-type="image" data-from="image-url">add_circle</i>
+                                    <i class="material-icons extra-btn" data-style="slide-up"  data-toggle="modal" data-target="#TESTModal"  >file_upload</i>
+                                    <i class="material-icons extra-btn refresh">refresh</i>
                                     <i class="material-icons extra-btn save">save</i>
                                 </div>
                                 
@@ -127,17 +127,25 @@
                     </li>
 
                     <li>
-                        <input type="radio" name="tabs" id="tab2" />
+                        <input type="radio" name="tabs" id="tab2" checked/>
                         <label for="tab2"
                                role="tab" 
-                               aria-selected="false" 
+                               aria-selected="true" 
                                aria-controls="panel2" 
                                tabindex="0">PDF's</label>
                         <div id="tab-content2" 
                              class="tab-content-extra" 
                              role="tabpanel" 
                              aria-labelledby="pdfs" 
-                             aria-hidden="true">
+                             aria-hidden="false">
+                            
+                            <div class="url-loc">
+                                    <input id="pdf-url" placeholder="Cargar PDF desde URL">
+                                    <i class="material-icons extra-btn add_extra" data-type="pdf" data-from="pdf-url">add_circle</i>
+<!--                                    <i class="material-icons extra-btn" data-style="slide-up"  data-toggle="modal" data-target="#TESTModal"  >file_upload</i>-->
+                                    <i class="material-icons extra-btn refresh">refresh</i>
+                                    <i class="material-icons extra-btn save">save</i>
+                                </div>
                             
                             <div id="pdfs">
                                 
@@ -147,7 +155,7 @@
                     </li>
                     
                     <li>
-                        <input type="radio" name="tabs" id="tab3" />
+                        <input type="radio" name="tabs" id="tab3"/>
                         <label for="tab3" 
                                role="tab" 
                                aria-selected="false" 
@@ -159,6 +167,13 @@
                              aria-labelledby="textos" 
                              aria-hidden="true">
                             
+                            <div class="url-loc">
+                                    <input id="text-url" placeholder="Escribe aquí cualquier nota">
+                                    <i class="material-icons extra-btn add_extra" data-type="text" data-from="text-url">add_circle</i>
+                                    <i class="material-icons extra-btn refresh">refresh</i>
+                                    <i class="material-icons extra-btn save">save</i>
+                            </div>
+                            
                             <div id="texto">
                                 
                             </div>
@@ -167,7 +182,7 @@
                     </li>
                 
                     <li>
-                        <input type="radio" name="tabs" id="tab4" />
+                        <input type="radio" name="tabs" id="tab4"/>
                         <label for="tab4" 
                                role="tab" 
                                aria-selected="false" 
@@ -179,7 +194,14 @@
                              aria-labelledby="videos" 
                              aria-hidden="true">
                             
-                            <div id="videos">
+                            <div class="url-loc">
+                                    <input id="video-url" placeholder="URL vídeo">
+                                    <i class="material-icons extra-btn add_extra" data-type="youtube" data-from="video-url">add_circle</i>
+                                    <i class="material-icons extra-btn refresh">refresh</i>
+                                    <i class="material-icons extra-btn save">save</i>
+                            </div>
+                            
+                            <div id="videos" class="w3-row">
                                 
                             </div>
                             

@@ -271,6 +271,7 @@ var APP = {
                     revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
 
                 project.setRotations(obj._rotation);
+                putCanvasMessage("Recuerda guardar...", 2000);
             }
 
             if(e.keyCode === 27) // ESC
@@ -381,6 +382,7 @@ var APP = {
 
             setTimeout(function(){
                 APP.destroyElements(scene.root.children, "config");
+                putCanvasMessage("Recuerda guardar...", 2000);
             }, 500);
         });
     },
@@ -504,6 +506,7 @@ var APP = {
 
             // remove dialog
             $(".draggable").remove();
+            putCanvasMessage("Recuerda guardar...", 2000);
 
             if(window.tmp.length === 2)
                 project.insertMeasure(camera, window.tmp[0], window.tmp[1], distance, true);
@@ -703,6 +706,7 @@ var APP = {
             area /= Math.pow(project._meter, 2);
             var msg = "AREA: " + area;
             putCanvasMessage(msg, 5000, {type: "response"});
+            putCanvasMessage("Recuerda guardar...", 2000);
 
             // passing 3d points list
             project.insertArea(points, area, index, "+++++", true);

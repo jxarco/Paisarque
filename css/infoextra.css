@@ -1,3 +1,7 @@
+#info-extra-tab label{
+    color: white !important;
+}
+
 /* @images */
 
 #img-content{
@@ -74,7 +78,7 @@
     padding: 5px;
 }
 
-#url-loc{
+.url-loc{
 /*    border: 3px solid red; */
     display: flex;
 }
@@ -170,3 +174,38 @@ body, hmtl{background: #ecf0f1; font-family: 'Anton', sans-serif;}
 }
 
 /* @text */
+
+#text-url{
+    height: 50px; 
+    width: 80%;  
+    padding: 5px;
+}
+
+#texto{
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 5px;
+}
+
+.apt-text{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    margin-top: 10px;
+}
+
+/* @videos */
+
+#pdf-url, #video-url{
+    height: 50px; 
+    width: 50%;  
+    padding: 5px;
+}
+
+#videos{
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 5px;
+    width: 100%;
+}
+
+.apt-video{
+    position: relative;
+    width: 100%;
+}

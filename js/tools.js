@@ -26,7 +26,7 @@ var LOADER = {
         var data = sessionStorage.getItem("project");
         copy = new Project({}, current_user, {no_construct: true});
         copy.fill(data);
-        $("#refresh").click();
+        $(".refresh").click();
         
     }
 };
@@ -70,8 +70,8 @@ function loadContent(url, id)
         
         if(url === 'inicio.php')
             document.location.href = url+"?user=" + current_user;
-        else if(url === 'infoextra.html')
-        {
+            
+        else {
             var preurl = document.location.pathname;
             if(preurl.includes("/modelo.html"))
                 // pass project information to reload it later
@@ -79,8 +79,6 @@ function loadContent(url, id)
             
             document.location.href = url+"?r="+(id || current_project).toString();        
         }
-        else
-            document.location.href = url+"?r="+(id || current_project).toString();    
     }
     else
     {
@@ -164,7 +162,8 @@ function parseExtraJSON(json)
         }
         else if (el.type == "youtube")
         {
-            $("#videos").append(build(el.type, el.data));
+            var data = el.data.split("=")[1];
+            $("#videos").append(build(el.type, data));
         }
     }
     
@@ -178,22 +177,24 @@ function parseExtraJSON(json)
 */
 function build(type, data)
 {
-    if(type == "pdf")
-        return "<div class='embed-responsive' style='padding-bottom:75vh'>" +
-            "<object data='"+ data +"' type='application/pdf' width='100%' height='100%'></object>" +
-            "</div>";
-    
-    if(type == "text")
-        return '<p>'+ data +'</p></br>';
-    
-    if(type == "youtube")
-        return '<div align="center" class="embed-responsive embed-responsive-16by9"><iframe width="560" height="315" src="https://www.youtube.com/embed/'+ data +'" frameborder="0" allowfullscreen></iframe></div>';
-    
     if(type == "image"){
         var t =  '<li class="imageli"><img src="'+ data +'" class="img-responsive image image' + imagesCounter + '" onclick="select(this)" alt="Responsive image"></li>';
         imagesCounter++;
         return t;
     }
+    
+    if(type == "text")
+        return '<p class="apt-text">· '+ data +'</p>';
+    
+    if(type == "pdf")
+        return '<div class="embed-responsive" style="padding-bottom:75vh">' +
+            '<object data="'+ data +'" type="application/pdf" width="100%" height="100%"></object>' +
+            '</div>';
+
+    if(type == "youtube")
+        return '<div class="w3-col m4"><iframe class="apt-video" src="https://www.youtube.com/embed/'+ data +'" allowfullscreen></iframe></div>';
+    
+    
         
 }
 

@@ -5,18 +5,22 @@ var textLinkCounter = 0;
 
 /* EXTRA STUFF */
 
-$("#testing").click(function(){
-    var data = $("#image-url").val();
+// Adding any type of extra to the list of _extra in the project
+$(".add_extra").click(function(){
+    
+    var from = "#" + $(this).data("from");
+    var type = $(this).data("type");
+    var data = $(from).val();
 
     if(data == "")
         return 0;
         
-    copy.pushExtra("image", data);
-    $("#image-url").val("");
+    copy.pushExtra(type, data);
+    $(from).val("");
     parseExtraJSON(copy._extra);
 });
 
-$("#refresh").click(function(){
+$(".refresh").click(function(){
     parseExtraJSON(copy._extra);
 });
 
@@ -83,9 +87,6 @@ $("#formAddImage").on('submit', function(e)
     
 });
 
-
-
-
 // *******************************************************************************
 
 /*
@@ -130,7 +131,6 @@ $('.pro-info').keyup(function(e)
     e.preventDefault();
     project._description = $(this).val();
 });
-
 
 $('#coord-btn').click(function(e) 
 {

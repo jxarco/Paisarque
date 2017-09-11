@@ -37,14 +37,19 @@ header > nav > div:hover > a {
         text-decoration: none; 
 }
 
+.w3-bar{
+    background-color: rgb(62, 164, 155);   
+    color: aliceblue !important;
+    height: 46px;
+}
+
 .w3-button{
     text-decoration: none !important;
 }
 
-.w3-bar{
-    background-color: rgb(62, 164, 155);   
-/*    background-color: #5d687a;*/
-    color: aliceblue !important;
+.w3-bar-item.w3-button:hover{
+    background: rgba(220, 220, 220, 0.5) !important;   
+    transition: linear 0.2s;
 }
 
 #navDemo{
@@ -57,7 +62,8 @@ header > nav > div:hover > a {
     font-family: 'Lobster', cursive !important;
     padding-top: 7px !important;
     font-size: 22px;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 0 12px rgba(250, 250, 250, 0.5);
+    color: rgb(230, 230, 230);
 }
 
 .w3-button.textUser:hover{
