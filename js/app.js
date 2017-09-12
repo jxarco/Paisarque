@@ -167,8 +167,8 @@ var APP = {
                 putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "alert"}); 
         };
 
-//        renderer.loadMesh(obj.mesh, makeVisible);
-//        renderer.loadTexture(obj.texture, renderer.default_texture_settings);
+        renderer.loadMesh(obj.mesh, makeVisible);
+        renderer.loadTexture(obj.texture, renderer.default_texture_settings);
 
         obj.scale([5,5,5]);
         pivot.addChild( obj );
@@ -332,16 +332,16 @@ var APP = {
     {
         if(project._meter !== -1)
         {
-            putCanvasMessage("La configuración del metro ya ha sido realizada en este proyecto. Use la herramienta 'Reset' en el menú de herramientas.", 5000, {type: "error"});    
-            return;
+            putCanvasMessage("La configuración de la escala ya ha sido realizada en este proyecto. Si lo haces, perderás la medición anterior.", 5000, {type: "error"});    
         }
 
         // clear first
         APP.destroyElements(scene.root.children, "config");
         $(".draggable").remove();
 
-        testDialog({hidelower: true, upperbtn: "Seleccionar"}); // open dialog
-        putCanvasMessage("Selecciona dos puntos, la linea recta que los une corresponderá a un metro", 2500);
+        testDialog({scale: true, hidelower: true, upperbtn: "Seleccionar"}); // open dialog
+        putCanvasMessage("Selecciona dos puntos, la linea recta que los une corresponderá a la escala indicada. (Por defecto 1 metro)", 5000);
+        putCanvasMessage("Esta acción utiliza autoguardado. Para cancelar pulsa ESC.", 8000, {type: "alert"});
         window.tmp = [];
 
         $("#add-dialog").click(function(){
@@ -376,14 +376,24 @@ var APP = {
             newPoint[1] = Math.abs(cur[1] - next[1]);
             newPoint[2] = Math.abs(cur[2] - next[2]);
 
-            project._meter = vec3.length(newPoint);
+            var scale = parseFloat($("#scale-input").val()) || 1;
+            var relation = vec3.length(newPoint) / scale;
+//            project._meter = vec3.length(newPoint) / scale;
+            project.update_meter(relation);
             $(".draggable").remove();
             $(".measures-btns").css('opacity', '1');
 
             setTimeout(function(){
                 APP.destroyElements(scene.root.children, "config");
-                putCanvasMessage("Recuerda guardar...", 2000);
             }, 500);
+        });
+        
+        $("#help-dialog").click(function(){
+            $(".dialog-option.help").fadeIn();
+        });
+        
+        $(".dialog-option.help").click(function(){
+            $(this).fadeOut();
         });
     },
 

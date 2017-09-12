@@ -45,7 +45,7 @@
             <!--   END TOOGLE NAVIGATION           -->
             <a onclick="loadContent('inicio.php')" id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
             <a onclick="loadContent('modelo.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">3D</a>
-            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Aportaciones</a>
+            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium active">Aportaciones</a>
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Exportar</a>
             <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Ayuda</a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
@@ -70,17 +70,17 @@
             
             <ul class="tabs" role="tablist" id="info-extra-tab">
                     <li>
-                        <input type="radio" name="tabs" id="tab1" />
+                        <input type="radio" name="tabs" id="tab1" checked/>
                         <label for="tab1" 
                                role="tab" 
-                               aria-selected="false" 
+                               aria-selected="true" 
                                aria-controls="panel1" 
                                tabindex="0">Imágenes</label>
                         <div id="tab-content1" 
                              class="tab-content-extra" 
                              role="tabpanel" 
                              aria-labelledby="imagenes" 
-                             aria-hidden="true">
+                             aria-hidden="false">
                             
                             <div style="display: flex; height: 50px;">
                                 <i class="material-icons extra-btn" onclick="deleteImage()">delete</i>
@@ -127,17 +127,17 @@
                     </li>
 
                     <li>
-                        <input type="radio" name="tabs" id="tab2" checked/>
+                        <input type="radio" name="tabs" id="tab2"/>
                         <label for="tab2"
                                role="tab" 
-                               aria-selected="true" 
+                               aria-selected="false" 
                                aria-controls="panel2" 
                                tabindex="0">PDF's</label>
                         <div id="tab-content2" 
                              class="tab-content-extra" 
                              role="tabpanel" 
                              aria-labelledby="pdfs" 
-                             aria-hidden="false">
+                             aria-hidden="true">
                             
                             <div class="url-loc">
                                     <input id="pdf-url" placeholder="Cargar PDF desde URL">

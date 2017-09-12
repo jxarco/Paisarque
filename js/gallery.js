@@ -143,6 +143,9 @@ function deleteImage(){
         }
     }
     
+    if(!pending.length)
+        return;
+    
     for(var i = 0; i < pending.length; i++)
     {
         var curr = pending[i];

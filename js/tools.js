@@ -287,13 +287,25 @@ function testDialog(options)
                   "margin-top: 20px; " +
                   "text-align: center;'>" +
                   "<h5>Herramientas</h5>" +// text 
-                  "<div class='dialog-option' style='display: flex;'>" +
+                  "<div class='dialog-option'>" +
                     "<button id='add-dialog' class='dialog-btn'>" + upperbtn + "</button>" +
                     "</div>" +
-                  "<div class='dialog-option' style='display: flex;'>" +
+                  "<div class='dialog-option'>" +
                     "<button id='end-dialog' class='dialog-btn'>" + lowerbtn + "</button>" +
+                    "</div>";
+    
+    if(options.scale)
+        html +=   "<div class='dialog-option'>" +
+                    "<button id='help-dialog' class='dialog-btn'><i class='material-icons'>info_outline</i></button>" +
                     "</div>" +
-                "</div>";
+                  "<div class='dialog-option'>" +
+                    "<input id='scale-input' placeholder='Escala (metros)'></input>" +
+                    "</div>" + 
+                  "<div class='dialog-option help'>" +
+                    "<p>Escribe en el cuadro de texto la escala con la que vas a medir el modelo 3D. Por ejemplo, si introduces 0.1, la distancia total entre los puntos que selecciones será igual a 0.1 metros. Por defecto, la distancia será 1 metro.</p>" +
+                  "</div>";
+                    
+    html += "</div>";
     
     location.append(html);
     $( ".draggable" ).draggable();
@@ -303,7 +315,7 @@ function testDialog(options)
     if(options.hidelower)
         $("#end-dialog").hide();
 }
-
+    
 /*
 * Sliders initialization
 */

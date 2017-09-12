@@ -236,19 +236,36 @@ Project.prototype.setRotations = function( rotation )
 *   @class Project
 */
 
-Project.prototype.restoreMeter = function()
+Project.prototype.update_meter = function(relation)
 {
+    if(!confirm("Las distancias se recalcularán pero las areas calculadas se borrarán si continuas."))
+    {
+        document.location.href = "modelo.html?r=" + current_project;      
+        return;
+    }
+
+    // recalcular distancias 
     for(var i = 0; i < this._measures.length; ++i)
     {
         var msr = this._measures[i];
-        msr.distance = msr.distance * this._meter;
+        msr.distance *= this._meter;
+        msr.distance /= relation;
+    }
+    
+    // recalcular segmentos
+    for(var i = 0; i < this._segments.length; ++i)
+    {
+        var msr = this._segments[i];
+        msr.distance *= this._meter;
+        msr.distance /= relation;
     }
 
-    this._meter = -1;
+    // DE MOMENTO, borrar areas
+    project._areas = [];
     
+    this._meter = relation;
     this.save();
     document.location.href = "modelo.html?r=" + current_project;    
-    putCanvasMessage("Actualiza la página para ver los cambios en las tablas.", 3000, {type: "alert"});
 }
 
 Project.prototype.getMeasurements = function()

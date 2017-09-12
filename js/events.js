@@ -238,6 +238,9 @@ $("#measure-opt-btn").click(function(){
     }
 });
 
+//$(".messages").click(function(){
+//   $(this).fadeOut(); 
+//});
 
 /*
 *   PROJECT STUFF

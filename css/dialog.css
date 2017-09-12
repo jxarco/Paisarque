@@ -18,7 +18,7 @@ input{
 }
 
 .dialog-option{
-/*    width: 130px;*/
+    display: flex;
 }
 
 .dialog-btn{
@@ -27,6 +27,7 @@ input{
     color: darkgrey;
     border: 1px solid black;
     width: 80%;
+    height: 30px;
     outline: none;
     margin-left: 10%;
     margin-bottom: 3px;
@@ -38,3 +39,26 @@ input{
     color: whitesmoke;
 }
 
+.dialog-option p{
+    color: darkgrey;
+    width: 80%;
+    margin-left: 10%;
+    margin-bottom: 3px;
+}
+
+.dialog-option input{
+    background: none;
+    border: 1px solid black;
+    box-shadow: 0px 0px 2px black;
+    color: darkgrey;
+    outline: none;
+    width: 80%;
+    margin-left: 10%;
+    margin-bottom: 3px;
+    padding-left: 5px;
+}
+
+.dialog-option.help{
+    display: none;
+    text-align: justify;
+}
