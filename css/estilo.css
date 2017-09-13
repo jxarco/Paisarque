@@ -60,14 +60,19 @@ h1, h2, h3, h4, h5, h6{
 /*********************************************************/
 /* inicio.php */
 
+.form-control.index{
+    width: 50%;
+    margin-left: 25%;
+}
+
 .textUser{
     cursor: default !important;
 }
 
 .btn.inicio{
     outline: none !important;
-    background: linear-gradient(rgb(180, 180, 180), rgb(210, 210, 210));
-    box-shadow: 0px 0px 2px black;
+    border-radius: 0px;
+    background: linear-gradient(rgb(200, 200, 200), rgb(210, 210, 210));
     color: black;
     width: 80%;
     margin-left: 10%;
@@ -75,8 +80,7 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .btn.inicio:hover{
-    background: linear-gradient(rgb(160, 160, 160), rgb(190, 190, 190));
-    box-shadow: 0px 0px 2px black;
+    background: linear-gradient(rgb(190, 190, 190), rgb(200, 200, 200));
     color: black;
 }
 

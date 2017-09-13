@@ -74,22 +74,6 @@ s</head>
         <br>
         - Posibilidad de exportar anotaciones en formato word/medidas, etc.-->
 
-        <?php 
-            echo '<a href="';
-            echo 'data/' . $_GET['r'] . '/mesh.obj"';
-            echo 'download="" title="Descargar Mesh" type="button" class="btn btn-default">Descargar Mesh</a>';
-            echo '<a href="';
-            echo 'data/' . $_GET['r'] . '/tex_0.jpg"';
-            echo 'download="" title="Descargar Textura" type="button" class="btn btn-default">Descargar Textura</a>';
-            echo '<a href="';
-            echo 'data/' . $_GET['r'] . '.json"';
-            echo 'download="" title="Descargar archivo de configuración" type="button" class="btn btn-default">Descargar archivo de configuración</a>';
-        ?>
-            <br>
-            <br>
-            <br>
-            
-            <h5>Opciones de exportación</h5>
             <table class="table table-striped table-hover" id="export-table">
                 <tbody>
                      <tr>

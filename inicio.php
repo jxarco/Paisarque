@@ -31,7 +31,7 @@
         
         <content class="container" id="all">
             
-            <div class="row" style="margin-top: 50px;">
+            <div class="row" style="margin-top: 46px;">
                 <div class="col-md-6 col-md-offset-3">
                     <div class="panel panel-default">
                         <div class="panel-body">
@@ -91,14 +91,12 @@
                                     ?>
                                 </tbody>
                             </table> 
+                            
                         </div>
                     </div>
                     
-                    <a href="https://www.upf.edu/"><img src="data/upf.png" class="img-responsive" style="margin-left: 42%; width: 150px;"></a>
-                    <br>
-                    <p style="margin-left: 45%; width: 100px;">Financiado por</p>
-                    <img src="data/bbva.png" class="img-responsive" style="margin-left: 45%; width: 100px;">
-                    
+                    <img src="data/bbva.png" class="img-responsive" style="margin-left: 42.5%; width: 100px;">
+                        
                 </div>
 	       </div>
             
@@ -212,15 +210,6 @@
                 </div>
               </div>
             </div>
-            
-            <br>
-            <br>
-            
-<!--            <div id="table-projects">-->
-            
-            
-                
-<!--            </div>-->
 
         </content><!--  content end-->
         
