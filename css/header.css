@@ -1,6 +1,6 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic);
-@import url('https://fonts.googleapis.com/css?family=Ubuntu');
-@import url('https://fonts.googleapis.com/css?family=Lobster');
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/css?family=Julius+Sans+One|Lobster+Two|Satisfy');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300');
 
 
 #navDemo{
@@ -9,7 +9,7 @@
 }
 
 #megatitle{
-    font-family: 'Lobster', cursive !important;
+    font-family: 'Julius Sans One', sans-serif;
     padding-top: 7px !important;
     font-size: 22px;
     text-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
@@ -20,6 +20,7 @@
     background-color: rgb(62, 164, 155);   
     color: aliceblue;
     height: 46px;
+    font-size: 14px;
 }
 
 .w3-bar-item.w3-button{

@@ -53,7 +53,7 @@ Project.prototype.pushExtra = function( type, data )
 *   @param type: data type (pdf, image, etc)
 *   @param data: path to data (or link)
 */
-Project.prototype.deleteExtra = function( id )
+Project.prototype.deleteExtra = function( type, id )
 {
     var index = null;
     var searched = "extra_" + id;

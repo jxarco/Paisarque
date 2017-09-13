@@ -139,6 +139,7 @@ $('#coord-btn').click(function(e)
     project._coordinates.lat = lat;
     project._coordinates.lng = lng;
     initMap(lat, lng);
+    putCanvasMessage("Recuerda guardar...", 3000);
 });
 
 $("#lat").keypress(onlyNumbers);

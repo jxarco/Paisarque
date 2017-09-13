@@ -54,8 +54,8 @@
     z-index: 2000;
 }
 
-#img-content .img-active{
-    border: 6px solid rgba(66, 134, 244, 0.9);
+#img-content .image-active, #texto .note-active, #videos .youtube-active{
+    border: 3px solid rgba(66, 134, 244, 0.8);
 }
 
 .extra-btn{
@@ -74,7 +74,8 @@
 
 #image-url{
     height: 50px; 
-    width: 200px;  
+    width: 50%;  
+    min-width: 200px;  
     padding: 5px;
 }
 
@@ -177,18 +178,46 @@ body, hmtl{background: #ecf0f1; font-family: 'Anton', sans-serif;}
 
 #text-url{
     height: 50px; 
-    width: 80%;  
+    width: 50%;  
+    min-width: 205px;  
     padding: 5px;
 }
 
 #texto{
-    background-color: rgba(0, 0, 0, 0.1);
-    padding: 5px;
+    background: none;
+    padding: 25px;
 }
 
 .apt-text{
-    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    background: white;
+    padding: 20px;
+    
     margin-top: 10px;
+}
+
+.note {
+    position: relative;
+    padding: 1em 1.5em;
+    color: #333;
+    background: #fff;
+    overflow: hidden;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+.note:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-width: 0 16px 16px 0;
+  border-style: solid;
+  border-color: rgb(225, 225, 225) rgb(225, 225, 225) #eee #eee;
+  background: #658E15;
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
+  /* Firefox 3.0 damage limitation */
+  display: block; width: 0;
 }
 
 /* @videos */
@@ -196,6 +225,7 @@ body, hmtl{background: #ecf0f1; font-family: 'Anton', sans-serif;}
 #pdf-url, #video-url{
     height: 50px; 
     width: 50%;  
+    min-width: 200px;  
     padding: 5px;
 }
 
@@ -208,4 +238,14 @@ body, hmtl{background: #ecf0f1; font-family: 'Anton', sans-serif;}
 .apt-video{
     position: relative;
     width: 100%;
+    border: none;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+.apt-video:hover{
+    position: relative;
+    width: 100%;
+    border: none;
+    border-bottom: 4px inset rgba(255, 255, 255, 1);
+    transition: linear 0.25s;
 }

@@ -14,7 +14,6 @@
         <link href="css/estilo.css" rel="stylesheet">
         <link href="css/header.css" rel="stylesheet">
         <link rel="stylesheet" href="css/RWD.css"> <!-- responsive web design -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">        
@@ -32,12 +31,12 @@
         
         <content class="container" id="all">
             
-            <div class="row" style="margin-top: 10.5%;">
+            <div class="row" style="margin-top: 50px;">
                 <div class="col-md-6 col-md-offset-3">
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <button id="addProject" class="submit-button btn btn-lg btn-block ladda-button" data-style="slide-up" data-color="green" type="submit" data-toggle="modal" data-target="#GSCCModal"><span class="ladda-label">Crear nuevo proyecto</span><span class="ladda-spinner"></span></button>
-                            <button id="delete-project" class="submit-button btn btn-lg btn-block ladda-button" data-style="slide-up" data-color="green" type="submit"><span class="ladda-label">Eliminar proyecto existente</span><span class="ladda-spinner"></span></button>
+                            <button id="addProject" class="submit-button btn inicio btn-lg btn-block ladda-button" data-style="slide-up" data-color="green" type="submit" data-toggle="modal" data-target="#GSCCModal"><span class="ladda-label">Crear nuevo proyecto</span><span class="ladda-spinner"></span></button>
+                            <button id="delete-project" class="submit-button btn inicio btn-lg btn-block ladda-button" data-style="slide-up" data-color="green" type="submit"><span class="ladda-label">Eliminar proyecto existente</span><span class="ladda-spinner"></span></button>
                             
                             <!-- Listamos los ficheros que hay en el servidor/carpeta y sus propiedades -->
                             <table id="projects-tb" class="table table-striped table-hover ">
@@ -92,11 +91,11 @@
                                     ?>
                                 </tbody>
                             </table> 
-                            
-                            
-                            
                         </div>
                     </div>
+                    
+                    <img src="data/bbva.png" class="img-responsive" style="margin-left: 40%; width: 100px;">
+                    
                 </div>
 	       </div>
             

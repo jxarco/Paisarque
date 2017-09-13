@@ -45,9 +45,10 @@
             <!--   END TOOGLE NAVIGATION           -->
             <a onclick="loadContent('inicio.php')" id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
             <a onclick="loadContent('modelo.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">3D</a>
-            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium active">Aportaciones</a>
-            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Exportar</a>
-            <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">Ayuda</a>
+            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium active">APORTACIONES</a>
+            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">EXPORTAR</a>
+            <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">AYUDA</a>
+            <a onclick="loadContent('contacto.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">CONTACTO</a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium textUser">username</a>
               
@@ -58,14 +59,15 @@
         <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-top" style="margin-top:46px">
             <a class="w3-bar-item w3-button w3-padding-large textUser">username</a>
             <a onclick="loadContent('modelo.html')" class="w3-bar-item w3-button w3-padding-large">3D</a>
-            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large">Aportaciones</a>
-            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large">Exportar</a>
-            <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large">Ayuda</a>
+            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large">APORTACIONES</a>
+            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large">EXPORTAR</a>
+            <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large">AYUDA</a>
+            <a onclick="loadContent('contacto.html')" class="w3-bar-item w3-button w3-padding-large">CONTACTO</a>
         </div>
           
         <content class="row"><div class="col-lg-12" style="margin-top: 46px;">
             
-            <h2 class="w3-xxlarge" style="font-family: Oswald !important;"><b>APORTACIONES</b></h2>
+            <h3 class="w3-xxlarge"><b>APORTACIONES</b></h3>
             <br>
             
             <ul class="tabs" role="tablist" id="info-extra-tab">
@@ -83,7 +85,7 @@
                              aria-hidden="false">
                             
                             <div style="display: flex; height: 50px;">
-                                <i class="material-icons extra-btn" onclick="deleteImage()">delete</i>
+                                <i class="material-icons extra-btn" onclick="deleteElement('image')">delete</i>
                                 <h6 class="tutorial"><i class="material-icons">arrow_back</i>Selecciona una o más imágenes y presiona aquí para borrar</h6>
                                 <i class="material-icons extra-btn" onclick="openMiniGallery()">view_carousel</i>
                                 <h6 class="tutorial"><i class="material-icons">arrow_back</i>Prueba el carrousel de fotos pulsando aquí</h6>
@@ -97,7 +99,7 @@
                                 <div class="url-loc">
                                     <input id="image-url" placeholder="Cargar desde URL">
                                     <i class="material-icons extra-btn add_extra" data-type="image" data-from="image-url">add_circle</i>
-                                    <i class="material-icons extra-btn" data-style="slide-up"  data-toggle="modal" data-target="#TESTModal"  >file_upload</i>
+<!--                                    <i class="material-icons extra-btn" data-style="slide-up"  data-toggle="modal" data-target="#TESTModal"  >file_upload</i>-->
                                     <i class="material-icons extra-btn refresh">refresh</i>
                                     <i class="material-icons extra-btn save">save</i>
                                 </div>
@@ -172,6 +174,7 @@
                                     <i class="material-icons extra-btn add_extra" data-type="text" data-from="text-url">add_circle</i>
                                     <i class="material-icons extra-btn refresh">refresh</i>
                                     <i class="material-icons extra-btn save">save</i>
+                                    <i class="material-icons extra-btn" onclick="deleteElement('note')">delete</i>
                             </div>
                             
                             <div id="texto">
@@ -199,6 +202,7 @@
                                     <i class="material-icons extra-btn add_extra" data-type="youtube" data-from="video-url">add_circle</i>
                                     <i class="material-icons extra-btn refresh">refresh</i>
                                     <i class="material-icons extra-btn save">save</i>
+<!--                                    <i class="material-icons extra-btn" onclick="deleteElement('youtube')">delete</i>-->
                             </div>
                             
                             <div id="videos" class="w3-row">

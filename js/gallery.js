@@ -109,35 +109,48 @@ function openMiniGallery()
     }
 }
 
-function select(element){
-    var img = element.className.split(" ")[2];
+function select(element, type){
+    
+    var img = null, size = null;
+    
+    if(type == "note"){
+        img = element.className.split(" ")[1];
+    }
+        
+    else{
+        img = element.className.split(" ")[2];
+    }
+    
+    var classtype = type + "-active";
     
     // TRUE: ONLY ONE DELETION
     // FALSE: ONE OR MORE DELETIONS
     if(false)
     {
-        for(var i = 0; i < imagesCounter; i++)
+        for(var i = 0; i < extraCounter; i++)
         {
-            var ids = ".image" + i;
-            $(ids).removeClass("img-active");
+            var ids = "." + type + i;
+            $(ids).removeClass(classtype);
         }
     }
     
-    if($("." + img).hasClass("img-active"))
-        $("." + img).removeClass("img-active");
+    if($("." + img).hasClass(classtype))
+        $("." + img).removeClass(classtype);
     else 
-        $("." + img).addClass("img-active");
+        $("." + img).addClass(classtype);
 }
 
-function deleteImage(){
+function deleteElement(type){
     
     var pending = [];
     var pending_index = [];
+    var classtype = type + "-active";
+    var size = null;
     
-    for(var i = 0; i < imagesCounter; i++)
+    for(var i = 0; i < extraCounter; i++)
     {
-        var img = ".image" + i;
-        if($(img).hasClass("img-active")){
+        var img = "." + type + i;
+        if($(img).hasClass(classtype)){
             pending.push($(img));
             pending_index.push(i);
         }
@@ -149,8 +162,11 @@ function deleteImage(){
     for(var i = 0; i < pending.length; i++)
     {
         var curr = pending[i];
-        curr.parent().remove();
-        copy.deleteExtra(pending_index[i]);    
+        if(type == "image")
+            curr.parent().remove();
+        else 
+            curr.remove();
+        copy.deleteExtra(type, pending_index[i]);    
     }
     
     updateGallery();

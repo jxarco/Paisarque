@@ -1,9 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Ubuntu');
+@import url('https://fonts.googleapis.com/css?family=Titillium+Web');
+@import url('https://fonts.googleapis.com/css?family=Dosis');
 
 body, html{
     margin: 0 !important;
     padding: 0 !important;
-    font-family: 'Ubuntu', sans-serif !important;
+    font-family: 'Titillium Web', sans-serif !important;
     background-color: rgb(235, 235, 235);
     width: 100% !important;
     height: 100% !important;
@@ -35,6 +36,10 @@ button:hover{
     background-color: rgb(150, 150, 150);
 }
 
+h1, h2, h3, h4, h5, h6{
+    font-family: 'Dosis', sans-serif !important;
+}
+
 /*********************************************************/
 /* general */
 
@@ -59,17 +64,34 @@ button:hover{
     cursor: default !important;
 }
 
-.btn{
-   outline: none !important;
+.btn.inicio{
+    outline: none !important;
+    background: linear-gradient(rgb(180, 180, 180), rgb(210, 210, 210));
+    box-shadow: 0px 0px 2px black;
+    color: black;
+    width: 80%;
+    margin-left: 10%;
+    margin-bottom: 3px;
 }
+
+.btn.inicio:hover{
+    background: linear-gradient(rgb(160, 160, 160), rgb(190, 190, 190));
+    box-shadow: 0px 0px 2px black;
+    color: black;
+}
+
 
 #projects-tb{
     margin-left: 5%;
     width: 90%;
 }
 
+#projects-tb tr td{
+    background: none;
+}
+
 #projects-tb tr:hover td{
-    background-color: rgba(82, 184, 175, 0.5) !important;
+    background: linear-gradient(rgb(190, 190, 190), rgb(240, 240, 240)) !important;
 }
 
 .form-group > label{
@@ -191,6 +213,10 @@ button:hover{
     width: 350px;
     margin-top: 46px;
 /*    border: 1px solid blue;*/
+}
+
+.tab-content-large{
+        overflow: hidden !important;
 }
 
 #myCanvas {
@@ -403,7 +429,7 @@ button:hover{
 }
 
 
-.info-panel{
+.info-panel, .contacto-panel{
     display: flex;
     margin: 5px;
 }

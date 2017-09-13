@@ -6,6 +6,7 @@ var delete_project_active = false;
 
 var copy = null;
 var imagesCounter = 0;
+var extraCounter = 0;
 
 // LOAD DATA FROM JSON
 
@@ -140,6 +141,7 @@ function parseExtraJSON(json)
     }
     
     imagesCounter = 0;
+    extraCounter = 0;
     
     $(".imageli").remove();
     $("#texto").empty();
@@ -147,7 +149,7 @@ function parseExtraJSON(json)
     $("#videos").empty();
     
     var el = null;
-    for(var e in json){
+    for(var e = 0; e < json.length; ++e){
         el = json[e];
         if (el.type == "image")
         {
@@ -178,23 +180,31 @@ function parseExtraJSON(json)
 function build(type, data)
 {
     if(type == "image"){
-        var t =  '<li class="imageli"><img src="'+ data +'" class="img-responsive image image' + imagesCounter + '" onclick="select(this)" alt="Responsive image"></li>';
-        imagesCounter++;
+        var t =  '<li class="imageli"><img src="'+ data +'" class="img-responsive image image' + extraCounter + '" onclick="select(this, ' + "'image'" + ')" alt="Responsive image"></li>';
+        extraCounter++;
         return t;
     }
     
-    if(type == "text")
-        return '<p class="apt-text">· '+ data +'</p>';
+    if(type == "text"){
+        var t = '<p class="note note' + extraCounter + '" onclick="select(this, ' + "'note'" + ')">· '+ data +'</p>';
+        extraCounter++;
+        return t;
+    }
+        
     
-    if(type == "pdf")
-        return '<div class="embed-responsive" style="padding-bottom:75vh">' +
+    if(type == "pdf"){
+        var t = '<div class="embed-responsive" style="padding-bottom:75vh">' +
             '<object data="'+ data +'" type="application/pdf" width="100%" height="100%"></object>' +
-            '</div>';
+            '</div>'; 
+        extraCounter++;
+        return t;
+    }
 
-    if(type == "youtube")
-        return '<div class="w3-col m4"><iframe class="apt-video" src="https://www.youtube.com/embed/'+ data +'" allowfullscreen></iframe></div>';
-    
-    
+    if(type == "youtube"){
+        var t = '<div class="w3-col m4"><iframe class="apt-video" src="https://www.youtube.com/embed/'+ data +'" allowfullscreen></iframe></div>';
+        extraCounter++;
+        return t;
+    }
         
 }
 
