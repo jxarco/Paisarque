@@ -238,6 +238,7 @@ body, hmtl{background: #ecf0f1; font-family: 'Anton', sans-serif;}
 .apt-video{
     position: relative;
     width: 100%;
+/*    height: 260px;*/
     border: none;
     border-bottom: 2px solid rgba(0, 0, 0, 0.3);
 }

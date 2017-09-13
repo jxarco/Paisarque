@@ -94,11 +94,11 @@ function loadJSON()
     $.ajax({dataType: "json",
         url: "data/" + current_project + '.json',
         error: function(error)
-            {
-                console.log(error)
-            },
-            success:function(data)
-            {
+        {
+            console.log(error)
+        },
+        success:function(data)
+        {
             $('#project').html(data.id + "<span class='caret'></span>");
             if(APP.parseJSON)
             {

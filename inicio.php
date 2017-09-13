@@ -94,7 +94,10 @@
                         </div>
                     </div>
                     
-                    <img src="data/bbva.png" class="img-responsive" style="margin-left: 40%; width: 100px;">
+                    <a href="https://www.upf.edu/"><img src="data/upf.png" class="img-responsive" style="margin-left: 42%; width: 150px;"></a>
+                    <br>
+                    <p style="margin-left: 45%; width: 100px;">Financiado por</p>
+                    <img src="data/bbva.png" class="img-responsive" style="margin-left: 45%; width: 100px;">
                     
                 </div>
 	       </div>

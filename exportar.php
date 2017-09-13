@@ -86,6 +86,70 @@ s</head>
             echo 'download="" title="Descargar archivo de configuración" type="button" class="btn btn-default">Descargar archivo de configuración</a>';
         ?>
             <br>
+            <br>
+            <br>
+            
+            <h5>Opciones de exportación</h5>
+            <table class="table table-striped table-hover" id="export-table">
+                <tbody>
+                     <tr>
+                        <td>Resumen del del proyecto</td>
+                        <td>Doc</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>Configuración</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td><a href="data/guest/super_test.json" download="" title="Descargar archivo de configuración">JSON</a></td>
+                    </tr>
+                    <tr>
+                        <td>Información básica</td>
+                        <td>Doc</td>
+                        <td>-</td>
+                        <td>JSON</td>
+                    </tr>
+                    <tr>
+                        <td>Anotaciones</td>
+                        <td>-</td>
+                        <td>XLS</td>
+                        <td>JSON</td>
+                    </tr>
+                    <tr>
+                        <td>Medidas</td>
+                        <td>-</td>
+                        <td>XLS</td>
+                        <td>JSON</td>
+                    </tr>
+                    <tr>
+                        <td>Areas</td>
+                        <td>-</td>
+                        <td>XLS</td>
+                        <td>JSON</td>
+                    </tr>
+                    <tr>
+                        <td>Aportaciones</td>
+                        <td>Doc</td>
+                        <td>XLS</td>
+                        <td>JSON</td>
+                    </tr>
+                    <tr>
+                        <td>Modelo 3D</td>
+                        <?php 
+                            echo '<td><a href="';
+                            echo 'data/' . $_GET['r'] . '/mesh.obj"';
+                            echo 'download="" title="Descargar mesh">Mesh (.obj)</a></td>';
+                         php?>
+                        <?php 
+                            echo '<td><a href="';
+                            echo 'data/' . $_GET['r'] . '/tex_0.jpg"';
+                            echo 'download="" title="Descargar textura">Textura (.jpg)</a></td>';
+                         php?>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
             
         </div>
         

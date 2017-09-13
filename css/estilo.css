@@ -86,14 +86,6 @@ h1, h2, h3, h4, h5, h6{
     width: 90%;
 }
 
-#projects-tb tr td{
-    background: none;
-}
-
-#projects-tb tr:hover td{
-    background: linear-gradient(rgb(190, 190, 190), rgb(240, 240, 240)) !important;
-}
-
 .form-group > label{
     color: dimgrey !important;
 }
