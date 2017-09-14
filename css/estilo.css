@@ -469,6 +469,22 @@ h1, h2, h3, h4, h5, h6{
 }
 
 /* -------------------------------------------- */
+/* export css */
+#export-table td{
+    text-align: center;
+}
+
+#export-table i{
+    font-size: 17px;
+    color: rgba(10, 10, 10, 0.3);
+    
+}
+
+#export-table a:hover{
+    text-decoration: none;
+}
+
+/* -------------------------------------------- */
 /* sliders */
 
 .sliders{

@@ -6,266 +6,48 @@ var textLinkCounter = 0;
 /* EXPORT STUFF */
 
 $(".export-pdf").click(function(){
-    var doc = new jsPDF();
     
     var user = current_user;
     var project_name = current_project.split("/")[1];
     var type = $(this).attr("class").split(" ")[1];
-    var separator = "__________________________________________________\n\n";
     
-    doc.setFontSize(20);
-    doc.text(project_name, 20, 20);
-    doc.setFontSize(10);
-    doc.text("De " + user, 20, 30);
-    
-    doc.setFontSize(11);
-    
-    var body = "";
-    var isSummary = $(this).hasClass("summary");
-    
-    if($(this).hasClass("detailed") || isSummary)
-    {
-        // información básica
-        body += "Sobre el proyecto\n" + separator;
-        body += "Autor del proyecto: " + copy._author + "\n" +
-            "Localización: " + copy._location + "\n" +
-            "(LAT/LONG): (" + copy._coordinates.lat + "/" + copy._coordinates.lat + ")\n" +
-            "Descripción: " + copy._description + "\n";
-        body += separator;
-        // render 3d
-        body += "Modelo 3D: " + copy._mesh + "\n" +
-            "Texturas:\n";
-        
-        for(var i = 0; i < copy._textures.length; ++i)
-            body += "\t\t" + copy._textures[i] + "\n";
-        
-        body += separator;
-        
-        // rotaciones
-        if(copy._rotations.length){
-            body += "El modelo 3D dispone de una rotación modificada usando como valores:\n";
-            body += "\t\t(" + copy._rotations["0"].r0 + ", " + copy._rotations["1"].r1 + ", " + copy._rotations["2"].r2 + ", " + copy._rotations["3"].r3 + ")\n";
-            body += separator;
+    var options = {
+            title: project_name,
+            user: user,
+            extype: type
         }
-        else
-        {
-            body += "El proyecto únicamente dispone de las rotaciones por defecto.\n";
-            body += separator;
-        }
-        
-         // ESCALA!!!
-        
-        if(copy._meter != -1)
-            body += "La relación de escala es de " + copy._meter + " unidades por cada metro.\n\n";
-        else
-            body += "La escala no ha sido configurada.\n\n";
-        body += separator;
-            
-        // anotaciones
-        if(!isSummary)
-        {
-            doc.text(body, 20, 45);
-            doc.addPage();
-            doc.setPage(2);
-            body = "";
+    
+    jsToPDF(options);
+});
 
-            body += "Anotaciones realizadas sobre el modelo 3D:\n" + separator;
-            if(copy._anotations.length){
-                for(var i = 0; i < copy._anotations.length; ++i)
-                {
-                    var current = copy._anotations[i];
-                    body += "\t\tDescripción: " + current.text + "\n" +
-                        "\t\tPosición: (" + current.position[0] + ", " + current.position[1] + ", " + current.position[2] + ")\n" +
-                        "\t\tCámara: (" + current.position[0] + ", " + current.position[1] + ", " + current.position[2] + ")\n" +
-                        "\t\tID: " + current.id + "\n";
-                }
-                body += separator;
-            }
-            else
-            {
-                body += "El proyecto no contiene anotaciones.\n";
-                body += separator;
-            }
-            
-            doc.text(body, 20, 25);
-            doc.addPage();
-            doc.setPage(3);
-            body = "";
-            
-            // medidas
-            body += "Mediciones realizadas sobre el modelo 3D:\n" + separator;
-            if(copy._measures.length){
-                for(var i = 0; i < copy._measures.length; ++i)
-                {
-                    var current = copy._measures[i];
-                    body += "\t\tEtiqueta: " + "Sin etiqueta" + "\n";
-                    body += "\t\tDistancia: " + current.distance + "\n";
-                    body += "\t\tPosición P0: (" + current.x1[0] + ", " + current.x1[1] + ", " + current.x1[2] + ")\n" +
-                        "\t\tPosición P1: (" + current.x2[0] + ", " + current.x2[1] + ", " + current.x2[2] + ")\n" +
-                        "\t\tID: " + current.id + "\n\n";
-                }
-                body += separator;
-            }
-            else
-            {
-                body += "El proyecto no contiene mediciones.\n";
-                body += separator;
-            }
-        }
-        
-        if(!isSummary){
-            doc.text(body, 20, 25);
-            doc.addPage();
-            doc.setPage(4);
-            body = "";
-            
-            body += "Mediciones por segmentos realizadas sobre el modelo 3D:\n" + separator;
-            if(copy._segments.length){
-                for(var i = 0; i < copy._segments.length; ++i)
-                {
-                    var current = copy._segments[i];
-                    body += "\t\tEtiqueta: " + "Sin etiqueta" + "\n";
-                    body += "\t\tDistancia: " + current.distance + "\n";
-                    for(var j = 0; j < current.points.length; ++j){
-                        var point = current.points[j];
-                        body += "\t\tPosición P" + j + ": (" + point[0] + ", " + point[1] + ", " + point[2] + ")\n";
-                    }
-
-                    body += "\t\tID: " + current.id + "\n\n";
-                }
-                body += separator;
-            }
-            else
-            {
-                body += "El proyecto no contiene mediciones por segmentos.\n";
-                body += separator;
-            }
-        }
-       
-        
-        
-        // areas
-        
-        if(!isSummary){
-            doc.text(body, 20, 25);
-            doc.addPage();
-            doc.setPage(5);
-            body = "";
-            
-            body += "Mediciones de area realizadas sobre el modelo 3D:\n" + separator;
-            if(copy._areas.length){
-                for(var i = 0; i < copy._areas.length; ++i)
-                {
-                    var current = copy._areas[i];
-                    body += "\t\tEtiqueta: " + current.name + "\n";
-                    body += "\t\tArea: " + current.area + "\n";
-                    for(var j = 0; j < current.points.length; ++j){
-                        var point = current.points[j];
-                        body += "\t\tPosición P" + j + ": (" + point[0] + ", " + point[1] + ", " + point[2] + ")\n";
-                    }
-
-                    body += "\t\tID: " + current.id + "\n\n";
-                }
-                body += separator;
-            }
-            else
-            {
-                body += "El proyecto no contiene mediciones de area.\n";
-                body += separator;
-            }
-        }
-        
-        // extra
-        if(!isSummary){
-            doc.text(body, 20, 25);
-            doc.addPage();
-            doc.setPage(6);
-            body = "";
-        }
-        
-        body += "Aportaciones subidas al proyecto:\n" + separator;
-        
-        if(copy._extra.length){
-            copy._extra.sort(function(a,b) {
-                  if (a.type < b.type)
-                       return -1;
-                  if (a.type > b.type)
-                    return 1;
-                  return 0;
-                });
-            
-            for(var i = 0; i < copy._extra.length; ++i)
-            {
-                var current = copy._extra[i];
-                if(current.type == "image")
-                    body += "\t\tImagen (URL): " + current.data + "\n";
-                else if(current.type == "pdf")
-                    body += "\t\tURL imagen: " + current.data + "\n";
-                else if(current.type == "text")
-                    body += "\t\tNota: " + current.data + "\n";
-                else if(current.type == "youtube")
-                    body += "\t\tVídeo (URL): " + current.data + "\n";
-            }
-            body += separator;
-        }
-        else
-        {
-            body += "El proyecto no dispone de aportaciones.\n";
-            body += separator;
-        }
-    }
-        
-    if($(this).hasClass("aport"))
-    {
-        body += "Aportaciones subidas al proyecto:\n" + separator;
-        
-        if(copy._extra.length){
-            copy._extra.sort(function(a,b) {
-                  if (a.type < b.type)
-                       return -1;
-                  if (a.type > b.type)
-                    return 1;
-                  return 0;
-                });
-            
-            for(var i = 0; i < copy._extra.length; ++i)
-            {
-                var current = copy._extra[i];
-                if(current.type == "image")
-                    body += "\t\tImagen (URL): " + current.data + "\n";
-                else if(current.type == "pdf")
-                    body += "\t\tURL imagen: " + current.data + "\n";
-                else if(current.type == "text")
-                    body += "\t\tNota: " + current.data + "\n";
-                else if(current.type == "youtube")
-                    body += "\t\tVídeo (URL): " + current.data + "\n";
-            }
-            body += separator;
-        }
-        else
-        {
-            body += "El proyecto no dispone de aportaciones.\n";
-            body += separator;
-        }
-        
-        doc.text(body, 20, 45);
-        doc.save(project_name + '_' + type + '.pdf');
-        return;
+$(".export-json").click(function(){
+    
+    var project_name = current_project.split("/")[1];
+    var type = $(this).attr("class").split(" ")[1];
+    
+    var csv = JSON.stringify(copy[type], null, 2);
+    
+    var options = {
+        file: "export_" + project_name + type + ".json",
+        csv: csv
     }
     
-    if($(this).hasClass("config"))
-    {
-        body += separator + JSON.stringify(copy, null, 2);
-        doc.text(body, 20, 45);
-        doc.save(project_name + '_' + type + '.pdf');
-        return;
+    jsToJSON(this, options);
+});
+
+$(".export-xls").click(function(){
+    
+    var project_name = current_project.split("/")[1];
+    var type = $(this).attr("class").split(" ")[1];
+    
+    var csv = convertToCSV(copy[type]);
+    
+    var options = {
+        file: "export_" + project_name + type + ".csv",
+        csv: csv
     }
     
-    if(isSummary)
-        doc.text(body, 20, 45);
-    else
-        doc.text(body, 20, 25);
-    doc.save(project_name + '_' + type + '.pdf');
+    jsToXLS(this, options);
 });
 
 /* EXTRA STUFF */

@@ -597,7 +597,7 @@ Project.prototype.fill = function( data )
 //    console.log(data);
     var copy = JSON.parse(data);
     
-    this._json = copy._json;
+//    this._json = copy._json;
     this._id = copy._id;
     this._uid = copy._uid;
     this._description = copy._description;

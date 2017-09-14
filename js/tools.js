@@ -7,6 +7,7 @@ var delete_project_active = false;
 var copy = null;
 var imagesCounter = 0;
 var extraCounter = 0;
+var separator = "__________________________________________________\n";
 
 // LOAD DATA FROM JSON
 
@@ -350,3 +351,341 @@ var init_sliders = function() {
   });
     
 };
+
+
+/* 
+* PDF EXPORTING
+* Uses the jsPDF library to export javascript to pdf
+*/
+
+function jsToPDF(options)
+{
+    var doc = new jsPDF();
+    var pageHeight = doc.internal.pageSize.height - 25;
+    
+    var user = options.user;
+    var project_name = options.title;
+    var type = options.extype;
+    
+    doc.setFontSize(20);
+    doc.text(project_name, 20, 20);
+    doc.setFontSize(10);
+    doc.text("De " + user, 20, 30);
+    doc.setFontSize(11);
+    
+    var body = "";
+    var isSummary = type == "summary";
+    
+    if(type == "detailed" || isSummary)
+    {
+        // información básica
+        body += separator + "Sobre el proyecto\n\n";
+        body += "Autor del proyecto: " + copy._author + "\n" +
+            "Localización: " + copy._location + "\n" +
+            "Latitud-Longitud: [ " + copy._coordinates.lat + " - " + copy._coordinates.lng + " ]\n" +
+            "Descripción: " + copy._description + "\n";
+        
+        // render 3d
+        body += separator + "3D\n\n";
+        body += "Modelo 3D: " + copy._mesh + "\n" +
+            "Texturas:\n";
+        
+        for(var i = 0; i < copy._textures.length; ++i)
+            body += "\t" + copy._textures[i] + "\n";
+        
+        if(!isSummary)
+        {
+            // rotaciones
+            body += separator + "Rotaciones\n\n";
+            if(copy._rotations.length){
+                body += "El modelo 3D dispone de una rotación modificada usando como valores:\n";
+                body += "\t(" + copy._rotations["0"].r0 + ", " + copy._rotations["1"].r1 + ", " + copy._rotations["2"].r2 + ", " + copy._rotations["3"].r3 + ")\n";
+            }
+            else
+                body += "El proyecto únicamente dispone de las rotaciones por defecto.\n";
+
+             // ESCALA!!!
+            body += separator + "Escala\n\n";
+            if(copy._meter != -1)
+                body += "La relación de escala es de " + copy._meter + " unidades por cada metro.\n";
+            else
+                body += "La escala no ha sido configurada.\n";
+
+            // anotaciones
+            
+            body += separator + "Anotaciones realizadas sobre el modelo 3D:\n\n";
+            if(copy._anotations.length){
+                for(var i = 0; i < copy._anotations.length; ++i)
+                {
+                    var current = copy._anotations[i];
+                    body += "\tID: " + current.id + "\n" +
+                        "\tDescripción: " + current.text + "\n" +
+                        "\tPosición: (" + current.position[0] + ", " + current.position[1] + ", " + current.position[2] + ")\n" +
+                        "\tCámara: (" + current.position[0] + ", " + current.position[1] + ", " + current.position[2] + ")\n";
+                }
+            }
+            else
+                body += "El proyecto no contiene anotaciones.\n";
+            
+            // medidas
+            body += separator + "Mediciones realizadas sobre el modelo 3D:\n\n";
+            if(copy._measures.length){
+                for(var i = 0; i < copy._measures.length; ++i)
+                {
+                    var current = copy._measures[i];
+                    body += "\tID: " + current.id + "\n";
+                    body += "\tEtiqueta: " + "Sin etiqueta" + "\n";
+                    body += "\tDistancia: " + current.distance + "\n";
+                    body += "\tPosición P0: (" + current.x1[0] + ", " + current.x1[1] + ", " + current.x1[2] + ")\n" +
+                        "\tPosición P1: (" + current.x2[0] + ", " + current.x2[1] + ", " + current.x2[2] + ")\n";
+                }
+            }
+            else
+                body += "El proyecto no contiene mediciones.\n";
+        }
+        
+        if(!isSummary){
+            body += separator + "Mediciones por segmentos realizadas sobre el modelo 3D:\n\n";
+            if(copy._segments.length){
+                for(var i = 0; i < copy._segments.length; ++i)
+                {
+                    var current = copy._segments[i];
+                    body += "\tID: " + current.id + "\n";
+                    body += "\tEtiqueta: " + "Sin etiqueta" + "\n";
+                    body += "\tDistancia: " + current.distance + "\n";
+                    for(var j = 0; j < current.points.length; ++j){
+                        var point = current.points[j];
+                        body += "\tPosición P" + j + ": (" + point[0] + ", " + point[1] + ", " + point[2] + ")\n";
+                    }
+                }
+            }
+            else
+                body += "El proyecto no contiene mediciones por segmentos.\n";
+        }
+
+        // areas
+        if(!isSummary){
+            body += separator + "Mediciones de area realizadas sobre el modelo 3D:\n\n";
+            if(copy._areas.length){
+                for(var i = 0; i < copy._areas.length; ++i)
+                {
+                    var current = copy._areas[i];
+                    body += "\tID: " + current.id + "\n";
+                    body += "\tEtiqueta: " + current.name + "\n";
+                    body += "\tArea: " + current.area + "\n";
+                    for(var j = 0; j < current.points.length; ++j){
+                        var point = current.points[j];
+                        body += "\tPosición P" + j + ": (" + point[0] + ", " + point[1] + ", " + point[2] + ")\n";
+                    }
+                }
+            }
+            else
+                body += "El proyecto no contiene mediciones de area.\n";
+        }
+        
+        // extra
+        body += separator + "Aportaciones subidas al proyecto:\n\n";
+
+        if(copy._extra.length){
+            copy._extra.sort(function(a,b) {
+                  if (a.type < b.type)
+                       return -1;
+                  if (a.type > b.type)
+                    return 1;
+                  return 0;
+                });
+            
+            for(var i = 0; i < copy._extra.length; ++i)
+            {
+                var current = copy._extra[i];
+                if(current.type == "image")
+                    body += "\tImagen (URL): " + current.data + "\n";
+                else if(current.type == "pdf")
+                    body += "\tURL imagen: " + current.data + "\n";
+                else if(current.type == "text")
+                    body += "\tNota: " + current.data + "\n";
+                else if(current.type == "youtube")
+                    body += "\tVídeo (URL): " + current.data + "\n";
+            }
+        }
+        else
+            body += "El proyecto no dispone de aportaciones.\n";
+        
+        var lines = body.split("\n");
+        // Y corresponds to the current page height
+        var y = 45;
+        
+        for(var i = 0; i < lines.length; i++)
+        {
+            doc.text(lines[i], 20, y);            
+            y += 7;
+            if(y > pageHeight)
+            {
+                doc.addPage();
+                y = 25;
+            }
+        }
+    }
+        
+    if(type == "aport")
+    {
+        body = "";
+        body += "Aportaciones subidas al proyecto:\n" + separator;
+        
+        if(copy._extra.length){
+            copy._extra.sort(function(a,b) {
+                  if (a.type < b.type)
+                       return -1;
+                  if (a.type > b.type)
+                    return 1;
+                  return 0;
+                });
+            
+            for(var i = 0; i < copy._extra.length; ++i)
+            {
+                var current = copy._extra[i];
+                if(current.type == "image")
+                    body += "\tImagen (URL): " + current.data + "\n";
+                else if(current.type == "pdf")
+                    body += "\tURL imagen: " + current.data + "\n";
+                else if(current.type == "text")
+                    body += "\tNota: " + current.data + "\n";
+                else if(current.type == "youtube")
+                    body += "\tVídeo (URL): " + current.data + "\n";
+            }
+            body += separator;
+        }
+        else
+        {
+            body += "El proyecto no dispone de aportaciones.\n";
+            body += separator;
+        }
+        
+        var lines = body.split("\n");
+        // Y corresponds to the current page height
+        var y = 45;
+        
+        for(var i = 0; i < lines.length; i++)
+        {
+            doc.text(lines[i], 20, y);            
+            y += 7;
+            if(y > pageHeight)
+            {
+                doc.addPage();
+                y = 25;
+            }
+        }
+    }
+    
+    if(type == "config")
+    {
+        var lines = JSON.stringify(copy, null, 2).split("\n");
+        // Y corresponds to the current page height
+        var y = 45;
+        
+        for(var i = 0; i < lines.length; i++)
+        {
+            doc.text(lines[i], 20, y);            
+            y += 7;
+            if(y > pageHeight)
+            {
+                doc.addPage();
+                y = 25;
+            }
+        }
+        
+    }
+    
+    // saving is the same for every option
+    doc.save("export_" + project_name + '_' + type + '.pdf');
+}
+
+/* 
+* JSON EXPORTING
+*/
+function jsToJSON(element, options)
+{
+    var csvData = 'data:application/json;charset=utf-8,' + encodeURIComponent(options.csv);
+    
+    element.href = csvData;
+    element.target = '_blank';
+    element.download = options.file;
+}
+
+
+/* 
+* CSV EXPORTING
+*/
+
+function jsToXLS(element, options)
+{
+    var csvData = 'data:text/csv;charset=utf-8,' + encodeURIComponent(options.csv);
+    
+    element.href = csvData;
+    element.target = '_blank';
+    element.download = options.file;
+}
+
+/* 
+* Tries to convert the object list format to csv format
+*/
+ function convertToCSV(list) {
+     
+     var header = "";
+     var str = "";
+     
+     for(var i = 0; i < list.length; ++i)
+     {
+        var array = list[i];
+        var keys = Object.keys(array); 
+         
+        for(var j = 0; j < keys.length; ++j)
+        {
+            header += keys[j];
+            if(j == keys.length - 1)
+                header += "\n";
+            else
+                header += ",";
+            
+            if(typeof array[keys[j]] !== 'object')
+                str += array[keys[j]];
+            else
+                str += JSONtoString( array[keys[j]] );
+                
+            if(j == keys.length - 1)
+                str += "\n";
+            else
+                str += ",";
+         }
+     }
+     
+     var data = header + str;
+     return data;
+ }
+     
+/* 
+* Tries to pretty print a json in a string
+*/
+function JSONtoString(sample)
+{
+    var str = "";
+    var keys = Object.keys(sample);
+    
+    for(var i = 0; i < keys.length; ++i)
+    {
+        if(typeof sample[keys[i]] !== 'object')
+            str += sample[keys[i]];
+        else
+            str += JSONtoString( sample[keys[i]] );
+
+        if(i != keys.length - 1)
+            str += " x ";
+     }
+    
+    return str;
+}
+
+
+
+
+

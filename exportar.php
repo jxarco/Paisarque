@@ -77,64 +77,64 @@ s</head>
             <table class="table table-striped table-hover" id="export-table">
                 <tbody>
                      <tr>
-                        <td>Resumen del proyecto</td>
-                        <td class="export-pdf summary success"><a href="">PDF</a></td>
-                        <td>-</td>
-                        <td>-</td>
+                        <th>Resumen del proyecto</th>
+                        <td class="success"><a class="export-pdf summary" title="Exportar en PDF" href="">PDF</a></td>
+                        <td><i class="material-icons">not_interested</i></td>
+                        <td><i class="material-icons">not_interested</i></td>
                     </tr>
                     <tr>
-                        <td>Proyecto al detalle</td>
-                        <td class="export-pdf detailed success"><a href="">PDF</a></td>
-                        <td>-</td>
-                        <td>-</td>
+                        <th>Proyecto al detalle</th>
+                        <td class="success"><a class="export-pdf detailed" title="Exportar en PDF" href="">PDF</a></td>
+                        <td><i class="material-icons">not_interested</i></td>
+                        <td><i class="material-icons">not_interested</i></td>
                     </tr>
                     <tr>
-                        <td>Configuración</td>
-                        <td class="export-pdf config danger"><a href="">PDF</a></td>
-                        <td>-</td>
+                        <th>Configuración</th>
+                        <td class="success"><a class="export-pdf config" title="Exportar en PDF" href="">PDF</a></td>
+                        <td><i class="material-icons">not_interested</i></td>
                          <?php 
                             echo '<td class="success"><a href="';
                             echo 'data/' . $_GET['r'] . '.json"';
-                            echo 'download="" title="Descargar archivo de configuración">JSON</a></td>';
+                            echo 'download="" title="Descargar configuración en JSON">JSON</a></td>';
                          php?>
                     </tr>
                     <tr>
-                        <td>Anotaciones</td>
-                        <td>-</td>
-                        <td>XLS</td>
-                        <td>JSON</td>
+                        <th>Anotaciones</th>
+                        <td><i class="material-icons">not_interested</i></td>
+                        <td class="success"><a class="export-xls _anotations" title="Exportar en CSV" href="">CSV</a></td>
+                        <td class="success"><a class="export-json _anotations" title="Exportar en JSON" href="">JSON</a></td>
                     </tr>
                     <tr>
-                        <td>Medidas</td>
-                        <td>-</td>
-                        <td>XLS</td>
-                        <td>JSON</td>
+                        <th>Medidas</th>
+                        <td><i class="material-icons">not_interested</i></td>
+                        <td class="success"><a class="export-xls _measures" title="Exportar en CSV" href="">CSV</a></td>
+                        <td class="success"><a class="export-json _measures" title="Exportar en JSON" href="">JSON</a></td>
                     </tr>
                     <tr>
-                        <td>Areas</td>
-                        <td>-</td>
-                        <td>XLS</td>
-                        <td>JSON</td>
+                        <th>Areas</th>
+                        <td><i class="material-icons">not_interested</i></td>
+                        <td class="success"><a class="export-xls _areas" title="Exportar en CSV" href="">CSV</a></td>
+                        <td class="success"><a class="export-json _areas" title="Exportar en JSON" href="">JSON</a></td>
                     </tr>
                     <tr>
-                        <td>Aportaciones</td>
-                        <td class="export-pdf aport success"><a href="">PDF</a></td>
-                        <td>-</td>
-                        <td>JSON</td>
+                        <th>Aportaciones</th>
+                        <td class="success"><a class="export-pdf aport" title="Exportar en PDF" href="">PDF</a></td>
+                        <td><i class="material-icons">not_interested</i></td>
+                        <td class="success"><a class="export-json _extra" title="Exportar en JSON" href="">JSON</a></td>
                     </tr>
                     <tr>
-                        <td>Modelo 3D</td>
+                        <th>Modelo 3D</th>
                         <?php 
                             echo '<td class="success"><a href="';
                             echo 'data/' . $_GET['r'] . '/mesh.obj"';
-                            echo 'download="" title="Descargar mesh">Mesh (.obj)</a></td>';
+                            echo 'download="" title="Descargar mesh">OBJ MESH</a></td>';
                          php?>
                         <?php 
                             echo '<td class="success"><a href="';
                             echo 'data/' . $_GET['r'] . '/tex_0.jpg"';
-                            echo 'download="" title="Descargar textura">Textura (.jpg)</a></td>';
+                            echo 'download="" title="Descargar textura">JPG TEXT</a></td>';
                          php?>
-                        <td>-</td>
+                        <td><i class="material-icons">not_interested</i></td>
                     </tr>
                 </tbody>
             </table>
