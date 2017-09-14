@@ -8,7 +8,7 @@
     <title>Exportar PaisArque</title>
     <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
     <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link href="css/custom.min.css" rel="stylesheet">
     <link href="css/estilo.css" rel="stylesheet">
     <link href="css/header.css" rel="stylesheet">
@@ -77,22 +77,26 @@ s</head>
             <table class="table table-striped table-hover" id="export-table">
                 <tbody>
                      <tr>
-                        <td>Resumen del del proyecto</td>
-                        <td>Doc</td>
+                        <td>Resumen del proyecto</td>
+                        <td class="export-pdf summary success"><a href="">PDF</a></td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>Proyecto al detalle</td>
+                        <td class="export-pdf detailed success"><a href="">PDF</a></td>
                         <td>-</td>
                         <td>-</td>
                     </tr>
                     <tr>
                         <td>Configuración</td>
+                        <td class="export-pdf config danger"><a href="">PDF</a></td>
                         <td>-</td>
-                        <td>-</td>
-                        <td><a href="data/guest/super_test.json" download="" title="Descargar archivo de configuración">JSON</a></td>
-                    </tr>
-                    <tr>
-                        <td>Información básica</td>
-                        <td>Doc</td>
-                        <td>-</td>
-                        <td>JSON</td>
+                         <?php 
+                            echo '<td class="success"><a href="';
+                            echo 'data/' . $_GET['r'] . '.json"';
+                            echo 'download="" title="Descargar archivo de configuración">JSON</a></td>';
+                         php?>
                     </tr>
                     <tr>
                         <td>Anotaciones</td>
@@ -114,19 +118,19 @@ s</head>
                     </tr>
                     <tr>
                         <td>Aportaciones</td>
-                        <td>Doc</td>
-                        <td>XLS</td>
+                        <td class="export-pdf aport success"><a href="">PDF</a></td>
+                        <td>-</td>
                         <td>JSON</td>
                     </tr>
                     <tr>
                         <td>Modelo 3D</td>
                         <?php 
-                            echo '<td><a href="';
+                            echo '<td class="success"><a href="';
                             echo 'data/' . $_GET['r'] . '/mesh.obj"';
                             echo 'download="" title="Descargar mesh">Mesh (.obj)</a></td>';
                          php?>
                         <?php 
-                            echo '<td><a href="';
+                            echo '<td class="success"><a href="';
                             echo 'data/' . $_GET['r'] . '/tex_0.jpg"';
                             echo 'download="" title="Descargar textura">Textura (.jpg)</a></td>';
                          php?>
@@ -144,17 +148,18 @@ s</head>
             
 
          <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-        <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <script src="js/extra/bootstrap.min.js"></script>
-        <script src="js/extra/custom.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script type="text/javascript" src="js/extra/jspdf.min.js"></script>
+        <script type="text/javascript" src="js/extra/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/extra/custom.js"></script>
         <script type="text/javascript" src="js/extra/gl-matrix-min.js"></script>
         <script type="text/javascript" src="js/extra/rangeslider.min.js"></script>
         <script type="text/javascript" src="js/extra/litegl.js"></script>
         <script type="text/javascript" src="js/extra/rendeer.js"></script>
         <script src="litefile/litefileserver.js"></script>
         <script src="litefile/js/codeLite.js"></script>
+        <script src="js/project.js"></script>
         <script src="js/utils.js"></script>
        <script type="text/javascript">
             PAS.recover(); // load paisarque session
@@ -162,10 +167,7 @@ s</head>
         <script src="js/tools.js"></script>
         <script src="js/events.js"></script>
         <script>
-        
-            if(0)
-                $("content").html("");
-        
+            LOADER.loadProject();
         </script>
     </body>
     

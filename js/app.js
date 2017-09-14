@@ -167,8 +167,8 @@ var APP = {
                 putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "alert"}); 
         };
 
-//        renderer.loadMesh(obj.mesh, makeVisible);
-//        renderer.loadTexture(obj.texture, renderer.default_texture_settings);
+        renderer.loadMesh(obj.mesh, makeVisible);
+        renderer.loadTexture(obj.texture, renderer.default_texture_settings);
 
         obj.scale([5,5,5]);
         pivot.addChild( obj );
@@ -732,13 +732,13 @@ var APP = {
         var measure = project.getMeasure(id);
         var x1 = [measure.x1[0], measure.x1[1], measure.x1[2]];
         var x2 = [measure.x2[0], measure.x2[1], measure.x2[2]];
-        var points = [x1, x2];
+        window.points = [x1, x2];
 
         for(var i = 0; i < points.length; ++i)
-            {
-                    var ind = new SceneIndication();
-                    ind = ind.ball(scene, points[i], {depth_test: false, type: "view"});
-            }
+        {
+            var ind = new SceneIndication();
+            ind = ind.ball(scene, points[i], {depth_test: false, type: "view"});
+        }
 
         var vertices = x1.concat(x2);
         var mesh = GL.Mesh.load({ vertices: vertices }); 
@@ -771,7 +771,15 @@ var APP = {
             measure = project.getSegmentMeasure(id) || {};
     //    console.log(measure);
 
-        var points = measure.points;
+        var points = [];
+        
+        for(var i = 0; i < measure.points.length; ++i){
+            var list = [];
+            list.push(measure.points[i][0]);
+            list.push(measure.points[i][1]);
+            list.push(measure.points[i][2]);
+            points.push(list);
+        }
 
         for(var i = 0; i < points.length; ++i)
         {

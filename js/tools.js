@@ -28,7 +28,11 @@ var LOADER = {
         copy = new Project({}, current_user, {no_construct: true});
         copy.fill(data);
         $(".refresh").click();
-        
+    },
+    loadProject: function(){
+        var data = sessionStorage.getItem("project");
+        copy = new Project({}, current_user, {no_construct: true});
+        copy.fill(data);
     }
 };
 
@@ -73,10 +77,12 @@ function loadContent(url, id)
             document.location.href = url+"?user=" + current_user;
             
         else {
+            // pass project information to reload it later
             var preurl = document.location.pathname;
             if(preurl.includes("/modelo.html"))
-                // pass project information to reload it later
-                sessionStorage.setItem("project", JSON.stringify(project));        
+                sessionStorage.setItem("project", JSON.stringify(project));     
+            if(preurl.includes("/infoextra.html"))
+                sessionStorage.setItem("project", JSON.stringify(copy));     
             
             document.location.href = url+"?r="+(id || current_project).toString();        
         }
