@@ -12,6 +12,7 @@
     <link href="css/custom.min.css" rel="stylesheet">
     <link href="css/estilo.css" rel="stylesheet">
     <link href="css/header.css" rel="stylesheet">
+    <link href="css/tables.css" rel="stylesheet">
     <link rel="stylesheet" href="css/RWD.css"> <!-- responsive web design -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
@@ -61,7 +62,7 @@ s</head>
         
         <content class="row"><div class="col-lg-12" style="margin-top:46px">
             
-            <h3 class="w3-xxlarge"><b>EXPORTAR</b></h3>
+            <h3 class="w3-xlarge"><b>EXPORTAR</b></h3>
             <br>            
             
         <!--Aqui tendrian que haber diferentes opciones de export (jpg/pdf):
@@ -73,27 +74,99 @@ s</head>
         - Opciones de modificar la imagen final (cambiar color de fondo, añadir escala)
         <br>
         - Posibilidad de exportar anotaciones en formato word/medidas, etc.-->
+            
+            
+            <div class="wrap">
+                <div class="css-table">
+                    <ul>
+                        <li>
+                          <div class="top">
+                            <h3>MODELO</h3>
+                            <div class="circle blue">3D</div>
+                          </div>
+                          <div class="bottom">
+                              <?php 
+                                echo '<a href="';
+                                echo 'data/' . $_GET['r'] . '/mesh.obj"';
+                                echo 'download="" title="Descargar mesh">Mesh</a><br><br>';
+                             php?>
+                            <?php 
+                                echo '<a href="';
+                                echo 'data/' . $_GET['r'] . '/tex_0.jpg"';
+                                echo 'download="" title="Descargar textura">Textura</a><br><br>';
+                             php?>
+                          </div>
+                        </li>
 
+                        <li>
+                          <div class="top">
+                            <h3>PROYECTO</h3>
+                            <div class="circle pink">PDF</div>
+                          </div>
+                            <div class="bottom">
+                            <a class="export-pdf summary" title="Exportar en PDF" href="">Resumen</a><br><br>
+                            <a class="export-pdf detailed" title="Exportar en PDF" href="">Detalle</a><br><br>
+                            <a class="export-pdf config" title="Exportar en PDF" href="">Configuración</a><br><br>
+                            <a class="export-pdf aport" title="Exportar en PDF" href="">Aportaciones</a><br><br>
+                          </div>
+                        </li>
+
+                        <li>
+                          <div class="top">
+                            <h3>TABLAS</h3>
+                            <div class="circle green">CSV</div>
+                          </div>
+                            <div class="bottom">
+                                <a class="export-xls _anotations" title="Exportar en CSV" href="">Anotaciones</a><br><br>
+                                <a class="export-xls _measures" title="Exportar en CSV" href="">Medidas</a><br><br>
+                                <a class="export-xls _areas" title="Exportar en CSV" href="">Areas</a><br><br>
+                          </div>
+                        </li>
+
+                        <li>
+                          <div class="top">
+                            <h3>OBJETO</h3>
+                            <div class="circle">JSON</div>
+                          </div>
+                            <div class="bottom">
+                                <a class="export-json _anotations" title="Exportar en JSON" href="">Anotaciones</a><br><br>
+                                <a class="export-json _measures" title="Exportar en JSON" href="">Medidas</a><br><br>
+                                <a class="export-json _areas" title="Exportar en JSON" href="">Areas</a><br><br>
+                                <?php 
+                                    echo '<a href="';
+                                    echo 'data/' . $_GET['r'] . '.json"';
+                                    echo 'download="" title="Descargar configuración en JSON">Configuración</a><br><br>';
+                                 php?>
+                                <a class="export-json _extra" title="Exportar en JSON" href="">Aportaciones</a><br><br>
+                          </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+
+<!--
             <table class="table table-striped table-hover" id="export-table">
                 <tbody>
                      <tr>
                         <th>Resumen del proyecto</th>
-                        <td class="success"><a class="export-pdf summary" title="Exportar en PDF" href="">PDF</a></td>
+                        <td class=""><a class="export-pdf summary" title="Exportar en PDF" href="">PDF</a></td>
                         <td><i class="material-icons">not_interested</i></td>
                         <td><i class="material-icons">not_interested</i></td>
                     </tr>
                     <tr>
                         <th>Proyecto al detalle</th>
-                        <td class="success"><a class="export-pdf detailed" title="Exportar en PDF" href="">PDF</a></td>
+                        <td class=""><a class="export-pdf detailed" title="Exportar en PDF" href="">PDF</a></td>
                         <td><i class="material-icons">not_interested</i></td>
                         <td><i class="material-icons">not_interested</i></td>
                     </tr>
                     <tr>
                         <th>Configuración</th>
-                        <td class="success"><a class="export-pdf config" title="Exportar en PDF" href="">PDF</a></td>
+                        <td class=""><a class="export-pdf config" title="Exportar en PDF" href="">PDF</a></td>
                         <td><i class="material-icons">not_interested</i></td>
                          <?php 
-                            echo '<td class="success"><a href="';
+                            echo '<td class=""><a href="';
                             echo 'data/' . $_GET['r'] . '.json"';
                             echo 'download="" title="Descargar configuración en JSON">JSON</a></td>';
                          php?>
@@ -101,36 +174,36 @@ s</head>
                     <tr>
                         <th>Anotaciones</th>
                         <td><i class="material-icons">not_interested</i></td>
-                        <td class="success"><a class="export-xls _anotations" title="Exportar en CSV" href="">CSV</a></td>
-                        <td class="success"><a class="export-json _anotations" title="Exportar en JSON" href="">JSON</a></td>
+                        <td class=""><a class="export-xls _anotations" title="Exportar en CSV" href="">CSV</a></td>
+                        <td class=""><a class="export-json _anotations" title="Exportar en JSON" href="">JSON</a></td>
                     </tr>
                     <tr>
                         <th>Medidas</th>
                         <td><i class="material-icons">not_interested</i></td>
-                        <td class="success"><a class="export-xls _measures" title="Exportar en CSV" href="">CSV</a></td>
-                        <td class="success"><a class="export-json _measures" title="Exportar en JSON" href="">JSON</a></td>
+                        <td class=""><a class="export-xls _measures" title="Exportar en CSV" href="">CSV</a></td>
+                        <td class=""><a class="export-json _measures" title="Exportar en JSON" href="">JSON</a></td>
                     </tr>
                     <tr>
                         <th>Areas</th>
                         <td><i class="material-icons">not_interested</i></td>
-                        <td class="success"><a class="export-xls _areas" title="Exportar en CSV" href="">CSV</a></td>
-                        <td class="success"><a class="export-json _areas" title="Exportar en JSON" href="">JSON</a></td>
+                        <td class=""><a class="export-xls _areas" title="Exportar en CSV" href="">CSV</a></td>
+                        <td class=""><a class="export-json _areas" title="Exportar en JSON" href="">JSON</a></td>
                     </tr>
                     <tr>
                         <th>Aportaciones</th>
-                        <td class="success"><a class="export-pdf aport" title="Exportar en PDF" href="">PDF</a></td>
+                        <td class=""><a class="export-pdf aport" title="Exportar en PDF" href="">PDF</a></td>
                         <td><i class="material-icons">not_interested</i></td>
-                        <td class="success"><a class="export-json _extra" title="Exportar en JSON" href="">JSON</a></td>
+                        <td class=""><a class="export-json _extra" title="Exportar en JSON" href="">JSON</a></td>
                     </tr>
                     <tr>
                         <th>Modelo 3D</th>
                         <?php 
-                            echo '<td class="success"><a href="';
+                            echo '<td class=""><a href="';
                             echo 'data/' . $_GET['r'] . '/mesh.obj"';
                             echo 'download="" title="Descargar mesh">OBJ MESH</a></td>';
                          php?>
                         <?php 
-                            echo '<td class="success"><a href="';
+                            echo '<td class=""><a href="';
                             echo 'data/' . $_GET['r'] . '/tex_0.jpg"';
                             echo 'download="" title="Descargar textura">JPG TEXT</a></td>';
                          php?>
@@ -138,6 +211,7 @@ s</head>
                     </tr>
                 </tbody>
             </table>
+-->
             
         </div>
         

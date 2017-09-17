@@ -5,8 +5,6 @@ var proj_to_delete = "test";
 var delete_project_active = false;
 
 var copy = null;
-var imagesCounter = 0;
-var extraCounter = 0;
 var separator = "__________________________________________________\n";
 
 // LOAD DATA FROM JSON
@@ -28,7 +26,8 @@ var LOADER = {
         var data = sessionStorage.getItem("project");
         copy = new Project({}, current_user, {no_construct: true});
         copy.fill(data);
-        $(".refresh").click();
+        parseExtraJSON(copy._extra, {parseAll: true});
+        SlickJS.init();
     },
     loadProject: function(){
         var data = sessionStorage.getItem("project");
@@ -103,9 +102,10 @@ function loadMapsAPI()
 function initMap(lat, lng) 
 {
     // https://developers.google.com/maps/documentation/javascript/examples/infowindow-simple
-                
-    var latitud     = lat || project._coordinates.lat;
-    var longitud    = lng || project._coordinates.lng;
+    //console.log(typeof project._coordinates.lat);
+    
+    var latitud     = lat || parseFloat(project._coordinates.lat);
+    var longitud    = lng || parseFloat(project._coordinates.lng);
     var location    = project._location;
     
     var marker = {lat: latitud, lng: longitud};
@@ -132,51 +132,80 @@ function setInput(id)
     $("#s_input").keyup(function(e)
     {
         if(e.keyCode == 13){
-            project.getArea(id).name = $(this).val();
-            $("#area-name" + id).html("<p onclick='setInput(" + id + ")'>" + $(this).val() + "</p>");
-            putCanvasMessage("Recuerda guardar...", 2000);
+            
+            var value = $(this).val();
+            
+            if(value == "")
+                $("#area-name" + id).html("<p onclick='setInput(" + id + ")'>" + project.getArea(id).name + "</p>");
+            else
+            {
+                project.getArea(id).name = value;
+                $("#area-name" + id).html("<p onclick='setInput(" + id + ")'>" + value + "</p>");
+                putCanvasMessage("Recuerda guardar...", 2000);
+            }
         }
+        
+        if(e.keyCode == 27)
+            $("#area-name" + id).html("<p onclick='setInput(" + id + ")'>" + project.getArea(id).name + "</p>");
     });
 }
 
-function parseExtraJSON(json)
+function parseExtraJSON(json, flags)
 {
+    flags = flags || {};
+    
 //    console.log(json);
     if(!json){
         console.error("empty");
         return;
     }
     
-    imagesCounter = 0;
-    extraCounter = 0;
-    
-    $(".imageli").remove();
-    $("#texto").empty();
-    $("#pdfs").empty();
-    $("#videos").empty();
-    
-    var el = null;
-    for(var e = 0; e < json.length; ++e){
-        el = json[e];
-        if (el.type == "image")
-        {
-            $(".imagenes-aqui").append(build(el.type, el.data));
-        }
-        else if (el.type == "text")
-        {
-            $("#texto").append(build(el.type, el.data));
-        }
-        else if (el.type == "pdf") {
-            $("#pdfs").append(build(el.type, el.data));
-        }
-        else if (el.type == "youtube")
-        {
-            var data = el.data.split("=")[1];
-            $("#videos").append(build(el.type, data));
-        }
+    if(flags.parseAll)
+    {
+        $(".imagenes-aqui").empty();
+        $("#texto").empty();
+        $("#pdfs").empty();
+        $("#videos").empty();
+
+        var sel = null;
+        for(var e = 0; e < json.length; ++e){
+            sel = json[e];
+            if (sel.type == "image")
+            {
+                $(".imagenes-aqui").append(build(sel));
+            }
+            else if (sel.type == "text")
+            {
+                $("#texto").append(build(sel));
+            }
+            else if (sel.type == "pdf") {
+                $("#pdfs").append(build(sel));
+            }
+            else if (sel.type == "youtube")
+            {
+                var embeed = sel.data.split("=")[1];
+                $("#videos").append(build(sel, {id: embeed}));
+            }
+        }    
     }
-    
-    updateGallery();
+    else
+    {
+        var index = json.length - 1;
+        var sel = json[index];
+        if (sel.type == "image")
+            $(".imagenes-aqui").append(build(sel));
+        else if (sel.type == "text")
+            $("#texto").append(build(sel));
+        else if (sel.type == "pdf")
+            $("#pdfs").append(build(sel));
+        else if (sel.type == "youtube")
+        {
+            var embeed = sel.data.split("=")[1];
+            $("#videos").append(build(sel, {id: embeed}));
+        }
+        
+        SlickJS.refresh();   
+    }
 }
 
 /*
@@ -184,33 +213,29 @@ function parseExtraJSON(json)
 * @param type: type of data to build
 * @return object with two nodes
 */
-function build(type, data)
+function build(sampleObj, options)
 {
-    if(type == "image"){
-        var t =  '<li class="imageli"><img src="'+ data +'" class="img-responsive image image' + extraCounter + '" onclick="select(this, ' + "'image'" + ')" alt="Responsive image"></li>';
-        extraCounter++;
-        return t;
+    sampleObj = sampleObj || {};
+    options = options || {};
+    
+    if(sampleObj.type == "image"){
+        return '<div><img src="'+ sampleObj.data +'" class="img-responsive image ' + sampleObj.name + '" onclick="select(this, ' + "'image'" + ')" alt="Responsive image"></div>';
+//        return '<li class="imageli"><img src="'+ sampleObj.data +'" class="img-responsive image ' + sampleObj.name + '" onclick="select(this, ' + "'image'" + ')" alt="Responsive image"></li>';
     }
     
-    if(type == "text"){
-        var t = '<p class="note note' + extraCounter + '" onclick="select(this, ' + "'note'" + ')">· '+ data +'</p>';
-        extraCounter++;
-        return t;
+    if(sampleObj.type == "text"){
+        return '<p class="note ' + sampleObj.name + '" onclick="select(this, ' + "'text'" + ')">· '+ sampleObj.data +'</p>';
     }
-        
     
-    if(type == "pdf"){
-        var t = '<div class="embed-responsive" style="padding-bottom:75vh">' +
-            '<object data="'+ data +'" type="application/pdf" width="100%" height="100%"></object>' +
+    if(sampleObj.type == "pdf"){
+        return '<div class="w3-col m6 ' + sampleObj.name + '" onclick="select(this, ' + "'pdf'" + ')">' +
+            '<object class="apt-pdf" data="'+ sampleObj.data +'#view=FitH" type="application/pdf"></object>' +
             '</div>'; 
-        extraCounter++;
-        return t;
     }
 
-    if(type == "youtube"){
-        var t = '<div class="w3-col m4"><iframe class="apt-video" src="https://www.youtube.com/embed/'+ data +'" allowfullscreen></iframe></div>';
-        extraCounter++;
-        return t;
+    if(sampleObj.type == "youtube"){
+        return '<div class="w3-col m4 ' + sampleObj.name + '" onclick="select(this, ' + "'youtube'" + ')"><iframe class="apt-video" src="https://www.youtube.com/embed/'+ options.id +'" allowfullscreen></iframe>' +
+        '</div>';
     }
         
 }
@@ -617,7 +642,7 @@ function jsToJSON(element, options)
 * CSV EXPORTING
 */
 
-function jsToXLS(element, options)
+function jsToCSV(element, options)
 {
     var csvData = 'data:text/csv;charset=utf-8,' + encodeURIComponent(options.csv);
     

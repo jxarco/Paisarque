@@ -35,15 +35,12 @@ Project.prototype._ctor = function( data )
 *   @param type: data type (pdf, image, etc)
 *   @param data: path to data (or link)
 */
-Project.prototype.pushExtra = function( type, data )
+Project.prototype.pushExtra = function( name, type, data )
 {
-    last_extra_id = this._extra[this._extra.length-1].name.split("_")[1];
-    last_extra_id++;
-
     this._extra.push( {
         type: type,
         data: data,
-        name: "extra_" + last_extra_id
+        name: name
     });
 }
 
@@ -53,10 +50,20 @@ Project.prototype.pushExtra = function( type, data )
 *   @param type: data type (pdf, image, etc)
 *   @param data: path to data (or link)
 */
-Project.prototype.deleteExtra = function( type, id )
+Project.prototype.deleteExtra = function( selector, type )
 {
     var index = null;
-    var searched = "extra_" + id;
+    var searched = null;
+    
+    if(type == "text"){
+        searched = selector.attr("class").split(" ")[1];
+    }
+        
+    else{
+        searched = selector.attr("class").split(" ")[2];
+    }
+    
+//    console.log(searched);
     
     for(var i = 0; i < this._extra.length; i++){
         if(this._extra[i].name == searched)
@@ -238,12 +245,10 @@ Project.prototype.setRotations = function( rotation )
 
 Project.prototype.update_meter = function(relation)
 {
-    if(!confirm("Las distancias se recalcularán pero las areas calculadas se borrarán si continuas."))
-    {
-        document.location.href = "modelo.html?r=" + current_project;      
-        return;
-    }
-
+    if(this._areas.length)
+        if(!confirm("Las distancias se recalcularán pero las areas calculadas se borrarán si continuas."))
+            return;    
+    
     // recalcular distancias 
     for(var i = 0; i < this._measures.length; ++i)
     {

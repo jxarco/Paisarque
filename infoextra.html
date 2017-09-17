@@ -5,10 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Info PaisArque</title>
+    <title>Aportaciones PaisArque</title>
     <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png"> 
 
     <!-- Bootstrap -->
+    <link href="css/slick-theme.css" rel="stylesheet">
+    <link href="css/slick.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/custom.min.css" rel="stylesheet">
     <link href="css/header.css" rel="stylesheet">
@@ -65,10 +67,10 @@
             <a onclick="loadContent('contacto.html')" class="w3-bar-item w3-button w3-padding-large">CONTACTO</a>
         </div>
           
-        <content class="row"><div class="col-lg-12" style="margin-top: 46px;">
+        <content class="row"><div class="col-lg-12" style="margin-top:46px">
             
-            <h3 class="w3-xxlarge"><b>APORTACIONES</b></h3>
-            <br>
+            <h3 class="w3-xlarge"><b>APORTACIONES</b></h3>
+            <br>    
             
             <ul class="tabs" role="tablist" id="info-extra-tab">
                     <li>
@@ -84,17 +86,6 @@
                              aria-labelledby="imagenes" 
                              aria-hidden="false">
                             
-                            <div style="display: flex; height: 50px;">
-                                <i class="material-icons extra-btn" onclick="deleteElement('image')">delete</i>
-                                <h6 class="tutorial"><i class="material-icons">arrow_back</i>Selecciona una o más imágenes y presiona aquí para borrar</h6>
-                                <i class="material-icons extra-btn" onclick="openMiniGallery()">view_carousel</i>
-                                <h6 class="tutorial"><i class="material-icons">arrow_back</i>Prueba el carrousel de fotos pulsando aquí</h6>
-                            </div>
-                            
-                            <div id="img-content" class="imagenes-aqui">
-                            
-                            </div>
-                            
                             <div>
                                 <div class="url-loc">
                                     <input id="image-url" placeholder="Cargar desde URL">
@@ -102,26 +93,13 @@
                                     <i class="material-icons extra-btn" data-style="slide-up"  data-toggle="modal" data-target="#TESTModal"  >file_upload</i>
                                     <i class="material-icons extra-btn refresh">refresh</i>
                                     <i class="material-icons extra-btn save">save</i>
+                                    <i class="material-icons extra-btn" onclick="deleteElement('image')">delete</i>
                                 </div>
                                 
-                                <!-- when small screens = no slider         -->
-                                <div id="small-screen-content" class="w3-hide-large imagenes-aqui">
-                                    <br>
-                                </div>
                                 
-                                <!-- when large screens = slider         -->
-                                <div id="wrapper" class="w3-hide-small w3-hide-medium">
-                                      <div id="gall-wrap">
-                                          <ul id="gall" class="imagenes-aqui">
-
-                                          </ul>
-                                           <!--controls-->
-                                          <div class="btns" id="next"><i class="fa fa-arrow-right"></i></div>
-                                          <div class="btns" id="previous"><i class="fa fa-arrow-left"></i></div>
-                                          <div id="counter"></div>
-
-                                      </div>
-                               </div>
+                                <div class="slick01 imagenes-aqui">
+                                    
+                                </div>
                                 
                             </div>
                         </div>
@@ -147,11 +125,18 @@
 <!--                                    <i class="material-icons extra-btn" data-style="slide-up"  data-toggle="modal" data-target="#TESTModal"  >file_upload</i>-->
                                     <i class="material-icons extra-btn refresh">refresh</i>
                                     <i class="material-icons extra-btn save">save</i>
+                                    <i class="material-icons extra-btn" onclick="deleteElement('pdf')">delete</i>
                                 </div>
                             
+                            <div id="pdfs" class="w3-row">
+                                
+                            </div>
+                            
+<!--
                             <div id="pdfs">
                                 
                             </div>
+-->
                             
                         </div>
                     </li>
@@ -174,7 +159,7 @@
                                     <i class="material-icons extra-btn add_extra" data-type="text" data-from="text-url">add_circle</i>
                                     <i class="material-icons extra-btn refresh">refresh</i>
                                     <i class="material-icons extra-btn save">save</i>
-                                    <i class="material-icons extra-btn" onclick="deleteElement('note')">delete</i>
+                                    <i class="material-icons extra-btn" onclick="deleteElement('text')">delete</i>
                             </div>
                             
                             <div id="texto">
@@ -191,18 +176,18 @@
                                aria-selected="false" 
                                aria-controls="panel4" 
                                tabindex="0">Vídeos</label>
-                        <div id="tab-content" 
+                        <div id="tab-content4" 
                              class="tab-content-extra" 
                              role="tabpanel" 
                              aria-labelledby="videos" 
                              aria-hidden="true">
                             
                             <div class="url-loc">
-                                    <input id="video-url" placeholder="URL vídeo">
+                                    <input id="video-url" placeholder="Youtube URL vídeo">
                                     <i class="material-icons extra-btn add_extra" data-type="youtube" data-from="video-url">add_circle</i>
                                     <i class="material-icons extra-btn refresh">refresh</i>
                                     <i class="material-icons extra-btn save">save</i>
-<!--                                    <i class="material-icons extra-btn" onclick="deleteElement('youtube')">delete</i>-->
+                                    <i class="material-icons extra-btn" onclick="deleteElement('youtube')">delete</i>
                             </div>
                             
                             <div id="videos" class="w3-row">
@@ -258,6 +243,7 @@
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="js/extra/bootstrap.min.js"></script>
         <script src="js/extra/custom.js"></script>
+        <script src="js/extra/slick.min.js"></script>
         <script type="text/javascript" src="js/extra/gl-matrix-min.js"></script>
         <script type="text/javascript" src="js/extra/rangeslider.min.js"></script>
         <script type="text/javascript" src="js/extra/litegl.js"></script>
@@ -276,7 +262,6 @@
     
         <script>
             LOADER.loadExtra();
-            updateGallery();
         </script>
         
     </body>

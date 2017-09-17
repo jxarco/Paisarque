@@ -3,6 +3,8 @@ var pdfLinkCounter = 0;
 var imagenLinkCounter = 0;
 var textLinkCounter = 0;
 
+var extraCounter = null;
+
 /* EXPORT STUFF */
 
 $(".export-pdf").click(function(){
@@ -47,7 +49,7 @@ $(".export-xls").click(function(){
         csv: csv
     }
     
-    jsToXLS(this, options);
+    jsToCSV(this, options);
 });
 
 /* EXTRA STUFF */
@@ -58,18 +60,33 @@ $(".add_extra").click(function(){
     var from = "#" + $(this).data("from");
     var type = $(this).data("type");
     var data = $(from).val();
+    var name = null;
+    
+    if(copy === null)
+    {
+        console.error("no project in this html");
+        return 0;
+    }
+    
+    if(copy._extra.length)
+        extraCounter = copy._extra[copy._extra.length-1].name.split("_")[1];
+    else
+        extraCounter = -1;
+    
+    extraCounter++;
+    var name = "extra_" + extraCounter;
 
     if(data == "")
         return 0;
         
-    copy.pushExtra(type, data);
+    copy.pushExtra(name, type, data);
     $(from).val("");
     parseExtraJSON(copy._extra);
 });
 
-// refresh gallery 
+// refresh all extra
 $(".refresh").click(function(){
-    parseExtraJSON(copy._extra);
+    parseExtraJSON(copy._extra, {parseAll: true});
 });
 
 // upload image from disc
@@ -109,7 +126,16 @@ $("#formAddImage").on('submit', function(e)
         
 //        console.log(urlImage);
         // add image to project
-        copy.pushExtra("image", urlImage);
+        
+        if(copy._extra.length)
+            extraCounter = copy._extra[copy._extra.length-1].name.split("_")[1];
+        else
+            extraCounter = -1;
+
+        extraCounter++;
+        var name = "extra_" + extraCounter;
+        
+        copy.pushExtra(name, "image", urlImage);
         
     });
     
@@ -133,7 +159,7 @@ $("#formAddImage").on('submit', function(e)
     
     // Resetear campos del form
     $(this).trigger("reset");
-    
+    $(".refresh").click();
 });
 
 // *******************************************************************************
@@ -400,7 +426,7 @@ $("#formUploadProject").on('submit', function(e)
     
     var jsonFicheroPrincipal = {
         "id": project_id,
-        "descripcion": "desc",
+        "descripcion": "nodesc",
         "autor": values["autor"],
         "lugar": values["lugar"],
         "coordenadas": {"lat": values["latitud"], "lng": values["longitud"]},

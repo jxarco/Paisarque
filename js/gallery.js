@@ -1,10 +1,4 @@
-//current position
-var pos = 0;
 var conditional = true;
-//number of slides
-var totalSlides = $('#gall-wrap ul li').length;
-//get the slide width
-var sliderWidth = $('#gall-wrap').width();
 
 //hide tutorial messages
 setTimeout(function(){
@@ -15,87 +9,18 @@ $(".tutorial").click(function(){
      $(this).fadeOut();
 });
 
-//set width to be 'x' times the number of slides
-$('#gall-wrap ul#gall').width(sliderWidth*totalSlides);
-
-$('#next').click(function(){
-    slideRight();
-});
-
-$('#previous').click(function(){
-    slideLeft();
-});
-
-//for each slide 
-$.each($('#gall-wrap ul li'), function() { 
-   //set its color
-   var c = $(this).attr("data-color");
-   $(this).css("background",c);
-});
-
-countSlides();
-
-//hide/show controls/btns when hover
-//pause automatic slide when hover
-$('#gall-wrap').hover(
-  function(){ $(this).addClass('active'); }, 
-  function(){ $(this).removeClass('active'); }
-);
-
-/***********
- SLIDE LEFT
-************/
-function slideLeft(){
-    pos--;
-    if(pos==-1){ pos = totalSlides-1; }
-    $('#gall-wrap ul#gall').css('left', -(sliderWidth*pos)); 	
-
-    //*> optional
-    countSlides();
-}
-
-function slideRight(){
-    pos++;
-    if(pos==totalSlides){ pos = 0; }
-    $('#gall-wrap ul#gall').css('left', -(sliderWidth*pos)); 
-
-    //*> optional 
-    countSlides();
-}
-
-function countSlides(){
-    $('#counter').html(pos+1 + ' / ' + totalSlides);
-}
-
-function updateGallery(){
-    totalSlides = $('#gall-wrap ul li').length;
-    sliderWidth = $('#gall-wrap').width();
-
-    $('#gall-wrap ul#gall').width(sliderWidth*totalSlides);
-
-    $.each($('#gall-wrap ul li'), function() { 
-       var c = $(this).attr("data-color");
-       $(this).css("background",c);
-    });
-
-    countSlides();
-    
-    if(!$('#gall-wrap ul li').length){
-        openMiniGallery();
-    }
-}
-
-
-// minigallery
-
 $(document).keyup(function(e){
     if(e.keyCode == 27)
-        openMiniGallery();
+        openMiniGallery(true);
 });
 
-function openMiniGallery()
+function openMiniGallery(flag)
 {
-    conditional = !conditional;
+    if(flag)
+        conditional = true;
+    else
+        conditional = !conditional;
+    
     if(!conditional){
         $("#img-content").css("margin-left", "0");
         $("#img-content").css("height", "175px");
@@ -109,11 +34,19 @@ function openMiniGallery()
     }
 }
 
+/*
+* Receives a dom element and adds a class to it.
+* @param element  (dom element which has to have border as active one)
+* @param type  (text, pdf, image, youtube)
+*/
+
 function select(element, type){
+    
+//    console.log("selected")
     
     var img = null, size = null;
     
-    if(type == "note"){
+    if(type == "text"){
         img = element.className.split(" ")[1];
     }
         
@@ -123,8 +56,8 @@ function select(element, type){
     
     var classtype = type + "-active";
     
-    // TRUE: ONLY ONE DELETION
-    // FALSE: ONE OR MORE DELETIONS
+    // #TRUE: ONLY ONE DELETION
+    // #FALSE: ONE OR MORE DELETIONS
     if(false)
     {
         for(var i = 0; i < extraCounter; i++)
@@ -140,34 +73,110 @@ function select(element, type){
         $("." + img).addClass(classtype);
 }
 
+/*
+* Deletes one or more elements from the dom and the extra
+* list of the project
+* @param type  (text, pdf, image, youtube)
+*/
+
 function deleteElement(type){
     
     var pending = [];
-    var pending_index = [];
     var classtype = type + "-active";
     var size = null;
     
-    for(var i = 0; i < extraCounter; i++)
+    for(var i = 0; i < copy._extra.length; i++)
     {
-        var img = "." + type + i;
-        if($(img).hasClass(classtype)){
-            pending.push($(img));
-            pending_index.push(i);
+        var extra = copy._extra[i];
+        
+        if(extra.type != type)
+            continue;
+        
+        var sel = "." + extra.name;
+        if($(sel).hasClass(classtype)){
+            pending.push($(sel));
         }
     }
     
     if(!pending.length)
+    {
+        console.error("nothing to delete");
         return;
+    }
     
     for(var i = 0; i < pending.length; i++)
     {
-        var curr = pending[i];
-        if(type == "image")
-            curr.parent().remove();
-        else 
-            curr.remove();
-        copy.deleteExtra(type, pending_index[i]);    
+        var sel = pending[i]; // $(...)
+        copy.deleteExtra(sel, type);    
+        sel.remove();
     }
     
-    updateGallery();
+    SlickJS.stop();        
+    parseExtraJSON(copy._extra, {parseAll: true});
+    SlickJS.init();
 }
+
+// SLICK JS //
+
+var SlickJS = {
+    
+    on: false,
+  
+    init: function(){
+        
+        SlickJS.on = true;
+
+      $('.slick01').slick({
+          infinite: true,
+          autoplay: true,
+          autoplaySpeed: 3000,
+          arrows: false,
+          speed: 200,
+          focusOnSelect: true,
+          pauseOnFocus: true,
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          responsive: [
+            {
+              breakpoint: 993,
+              settings: {
+                slidesToShow: 2,
+                slidesToScroll: 2,
+              }
+            },
+            {
+              breakpoint: 680,
+              settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+              }
+            }
+          ]
+      });
+        
+//        $('.slick-slide').find('img').each(function() {
+//            var imgClass = (this.width / this.height > 1) ? 'wide' : 'tall';
+//            $(this).addClass(imgClass);
+//        });
+    },
+    
+    stop: function(){
+        $('.slick01').slick('unslick');
+        this.on = false;
+    },
+    
+    refresh: function(){
+        
+        if(SlickJS.on){
+            this.stop();
+            this.on = true;
+        }
+        
+        this.init();    
+    
+    }
+};
+
+$(window).load(function() {
+    
+});
