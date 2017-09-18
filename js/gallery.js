@@ -130,13 +130,20 @@ var SlickJS = {
           infinite: true,
           autoplay: true,
           autoplaySpeed: 3000,
+          touchMove: false,
           arrows: false,
           speed: 200,
-          focusOnSelect: true,
           pauseOnFocus: true,
-          slidesToShow: 1,
-          slidesToScroll: 1,
+          slidesToShow: 4,
+          slidesToScroll: 4,
           responsive: [
+            {
+              breakpoint: 1280,
+              settings: {
+                slidesToShow: 3,
+                slidesToScroll: 3,
+              }
+            },
             {
               breakpoint: 993,
               settings: {
@@ -154,10 +161,6 @@ var SlickJS = {
           ]
       });
         
-//        $('.slick-slide').find('img').each(function() {
-//            var imgClass = (this.width / this.height > 1) ? 'wide' : 'tall';
-//            $(this).addClass(imgClass);
-//        });
     },
     
     stop: function(){
