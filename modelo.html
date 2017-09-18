@@ -222,52 +222,29 @@
                             </div>
                             <div class="w3-col m2 w3-center">
                                 <a onclick="APP.medirMetro()" class="btn tool-btn">
-                                    <i class="material-icons">settings</i>
-                                    <p class="info_hover_box">Definir metro</p>
-                                </a>
-                            </div>
-                            <div class="w3-col m2 w3-center">
-                                <a id="measure-btn" onclick="APP.testDistance()" class="btn tool-btn nodisplay measures-btns">
-                                    <i class="material-icons">space_bar</i>
-                                    <p class="info_hover_box">Distancia</p>
+                                    <i class="material-icons">tune</i>
+                                    <p class="info_hover_box">Escala</p>
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
                                 <a id="show_dt" class="btn tool-btn">
-                                    <i class="material-icons">filter_1</i>
-                                    <p class="info_hover_box">Ver distancias</p>
+                                    <i class="material-icons">remove</i>
+                                    <p class="info_hover_box">Distancias</p>
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
                                 <a id="show_dst" class="btn tool-btn">
-                                    <i class="material-icons">filter_2</i>
-                                    <p class="info_hover_box">Ver segmentos</p>
+                                    <i class="material-icons">linear_scale</i>
+                                    <p class="info_hover_box">Segmentos</p>
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
                                 <a id="show_areat" class="btn tool-btn">
-                                    <i class="material-icons">filter_3</i>
-                                    <p class="info_hover_box">Ver áreas</p>
-                                </a>
-                            </div>
-                            <div class="w3-col m2 w3-center">
-                                <a id="measure-opt-btn" class="btn tool-btn">
-                                    <i class="material-icons">add_circle_outline</i>
+                                    <i class="material-icons">photo_size_select_small</i>
                                     <p class="info_hover_box">Áreas</p>
                                 </a>
-
-                                <div class="sub-btns">
-                                        <a id="measure-areas-btn" onclick="APP.medirArea(0)" class="btn tool-btn nodisplay measures-btns">
-                                            <i class="material-icons">crop_din</i>
-                                            <p class="info_hover_box">Planta</p>
-                                        </a>
-                                        <a id="measure-areas2-btn" onclick="APP.medirArea(1)" class="btn tool-btn nodisplay measures-btns">
-                                            <i class="material-icons">crop_portrait</i>
-                                            <p class="info_hover_box">Alzado</p>
-                                        </a>
-                                </div>
                             </div>
-                          
+                            
                             <table class="table table-striped table-hover tables" id="distances-table">
                                  <thead>
                                     <tr>
@@ -279,6 +256,10 @@
                                 <tbody>
                                 </tbody>
                             </table>
+                            
+                             <a id="measure-btn"  onclick="APP.testDistance()" class="btn table-btn nodisplay" style="display: none;">
+                                <p>Añadir distancia</p>
+                            </a>
                           
                           <table class="table table-striped table-hover tables" id="segment-distances-table">
                                  <thead>
@@ -291,6 +272,10 @@
                                 </tbody>
                             </table>
                             
+                            <a id="measure-s-btn"  onclick="APP.testDistance()" class="btn table-btn nodisplay" style="display: none;">
+                                <p>Añadir distancia por segmentos</p>
+                            </a>
+                            
                           <table class="table table-striped table-hover tables" id="areas-table">
                                  <thead>
                                     <tr>
@@ -302,6 +287,19 @@
                                 <tbody>
                                 </tbody>
                             </table>
+                                 
+                            <a id="measure-opt-btn" class="btn table-btn" style="display: none;">
+                                <p>Añadir área</p>
+                            </a>
+
+                            <div class="sub-btns">
+                                    <a id="measure-areas-btn" onclick="APP.medirArea(0)" class="btn table-btn nodisplay measures-btns">
+                                        <p>Área de planta</p>
+                                    </a>
+                                    <a id="measure-areas2-btn" onclick="APP.medirArea(1)" class="btn table-btn nodisplay measures-btns">
+                                        <p>Área de alzado</p>
+                                    </a>
+                            </div>
                             
                         </div>
                     </li>

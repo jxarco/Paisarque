@@ -16,6 +16,10 @@
     color: rgb(240, 240, 240);
 }
 
+.w3-top{
+    z-index: 10 !important;
+}
+
 .w3-bar{
     background-color: rgb(62, 164, 155);   
     color: aliceblue;

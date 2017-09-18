@@ -332,16 +332,16 @@ var APP = {
     {
         if(project._meter !== -1)
         {
-            putCanvasMessage("La configuración de la escala ya ha sido realizada en este proyecto. Si lo haces, perderás la medición anterior.", 5000, {type: "error"});    
+            putCanvasMessage("La configuración de la escala ya ha sido realizada en este proyecto. Si lo haces, perderás la medición anterior.", 8000, {type: "error"});    
         }
 
         // clear first
         APP.destroyElements(scene.root.children, "config");
         $(".draggable").remove();
 
-        testDialog({scale: true, hidelower: true, upperbtn: "Seleccionar"}); // open dialog
-        putCanvasMessage("Selecciona dos puntos, la linea recta que los une corresponderá a la escala indicada. (Por defecto 1 metro)", 5000);
-        putCanvasMessage("Esta acción utiliza autoguardado. Para cancelar pulsa ESC.", 8000, {type: "alert"});
+        testDialog({scale: true, hidelower: true}); // open dialog
+        putCanvasMessage("Selecciona dos puntos, la linea recta que los une corresponderá a la escala indicada (por defecto 1 metro). " +
+                         "Esta acción utiliza autoguardado. Para cancelar pulsa ESC.", 8000);
         window.tmp = [];
 
         $("#add-dialog").click(function(){
@@ -358,9 +358,6 @@ var APP = {
                     var ind = new SceneIndication();
                     ind = ind.ball(scene, result);
                     window.tmp.push(result);
-                    context.onmousedown = function(e) {}
-                    $("#myCanvas").css("cursor", "default");
-
                     if(window.tmp.length === 2)
                         $("#end-dialog").click();
                 }
@@ -378,10 +375,12 @@ var APP = {
 
             var scale = parseFloat($("#scale-input").val()) || 1;
             var relation = vec3.length(newPoint) / scale;
-//            project._meter = vec3.length(newPoint) / scale;
             project.update_meter(relation);
             $(".draggable").remove();
             $(".measures-btns").css('opacity', '1');
+            
+            context.onmousedown = function(e) {}
+            $("#myCanvas").css("cursor", "default");
 
             setTimeout(function(){
                 APP.destroyElements(scene.root.children, "config");
@@ -389,15 +388,14 @@ var APP = {
         });
         
         $("#help-dialog").click(function(){
-            $(".dialog-option.help").fadeIn();
-        });
-        
-        $(".dialog-option.help").click(function(){
-            $(this).fadeOut();
+            if($(".dialog-option.help").css("display") == "none")
+                $(".dialog-option.help").fadeIn();
+            else
+                $(".dialog-option.help").fadeOut();
         });
     },
 
-    testDistance: function ()
+    testDistance: function (segments)
     {
         if(project._meter === -1)
             return;
@@ -425,9 +423,6 @@ var APP = {
                     var ind = new SceneIndication();
                     ind = ind.ball(scene, result);
                     window.tmp.push(result);
-
-                    context.onmousedown = function(e) {}
-                    $("#myCanvas").css("cursor", "default");
                 }
 
                 if(window.tmp.length > 1)
@@ -486,20 +481,22 @@ var APP = {
             var vertices = [];
 
             for(var i = 0; i < window.tmp.length; ++i)
-                {
-                    vertices.push(window.tmp[i][0]);
-                    vertices.push(window.tmp[i][1]);
-                    vertices.push(window.tmp[i][2]);
+            {
+                vertices.push(window.tmp[i][0]);
+                vertices.push(window.tmp[i][1]);
+                vertices.push(window.tmp[i][2]);
 
-                        if(i)
-                        {
-                            vertices.push(window.tmp[i][0]);
-                            vertices.push(window.tmp[i][1]);
-                            vertices.push(window.tmp[i][2]);
-                        }
-                }
+                    if(i)
+                    {
+                        vertices.push(window.tmp[i][0]);
+                        vertices.push(window.tmp[i][1]);
+                        vertices.push(window.tmp[i][2]);
+                    }
+            }
 
             APP.destroyElements(scene.root.children, "config-tmp");
+            context.onmousedown = function(e) {}
+            $("#myCanvas").css("cursor", "default");
 
             var mesh = GL.Mesh.load({ vertices: vertices }); 
             renderer.meshes["line"] = mesh;

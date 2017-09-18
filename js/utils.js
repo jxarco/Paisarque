@@ -156,5 +156,3 @@ var onlyNumbers = function(e) {
     if (!(a.indexOf(k)>=0))
         e.preventDefault();
 };
-
-

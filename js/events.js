@@ -164,6 +164,17 @@ $("#formAddImage").on('submit', function(e)
 
 // *******************************************************************************
 
+// FORMS; ENTER -> SUBMIT
+$('.form-signin').each(function() {
+        
+    $(this).find('input').keyup(function(e) {
+            // Enter pressed?
+             if(e.keyCode == 13) {
+               $("#signin-btn").click();
+            }
+    });
+});
+
 /*
 *   Button: Insert annotation to project
 */
@@ -278,7 +289,8 @@ $("#show_dt").click(function()
     showing["t1"] = !showing["t1"];
     
     var table = $('#distances-table');
-    revealDOMElements(table, showing["t1"]);
+    var btn = $('#measure-btn');
+    revealDOMElements([table, btn], showing["t1"]);
 });
 
 /*
@@ -290,7 +302,8 @@ $("#show_dst").click(function()
     showing["t2"] = !showing["t2"];
     
     var table = $('#segment-distances-table');
-    revealDOMElements(table, showing["t2"]);
+    var btn = $('#measure-s-btn');
+    revealDOMElements([table, btn], showing["t2"]);
 });
 
 /*
@@ -302,7 +315,8 @@ $("#show_areat").click(function()
     showing["t3"] = !showing["t3"];
     
     var table = $('#areas-table');
-    revealDOMElements(table, showing["t3"]);
+    var btn = $('#measure-opt-btn');
+    revealDOMElements([table, btn], showing["t3"]);
 });
 
 /* 

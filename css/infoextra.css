@@ -2,11 +2,10 @@
 
 #info-extra-tab label{
     color: white !important;
-    z-index: 1 !important;
 }
 
 .tab-content-extra{
-    z-index: 2 !important;
+    z-index: 1 !important;
 }
 
 @media only screen and (max-width: 480px) {
@@ -16,7 +15,6 @@
         padding: 18px 6px 18px 6px !important;
     }   
 }
-
 
 /* @images */
 
@@ -31,7 +29,6 @@
 }
 
 .extra-btn{
-/*    box-shadow: 0 0 2px black;*/
     padding-top: 12px !important;
     border: none !important;
     outline: none;

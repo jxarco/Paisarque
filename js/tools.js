@@ -305,6 +305,7 @@ function putCanvasMessage(text, ms, options)
 
     setTimeout(function(){
         $(id).fadeOut();
+        $(id).remove();
     }, ms);
     last_message_id++;
 }
@@ -317,7 +318,7 @@ function testDialog(options)
 {
     options = options || {};
     
-    var upperbtn = options.upperbtn || "Añadir punto";
+    var upperbtn = options.upperbtn || "Añadir puntos";
     var lowerbtn = options.lower || "Finalizar";
     
     var location = $("#placeholder");
@@ -333,15 +334,15 @@ function testDialog(options)
                     "<button id='add-dialog' class='dialog-btn'>" + upperbtn + "</button>" +
                     "</div>" +
                   "<div class='dialog-option'>" +
+                    "<button id='camera-mode' class='dialog-btn'>Mover cámara</button>" +
+                    "</div>" +
+                  "<div class='dialog-option'>" +
                     "<button id='end-dialog' class='dialog-btn'>" + lowerbtn + "</button>" +
                     "</div>";
     
     if(options.scale)
         html +=   "<div class='dialog-option'>" +
-                    "<button id='help-dialog' class='dialog-btn'><i class='material-icons'>info_outline</i></button>" +
-                    "</div>" +
-                  "<div class='dialog-option'>" +
-                    "<input id='scale-input' placeholder='Escala (metros)'></input>" +
+                    "<input id='scale-input' placeholder='Escala (metros)'></input><button id='help-dialog' class='dialog-btn info'><i class='material-icons'>info_outline</i></button>" +
                     "</div>" + 
                   "<div class='dialog-option help'>" +
                     "<p>Escribe en el cuadro de texto la escala con la que vas a medir el modelo 3D. Por ejemplo, si introduces 0.1, la distancia total entre los puntos que selecciones será igual a 0.1 metros. Por defecto, la distancia será 1 metro.</p>" +
@@ -354,8 +355,15 @@ function testDialog(options)
     
     if(options.hideupper)
         $("#add-dialog").hide();
-    if(options.hidelower)
+    if(options.hidelower){
         $("#end-dialog").hide();
+    }
+    
+    $("#camera-mode").click(function(){
+        context.onmousedown = function(e) {}
+        $("#myCanvas").css("cursor", "default");  
+    });
+        
 }
     
 /*

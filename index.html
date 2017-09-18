@@ -43,7 +43,7 @@
                             <h3 class="panel-title">PaisArque</h3>
                         </div>
                         <div class="panel-body">
-                            <p style="text-align: justify;">Proyecto realizado por grupos pertenecientes a la Universidad Pompeu Fabra y con la financiación de la <a href="https://www.fbbva.es/">Fundación BBVA.</a></p><br>
+                            <p style="text-align: justify;">Proyecto realizado por grupos pertenecientes a la Universidad Pompeu Fabra con la financiación de la <a href="https://www.fbbva.es/">Fundación BBVA.</a></p><br>
                             <a href="https://www.upf.edu/web/paisarque"><img src="data/upf.png" class="img-responsive" style="width: 160px;"></a>        
                         </div>
                     </div>
@@ -67,11 +67,11 @@
                         <div class="panel-body">
                             <form class="form-signin">
                                 <label for="inputEmail" class="sr-only">Username</label>
-                                <input name="username" type="text" id="inputEmail" class="form-control index" placeholder="Usuario" value="" required="" autofocus="">
+                                <input name="username" type="text" id="inputEmail" class="form-control index" placeholder="Usuario" value="" required autofocus>
                                 <label for="inputPassword" class="sr-only">Password</label>
-                                <input name="password" type="password" id="inputPassword" class="form-control index" placeholder="Contraseña" value="" required="">
+                                <input name="password" type="password" id="inputPassword" class="form-control index" placeholder="Contraseña" value="" required>
                                 <br>
-                                <button class="submit-button btn inicio btn-lg btn-block ladda-button" data-style="slide-up" data-color="green" type="submit"><span class="ladda-label">Iniciar sesión</span><span class="ladda-spinner"></span></button>
+                                <button id="signin-btn" class="submit-button btn inicio btn-lg btn-block ladda-button" data-style="slide-up" data-color="green" type="submit"><span class="ladda-label">Iniciar sesión</span><span class="ladda-spinner"></span></button>
                                 <button class="submit-button btn inicio btn-block ladda-button new-account" data-style="slide-up" data-color="green" type="submit" onclick="location.href='form.php'"><span class="ladda-label">Registrarse</span><span class="ladda-spinner"></span></button>
                             </form>                            
                         </div>
@@ -120,6 +120,8 @@
         <script type="text/javascript" src="js/extra/rendeer.js"></script>
         <script type="text/javascript" src="litefile/litefileserver.js"></script>
         <script type="text/javascript" src="litefile/js/codeLite.js"></script>
+        <script type="text/javascript" src="js/utils.js"></script>
+        <script type="text/javascript" src="js/events.js"></script>
     </body>
     
 </html>
