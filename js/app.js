@@ -167,8 +167,10 @@ var APP = {
                 putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "alert"}); 
         };
 
-        renderer.loadMesh(obj.mesh, makeVisible);
-        renderer.loadTexture(obj.texture, renderer.default_texture_settings);
+//        renderer.loadMesh(obj.mesh, makeVisible);
+//        renderer.loadTexture(obj.texture, renderer.default_texture_settings);
+//        $("#placeholder").css("background-image", "none");
+//        $('#myCanvas').css({"opacity": 0, "visibility": "visible"}).animate({"opacity": 1.0}, 1000);
 
         obj.scale([5,5,5]);
         pivot.addChild( obj );
@@ -337,8 +339,9 @@ var APP = {
 
         // clear first
         APP.destroyElements(scene.root.children, "config");
+        APP.fadeAllTables(showing);
         $(".draggable").remove();
-
+        
         testDialog({scale: true, hidelower: true}); // open dialog
         putCanvasMessage("Selecciona dos puntos, la linea recta que los une corresponderá a la escala indicada (por defecto 1 metro). " +
                          "Esta acción utiliza autoguardado. Para cancelar pulsa ESC.", 8000);
@@ -346,6 +349,7 @@ var APP = {
 
         $("#add-dialog").click(function(){
 
+            selectDialogOption($(this));
             $("#myCanvas").css("cursor", "crosshair");
 
             context.onmousedown = function(e) 
@@ -411,6 +415,7 @@ var APP = {
 
         $("#add-dialog").click(function(){
 
+            selectDialogOption($(this));
             $("#myCanvas").css("cursor", "crosshair");
 
             context.onmousedown = function(e) 
@@ -543,6 +548,7 @@ var APP = {
 
         $("#add-dialog").click(function(){
 
+            selectDialogOption($(this));
             $("#myCanvas").css("cursor", "crosshair");
 
             context.onmousedown = function(e) 
@@ -911,6 +917,23 @@ var APP = {
         // obj properties
         obj.blend_mode = 0;
         obj.opacity = 1;
+    },
+    
+    fadeAllTables: function (o)
+    {
+        for(var i in o)
+            o[i] = false;
+        
+        var list = [];
+        
+        list.push($('#distances-table'));
+        list.push($('#measure-btn'));
+        list.push($('#segment-distances-table'));
+        list.push($('#measure-s-btn'));
+        list.push($('#areas-table'));
+        list.push($('#measure-opt-btn'));
+
+        revealDOMElements(list, false, {e: ""});
     },
 
     resize: function() 

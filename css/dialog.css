@@ -9,29 +9,30 @@ input{
 }
 
 .draggable{
-    background-color: rgba(80, 80, 80, 1);
-    border-radius: 3px;
+    width: 100%;
+    background: none;
+    border-radius: 2px;
     cursor: move;
-    min-width: 100px;
-    max-width: 225px;
-    position: absolute;
+    padding-top: 10px;
     padding-bottom: 10px;
+    position: relative;
 }
 
 .dialog-option{
     display: flex;
 }
 
-.dialog-btn{
-    background: linear-gradient(rgb(80, 80, 80), rgb(110, 110, 110));
-    box-shadow: 0px 0px 2px black;
-    color: darkgrey;
-    border: 1px solid black;
-    width: 80%;
+.dialog-btn{ 
+    width: 99%;
     height: 30px;
-    outline: none;
-    margin-left: 10%;
+    font-size: 15px;
+    line-height: 15px;
     margin-bottom: 3px;
+    padding-top: 5px;
+    background: lightgray;   
+    vertical-align: middle;
+    color: rgb(30, 30, 30);
+    outline: none !important;
 }
 
 .dialog-btn.info{
@@ -39,9 +40,19 @@ input{
     margin-left: 0 !important;
 }
 
+.dialog-btn.info i{
+    font-size: 18px !important;
+}
+
 .dialog-btn:hover{
     background: rgb(200, 200, 200);
     text-shadow: 0px 0px 1px black;
+    color: whitesmoke;
+}
+
+.dialog-btn.selected{
+    background: rgb(150, 150, 150) !important;
+    border: 1px solid rgba(66, 134, 244, 0.85);
     color: whitesmoke;
 }
 
@@ -53,15 +64,15 @@ input{
 }
 
 .dialog-option input{
-    background: none;
-    border: 1px solid black;
-    box-shadow: 0px 0px 2px black;
-    color: darkgrey;
+    background: lightgray;
+    border: none;
+    box-shadow: 0px 0px 2px grey;
+    color: rgb(20, 20, 20);
     outline: none;
-    width: 60%;
-    margin-left: 10%;
+    width: 80%;
     margin-bottom: 3px;
     padding-left: 5px;
+    margin-right: 5px;
 }
 
 .dialog-option.help{

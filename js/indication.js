@@ -18,16 +18,15 @@ function SceneIndication()
 */
 SceneIndication.prototype.ball = function(scene, position, options)
 {
-    var ball = new RD.SceneNode();
-    ball.description = "config";
-    ball.color = [0.3,0.8,0.1,1];
-    ball.mesh = "sphere";
-    ball.shader = "phong";
-    ball.layers = 0x4;
+    var ball = new RD.SceneNode({
+		position: position,
+		color: [0.3,0.8,0.1,1],
+        layers: 0x4,
+		mesh: "sphere",
+        description: "config"
+	});
+    
     ball.flags.ignore_collisions = true;
-    
-    ball.position = position;
-    
     options = options || {};
     
     if(options)

@@ -58,16 +58,29 @@ function addScript( url, callback ) {
 
 /*
 * Hide or show DOM element passed as parameter
+* @method revealDOMElements
+* @param {list} or {jquery selector} 
+* @param {bool}
+* @param {object}
 */
-function revealDOMElements( elements, showing )
+function revealDOMElements( elements, showing, options )
 {   
     var list = [].concat(elements);
+    options = options || {};
     
     for(var i = 0; i < list.length; ++i)
-        if(showing)
+        if(showing){
             list[i].fadeIn();
+        }
+            
         else
-            list[i].fadeOut();
+        {
+            if(options.e == "")
+                list[i].hide();
+            else
+                list[i].fadeOut();
+        }
+            
 }
 
 /*

@@ -285,12 +285,13 @@ $(".viz_on").click(function()
 */
 $("#show_dt").click(function() 
 {
-//    console.log("showing/hiding distances table");
+     APP.fadeAllTables(showing);
     showing["t1"] = !showing["t1"];
     
     var table = $('#distances-table');
     var btn = $('#measure-btn');
     revealDOMElements([table, btn], showing["t1"]);
+    
 });
 
 /*
@@ -298,7 +299,7 @@ $("#show_dt").click(function()
 */
 $("#show_dst").click(function() 
 {
-//    console.log("showing/hiding segments distances table");
+     APP.fadeAllTables(showing);
     showing["t2"] = !showing["t2"];
     
     var table = $('#segment-distances-table');
@@ -311,7 +312,7 @@ $("#show_dst").click(function()
 */
 $("#show_areat").click(function() 
 {
-//    console.log("showing/hiding areas table");
+     APP.fadeAllTables(showing);
     showing["t3"] = !showing["t3"];
     
     var table = $('#areas-table');

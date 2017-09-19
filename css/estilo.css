@@ -186,7 +186,7 @@ h1, h2, h3, h4, h5, h6{
     padding:0;
     margin-top: 46px;
     height: calc(100vh - 46px);
-    width: calc(100% - 350px);
+    width: calc(100% - 375px);
     float: left;
     overflow-y: hidden;
     
@@ -209,7 +209,7 @@ h1, h2, h3, h4, h5, h6{
 #tools{
     float: right;
     height: calc(100vh - 46px);
-    width: 350px;
+    width: 375px;
     margin-top: 46px;
 /*    border: 1px solid blue;*/
 }
@@ -319,13 +319,15 @@ h1, h2, h3, h4, h5, h6{
     color: rgb(30, 30, 30);
 }
 
-.table-btn:hover p{
-    color: rgb(62, 164, 155) !important;
-    transition: 0.2s;
+.table-btn:hover{
+    background: rgb(200, 200, 200);
+    text-shadow: 0px 0px 1px black;
+    color: whitesmoke !important;
+    background: lightgray;
 }
 
 .tool-btn{
-    width: 60px;
+    width: 70px;
     height: 60px;
     padding-top: 5px;
     background: lightgray;   
@@ -336,12 +338,12 @@ h1, h2, h3, h4, h5, h6{
 .info_hover_box{
     width: 100%;
     font-size: 10px;
-    margin-left: -5px;
+/*    margin-left: -5px;*/
 }
 
 .tool-btn:hover{
     color: rgb(62, 164, 155) !important;
-    margin-left: -20px;
+    margin-left: -8px;
     width: 95px;
     transition: 0.8s;
 }
@@ -360,6 +362,10 @@ h1, h2, h3, h4, h5, h6{
 
 .tool-btn.anot{
     margin: 5px;
+}
+
+.tool-btn.anot:hover{
+    width: 60px;
 }
 
 .tool-btn.info{

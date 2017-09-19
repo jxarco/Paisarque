@@ -321,28 +321,29 @@ function testDialog(options)
     var upperbtn = options.upperbtn || "Añadir puntos";
     var lowerbtn = options.lower || "Finalizar";
     
-    var location = $("#placeholder");
+    var location = $("#tab-content2-large");
+    var margin = options.scale ? "175px;" : "15px;";
+    
     var html = "<div " +
-                  "class='draggable ui-widget-content' " +
+                    "class='draggable ui-widget-content' " +
                   "style='" +
-                  "width: 30%; " +
-                  "margin-left: 60%; " +
-                  "margin-top: 20px; " +
+//                  "width: 30%; " +
+                  "margin-top: " + margin +
                   "text-align: center;'>" +
-                  "<h5>Herramientas</h5>" +// text 
+                  "<button id='close-dialog' class='btn dialog-btn info'><i class='material-icons'>close</i></button>" +
                   "<div class='dialog-option'>" +
-                    "<button id='add-dialog' class='dialog-btn'>" + upperbtn + "</button>" +
+                    "<button id='add-dialog' class='btn dialog-btn'>" + upperbtn + "</button>" +
                     "</div>" +
                   "<div class='dialog-option'>" +
-                    "<button id='camera-mode' class='dialog-btn'>Mover cámara</button>" +
+                    "<button id='camera-mode' class='btn dialog-btn'>Mover cámara</button>" +
                     "</div>" +
                   "<div class='dialog-option'>" +
-                    "<button id='end-dialog' class='dialog-btn'>" + lowerbtn + "</button>" +
+                    "<button id='end-dialog' class='btn dialog-btn'>" + lowerbtn + "</button>" +
                     "</div>";
     
     if(options.scale)
         html +=   "<div class='dialog-option'>" +
-                    "<input id='scale-input' placeholder='Escala (metros)'></input><button id='help-dialog' class='dialog-btn info'><i class='material-icons'>info_outline</i></button>" +
+                    "<input id='scale-input' placeholder='Escala (metros)'></input><button id='help-dialog' class='btn dialog-btn info'><i class='material-icons'>info_outline</i></button>" +
                     "</div>" + 
                   "<div class='dialog-option help'>" +
                     "<p>Escribe en el cuadro de texto la escala con la que vas a medir el modelo 3D. Por ejemplo, si introduces 0.1, la distancia total entre los puntos que selecciones será igual a 0.1 metros. Por defecto, la distancia será 1 metro.</p>" +
@@ -351,7 +352,7 @@ function testDialog(options)
     html += "</div>";
     
     location.append(html);
-    $( ".draggable" ).draggable();
+//    $( ".draggable" ).draggable();
     
     if(options.hideupper)
         $("#add-dialog").hide();
@@ -360,10 +361,31 @@ function testDialog(options)
     }
     
     $("#camera-mode").click(function(){
+        selectDialogOption($(this));
         context.onmousedown = function(e) {}
         $("#myCanvas").css("cursor", "default");  
     });
+    
+    $("#close-dialog").click(function(){
+        APP.disableAllFeatures();  
+    });
         
+}
+
+/*
+* @param {o} jquery selector from the dialog tools to add class active
+*/
+
+function selectDialogOption(o)
+{
+    var list = [$("#camera-mode"),
+    $("#add-dialog")];
+
+    for(var i in list)
+        list[i].removeClass("selected");
+    
+    if(!o.hasClass("selected"))
+        o.addClass("selected");
 }
     
 /*
