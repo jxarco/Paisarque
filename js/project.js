@@ -30,7 +30,7 @@ Project.prototype._ctor = function( data )
 }
 
 /*
-*   @prototype pushExtra
+*   @method pushExtra
 *   Insert extra information to the _extra list.
 *   @param type: data type (pdf, image, etc)
 *   @param data: path to data (or link)
@@ -45,7 +45,7 @@ Project.prototype.pushExtra = function( name, type, data )
 }
 
 /*
-*   @prototype deleteExtra
+*   @method deleteExtra
 *   Delete one single extra information of the _extra list.
 *   @param type: data type (pdf, image, etc)
 *   @param data: path to data (or link)
@@ -76,7 +76,7 @@ Project.prototype.deleteExtra = function( selector, type )
 }
 
 /*
-*   @prototype rename
+*   @method rename
 *   Renames project (ID!!)
 *   @param name: new name
 */
@@ -94,7 +94,7 @@ Project.prototype.rename = function( name )
 */
 
 /*
-*   @prototype insertAnotation
+*   @method insertAnotation
 *   @param camera: contains position, target and up
 *   @param position: x y z of the anotation
 *   @param status: text of the anotation
@@ -132,7 +132,7 @@ Project.prototype.getAnnotations = function()
 }
 
 /*
-*   @prototype deleteAnotation
+*   @method deleteAnotation
 *   Deletes a single annotation
 *   @param id: id of the annotation to delete
 */
@@ -193,7 +193,7 @@ Project.prototype.deleteAnotation = function( id )
 }
 
 /*
-*   @prototype deleteAllAnotations
+*   @method deleteAllAnotations
 *   Deletes all annotations
 *   @param obj: current global mesh of the project
 */
@@ -219,7 +219,7 @@ Project.prototype.getRotations = function()
 }
 
 /*
-*   @prototype setRotations
+*   @method setRotations
 *   Sets the current rotations to the project
 *   @param rotation: array list of the object rotations
 */
@@ -242,36 +242,6 @@ Project.prototype.setRotations = function( rotation )
 *   Distances
 *   @class Project
 */
-
-Project.prototype.update_meter = function(relation)
-{
-    if(this._areas.length)
-        if(!confirm("Las distancias se recalcularán pero las areas calculadas se borrarán si continuas."))
-            return;    
-    
-    // recalcular distancias 
-    for(var i = 0; i < this._measures.length; ++i)
-    {
-        var msr = this._measures[i];
-        msr.distance *= this._meter;
-        msr.distance /= relation;
-    }
-    
-    // recalcular segmentos
-    for(var i = 0; i < this._segments.length; ++i)
-    {
-        var msr = this._segments[i];
-        msr.distance *= this._meter;
-        msr.distance /= relation;
-    }
-
-    // DE MOMENTO, borrar areas
-    project._areas = [];
-    
-    this._meter = relation;
-    this.save();
-    document.location.href = "modelo.html?r=" + current_project;    
-}
 
 Project.prototype.getMeasurements = function()
 {
@@ -309,22 +279,109 @@ Project.prototype.getArea = function(id)
             return this._areas[i];
 }
 
+/*  
+*   @method setDistances
+*   Insertar solo las medidas en las tablas
+*   cuando se actualiza el metro
+*   @param data
+*/
+Project.prototype.restoreDistances = function( )
+{
+    $('#distances-table').find("tr").remove();
+    $('#segment-distances-table').find("tr").remove();
+    $('#areas-table').find("tr").remove();
+    
+    var length = this._measures.length;
+    
+    for(var i = 0; i < length; i++)
+    {
+        var msr = this._measures[i];
+        
+        var camera = {
+            "position": msr.camera_position,
+            "target": msr.camera_target,
+            "up": msr.camera_up
+        };
+        
+        var x1 = msr.x1;
+        var x2 = msr.x2;
+        var distance = msr.distance;
+        console.log(msr.id);
+        this.insertMeasure(camera, x1, x2, distance, {display: false, push: false, id: msr.id});
+    }
+    
+    length = this._segments.length;
+    
+    for(var i = 0; i < length; i++)
+        this.insertSegmentMeasure( this._segments[i].points, this._segments[i].distance, {display: false, push: false, id: this._segments[i].id} );
+    
+    length = this._areas.length;
+    
+    for(var i = 0; i < length; i++)
+    {
+        var points = [];
+        var msr = this._areas[i];
+        
+        for(var j = 0; j < msr.points.length; j++)
+        {
+            var obj = msr.points[j];
+            var point = [obj[0], obj[1], obj[2]];
+            points.push(point);
+        }
+        this.insertArea( points, msr.area, msr.index, msr.name, {display: false, push: false, id: msr.id});    
+    }
+}
+
+Project.prototype.update_meter = function(relation)
+{
+    // recalcular distancias 
+    for(var i = 0; i < this._measures.length; ++i)
+    {
+        var msr = this._measures[i];
+        msr.distance *= this._meter;
+        msr.distance /= relation;
+    }
+    
+    // recalcular segmentos
+    for(var i = 0; i < this._segments.length; ++i)
+    {
+        var msr = this._segments[i];
+        msr.distance *= this._meter;
+        msr.distance /= relation;
+    }
+    
+    // recalcular areas
+    for(var i = 0; i < this._areas.length; ++i)
+    {
+        var msr = this._areas[i];
+        msr.area *= Math.pow(this._meter, 2);
+        msr.area /= Math.pow(relation, 2);
+    }
+    
+    this._meter = relation;
+    this.restoreDistances();
+    //this.save();
+    //document.location.href = "modelo.html?r=" + current_project;   
+}
+
 /*
-*   @prototype insertMeasure
+*   @method insertMeasure
 *   Push a new measure to the list project
 *   @param camera: get camera properties
 *   @param x1 and x2: points within distance is calculated
 *   @param display: show or not the table after inserting measure
 */
 
-Project.prototype.insertMeasure = function( camera, x1, x2, distance, display )
+Project.prototype.insertMeasure = function( camera, x1, x2, distance, options )
 {   
     if(!distance)
         return;
     
+    options = options || {};
+    
     var table = $('#distances-table');
     var bodyTable = table.find('tbody');
-    var id = last_measure_id++;
+    var id = options.id >= 0 ? options.id : last_measure_id++;
     
     var row = "<tr onclick='APP.viewMeasure(" + id + ")' id=" + id + " a class='pointer'>" + 
     "<td>" + Math.round(x1[0] * 100) / 100 + "</br>" + Math.round(x1[1] * 100) / 100 + "</br>" + Math.round(x1[2] * 100) / 100 + "</td>" + 
@@ -334,43 +391,46 @@ Project.prototype.insertMeasure = function( camera, x1, x2, distance, display )
     
     bodyTable.append(row);
     
-    showing["t1"] = display;
-    revealDOMElements(table, display);
+    showing["t1"] = options.display;
+    revealDOMElements(table, options.display);
     
-    this._measures.push( {
-        "id": id,
-        "camera_position": vec3.clone(camera.position),
-        "camera_target": vec3.clone(camera.target),
-        "camera_up": vec3.clone(camera.up),
-        "x1": {
-            "0": x1[0],
-            "1": x1[1],
-            "2": x1[2],
-        },
-        "x2": {
-            "0": x2[0],
-            "1": x2[1],
-            "2": x2[2],
-        },
-        "distance": distance
-    } );
+    if(options.push)
+        this._measures.push( {
+            "id": id,
+            "camera_position": vec3.clone(camera.position),
+            "camera_target": vec3.clone(camera.target),
+            "camera_up": vec3.clone(camera.up),
+            "x1": {
+                "0": x1[0],
+                "1": x1[1],
+                "2": x1[2],
+            },
+            "x2": {
+                "0": x2[0],
+                "1": x2[1],
+                "2": x2[2],
+            },
+            "distance": distance
+        });
 }
 
 /*
-*   @prototype insertSegmentMeasure
+*   @method insertSegmentMeasure
 *   Push a new segment measure to the list project
 *   @param points: list of vertices
 *   @param display: show or not the table after inserting measure
 */
 
-Project.prototype.insertSegmentMeasure = function( points, distance, display )
+Project.prototype.insertSegmentMeasure = function( points, distance, options )
 {   
     if(!distance)
         return;
     
+    options = options || {};
+    
     var table = $('#segment-distances-table');
     var bodyTable = table.find('tbody');
-    var id = last_seg_measure_id++;
+     var id = options.id ? options.id : last_seg_measure_id++;
     
     var row = "<tr onclick='APP.viewClosedMeasure(" + id + ")' id=" + id + " a class='pointer'>" + 
     "<td>" + (points.length - 1) + "</td>" + 
@@ -379,31 +439,34 @@ Project.prototype.insertSegmentMeasure = function( points, distance, display )
     
     bodyTable.append(row);
     
-    showing["t2"] = display;
-    revealDOMElements(table, display);
+    showing["t2"] = options.display;
+    revealDOMElements(table, options.display);
     
-    this._segments.push( {
-        "id": id,
-        "points": points,
-        "distance": distance
-    } );
+    if(options.push)
+        this._segments.push( {
+            "id": id,
+            "points": points,
+            "distance": distance
+        } );
 }
 
 /*
-*   @prototype insertArea
+*   @method insertArea
 *   Push a new area measure to the list project
 *   @param points: list of vertices
 *   @param display: show or not the table after inserting measure
 */
 
-Project.prototype.insertArea = function( points, area, index, name, display )
+Project.prototype.insertArea = function( points, area, index, name, options )
 {   
-//    if(!area)
-//        return;
+    if(!area)
+        return;
+    
+    options = options || {};
     
     var table = $('#areas-table');
     var bodyTable = table.find('tbody');
-    var id = last_area_measure_id++;
+    var id = options.id ? options.id : last_area_measure_id++;
     var style = index === 1 ? "Planta" : "Alzado";
     
     var aux = "area-name" + id;
@@ -412,20 +475,22 @@ Project.prototype.insertArea = function( points, area, index, name, display )
     "<td id='" + aux + "'><p onclick='setInput(" + id + ")'>" + name + "</p></td>" + 
     "<td>" + style + "</td>" + 
     "<td>" + Math.round(area * 1000) / 1000 + "</td>" + 
+    "<td>" + "<i class='material-icons remove-item'>close</i>" + "</td>" + 
     "</tr>";
     
     bodyTable.append(row);
     
-    showing["t3"] = display;
-    revealDOMElements(table, display);
+    showing["t3"] = options.display;
+    revealDOMElements(table, options.display);
     
-    this._areas.push( {
-        "id": id,
-        "name": name,
-        "points": points,
-        "index": index,
-        "area": area
-    } );
+    if(options.push)
+        this._areas.push( {
+            "id": id,
+            "name": name,
+            "points": points,
+            "index": index,
+            "area": area
+        } );
 }
 
 /*
@@ -434,7 +499,7 @@ Project.prototype.insertArea = function( points, area, index, name, display )
 */
 
 /*  
-*   @prototype FROMJSON
+*   @method FROMJSON
 *   Crear el proyecto a partir del json creado
 *   @param data
 */
@@ -495,13 +560,13 @@ Project.prototype.FROMJSON = function( data )
         var x2 = data.medidas[i].x2;
         var distance = data.medidas[i].distance;
         
-        this.insertMeasure(camera, x1, x2, distance, false);
+        this.insertMeasure(camera, x1, x2, distance, {display: false, push: true});
     }
     
     len = data.segmentos ? data.segmentos.length : 0;
     
     for(var i = 0; i < len; i++)
-        this.insertSegmentMeasure( data.segmentos[i].points, data.segmentos[i].distance, false );
+        this.insertSegmentMeasure( data.segmentos[i].points, data.segmentos[i].distance, {display: false, push: true} );
     
     len = data.areas ? data.areas.length : 0;
     
@@ -514,13 +579,12 @@ Project.prototype.FROMJSON = function( data )
                     var point = [obj[0], obj[1], obj[2]];
                     points.push(point);
                 }
-            this.insertArea( points, data.areas[i].area, data.areas[i].index, data.areas[i].name, false );    
+            this.insertArea( points, data.areas[i].area, data.areas[i].index, data.areas[i].name, {display: false, push: true} );    
         }
-        
 }
 
 /*  
-*   @prototype save
+*   @method save
 *   Guardar todos los datos a disco
 *   Se trata de sobreescribir (o no) el json original,
 *   con los atributos actuales del proyecto
@@ -574,7 +638,7 @@ Project.prototype.save = function( overwrite, extra )
 
 
 /*  
-*   @prototype check
+*   @method check
 *   Cambiamos propiedades de la página dependiendo de 
 *   atributos del proyecto
 */
@@ -593,7 +657,7 @@ Project.prototype.check = function()
 
 
 /*  
-*   @prototype fill
+*   @method fill
 *   Crea un proyecto a partir de un string con los datos
 *   @param data
 */

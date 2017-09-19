@@ -22,10 +22,10 @@ SceneIndication.prototype.ball = function(scene, position, options)
 		position: position,
 		color: [0.3,0.8,0.1,1],
         layers: 0x4,
-		mesh: "sphere",
-        description: "config"
+		mesh: "sphere"
 	});
     
+    ball.description = "config";
     ball.flags.ignore_collisions = true;
     options = options || {};
     

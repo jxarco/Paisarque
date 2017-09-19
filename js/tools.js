@@ -125,9 +125,7 @@ function initMap(lat, lng)
 
 function setInput(id)
 {
-//    console.log(id);
-
-    $("#area-name" + id).html("<textarea id='s_input'></textarea>");
+    $("#area-name" + id).html("<textarea id='s_input' placeholder='Nombre'></textarea>");
     $("#s_input").focus();
     $("#s_input").keyup(function(e)
     {
@@ -306,6 +304,10 @@ function putCanvasMessage(text, ms, options)
     setTimeout(function(){
         $(id).fadeOut();
         $(id).remove();
+        
+        if(options.callback)
+            options.callback();
+        
     }, ms);
     last_message_id++;
 }

@@ -236,6 +236,14 @@ $('#coord-btn').click(function(e)
 $("#lat").keypress(onlyNumbers);
 $("#lon").keypress(onlyNumbers);
 
+
+$(".remove-item").click(function(){
+   
+    console.log("deleting item");
+    
+});
+
+
 /*
 *   Button: Clear configuration of meter in the project
 */

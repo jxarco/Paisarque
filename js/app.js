@@ -596,7 +596,7 @@ var APP = {
                         plane.color = [0.5,0.5,0.8, 0.75];
                         plane.position = points[0];
                         plane.scaling = 500;
-                        plane.blend_mode = 1;
+                        plane.blend_mode = RD.BLEND_ALPHA;
                         if(vista === ALZADO)
                             plane.rotate(90 * DEG2RAD, RD.FRONT);
                         scene.root.addChild(plane);  
@@ -619,9 +619,6 @@ var APP = {
                         obj.blend_mode = 1;
                         obj.opacity = 0.75;
                     }
-
-                    context.onmousedown = function(e) {}
-                    $("#myCanvas").css("cursor", "default");
                 }
 
                 if(points.length > 1)
@@ -908,7 +905,6 @@ var APP = {
 
     disableAllFeatures: function ()
     {
-        putCanvasMessage("Hecho!", 1000);
         context.onmousedown = function(e) {};
         APP.rotation = false;
         scene.root.children[1].flags.visible = false;
@@ -919,10 +915,13 @@ var APP = {
         $("#measure-opt-btn").find("i").html("add_circle_outline");
         $(".sub-btns").hide();
         $(".draggable").remove();
+        $("#cont-msg").empty();
 
         // obj properties
         obj.blend_mode = 0;
         obj.opacity = 1;
+        
+        putCanvasMessage("Hecho!", 1000);
     },
     
     fadeAllTables: function (o)
