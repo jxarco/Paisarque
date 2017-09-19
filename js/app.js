@@ -167,8 +167,8 @@ var APP = {
                 putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "alert"}); 
         };
 
-//        renderer.loadMesh(obj.mesh, makeVisible);
-//        renderer.loadTexture(obj.texture, renderer.default_texture_settings);
+        renderer.loadMesh(obj.mesh, makeVisible);
+        renderer.loadTexture(obj.texture, renderer.default_texture_settings);
 //        $("#placeholder").css("background-image", "none");
 //        $('#myCanvas').css({"opacity": 0, "visibility": "visible"}).animate({"opacity": 1.0}, 1000);
 
@@ -524,6 +524,9 @@ var APP = {
                 project.insertSegmentMeasure(window.tmp, distance, true);
 
         });
+        
+        // begin with an option selected
+        $("#add-dialog").click();
     },
 
     medirArea: function (vista)
@@ -725,6 +728,9 @@ var APP = {
             //clear all
             APP.disableAllFeatures();
         });
+        
+        // begin with an option selected
+        $("#add-dialog").click();
     },
 
     viewMeasure: function (id)

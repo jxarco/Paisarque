@@ -330,7 +330,7 @@ function testDialog(options)
 //                  "width: 30%; " +
                   "margin-top: " + margin +
                   "text-align: center;'>" +
-                  "<button id='close-dialog' class='btn dialog-btn info'><i class='material-icons'>close</i></button>" +
+                  "<button title='Cancelar' id='close-dialog' class='btn dialog-btn info'><i class='material-icons'>close</i></button>" +
                   "<div class='dialog-option'>" +
                     "<button id='add-dialog' class='btn dialog-btn'>" + upperbtn + "</button>" +
                     "</div>" +
