@@ -8,7 +8,7 @@ body, html{
     padding: 0 !important;
     font-family: 'Titillium Web', sans-serif !important;
     -webkit-font-smoothing: antialiased;
-    background-color: rgb(235, 235, 235);
+    background-color: rgb(210, 210, 210);
     width: 100% !important;
     height: 100% !important;
 /*    overflow-y: hidden;*/
@@ -254,7 +254,7 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .messages.alert{
-    background-color: rgba(200, 200, 90, 0.8); 
+    background-color: rgba(200, 200, 90, 0.9); 
 }
 .messages.error{
     background-color: rgba(200, 90, 90, 0.8); 
@@ -412,8 +412,16 @@ h1, h2, h3, h4, h5, h6{
 
 .tables td{
     text-align: center;
+    padding-top: 12px !important; 
 }
 
+.a-visibility{
+    font-size: 13px !important;
+    color: limegreen;
+    text-shadow: 0 0 5px limegreen;
+    margin-left: 5px;
+    margin-top: 5px;
+}
 
 /* -------------------------------------------- */
 

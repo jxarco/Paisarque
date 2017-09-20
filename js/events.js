@@ -236,14 +236,6 @@ $('#coord-btn').click(function(e)
 $("#lat").keypress(onlyNumbers);
 $("#lon").keypress(onlyNumbers);
 
-
-$(".remove-item").click(function(){
-   
-    console.log("deleting item");
-    
-});
-
-
 /*
 *   Button: Clear configuration of meter in the project
 */
@@ -343,6 +335,78 @@ $("#measure-opt-btn").click(function(){
         $(this).find("i").html("add_circle_outline");
         $(".sub-btns").hide(); 
     }
+});
+
+/*
+* holds the action of taking a snapshot of the canvas
+*/
+$("#capture-scene").click(function(){
+   
+    var canvas = gl.snapshot(0, 0, renderer.canvas.width, renderer.canvas.height);
+    
+    function inner_screenshot( img_blob )
+		{
+			var url = URL.createObjectURL( img_blob );
+
+			var img = new Image();
+			img.setAttribute("download","screen.png");
+			img.src = url;
+            $("#capturing").append("<a href='"+url+"' download='screenshot.png'>Descargar captura</a>")
+			//img.width = "100%";
+			$("#capturing").append( img );
+		}
+    
+    var on_complete = inner_screenshot;
+    
+    canvas.toBlob( on_complete, "image/png");
+    
+    /*var width = renderer.canvas.width;
+    var height = renderer.canvas.height;
+    var v3d = renderer;
+    
+    if( v3d.canvas.width >= width ) //render big and downscale
+    {
+        var canvas = createCanvas( width, height );
+        //document.body.appendChild(canvas);
+        var ctx = canvas.getContext("2d");
+        var scalew = width / v3d.canvas.width;
+        var scaleh = height / v3d.canvas.height;
+        var scale = Math.max( scalew, scaleh ); //the biggest so it fits all
+        if(scale == scaleh )
+            ctx.translate( ((scale * v3d.canvas.width) - width) * -0.5, 0 );
+        else
+            ctx.translate( 0, ((scale * v3d.canvas.height) - height) * -0.5 );
+        ctx.scale( scale, scale );
+        ctx.drawImage( v3d.canvas, 0, 0 );
+        
+        if(on_complete)
+        {
+            canvas.toBlob( on_complete, "image/png");
+            return null;
+        }
+       // data = canvas.toDataURL("image/png");
+    }
+    else //render to specific size
+    {
+        var old = [v3d.canvas.width,v3d.canvas.height];
+        v3d.resize(width,height);
+
+        this.render(true);
+        var data = null;
+
+        if(on_complete)
+        {
+            v3d.canvas.toBlob( on_complete, "image/png");
+            v3d.resize(old[0],old[1]);
+            RenderModule.render(true); //force render a frame to clean 
+            return null;
+        }
+
+        data = v3d.canvas.toDataURL("image/png");
+        v3d.resize(old[0],old[1]);
+    }
+    return data;*/
+    
 });
 
 /*

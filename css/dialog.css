@@ -51,7 +51,7 @@ input{
 
 .dialog-btn.selected{
     background: rgb(150, 150, 150) !important;
-    border: 1px solid rgba(66, 134, 244, 0.85);
+    border: 2px solid rgba(62, 164, 155, 0.95);
     color: whitesmoke;
 }
 

@@ -26,6 +26,7 @@ ul li {
     text-align:center;
     list-style-type: none;
     height: 350px;
+    background-color: #ddd;
 }
 
 a:hover{
@@ -34,7 +35,7 @@ a:hover{
 }
 
 .top {
-  background-color: #DAD9D4;
+  background-color: #eee;
   height:75px;
   
 }

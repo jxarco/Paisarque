@@ -119,25 +119,28 @@ var APP = {
 
         //disable autoload
         renderer.autoload_assets = false;
-
+        
         //create camera
         camera = new RD.Camera();
         camera.perspective( 45, gl.canvas.width / gl.canvas.height, 1, 1000 );
         camera.lookAt( [100,100,100],[0,0,0],[0,1,0] );
 
         var pivot = new RD.SceneNode();
+        pivot.name = "3d pivot";
         //inner update
         /*pivot.update = function(dt) {
             this.rotate(dt * 0.1,RD.UP);
-        }*/
-        scene.root.addChild(pivot);
+        }
+        scene.root.addChild(pivot);*/
 
         //create an obj in the scene
         obj = new RD.SceneNode();
+        obj.name = "mesh 3d";
         obj.position = [0,0,0];
-        obj.color = [1,1,1,1];
         obj.mesh = meshURL;
-
+        //obj.blend_mode = RD.BLEND_NONE;
+        //obj.opacity = 1;
+        
         // tenemos que pensar el caso en que haya mas de una textura
         if (!isArray(textureURL)) {
             obj.texture = textureURL;
@@ -167,13 +170,13 @@ var APP = {
                 putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "alert"}); 
         };
 
-        renderer.loadMesh(obj.mesh, makeVisible);
-        renderer.loadTexture(obj.texture, renderer.default_texture_settings);
+//        renderer.loadMesh(obj.mesh, makeVisible);
+//        renderer.loadTexture(obj.texture, renderer.default_texture_settings);
 //        $("#placeholder").css("background-image", "none");
 //        $('#myCanvas').css({"opacity": 0, "visibility": "visible"}).animate({"opacity": 1.0}, 1000);
 
         obj.scale([5,5,5]);
-        pivot.addChild( obj );
+        scene.root.addChild( obj );
 
         //GRID
         var ind = new SceneIndication();
@@ -206,14 +209,13 @@ var APP = {
         }
 
         //global settings
-        var bg_color = vec4.fromValues(0.921, 0.921, 0.921, 1);
+        var bg_color = vec4.fromValues(0.823, 0.823, 0.823, 1);
 
         //main render loop
         var last = now = getTime();
         requestAnimationFrame(animate);
         function animate() {
             requestAnimationFrame( animate );
-
             last = now;
             now = getTime();
             var dt = (now - last) * 0.001;
@@ -261,19 +263,18 @@ var APP = {
 
             if(e.keyCode === 13) // Enter
             {
-                if(!APP.rotation)
-                    return;
+                if(APP.rotation){
+                    APP.rotation = false;
+                    scene.root.children[1].flags.visible = APP.rotation;
 
-                APP.rotation = false;
-                scene.root.children[1].flags.visible = APP.rotation;
+                    if(APP.rotation)
+                        revealDOMElements([$("#cardinal-axis"), $('.sliders')], true);
+                    else
+                        revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
 
-                if(APP.rotation)
-                    revealDOMElements([$("#cardinal-axis"), $('.sliders')], true);
-                else
-                    revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
-
-                project.setRotations(obj._rotation);
-                putCanvasMessage("Recuerda guardar...", 2000);
+                    project.setRotations(obj._rotation);
+                    putCanvasMessage("Recuerda guardar...", 2000);
+                }
             }
 
             if(e.keyCode === 27) // ESC
@@ -334,7 +335,7 @@ var APP = {
     {
         if(project._meter !== -1)
         {
-            putCanvasMessage("La configuración de la escala ya ha sido realizada en este proyecto. Si lo haces, perderás la medición anterior.", 8000, {type: "error"});    
+            putCanvasMessage("La configuración de la escala ya ha sido realizada en este proyecto. Si lo haces, perderás la medición anterior.", 8000, {type: "alert"});    
         }
 
         // clear first
@@ -361,8 +362,8 @@ var APP = {
                 if (node) {
                     var ind = new SceneIndication();
                     ind = ind.ball(scene, result);
-                    window.tmp.push(result);
-                    if(window.tmp.length === 2)
+                    tmp.push(result);
+                    if(tmp.length == 2)
                         $("#end-dialog").click();
                 }
             }
@@ -371,8 +372,8 @@ var APP = {
         $("#end-dialog").click(function(){
 
             var newPoint = vec3.create();
-            var cur = window.tmp[0];
-            var next = window.tmp[1];
+            var cur = tmp[0];
+            var next = tmp[1];
             newPoint[0] = Math.abs(cur[0] - next[0]);
             newPoint[1] = Math.abs(cur[1] - next[1]);
             newPoint[2] = Math.abs(cur[2] - next[2]);
@@ -380,6 +381,7 @@ var APP = {
             var scale = parseFloat($("#scale-input").val()) || 1;
             var relation = vec3.length(newPoint) / scale;
             project.update_meter(relation);
+            putCanvasMessage("Guardando...", 2000);
             $(".draggable").remove();
             $(".measures-btns").css('opacity', '1');
             
@@ -427,25 +429,25 @@ var APP = {
                 if (node) {
                     var ind = new SceneIndication();
                     ind = ind.ball(scene, result);
-                    window.tmp.push(result);
+                    tmp.push(result);
                 }
 
-                if(window.tmp.length > 1)
+                if(tmp.length > 1)
                 {
                     var vertices = [];
                     APP.destroyElements(scene.root.children, "config-tmp");
 
-                    for(var i = 0; i < window.tmp.length; ++i)
+                    for(var i = 0; i < tmp.length; ++i)
                     {
-                        vertices.push(window.tmp[i][0]);
-                        vertices.push(window.tmp[i][1]);
-                        vertices.push(window.tmp[i][2]);
+                        vertices.push(tmp[i][0]);
+                        vertices.push(tmp[i][1]);
+                        vertices.push(tmp[i][2]);
 
                             if(i)
                             {
-                                vertices.push(window.tmp[i][0]);
-                                vertices.push(window.tmp[i][1]);
-                                vertices.push(window.tmp[i][2]);
+                                vertices.push(tmp[i][0]);
+                                vertices.push(tmp[i][1]);
+                                vertices.push(tmp[i][2]);
                             }
                     }
 
@@ -465,16 +467,16 @@ var APP = {
 
         $("#end-dialog").click(function(){
 
-            if(window.tmp.length < 2)
+            if(tmp.length < 2)
                 return;
 
             var units = 0;
 
-            for(var i = 0; i < window.tmp.length - 1; ++i)
+            for(var i = 0; i < tmp.length - 1; ++i)
             {
                 var newPoint = vec3.create();
-                var cur = window.tmp[i];
-                var next = window.tmp[i+1];
+                var cur = tmp[i];
+                var next = tmp[i+1];
                 newPoint[0] = Math.abs(cur[0] - next[0]);
                 newPoint[1] = Math.abs(cur[1] - next[1]);
                 newPoint[2] = Math.abs(cur[2] - next[2]);
@@ -485,17 +487,17 @@ var APP = {
             var distance = units / project._meter;
             var vertices = [];
 
-            for(var i = 0; i < window.tmp.length; ++i)
+            for(var i = 0; i < tmp.length; ++i)
             {
-                vertices.push(window.tmp[i][0]);
-                vertices.push(window.tmp[i][1]);
-                vertices.push(window.tmp[i][2]);
+                vertices.push(tmp[i][0]);
+                vertices.push(tmp[i][1]);
+                vertices.push(tmp[i][2]);
 
                     if(i)
                     {
-                        vertices.push(window.tmp[i][0]);
-                        vertices.push(window.tmp[i][1]);
-                        vertices.push(window.tmp[i][2]);
+                        vertices.push(tmp[i][0]);
+                        vertices.push(tmp[i][1]);
+                        vertices.push(tmp[i][2]);
                     }
             }
 
@@ -518,10 +520,10 @@ var APP = {
             $(".draggable").remove();
             putCanvasMessage("Recuerda guardar...", 2000);
 
-            if(window.tmp.length === 2)
-                project.insertMeasure(camera, window.tmp[0], window.tmp[1], distance, true);
+            if(tmp.length === 2)
+                project.insertMeasure(camera, tmp[0], tmp[1], distance, true);
             else 
-                project.insertSegmentMeasure(window.tmp, distance, true);
+                project.insertSegmentMeasure(tmp, distance, true);
 
         });
         
@@ -531,8 +533,10 @@ var APP = {
 
     medirArea: function (vista)
     {
-        if(project._meter === -1)
+        if(project._meter == -1){
+            putCanvasMessage("Primero configura la escala.", 3000, {type: "error"});
             return;
+        }
 
          // clear first
         APP.destroyElements(scene.root.children, "config");
@@ -549,22 +553,21 @@ var APP = {
         window.tmp = [];
         var index = vista === PLANTA ? 1 : 2;
 
-        $("#add-dialog").click(function(){
+        $("#add-dialog").click(function(){ 
 
             selectDialogOption($(this));
             $("#myCanvas").css("cursor", "crosshair");
 
             context.onmousedown = function(e) 
             {
-                var points = window.tmp;
                 var result = vec3.create();
                 // normal depending on the type of area
                 var normal = vista === PLANTA ? vec3.fromValues(0, 1, 0) : vec3.fromValues(1, 0, 0);
                 var ray = camera.getRay( e.canvasx, e.canvasy );
                 var node = null;
 
-                if(window.tmp.length){
-                    result = camera.getRayPlaneCollision( e.canvasx, e.canvasy, points[0], normal);
+                if(tmp.length){
+                    result = camera.getRayPlaneCollision( e.canvasx, e.canvasy, tmp[0], normal);
                     node = true;
                 }
                 else
@@ -572,71 +575,84 @@ var APP = {
 
                 if (node) {
 
-                    if(points.length > 1)
+                    if(tmp.length > 1)
                     {
                         var newPoint = vec3.create();
-                        newPoint[0] = Math.abs(points[0][0] - result[0]);
-                        newPoint[1] = Math.abs(points[0][1] - result[1]);
-                        newPoint[2] = Math.abs(points[0][2] - result[2]);
+                        newPoint[0] = Math.abs(tmp[0][0] - result[0]);
+                        newPoint[1] = Math.abs(tmp[0][1] - result[1]);
+                        newPoint[2] = Math.abs(tmp[0][2] - result[2]);
 
                         var units = vec3.length(newPoint);
                         if(units < 1.5)
-                            result = points[0];            
+                            result = tmp[0];            
                     }
 
-                    var ind = new SceneIndication();
-                    ind = ind.ball(scene, result, {depth_test: false});
-                    window.tmp.push(result);
+                    tmp.push(result);
 
-                    if(points.length == 1)
+                    if(tmp.length == 1)
                     {
-                        var plane = new RD.SceneNode();
-                        plane.mesh = "planeXZ";
+                        var plane = new RD.SceneNode({
+                            mesh: "planeXZ",
+                            position: tmp[0],
+                            scaling: 500,
+                            blend_mode: RD.BLEND_ALPHA,
+                            opacity: 0.35,
+                            name: "area-plane"
+                        });
+                        
                         plane.description = "config";
-                        plane.color = [0.5,0.5,0.8, 0.75];
-                        plane.position = points[0];
-                        plane.scaling = 500;
-                        plane.blend_mode = RD.BLEND_ALPHA;
+                        plane.flags.two_sided = true;
+                        
                         if(vista === ALZADO)
                             plane.rotate(90 * DEG2RAD, RD.FRONT);
-                        scene.root.addChild(plane);  
-
-                        var grid = new RD.SceneNode();
+                        scene.root.addChild(plane);
+                        
                         var grid_mesh = GL.Mesh.grid({size:10});
                         renderer.meshes["grid"] = grid_mesh;
+                        
+                        var grid = new RD.SceneNode({
+                            mesh: "grid",
+                            position: tmp[0],
+                            color: [0.5, 0.5, 0.5]
+                        });
+                        
                         grid.description = "config";
-                        grid.mesh = "grid";
-                        grid.position = points[0];
-                        grid.primitive = gl.LINES;
-                        grid.color = [0.5, 0.5, 0.5, 1];
-                        grid.scale([50, 50, 50]);
+                        grid.primitive =gl.LINES;
+                        grid.scale([50, 50, 50]);    
+                        
                         if(vista === ALZADO)
                             grid.rotate(90 * DEG2RAD, RD.FRONT);
                         scene.root.addChild(grid);
 
                         // set opacity to the main object
                         // idea: plane over obj
-                        obj.blend_mode = 1;
-                        obj.opacity = 0.75;
+//                        obj.blend_mode = 1;
+//                        obj.opacity = 0.75;
+                        
+                        var ind = new SceneIndication();
+                        ind = ind.ball(scene, result, {depth_test: false});
                     }
                 }
 
-                if(points.length > 1)
+                if(tmp.length > 1)
                 {
                     var vertices = [];
                     APP.destroyElements(scene.root.children, "config-tmp");
+                    
+                    var ind = new SceneIndication();
+                    ind = ind.ball(scene, result, {depth_test: false});
 
-                    for(var i = 0; i < window.tmp.length; ++i)
+                    for(var i = 0; i < tmp.length; ++i)
                     {
-                        vertices.push(window.tmp[i][0]);
-                        vertices.push(window.tmp[i][1]);
-                        vertices.push(window.tmp[i][2]);
+                        vertices.push(tmp[i][0]);
+                        vertices.push(tmp[i][1]);
+                        vertices.push(tmp[i][2]);
 
                             if(i)
                             {
-                                vertices.push(window.tmp[i][0]);
-                                vertices.push(window.tmp[i][1]);
-                                vertices.push(window.tmp[i][2]);
+                                vertices.push(tmp[i][0]);
+                                vertices.push(tmp[i][1]);
+                                vertices.push(tmp[i][2]);
                             }
                     }
 
@@ -657,22 +673,22 @@ var APP = {
 
         $("#end-dialog").click(function(){
 
-            if(window.tmp.length < 2)
+            if(tmp.length < 2)
                 return;
 
             var vertices = [];
 
-            for(var i = 0; i < window.tmp.length; ++i)
+            for(var i = 0; i < tmp.length; ++i)
             {
-                vertices.push(window.tmp[i][0]);
-                vertices.push(window.tmp[i][1]);
-                vertices.push(window.tmp[i][2]);
+                vertices.push(tmp[i][0]);
+                vertices.push(tmp[i][1]);
+                vertices.push(tmp[i][2]);
 
                     if(i)
                     {
-                        vertices.push(window.tmp[i][0]);
-                        vertices.push(window.tmp[i][1]);
-                        vertices.push(window.tmp[i][2]);
+                        vertices.push(tmp[i][0]);
+                        vertices.push(tmp[i][1]);
+                        vertices.push(tmp[i][2]);
                     }
             }
 
@@ -691,7 +707,7 @@ var APP = {
 
             var points2D = [];
             var p2D = null;
-            var points = window.tmp;
+            var points = tmp;
 
             for(var i = 0; i < points.length; ++i)
             {
@@ -911,6 +927,7 @@ var APP = {
 
         revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
         APP.destroyElements(scene.root.children, "config");
+        APP.destroyElements(scene.root.children, "config-tmp");
         $("#myCanvas").css("cursor", "default");
         $("#measure-opt-btn").find("i").html("add_circle_outline");
         $(".sub-btns").hide();
@@ -918,8 +935,8 @@ var APP = {
         $("#cont-msg").empty();
 
         // obj properties
-        obj.blend_mode = 0;
-        obj.opacity = 1;
+//        obj.blend_mode = 0;
+//        obj.opacity = 1;
         
         putCanvasMessage("Hecho!", 1000);
     },

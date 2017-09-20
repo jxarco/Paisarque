@@ -148,6 +148,17 @@ function setInput(id)
     });
 }
 
+function remove(e){
+    
+    //           <i>    <td>    <tr>
+    var parent = $(e).parent().parent();
+    console.log(parent.attr("id"));
+    
+    parent.remove();   
+    
+    // coger por id el area o medida y eliminarla
+}
+
 function parseExtraJSON(json, flags)
 {
     flags = flags || {};
@@ -260,7 +271,7 @@ function setParent(parent, son)
 
 function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id)
 {
-    camera.position = position_camera;
+    camera.position = position_camera;    
     camera.target = target_camera;
     camera.up = up_camera;
     

@@ -171,7 +171,7 @@
                                role="tab" 
                                aria-selected="true" 
                                aria-controls="panel1-large" 
-                               tabindex="0">Información</label>
+                               tabindex="0">Sobre el proyecto</label>
                         <div id="tab-content1-large" 
                              class="tab-content-large" 
                              role="tabpanel" 
@@ -198,7 +198,7 @@
                                role="tab" 
                                aria-selected="false" 
                                aria-controls="panel2-large" 
-                               tabindex="0">Tools</label>
+                               tabindex="0">Herramientas</label>
                         <div id="tab-content2-large" 
                              class="tab-content-large"
                              role="tabpanel" 
@@ -206,42 +206,66 @@
                              aria-hidden="true">
                             
                             <div class="w3-col m2 w3-center">
-                                <a onclick="APP.enableSetRotation()" class="btn tool-btn">
+                                <a onclick="APP.enableSetRotation()" class="btn tool-btn" title="Aplicar rotaciones por defecto">
                                     <i class="material-icons">3d_rotation</i>
                                     <br>
                                     <p class="info_hover_box">Rotaciones</p>
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
-                                <a class="btn tool-btn save">
+                                <a class="btn tool-btn save" title="Guardar proyecto">
                                     <i class="material-icons">save</i>
                                     <p class="info_hover_box">Guardar</p>
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
-                                <a onclick="APP.medirMetro()" class="btn tool-btn">
+                                <a onclick="APP.medirMetro()" class="btn tool-btn" title="Configurar escala">
                                     <i class="material-icons">tune</i>
                                     <p class="info_hover_box">Escala</p>
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
-                                <a id="show_dt" class="btn tool-btn">
+                                <a id="show_dt" class="btn tool-btn" title="Tabla de distancias">
                                     <i class="material-icons">remove</i>
                                     <p class="info_hover_box">Distancias</p>
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
-                                <a id="show_dst" class="btn tool-btn">
+                                <a id="show_dst" class="btn tool-btn" title="Tabla de distancias por segmentos">
                                     <i class="material-icons">linear_scale</i>
                                     <p class="info_hover_box">Segmentos</p>
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
-                                <a id="show_areat" class="btn tool-btn">
+                                <a id="show_areat" class="btn tool-btn" title="Tabla de areas">
                                     <i class="material-icons">photo_size_select_small</i>
                                     <p class="info_hover_box">Áreas</p>
                                 </a>
                             </div>
+                            <div class="w3-col m2 w3-center">
+                                <a onclick="renderer.gl.fullscreen()" class="btn tool-btn" title="Pantalla completa">
+                                    <i class="material-icons">fullscreen</i>
+                                    <p class="info_hover_box" >100%</p>
+                                </a>
+                            </div>
+                            <div class="w3-col m2 w3-center">
+                                <a id="capture-scene" class="btn tool-btn" title="Captura de escena">
+                                    <i class="material-icons">photo_camera</i>
+                                    <p class="info_hover_box">Capturar</p>
+                                </a>
+                            </div>
+                            
+                            <div id="capturing">
+                            
+                            </div>
+<!--
+                            <div class="w3-col m2 w3-center">
+                                <a id="" class="btn tool-btn">
+                                    <i class="material-icons">photo_size_select_small</i>
+                                    <p class="info_hover_box">Áreas</p>
+                                </a>
+                            </div>
+-->
                             
                             <table class="table table-striped table-hover tables" id="distances-table">
                                  <thead>
@@ -277,6 +301,7 @@
                           <table class="table table-striped table-hover tables" id="areas-table">
                                  <thead>
                                     <tr>
+                                        <th></th>
                                         <th>Descripción</th>
                                         <th>Vista</th>
                                         <th>Area (m²)</th>
@@ -303,6 +328,7 @@
                         </div>
                     </li>
                     
+                    <!--       anotaciones tab             -->
                     <li>
                         <input type="radio" name="tabs-large" id="tab3-large" />
                         <label for="tab3-large" 

@@ -360,8 +360,7 @@ Project.prototype.update_meter = function(relation)
     
     this._meter = relation;
     this.restoreDistances();
-    //this.save();
-    //document.location.href = "modelo.html?r=" + current_project;   
+    this.save();
 }
 
 /*
@@ -471,11 +470,12 @@ Project.prototype.insertArea = function( points, area, index, name, options )
     
     var aux = "area-name" + id;
     
-    var row = "<tr onclick='APP.viewClosedMeasure(" + id + ", true)' id=" + id + " a class='pointer'>" + 
+    var row = "<tr id=" + id + " a class='pointer'>" + 
+    "<td>" + "<i onclick='APP.viewClosedMeasure(" + id + ", true)' class='material-icons a-visibility'>fiber_manual_record</i>" + "</td>" + 
     "<td id='" + aux + "'><p onclick='setInput(" + id + ")'>" + name + "</p></td>" + 
     "<td>" + style + "</td>" + 
     "<td>" + Math.round(area * 1000) / 1000 + "</td>" + 
-    "<td>" + "<i class='material-icons remove-item'>close</i>" + "</td>" + 
+    "<td>" + "<i onclick='remove(this)' class='material-icons'>close</i>" + "</td>" + 
     "</tr>";
     
     bodyTable.append(row);
