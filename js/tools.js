@@ -299,7 +299,7 @@ function setParent(parent, son)
 
 function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id)
 {
-    camera.position = position_camera;    
+    camera.position = position_camera;
     camera.target = target_camera;
     camera.up = up_camera;
     

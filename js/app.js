@@ -5,6 +5,7 @@ var context         = null;
 var scene           = null;
 var renderer        = null;
 var camera          = null;
+var tmp_camera      = null;
 var _dt             = 0.0;
 
 var showing = {
@@ -122,7 +123,7 @@ var APP = {
         
         //create camera
         camera = new RD.Camera();
-        camera.perspective( 45, gl.canvas.width / gl.canvas.height, 1, 1000 );
+        camera.perspective( 45, gl.canvas.width / gl.canvas.height, 0.1, 10000 );
         camera.lookAt( [100,100,100],[0,0,0],[0,1,0] );
 
         var pivot = new RD.SceneNode();
@@ -172,18 +173,30 @@ var APP = {
 
         renderer.loadMesh(obj.mesh, makeVisible);
         renderer.loadTexture(obj.texture, renderer.default_texture_settings);
-//        $("#placeholder").css("background-image", "none");
-//        $('#myCanvas').css({"opacity": 0, "visibility": "visible"}).animate({"opacity": 1.0}, 1000);
+//        renderer.loadTexture("data/skybox.png", renderer.default_texture_settings);
 
         obj.scale([5,5,5]);
         scene.root.addChild( obj );
 
         //GRID
         var ind = new SceneIndication();
-        ind = ind.grid(5, {visible: false});
+        ind.grid(5, {visible: false});
+        
+        //SKYBOX
+        
+        var skybox = new RD.SceneNode({
+            name: "skybox",
+            mesh: "cube",
+            scaling: 1000,
+//            texture: "data/skybox.png",
+        });
+        
+//        skybox.flags.depth_test = false;
+        skybox.flags.flip_normals = true;
+        
+//        scene.root.addChild(skybox);
 
         var anotaciones = project.getAnnotations();
-
         if(!anotaciones.length)
             console.log("no anotations");
 
@@ -215,11 +228,13 @@ var APP = {
         var last = now = getTime();
         requestAnimationFrame(animate);
         function animate() {
+            
             requestAnimationFrame( animate );
             last = now;
             now = getTime();
             var dt = (now - last) * 0.001;
             renderer.clear(bg_color);
+
             renderer.render(scene, camera);
             scene.update(dt);
         }
@@ -865,7 +880,7 @@ var APP = {
         linea.primitive = gl.LINES;
         linea.mesh = "line";
         linea.description = "config";
-        linea.color = [0.3,0.2,0.8,1];
+        linea.color = [0.258, 0.525, 0.956];
         linea.flags.depth_test = false;
         scene.root.addChild(linea);
 

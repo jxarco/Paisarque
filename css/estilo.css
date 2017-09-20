@@ -11,7 +11,6 @@ body, html{
     background-color: rgb(210, 210, 210);
     width: 100% !important;
     height: 100% !important;
-/*    overflow-y: hidden;*/
     
     -webkit-user-select: none; /* Chrome/Safari */        
     -moz-user-select: none; /* Firefox */
@@ -338,25 +337,25 @@ h1, h2, h3, h4, h5, h6{
     background: lightgray;   
     vertical-align: middle;
     color: rgb(30, 30, 30) !important;
+    
 }
 
 .info_hover_box{
     width: 100%;
     font-size: 10px;
-/*    margin-left: -5px;*/
 }
 
 .tool-btn:hover{
     color: rgb(62, 164, 155) !important;
     margin-left: -8px;
     width: 95px;
-    transition: 0.8s;
+    transition: 0.5s;
 }
 
 .tool-btn:hover p {
     font-size: 13px;
-    transition: 0.5s;
     margin-left: 0px;
+    transition: 0.5s;
 }
 
 .m2{
@@ -370,7 +369,7 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .tool-btn.anot:hover{
-    width: 60px;
+    width: 95px;
 }
 
 .tool-btn.info{

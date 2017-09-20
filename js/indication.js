@@ -22,7 +22,7 @@ SceneIndication.prototype.ball = function(scene, position, options)
 		position: position,
 		color: [0.3,0.8,0.1,1],
         layers: 0x4,
-		mesh: "cube"
+		mesh: "sphere"
 	});
     
     ball.description = "config";
@@ -34,7 +34,7 @@ SceneIndication.prototype.ball = function(scene, position, options)
             ball.flags.depth_test = options.depth_test;
             ball.render_priority = 19;
             if(options.type == "view"){
-                ball.color = [0.3,0.2,0.8,1];           
+                ball.color = [0.258, 0.525, 0.956,1];           
                 ball.shader = null;
             }
             ball.id = options.id;
