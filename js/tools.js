@@ -439,7 +439,7 @@ var init_sliders = function() {
   var slider3 = document.querySelector('#s2');
   
   $(document).on('input', 'input[type="range"]', function(e) {
-      APP.modifyRotations(e.currentTarget);
+      APP.adjustSlider(e.currentTarget);
   });
   
   $('input[type=range]').rangeslider({

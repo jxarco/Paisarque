@@ -330,7 +330,7 @@ var APP = {
         }
     },
 
-    medirMetro: function ()
+    setScale: function ()
     {
         if(project._meter !== -1)
         {
@@ -399,8 +399,70 @@ var APP = {
                 $(".dialog-option.help").fadeOut();
         });
     },
+    
+    setRotation: function ()
+    {
+        if(project._rotations.length)
+            if(!confirm("Ya hay rotaciones por defecto en este proyecto. Si continuas se perderán todas las distancias medidas."))
+                return;
 
-    testDistance: function (segments)
+        // clear first
+        APP.disableAllFeatures();
+        project._measures = [];
+        project._segments = [];
+        project._areas = [];
+        $("#distances-table").find("tbody").empty();
+        $("#segment-distances-table").find("tbody").empty();
+        $("#areas-table").find("tbody").empty();
+
+        APP.rotation = !APP.rotation;
+        scene.root.children[1].flags.visible = APP.rotation; // grid
+
+        if(APP.rotation)
+        {
+            putCanvasMessage("Usa los sliders o bien mantén pulsadas las teclas A, S y D mientras arrastras para rotar en cada eje. (¡Guarda al acabar!)", 5000, {type: "help"});
+
+            $("#cardinal-axis").fadeIn();
+            $('.sliders').fadeIn();
+
+            context.onmousemove = function(e)
+            {
+                mouse = [e.canvasx, gl.canvas.height - e.canvasy];
+                if (e.dragging && e.leftButton)
+                    if(keys[KEY_A])
+                        obj.rotate(-e.deltax * 0.1 * _dt, RD.UP);
+                    else if(keys[KEY_S])
+                        obj.rotate(-e.deltax * 0.1 * _dt, RD.FRONT);
+                    else if(keys[KEY_D])
+                        obj.rotate(-e.deltax * 0.1 * _dt, RD.LEFT);
+                    else
+                        {
+                            camera.orbit(-e.deltax * 0.1 * _dt, RD.UP,  camera._target);
+                            camera.orbit(-e.deltay * 0.1 * _dt, camera._right, camera._target );
+                        }
+            }
+        }
+        else
+        {
+            $("#cardinal-axis").fadeOut();
+            $('.sliders').fadeOut();        
+
+            context.onmousemove = function(e)
+            {
+                mouse = [e.canvasx, gl.canvas.height - e.canvasy];
+                if (e.dragging && e.leftButton) {
+                    camera.orbit(-e.deltax * 0.1 * _dt, RD.UP,  camera._target);
+                    camera.orbit(-e.deltay * 0.1 * _dt, camera._right, camera._target );
+                }
+                if (e.dragging && e.rightButton) {
+                    camera.moveLocal([-e.deltax * 0.5 * _dt, e.deltay * 0.5 * _dt, 0]);
+                }
+            }
+        }
+
+    },
+    
+    calcDistance: function ()
     {
         if(project._meter === -1)
             return;
@@ -530,7 +592,7 @@ var APP = {
         $("#add-dialog").click();
     },
 
-    medirArea: function ( vista )
+    calcArea: function (vista)
     {
         if(project._meter == -1){
             putCanvasMessage("Primero configura la escala.", 3000, {type: "error"});
@@ -745,7 +807,7 @@ var APP = {
         $("#add-dialog").click();
     },
     
-    renderMeasure: function( o )
+    renderMeasure: function(o)
     {
         o = o || {};
 
@@ -813,7 +875,7 @@ var APP = {
         camera.up = msr.camera_up || camera.up;
     },
 
-    modifyRotations: function (slider)
+    adjustSlider: function (slider)
     {
         var to_rotate;
         if(slider.value > APP.value)
@@ -832,66 +894,6 @@ var APP = {
 
         obj.rotate(to_rotate, axis);
         APP.value = slider.value;
-    },
-
-    enableSetRotation: function ()
-    {
-        if(project._rotations.length)
-            if(!confirm("Ya hay rotaciones por defecto en este proyecto. Si continuas se perderán todas las distancias medidas."))
-                return;
-
-        // clear first
-        APP.destroyElements(scene.root.children, "config");
-        project._measures = [];
-        project._segments = [];
-        $("#segment-distances-table").find("tbody").empty();
-        $("#distances-table").find("tbody").empty();
-
-        APP.rotation = !APP.rotation;
-        scene.root.children[1].flags.visible = APP.rotation; // grid
-
-        if(APP.rotation)
-        {
-            putCanvasMessage("Usa los sliders o bien mantén pulsadas las teclas A, S y D mientras arrastras para rotar en cada eje. (¡Guarda al acabar!)", 5000, {type: "help"});
-
-            $("#cardinal-axis").fadeIn();
-            $('.sliders').fadeIn();
-
-            context.onmousemove = function(e)
-            {
-                mouse = [e.canvasx, gl.canvas.height - e.canvasy];
-                if (e.dragging && e.leftButton)
-                    if(keys[KEY_A])
-                        obj.rotate(-e.deltax * 0.1 * _dt, RD.UP);
-                    else if(keys[KEY_S])
-                        obj.rotate(-e.deltax * 0.1 * _dt, RD.FRONT);
-                    else if(keys[KEY_D])
-                        obj.rotate(-e.deltax * 0.1 * _dt, RD.LEFT);
-                    else
-                        {
-                            camera.orbit(-e.deltax * 0.1 * _dt, RD.UP,  camera._target);
-                            camera.orbit(-e.deltay * 0.1 * _dt, camera._right, camera._target );
-                        }
-            }
-        }
-        else
-        {
-            $("#cardinal-axis").fadeOut();
-            $('.sliders').fadeOut();        
-
-            context.onmousemove = function(e)
-            {
-                mouse = [e.canvasx, gl.canvas.height - e.canvasy];
-                if (e.dragging && e.leftButton) {
-                    camera.orbit(-e.deltax * 0.1 * _dt, RD.UP,  camera._target);
-                    camera.orbit(-e.deltay * 0.1 * _dt, camera._right, camera._target );
-                }
-                if (e.dragging && e.rightButton) {
-                    camera.moveLocal([-e.deltax * 0.5 * _dt, e.deltay * 0.5 * _dt, 0]);
-                }
-            }
-        }
-
     },
 
     disableAllFeatures: function ()

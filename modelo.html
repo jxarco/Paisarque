@@ -206,7 +206,7 @@
                              aria-hidden="true">
                             
                             <div class="w3-col m2 w3-center">
-                                <a onclick="APP.enableSetRotation()" class="btn tool-btn" title="Aplicar rotaciones por defecto">
+                                <a onclick="APP.setRotation()" class="btn tool-btn" title="Aplicar rotaciones por defecto">
                                     <i class="material-icons">3d_rotation</i>
                                     <br>
                                     <p class="info_hover_box">Rotaciones</p>
@@ -219,7 +219,7 @@
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
-                                <a onclick="APP.medirMetro()" class="btn tool-btn" title="Configurar escala">
+                                <a onclick="APP.setScale()" class="btn tool-btn" title="Configurar escala">
                                     <i class="material-icons">tune</i>
                                     <p class="info_hover_box">Escala</p>
                                 </a>
@@ -248,12 +248,14 @@
                                     <p class="info_hover_box" >100%</p>
                                 </a>
                             </div>
+<!--
                             <div class="w3-col m2 w3-center">
                                 <a id="capture-scene" class="btn tool-btn" title="Captura de escena">
                                     <i class="material-icons">photo_camera</i>
                                     <p class="info_hover_box">Capturar</p>
                                 </a>
                             </div>
+-->
                             
                             <div id="capturing">
                             
@@ -273,7 +275,7 @@
                                 </tbody>
                             </table>
                             
-                             <a id="measure-btn"  onclick="APP.testDistance()" class="btn table-btn nodisplay" style="display: none;">
+                             <a id="measure-btn"  onclick="APP.calcDistance()" class="btn table-btn nodisplay" style="display: none;">
                                 Añadir distancia
                             </a>
                           
@@ -290,7 +292,7 @@
                                 </tbody>
                             </table>
                             
-                            <a id="measure-s-btn"  onclick="APP.testDistance()" class="btn table-btn nodisplay" style="display: none;">
+                            <a id="measure-s-btn"  onclick="APP.calcDistance()" class="btn table-btn nodisplay" style="display: none;">
                                 Añadir distancia por segmentos
                             </a>
                             
@@ -313,10 +315,10 @@
                             </a>
 
                             <div class="sub-btns">
-                                    <a id="measure-areas-btn" onclick="APP.medirArea(0)" class="btn table-btn nodisplay measures-btns">
+                                    <a id="measure-areas-btn" onclick="APP.calcArea(0)" class="btn table-btn nodisplay measures-btns">
                                         Área de planta
                                     </a>
-                                    <a id="measure-areas2-btn" onclick="APP.medirArea(1)" class="btn table-btn nodisplay measures-btns">
+                                    <a id="measure-areas2-btn" onclick="APP.calcArea(1)" class="btn table-btn nodisplay measures-btns">
                                         Área de alzado
                                     </a>
                             </div>

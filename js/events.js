@@ -534,13 +534,13 @@ $("#formUploadProject").on('submit', function(e)
         
     var fileNameString = "data/" + user + "/" + project_id + '.json';
     
-    $.ajax({type: "GET",
+    $.ajax({type: "POST",
             dataType : 'json',
-            url: 'save_anotation.php',
+            url: 'save_to_disc.php',
             data:
-            { 
+            {
                 data: JSON.stringify(jsonFicheroPrincipal), 
-                file_name: fileNameString
+                file: fileNameString
             }
     });
     

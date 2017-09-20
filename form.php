@@ -29,7 +29,6 @@
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"><ul class="nav navbar-nav">
                         <li> <a onclick="location.href='index.html'">   Login </a> </li>
                         <li> <a onclick="location.href='form.php'"> Form</a> </li>
-                        <li> <a onclick="location.href='ayudaForm.html'">  Ayuda </a> </li>
                     </ul></div>
                 </div></nav>
             
