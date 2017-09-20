@@ -415,12 +415,17 @@ h1, h2, h3, h4, h5, h6{
     padding-top: 12px !important; 
 }
 
-.a-visibility{
+.show{
     font-size: 13px !important;
-    color: limegreen;
-    text-shadow: 0 0 5px limegreen;
+    color: grey;
+    text-shadow: 0 0 5px grey;
     margin-left: 5px;
     margin-top: 5px;
+}
+
+.on-point .show{
+    color: rgb(66, 134, 244) !important;
+    text-shadow: 0 0 5px rgb(66, 134, 244) !important;
 }
 
 /* -------------------------------------------- */

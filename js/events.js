@@ -590,7 +590,7 @@ $(".save").click(function(){
 });
 
 /*
-*   Opening more links in Extra info
+*   Opening more links in Extra info when 
 */
 
 $('#videoLink').click(function () 

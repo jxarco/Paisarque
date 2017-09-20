@@ -152,11 +152,39 @@ function remove(e){
     
     //           <i>    <td>    <tr>
     var parent = $(e).parent().parent();
-    console.log(parent.attr("id"));
+    var msr_id = parent.attr("id");
     
-    parent.remove();   
+    parent.remove();
     
     // coger por id el area o medida y eliminarla
+    if(project.getMeasure(msr_id))
+        project.deleteDistance(msr_id, "d");
+    else if(project.getSegmentMeasure(msr_id))    
+        project.deleteDistance(msr_id, "s");
+    else if(project.getArea(msr_id))    
+        project.deleteDistance(msr_id, "a");
+    else
+        console.error("Nothing to delete");
+}
+
+function show(e)
+{
+    if(!e.hasClass("on-point")){
+        // clear previous
+        $(".on-point").removeClass("on-point");
+        // add new onpoint or remove from the same one
+        e.addClass("on-point");
+        
+        // render measure
+        var id = e.parent().attr("id");
+        var type = e.data("type");
+
+        APP.renderMeasure({id: id, type: type});
+    }
+    else{
+        e.removeClass("on-point");
+        APP.disableAllFeatures();
+    }
 }
 
 function parseExtraJSON(json, flags)
@@ -335,7 +363,7 @@ function testDialog(options)
     var lowerbtn = options.lower || "Finalizar";
     
     var location = $("#tab-content2-large");
-    var margin = options.scale ? "175px;" : "15px;";
+    var margin = options.scale ? "250px;" : "15px;";
     
     var html = "<div " +
                     "class='draggable ui-widget-content' " +

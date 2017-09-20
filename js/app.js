@@ -167,7 +167,7 @@ var APP = {
             putCanvasMessage("Recuerda: guarda el proyecto al realizar cambios!", 3000);
             putCanvasMessage("Puedes cancelar cualquier acción con la tecla ESC", 3000);
             if(!rotaciones.length)
-                putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "alert"}); 
+                putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "error"}); 
         };
 
 //        renderer.loadMesh(obj.mesh, makeVisible);
@@ -328,7 +328,6 @@ var APP = {
             else if(description == elements[i].description)
                 elements[i].destroy();
         }
-
     },
 
     medirMetro: function ()
@@ -519,11 +518,11 @@ var APP = {
             // remove dialog
             $(".draggable").remove();
             putCanvasMessage("Recuerda guardar...", 2000);
-
-            if(tmp.length === 2)
-                project.insertMeasure(camera, tmp[0], tmp[1], distance, true);
+            
+            if(tmp.length == 2)
+                project.insertMeasure(camera, tmp, distance, {display: true, push: true});
             else 
-                project.insertSegmentMeasure(tmp, distance, true);
+                project.insertSegmentMeasure(tmp, distance, {display: true, push: true});
 
         });
         
@@ -531,7 +530,7 @@ var APP = {
         $("#add-dialog").click();
     },
 
-    medirArea: function (vista)
+    medirArea: function ( vista )
     {
         if(project._meter == -1){
             putCanvasMessage("Primero configura la escala.", 3000, {type: "error"});
@@ -736,7 +735,7 @@ var APP = {
             putCanvasMessage("Recuerda guardar...", 2000);
 
             // passing 3d points list
-            project.insertArea(points, area, index, "+++++", true);
+            project.insertArea(points, area, index, "+++++", {display: true, push: true});
 
             //clear all
             APP.disableAllFeatures();
@@ -745,70 +744,43 @@ var APP = {
         // begin with an option selected
         $("#add-dialog").click();
     },
-
-    viewMeasure: function (id)
+    
+    renderMeasure: function( o )
     {
+        o = o || {};
+
+    	var id = o.id;
+    	var type = o.type;
+    	var msr = null;
+
         // clear first
         APP.destroyElements(scene.root.children, "config");// clear first
 
-        var measure = project.getMeasure(id);
-        var x1 = [measure.x1[0], measure.x1[1], measure.x1[2]];
-        var x2 = [measure.x2[0], measure.x2[1], measure.x2[2]];
-        window.points = [x1, x2];
-
-        for(var i = 0; i < points.length; ++i)
-        {
-            var ind = new SceneIndication();
-            ind = ind.ball(scene, points[i], {depth_test: false, type: "view"});
-        }
-
-        var vertices = x1.concat(x2);
-        var mesh = GL.Mesh.load({ vertices: vertices }); 
-        renderer.meshes["line"] = mesh;
-        var linea = new RD.SceneNode();
-        linea.flags.ignore_collisions = true;
-        linea.primitive = gl.LINES;
-        linea.mesh = "line";
-        linea.description = "config";
-        linea.color = [0.3,0.2,0.8,1];
-        linea.flags.depth_test = false;
-        scene.root.addChild(linea);
-
-        // change global camera
-        camera.position = measure.camera_position;
-        camera.target = measure.camera_target;
-        camera.up = measure.camera_up;
-
-    },
-
-    viewClosedMeasure: function (id, area)
-    {
-        // clear first
-        APP.destroyElements(scene.root.children, "config");
-
-        var measure = null;
-        if(area)
-            measure = project.getArea(id) || {};
-        else 
-            measure = project.getSegmentMeasure(id) || {};
-    //    console.log(measure);
-
+        //get from project
+        if(type == 'm')
+            msr = project.getMeasure(id)
+	    else if(type == 's')
+            msr = project.getSegmentMeasure(id)
+	    else if(type == 'a')
+            msr = project.getArea(id)
+	    else
+	        console.error("no measure to show");
+        
         var points = [];
         
-        for(var i = 0; i < measure.points.length; ++i){
+        for(var i = 0; i < msr.points.length; ++i){
             var list = [];
-            list.push(measure.points[i][0]);
-            list.push(measure.points[i][1]);
-            list.push(measure.points[i][2]);
+            list.push(msr.points[i][0]);
+            list.push(msr.points[i][1]);
+            list.push(msr.points[i][2]);
             points.push(list);
-        }
-
-        for(var i = 0; i < points.length; ++i)
-        {
+            
+            // render representation
             var ind = new SceneIndication();
             ind = ind.ball(scene, points[i], {depth_test: false, type: "view"});
-        }
-
+        }    
+        
+        // lines stuff
         var vertices = [];
         for(var i = 0; i < points.length; ++i)
         {
@@ -823,19 +795,22 @@ var APP = {
                     vertices.push(points[i][2]);
                 }
         }
-
-
+        
         var mesh = GL.Mesh.load({ vertices: vertices }); 
         renderer.meshes["line"] = mesh;
         var linea = new RD.SceneNode();
-        linea.description = "config";
         linea.flags.ignore_collisions = true;
         linea.primitive = gl.LINES;
         linea.mesh = "line";
+        linea.description = "config";
         linea.color = [0.3,0.2,0.8,1];
         linea.flags.depth_test = false;
-
         scene.root.addChild(linea);
+
+        // change global camera
+        camera.position = msr.camera_position || camera.position;
+        camera.target = msr.camera_target || camera.target;
+        camera.up = msr.camera_up || camera.up;
     },
 
     modifyRotations: function (slider)
@@ -934,9 +909,7 @@ var APP = {
         $(".draggable").remove();
         $("#cont-msg").empty();
 
-        // obj properties
-//        obj.blend_mode = 0;
-//        obj.opacity = 1;
+        //on-point class
         
         putCanvasMessage("Hecho!", 1000);
     },

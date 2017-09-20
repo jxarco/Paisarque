@@ -263,6 +263,7 @@ Project.prototype.getMeasure = function(id)
     for(var i = 0; i < this._measures.length; i++)
         if(this._measures[i].id == id)
             return this._measures[i];
+    return 0;
 }
 
 Project.prototype.getSegmentMeasure = function(id)
@@ -270,6 +271,7 @@ Project.prototype.getSegmentMeasure = function(id)
     for(var i = 0; i < this._segments.length; i++)
         if(this._segments[i].id == id)
             return this._segments[i];
+    return 0;
 }
 
 Project.prototype.getArea = function(id)
@@ -277,6 +279,37 @@ Project.prototype.getArea = function(id)
     for(var i = 0; i < this._areas.length; i++)
         if(this._areas[i].id == id)
             return this._areas[i];
+    return 0;
+}
+
+/*
+*   @method deleteDistance
+*   Delete one single measured distance from any of the 3 lists
+*   @param id {number} id of the measure
+*   @param type {string} data type (pdf, image, etc)
+*/
+Project.prototype.deleteDistance = function( id, type )
+{
+    var index = null;
+    var list = null;
+    
+    switch(type){
+        case "d": list = this._measures; break;
+        case "s": list = this._segments; break;
+        case "a": list = this._areas; break;
+    }
+    
+    for(var i = 0; i < list.length; i++){
+        if(list[i].id == id)
+            index = i;
+    }
+    
+    if (index > -1) {
+        list.splice(index, 1);
+    }
+    else{
+        console.error("bad index");
+    }
 }
 
 /*  
@@ -303,11 +336,8 @@ Project.prototype.restoreDistances = function( )
             "up": msr.camera_up
         };
         
-        var x1 = msr.x1;
-        var x2 = msr.x2;
         var distance = msr.distance;
-        console.log(msr.id);
-        this.insertMeasure(camera, x1, x2, distance, {display: false, push: false, id: msr.id});
+        this.insertMeasure(camera, msr.points, distance, {display: false, push: false, id: msr.id});
     }
     
     length = this._segments.length;
@@ -367,11 +397,11 @@ Project.prototype.update_meter = function(relation)
 *   @method insertMeasure
 *   Push a new measure to the list project
 *   @param camera: get camera properties
-*   @param x1 and x2: points within distance is calculated
-*   @param display: show or not the table after inserting measure
+*   @param points: points within distance is calculated
+*   @param options {object} push / display flags
 */
 
-Project.prototype.insertMeasure = function( camera, x1, x2, distance, options )
+Project.prototype.insertMeasure = function( camera, points, distance, options )
 {   
     if(!distance)
         return;
@@ -382,10 +412,10 @@ Project.prototype.insertMeasure = function( camera, x1, x2, distance, options )
     var bodyTable = table.find('tbody');
     var id = options.id >= 0 ? options.id : last_measure_id++;
     
-    var row = "<tr onclick='APP.viewMeasure(" + id + ")' id=" + id + " a class='pointer'>" + 
-    "<td>" + Math.round(x1[0] * 100) / 100 + "</br>" + Math.round(x1[1] * 100) / 100 + "</br>" + Math.round(x1[2] * 100) / 100 + "</td>" + 
-    "<td>" + Math.round(x2[0] * 100) / 100 + "</br>" + Math.round(x2[1] * 100) / 100 + "</br>" + Math.round(x2[2] * 100) / 100 + "</td>" + 
+    var row = "<tr id=" + id + " a class='pointer'>" + 
+    "<td onclick='show($(this))' data-type='m'>" + "<i class='material-icons show'>fiber_manual_record</i></td>" +
     "<td>" + Math.round(distance * 1000) / 1000 + "</td>" + 
+    "<td><i onclick='remove(this)' class='material-icons'>close</i></td>" + 
     "</tr>";
     
     bodyTable.append(row);
@@ -399,16 +429,7 @@ Project.prototype.insertMeasure = function( camera, x1, x2, distance, options )
             "camera_position": vec3.clone(camera.position),
             "camera_target": vec3.clone(camera.target),
             "camera_up": vec3.clone(camera.up),
-            "x1": {
-                "0": x1[0],
-                "1": x1[1],
-                "2": x1[2],
-            },
-            "x2": {
-                "0": x2[0],
-                "1": x2[1],
-                "2": x2[2],
-            },
+            "points": points,
             "distance": distance
         });
 }
@@ -431,9 +452,11 @@ Project.prototype.insertSegmentMeasure = function( points, distance, options )
     var bodyTable = table.find('tbody');
      var id = options.id ? options.id : last_seg_measure_id++;
     
-    var row = "<tr onclick='APP.viewClosedMeasure(" + id + ")' id=" + id + " a class='pointer'>" + 
+    var row = "<tr id=" + id + " a class='pointer'>" + 
+    "<td onclick='show($(this))' data-type='s'>" + "<i class='material-icons show'>fiber_manual_record</i></td>" +
     "<td>" + (points.length - 1) + "</td>" + 
-    "<td>" + Math.round(distance * 1000) / 1000 + "</td>" + 
+    "<td>" + Math.round(distance * 1000) / 1000 + "</td>" +
+    "<td><i onclick='remove(this)' class='material-icons'>close</i></td>" + 
     "</tr>";
     
     bodyTable.append(row);
@@ -471,11 +494,11 @@ Project.prototype.insertArea = function( points, area, index, name, options )
     var aux = "area-name" + id;
     
     var row = "<tr id=" + id + " a class='pointer'>" + 
-    "<td>" + "<i onclick='APP.viewClosedMeasure(" + id + ", true)' class='material-icons a-visibility'>fiber_manual_record</i>" + "</td>" + 
+    "<td onclick='show($(this))' data-type='a'>" + "<i class='material-icons show'>fiber_manual_record</i></td>" + 
     "<td id='" + aux + "'><p onclick='setInput(" + id + ")'>" + name + "</p></td>" + 
     "<td>" + style + "</td>" + 
     "<td>" + Math.round(area * 1000) / 1000 + "</td>" + 
-    "<td>" + "<i onclick='remove(this)' class='material-icons'>close</i>" + "</td>" + 
+    "<td><i onclick='remove(this)' class='material-icons'>close</i></td>" + 
     "</tr>";
     
     bodyTable.append(row);
@@ -556,11 +579,8 @@ Project.prototype.FROMJSON = function( data )
             "up": data.medidas[i].camera_up
         };
         
-        var x1 = data.medidas[i].x1;
-        var x2 = data.medidas[i].x2;
         var distance = data.medidas[i].distance;
-        
-        this.insertMeasure(camera, x1, x2, distance, {display: false, push: true});
+        this.insertMeasure(camera, data.medidas[i].points, distance, {display: false, push: true});
     }
     
     len = data.segmentos ? data.segmentos.length : 0;
@@ -571,16 +591,17 @@ Project.prototype.FROMJSON = function( data )
     len = data.areas ? data.areas.length : 0;
     
     for(var i = 0; i < len; i++)
+    {
+        var points = [];
+        for(var j = 0; j < data.areas[i].points.length; j++)
         {
-            var points = [];
-            for(var j = 0; j < data.areas[i].points.length; j++)
-                {
-                    var obj = data.areas[i].points[j];
-                    var point = [obj[0], obj[1], obj[2]];
-                    points.push(point);
-                }
-            this.insertArea( points, data.areas[i].area, data.areas[i].index, data.areas[i].name, {display: false, push: true} );    
+            var obj = data.areas[i].points[j];
+            var point = [obj[0], obj[1], obj[2]];
+            points.push(point);
         }
+        
+        this.insertArea( points, data.areas[i].area, data.areas[i].index, data.areas[i].name, {display: false, push: true} ); 
+    }
 }
 
 /*  
@@ -619,7 +640,7 @@ Project.prototype.save = function( overwrite, extra )
     };
         
     $.ajax({
-            type: "GET",
+            type: "POST",
             //dataType : 'json',
             url: 'save_to_disc.php',
             data: { 
