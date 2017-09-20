@@ -170,8 +170,8 @@ var APP = {
                 putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "error"}); 
         };
 
-//        renderer.loadMesh(obj.mesh, makeVisible);
-//        renderer.loadTexture(obj.texture, renderer.default_texture_settings);
+        renderer.loadMesh(obj.mesh, makeVisible);
+        renderer.loadTexture(obj.texture, renderer.default_texture_settings);
 //        $("#placeholder").css("background-image", "none");
 //        $('#myCanvas').css({"opacity": 0, "visibility": "visible"}).animate({"opacity": 1.0}, 1000);
 
@@ -912,6 +912,7 @@ var APP = {
         $("#cont-msg").empty();
 
         //on-point class
+        $(".on-point").removeClass("on-point");
         
         putCanvasMessage("Hecho!", 1000);
     },
