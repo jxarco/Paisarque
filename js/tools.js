@@ -299,9 +299,9 @@ function setParent(parent, son)
 
 function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id)
 {
-    camera.position = position_camera;
-    camera.target = target_camera;
-    camera.up = up_camera;
+    // to look at with smooth efect
+    camera.direction = position_camera;
+    camera.smooth = true;
     
     for(var i = 0; i < obj.children.length; i++)
     {

@@ -152,6 +152,11 @@ function drop(ev) {
     }
 }
 
+function equals(a, b) {
+  return (Math.abs(a[0] - b[0]) <= 0.1) && (Math.abs(a[1] - b[1]) <= 0.1) && (Math.abs(a[2] - b[2]) <= 0.1);
+};
+
+
 //********** events *****
 
 var onlyNumbers = function(e) {
@@ -169,3 +174,4 @@ var onlyNumbers = function(e) {
     if (!(a.indexOf(k)>=0))
         e.preventDefault();
 };
+

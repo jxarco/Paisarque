@@ -18,6 +18,7 @@ var APP = {
     // variables of APP
     rotation: false,
     value: 0,
+    orbit: false,
     result: vec3.create(),
 
     // methods of APP
@@ -114,7 +115,7 @@ var APP = {
 
         //create the rendering context
         context = GL.create({width: window.innerWidth, height:window.innerHeight, alpha:true});
-        renderer = new RD.Renderer(context);
+        renderer = new RD.Renderer(context, {shaders_file: "data/shaders.glsl"});
         placer = document.getElementById("myCanvas");
         placer.appendChild(renderer.canvas); //attach
 
@@ -124,7 +125,9 @@ var APP = {
         //create camera
         camera = new RD.Camera();
         camera.perspective( 45, gl.canvas.width / gl.canvas.height, 0.1, 10000 );
-        camera.lookAt( [100,100,100],[0,0,0],[0,1,0] );
+        camera.lookAt( [120,60,120],[0,0,0],[0,1,0] );
+        camera.direction = [120,60,120];
+        camera.previous = vec3.clone(camera._position);
 
         var pivot = new RD.SceneNode();
         pivot.name = "3d pivot";
@@ -173,28 +176,30 @@ var APP = {
 
         renderer.loadMesh(obj.mesh, makeVisible);
         renderer.loadTexture(obj.texture, renderer.default_texture_settings);
-//        renderer.loadTexture("data/skybox.png", renderer.default_texture_settings);
 
         obj.scale([5,5,5]);
-        scene.root.addChild( obj );
 
         //GRID
         var ind = new SceneIndication();
         ind.grid(5, {visible: false});
         
-        //SKYBOX
+        //  skybox texture
+        var cubeMaptexture = GL.Texture.cubemapFromURL("data/skybox.png",{is_cross: 1, minFilter: gl.LINEAR_MIPMAP_LINEAR });
+        cubeMaptexture.bind(0);
+        renderer.textures["skybox"] = cubeMaptexture;
         
         var skybox = new RD.SceneNode({
             name: "skybox",
             mesh: "cube",
-            scaling: 1000,
-//            texture: "data/skybox.png",
+            texture: "skybox",
+            shader: "skybox"
         });
         
-//        skybox.flags.depth_test = false;
+        skybox.flags.depth_test = false;
         skybox.flags.flip_normals = true;
         
-//        scene.root.addChild(skybox);
+        scene.root.addChild(skybox);
+        scene.root.addChild( obj );
 
         var anotaciones = project.getAnnotations();
         if(!anotaciones.length)
@@ -227,16 +232,33 @@ var APP = {
         //main render loop
         var last = now = getTime();
         requestAnimationFrame(animate);
+        
         function animate() {
-            
             requestAnimationFrame( animate );
+            
+            APP.lookAt(camera);
+            
             last = now;
             now = getTime();
             var dt = (now - last) * 0.001;
             renderer.clear(bg_color);
 
+            if(APP.orbit)
+                camera.orbit(0.1 * dt, RD.UP);
+            
+            //smoothing camera
+            if(camera.smooth){
+                vec3.scale(camera.position, camera.position, 0.1);
+                vec3.scale(camera.previous, camera.previous, 0.9);
+                vec3.add(camera.position, camera.position, camera.previous);
+            }
+            
+            skybox.position = camera.position;
             renderer.render(scene, camera);
             scene.update(dt);
+            
+            //get old camera
+            camera.previous = vec3.clone(camera._position);
         }
 
         APP.resize();
@@ -251,8 +273,8 @@ var APP = {
             mouse = [e.canvasx, gl.canvas.height - e.canvasy];
 
             if (e.dragging && e.leftButton) {
-                camera.orbit(-e.deltax * 0.1 * _dt, RD.UP,  camera._target);
-                camera.orbit(-e.deltay * 0.1 * _dt, camera._right, camera._target );
+                camera.orbit(-e.deltax * 0.1 * _dt, RD.UP);
+                camera.orbit(-e.deltay * 0.1 * _dt, camera._right);
             }
             if (e.dragging && e.rightButton) {
                 camera.moveLocal([-e.deltax * 0.5 * _dt, e.deltay * 0.5 * _dt, 0]);
@@ -264,12 +286,23 @@ var APP = {
             if(!e.wheel)
                 return;
 
-            camera.position = vec3.scale( camera.position, camera.position, e.wheel < 0 ? 1.01 : 0.99 );
+            camera.position = vec3.scale( camera.position, camera.position, e.wheel < 0 ? 1.1 : 0.9 );
         }
 
         context.onkeydown = function(e)
         {
-            keys[e.keyCode] = true;        
+            keys[e.keyCode] = true;      
+            
+            if(e.keyCode == KEY_A){
+                renderer.loadShaders("data/shaders.glsl");
+            }
+        }
+        
+        context.onkey = function(e)
+        {
+            if(e.keyCode == KEY_S){
+                camera.position = [120, 60, 120];
+            }
         }
 
         context.onkeyup = function(e)
@@ -298,6 +331,19 @@ var APP = {
 
         context.captureMouse(true);
         context.captureKeys();
+    },
+    
+    lookAt: function(camera)
+    {
+        if(keys[KEY_S]){
+            camera.position = camera.direction;
+        }
+
+        if(!equals(camera.position, camera.direction) && camera.smooth){
+            camera.position = camera.direction;
+        }else{
+            camera.smooth = false;
+        }
     },
 
     anotar: function(modoAnotacion)
@@ -885,9 +931,9 @@ var APP = {
         scene.root.addChild(linea);
 
         // change global camera
-        camera.position = msr.camera_position || camera.position;
-        camera.target = msr.camera_target || camera.target;
-        camera.up = msr.camera_up || camera.up;
+        // to look at with smooth efect
+        camera.direction = msr.camera_position || camera.direction;
+        camera.smooth = true;
     },
 
     adjustSlider: function (slider)

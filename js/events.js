@@ -236,12 +236,16 @@ $('#coord-btn').click(function(e)
 $("#lat").keypress(onlyNumbers);
 $("#lon").keypress(onlyNumbers);
 
-/*
-*   Button: Clear configuration of meter in the project
-*/
-$("#restore-meter").click(function(){
-    project.restoreMeter();
-})
+$("#orbit").click(function(){
+   
+    APP.orbit = !APP.orbit;
+    
+    if(APP.orbit)
+        $(this).find("i").html("pause_circle_outline");
+   else
+        $(this).find("i").html("play_circle_outline");
+    
+});
 
 /*
 *   Button: Delete all annotations in project
