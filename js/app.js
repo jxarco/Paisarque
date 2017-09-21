@@ -477,7 +477,7 @@ var APP = {
         $("#areas-table").find("tbody").empty();
 
         APP.rotation = !APP.rotation;
-        scene.root.children[1].flags.visible = APP.rotation; // grid
+        scene.root.children[0].flags.visible = APP.rotation; // grid
 
         if(APP.rotation)
         {
@@ -961,7 +961,7 @@ var APP = {
     {
         context.onmousedown = function(e) {};
         APP.rotation = false;
-        scene.root.children[1].flags.visible = false;
+        scene.root.children[0].flags.visible = false;
 
         revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
         APP.destroyElements(scene.root.children, "config");
