@@ -32,7 +32,7 @@
     </script>
 
         
-s</head>
+</head>
     <body class="container">
         
        <!-- Navbar -->
@@ -144,80 +144,15 @@ s</head>
                 </div>
             </div>
             
-            
-
-<!--
-            <table class="table table-striped table-hover" id="export-table">
-                <tbody>
-                     <tr>
-                        <th>Resumen del proyecto</th>
-                        <td class=""><a class="export-pdf summary" title="Exportar en PDF" href="">PDF</a></td>
-                        <td><i class="material-icons">not_interested</i></td>
-                        <td><i class="material-icons">not_interested</i></td>
-                    </tr>
-                    <tr>
-                        <th>Proyecto al detalle</th>
-                        <td class=""><a class="export-pdf detailed" title="Exportar en PDF" href="">PDF</a></td>
-                        <td><i class="material-icons">not_interested</i></td>
-                        <td><i class="material-icons">not_interested</i></td>
-                    </tr>
-                    <tr>
-                        <th>Configuración</th>
-                        <td class=""><a class="export-pdf config" title="Exportar en PDF" href="">PDF</a></td>
-                        <td><i class="material-icons">not_interested</i></td>
-                         <?php 
-                            echo '<td class=""><a href="';
-                            echo 'data/' . $_GET['r'] . '.json"';
-                            echo 'download="" title="Descargar configuración en JSON">JSON</a></td>';
-                         php?>
-                    </tr>
-                    <tr>
-                        <th>Anotaciones</th>
-                        <td><i class="material-icons">not_interested</i></td>
-                        <td class=""><a class="export-xls _anotations" title="Exportar en CSV" href="">CSV</a></td>
-                        <td class=""><a class="export-json _anotations" title="Exportar en JSON" href="">JSON</a></td>
-                    </tr>
-                    <tr>
-                        <th>Medidas</th>
-                        <td><i class="material-icons">not_interested</i></td>
-                        <td class=""><a class="export-xls _measures" title="Exportar en CSV" href="">CSV</a></td>
-                        <td class=""><a class="export-json _measures" title="Exportar en JSON" href="">JSON</a></td>
-                    </tr>
-                    <tr>
-                        <th>Areas</th>
-                        <td><i class="material-icons">not_interested</i></td>
-                        <td class=""><a class="export-xls _areas" title="Exportar en CSV" href="">CSV</a></td>
-                        <td class=""><a class="export-json _areas" title="Exportar en JSON" href="">JSON</a></td>
-                    </tr>
-                    <tr>
-                        <th>Aportaciones</th>
-                        <td class=""><a class="export-pdf aport" title="Exportar en PDF" href="">PDF</a></td>
-                        <td><i class="material-icons">not_interested</i></td>
-                        <td class=""><a class="export-json _extra" title="Exportar en JSON" href="">JSON</a></td>
-                    </tr>
-                    <tr>
-                        <th>Modelo 3D</th>
-                        <?php 
-                            echo '<td class=""><a href="';
-                            echo 'data/' . $_GET['r'] . '/mesh.obj"';
-                            echo 'download="" title="Descargar mesh">OBJ MESH</a></td>';
-                         php?>
-                        <?php 
-                            echo '<td class=""><a href="';
-                            echo 'data/' . $_GET['r'] . '/tex_0.jpg"';
-                            echo 'download="" title="Descargar textura">JPG TEXT</a></td>';
-                         php?>
-                        <td><i class="material-icons">not_interested</i></td>
-                    </tr>
-                </tbody>
-            </table>
--->
-            
         </div>
         
         </content>
         
         <footer>
+            <p>PaisArque (UPF)</p>
+            <p>CaSEs</p>
+            <p>GTI</p>
+            
         </footer><!--   footer end-->
             
 

@@ -111,8 +111,6 @@ var APP = {
 
     init: function(current_project, meshURL, textureURL)
     {
-        scene = new RD.Scene();
-
         //create the rendering context
         context = GL.create({width: window.innerWidth, height:window.innerHeight, alpha:true});
         renderer = new RD.Renderer(context, {shaders_file: "data/shaders.glsl"});
@@ -122,34 +120,48 @@ var APP = {
         //disable autoload
         renderer.autoload_assets = false;
         
+        // instanciate global scene
+        scene = new RD.Scene();
+        
+        scene.root.getNodeByName = function(name){ 
+            for(var n in scene.root.children) if(scene.root.children[n].name == name) return scene.root.children[n];
+        }
+        
         //create camera
         camera = new RD.Camera();
         camera.perspective( 45, gl.canvas.width / gl.canvas.height, 0.1, 10000 );
-        camera.lookAt( [120,60,120],[0,0,0],[0,1,0] );
+        camera.lookAt( [150,60,150],[0,0,0],[0,1,0] );
         camera.direction = [120,60,120];
         camera.previous = vec3.clone(camera._position);
-
-        var pivot = new RD.SceneNode();
-        pivot.name = "3d pivot";
-        //inner update
-        /*pivot.update = function(dt) {
-            this.rotate(dt * 0.1,RD.UP);
-        }
-        scene.root.addChild(pivot);*/
-
+        
+        var wBinURL = meshURL.split(".")[0] + ".wbin";
+        
         //create an obj in the scene
         obj = new RD.SceneNode();
         obj.name = "mesh 3d";
         obj.position = [0,0,0];
-        obj.mesh = meshURL;
-        //obj.blend_mode = RD.BLEND_NONE;
-        //obj.opacity = 1;
+        obj.scale([5,5,5]);
+//        obj.mesh = meshURL;
+        obj.mesh = wBinURL;
         
-        // tenemos que pensar el caso en que haya mas de una textura
+        // one texture
         if (!isArray(textureURL)) {
             obj.texture = textureURL;
         }
-
+        
+        // load mesh and texture for obj model
+        var mesh = GL.Mesh.fromURL( obj.mesh, function () {
+            $("#placeholder").css("background-image", "none");
+            $('#myCanvas').css({"opacity": 0, "visibility": "visible"}).animate({"opacity": 1.0}, 1500);
+            putCanvasMessage("Recuerda: guarda el proyecto al realizar cambios!", 3000);
+            putCanvasMessage("Puedes cancelar cualquier acción con la tecla ESC", 3000);
+            if(!rotaciones.length)
+                putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "error"}); 
+        } ); //load from URL
+        renderer.meshes[wBinURL] = mesh;
+        
+        var obj_texture = renderer.loadTexture(obj.texture, renderer.default_texture_settings);
+        
         // Hacer las rotaciones pendientes
         var rotaciones = project.getRotations();
 
@@ -165,23 +177,9 @@ var APP = {
             obj.updateMatrices();
         }
 
-        var makeVisible = function () {
-            $("#placeholder").css("background-image", "none");
-            $('#myCanvas').css({"opacity": 0, "visibility": "visible"}).animate({"opacity": 1.0}, 1000);
-            putCanvasMessage("Recuerda: guarda el proyecto al realizar cambios!", 3000);
-            putCanvasMessage("Puedes cancelar cualquier acción con la tecla ESC", 3000);
-            if(!rotaciones.length)
-                putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "error"}); 
-        };
-
-        renderer.loadMesh(obj.mesh, makeVisible);
-        renderer.loadTexture(obj.texture, renderer.default_texture_settings);
-
-        obj.scale([5,5,5]);
-
         //GRID
-        var ind = new SceneIndication();
-        ind.grid(5, {visible: false});
+        var rot_grid = new SceneIndication();
+        rot_grid = rot_grid.grid(5, {visible: false});
         
         //  skybox texture
         var cubeMaptexture = GL.Texture.cubemapFromURL("data/skybox.png",{is_cross: 1, minFilter: gl.LINEAR_MIPMAP_LINEAR });
@@ -189,17 +187,20 @@ var APP = {
         renderer.textures["skybox"] = cubeMaptexture;
         
         var skybox = new RD.SceneNode({
-            name: "skybox",
             mesh: "cube",
             texture: "skybox",
             shader: "skybox"
         });
         
+        skybox.name = "skybox";
         skybox.flags.depth_test = false;
         skybox.flags.flip_normals = true;
+        skybox.render_priority = 100;
         
-        scene.root.addChild(skybox);
+        // order is important
+        scene.root.addChild( skybox );
         scene.root.addChild( obj );
+        scene.root.addChild( rot_grid );
 
         var anotaciones = project.getAnnotations();
         if(!anotaciones.length)
@@ -246,10 +247,15 @@ var APP = {
             if(APP.orbit)
                 camera.orbit(0.1 * dt, RD.UP);
             
+            if(keys[KEY_LEFT])
+                camera.orbit_direction(-DEG2RAD, RD.UP);
+            if(keys[KEY_RIGHT])
+                camera.orbit_direction(DEG2RAD, RD.UP);
+            
             //smoothing camera
             if(camera.smooth){
-                vec3.scale(camera.position, camera.position, 0.1);
-                vec3.scale(camera.previous, camera.previous, 0.9);
+                vec3.scale(camera.position, camera.position, 0.05);
+                vec3.scale(camera.previous, camera.previous, 0.95);
                 vec3.add(camera.position, camera.position, camera.previous);
             }
             
@@ -273,8 +279,8 @@ var APP = {
             mouse = [e.canvasx, gl.canvas.height - e.canvasy];
 
             if (e.dragging && e.leftButton) {
-                camera.orbit(-e.deltax * 0.1 * _dt, RD.UP);
-                camera.orbit(-e.deltay * 0.1 * _dt, camera._right);
+                camera.orbit(-e.deltax * 0.5 * _dt, RD.UP);
+                camera.orbit(-e.deltay * 0.5 * _dt, camera._right);
             }
             if (e.dragging && e.rightButton) {
                 camera.moveLocal([-e.deltax * 0.5 * _dt, e.deltay * 0.5 * _dt, 0]);
@@ -286,25 +292,14 @@ var APP = {
             if(!e.wheel)
                 return;
 
-            camera.position = vec3.scale( camera.position, camera.position, e.wheel < 0 ? 1.1 : 0.9 );
+            camera.position = vec3.scale( camera.position, camera.position, e.wheel < 0 ? 1.05 : 0.95 );
         }
 
         context.onkeydown = function(e)
         {
             keys[e.keyCode] = true;      
-            
-            if(e.keyCode == KEY_A){
-                renderer.loadShaders("data/shaders.glsl");
-            }
         }
         
-        context.onkey = function(e)
-        {
-            if(e.keyCode == KEY_S){
-                camera.position = [120, 60, 120];
-            }
-        }
-
         context.onkeyup = function(e)
         {   
             keys[e.keyCode] = false;        
@@ -313,7 +308,7 @@ var APP = {
             {
                 if(APP.rotation){
                     APP.rotation = false;
-                    scene.root.children[1].flags.visible = APP.rotation;
+                    scene.root.getNodeByName("grid").flags.visible = APP.rotation;
 
                     if(APP.rotation)
                         revealDOMElements([$("#cardinal-axis"), $('.sliders')], true);
@@ -321,12 +316,20 @@ var APP = {
                         revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
 
                     project.setRotations(obj._rotation);
-                    putCanvasMessage("Recuerda guardar...", 2000);
+                    project.save();
+                    putCanvasMessage("¡Guardado!", 2000);
                 }
             }
 
-            if(e.keyCode === 27) // ESC
+            if(e.keyCode === KEY_ESC)
                 APP.disableAllFeatures();
+            
+           if(e.keyCode === KEY_D)
+                download(renderer.meshes[obj.mesh], "wbin");
+            
+            if(e.keyCode === KEY_S){
+                renderer.loadShaders("data/shaders.glsl");
+            }
         }
 
         context.captureMouse(true);
@@ -335,15 +338,10 @@ var APP = {
     
     lookAt: function(camera)
     {
-        if(keys[KEY_S]){
+        if(!equals(camera.position, camera.direction) && camera.smooth)
             camera.position = camera.direction;
-        }
-
-        if(!equals(camera.position, camera.direction) && camera.smooth){
-            camera.position = camera.direction;
-        }else{
+        else
             camera.smooth = false;
-        }
     },
 
     anotar: function(modoAnotacion)
@@ -477,7 +475,7 @@ var APP = {
         $("#areas-table").find("tbody").empty();
 
         APP.rotation = !APP.rotation;
-        scene.root.children[0].flags.visible = APP.rotation; // grid
+        scene.root.getNodeByName("grid").flags.visible = APP.rotation;;
 
         if(APP.rotation)
         {
@@ -577,11 +575,12 @@ var APP = {
                     renderer.meshes["line"] = mesh;
                     var linea = new RD.SceneNode();
                     linea.description = "config-tmp";
-                    linea.flags.ignore_collisions = true;
+//                    linea.flags.ignore_collisions = true;
                     linea.primitive = gl.LINES;
                     linea.mesh = "line";
                     linea.color = [0.9,0.7,0.7,1];
                     linea.flags.depth_test = false;
+                    linea.render_priority = 1;
                     scene.root.addChild(linea);        
                 }
             }
@@ -878,18 +877,20 @@ var APP = {
 
         // clear first
         APP.destroyElements(scene.root.children, "config");// clear first
-
+        
         //get from project
         if(type == 'm')
-            msr = project.getMeasure(id)
+            msr = project.getMeasure(id);
 	    else if(type == 's')
-            msr = project.getSegmentMeasure(id)
+            msr = project.getSegmentMeasure(id);
 	    else if(type == 'a')
-            msr = project.getArea(id)
+            msr = project.getArea(id);
 	    else
 	        console.error("no measure to show");
-        
+
+        // points stuff
         var points = [];
+        console.log(msr.points.length);
         
         for(var i = 0; i < msr.points.length; ++i){
             var list = [];
@@ -898,9 +899,9 @@ var APP = {
             list.push(msr.points[i][2]);
             points.push(list);
             
-            // render representation
+            // ball render representation
             var ind = new SceneIndication();
-            ind = ind.ball(scene, points[i], {depth_test: false, type: "view"});
+            ind = ind.ball(scene, points[i], {depth_test: false, type: "view"});    
         }    
         
         // lines stuff
@@ -922,18 +923,21 @@ var APP = {
         var mesh = GL.Mesh.load({ vertices: vertices }); 
         renderer.meshes["line"] = mesh;
         var linea = new RD.SceneNode();
-        linea.flags.ignore_collisions = true;
         linea.primitive = gl.LINES;
         linea.mesh = "line";
         linea.description = "config";
         linea.color = [0.258, 0.525, 0.956];
         linea.flags.depth_test = false;
+        linea.render_priority = 1;
         scene.root.addChild(linea);
 
         // change global camera
         // to look at with smooth efect
-        camera.direction = msr.camera_position || camera.direction;
-        camera.smooth = true;
+        if(msr.camera_position)
+        {
+            camera.direction = msr.camera_position;
+            camera.smooth = true;    
+        }
     },
 
     adjustSlider: function (slider)
@@ -961,7 +965,7 @@ var APP = {
     {
         context.onmousedown = function(e) {};
         APP.rotation = false;
-        scene.root.children[0].flags.visible = false;
+        scene.root.getNodeByName("grid").flags.visible = false;
 
         revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
         APP.destroyElements(scene.root.children, "config");

@@ -26,22 +26,22 @@ SceneIndication.prototype.ball = function(scene, position, options)
 	});
     
     ball.description = "config";
-    ball.flags.ignore_collisions = true;
+    
     options = options || {};
     
-    if(options)
-        {
-            ball.flags.depth_test = options.depth_test;
-            ball.render_priority = 19;
-            if(options.type == "view"){
-                ball.color = [0.258, 0.525, 0.956,1];           
-                ball.shader = null;
-            }
-            ball.id = options.id;
-            if(options.color)
-                ball.color = options.color;
-        }
-            
+    if(options && options.depth_test)
+        ball.flags.depth_test = options.depth_test;
+        
+    if(options && options.color)
+        ball.color = options.color;
+        
+    if(options && options.id)
+        ball.id = options.id;
+    
+    if(options && options.type)
+        if(options.type == "view")
+            ball.color = [0.258, 0.525, 0.956,1];           
+        
     if(scene !== null)
         scene.root.addChild(ball);                
     
@@ -66,5 +66,6 @@ SceneIndication.prototype.grid = function(size, options)
     grid.primitive = gl.LINES;
     grid.color = [0.5, 0.5, 0.5, 1];
     grid.scale([50, 50, 50]);
-    scene.root.addChild(grid);
+    
+    return grid;
 }

@@ -1,13 +1,9 @@
 var keys = {};
-var KEY_W = 87;
-var KEY_A = 65;
-var KEY_S = 83;
-var KEY_D = 68;
-var KEY_F = 70;
-var KEY_SPACE = 32;
+var KEY_W = 87, KEY_A = 65, KEY_S = 83, KEY_D = 68, KEY_F = 70, KEY_B = 66;
+var KEY_LEFT = 37, KEY_UP = 38, KEY_RIGHT = 39, KEY_DOWN = 40;
+var KEY_SPACE = 32, KEY_ESC = 27;
 
-var PLANTA = 0;
-var ALZADO = 1;
+var PLANTA = 0, ALZADO = 1;
 
 // default user
 var current_user = "guest";
@@ -106,9 +102,9 @@ function loadJSON()
 {
     $.ajax({dataType: "json",
         url: "data/" + current_project + '.json',
-        error: function(error)
+        error: function(err)
         {
-            console.log(error)
+            console.error(err)
         },
         success:function(data)
         {
@@ -157,8 +153,6 @@ function equals(a, b) {
 };
 
 
-//********** events *****
-
 var onlyNumbers = function(e) {
     var a = [];
     var k = e.which;
@@ -175,3 +169,19 @@ var onlyNumbers = function(e) {
         e.preventDefault();
 };
 
+ window.download = function(mesh, format)
+{
+    var file = null;
+    if(format == "wbin")
+        file = mesh.encode("wbin");
+    else
+        file = mesh.encode("obj");
+    var url = URL.createObjectURL( new Blob([file]) );
+    var element = document.createElement("a");
+    element.setAttribute('href', url);
+    element.setAttribute('download', "mesh." + format );
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+}

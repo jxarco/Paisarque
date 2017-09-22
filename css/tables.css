@@ -11,6 +11,7 @@
     color:#8A8A8A;
     
 /*    border: 3px solid red;*/
+    
 }
 
 .css-table {
@@ -26,7 +27,7 @@ ul li {
     text-align:center;
     list-style-type: none;
     height: 350px;
-    background-color: #ddd;
+/*    background-color: #ddd;*/
 }
 
 a:hover{

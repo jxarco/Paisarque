@@ -2613,7 +2613,7 @@ Camera.prototype.rotateLocal = function(angle, axis)
 
 /**
 * rotate around its target position
-* @method rotate
+* @method orbit
 * @param {number} angle in radians
 * @param {vec3} axis
 * @param {vec3} [center=null] if another center is provided it rotates around it
@@ -2630,6 +2630,29 @@ Camera.prototype.orbit = function(angle, axis, center, axis_in_local)
 	var front = vec3.subtract( temp_vec3, this._position, this._target );
 	vec3.transformQuat(front, front, R );
 	vec3.add(this._position, center, front);
+	this._must_update_matrix = true;
+}
+
+/**
+* rotate around its target position and saves it to the direction
+* @method rotate
+* @param {number} angle in radians
+* @param {vec3} axis
+* @param {vec3} [center=null] if another center is provided it rotates around it
+*/
+Camera.prototype.orbit_direction = function(angle, axis, center, axis_in_local)
+{
+	if(!axis)
+		throw("RD: orbit axis missing");
+
+	center = center || this._target;
+	if(axis_in_local)
+		axis = mat4.rotateVec3(temp_vec3b, this._model_matrix, axis);
+	var R = quat.setAxisAngle( temp_quat, axis, angle );
+	var front = vec3.subtract( temp_vec3, this._position, this._target );
+	vec3.transformQuat(front, front, R );
+    vec3.add(this.direction, center, front);
+    this.smooth = true;
 	this._must_update_matrix = true;
 }
 
