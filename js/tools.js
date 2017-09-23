@@ -64,7 +64,7 @@ function loadJSON()
                 
                 // clear tmp files
                 $.ajax({
-                  url: 'emptyFolder.php',
+                  url: 'server/php/emptyFolder.php',
                   data: {
                         'folder': "data/uploadedfiles/tmp",
                         }
@@ -103,7 +103,7 @@ function deleteProject(user, project)
     ]
     
     $.ajax({
-      url: 'deleteFile.php',
+      url: 'server/php/deleteFile.php',
       data: {'file' : project_to_delete[0],
             'folder': project_to_delete[1],
             },

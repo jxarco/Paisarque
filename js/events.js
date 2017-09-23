@@ -144,7 +144,7 @@ $("#formAddImage").on('submit', function(e)
     //
     
     $.ajax( {
-        url: 'uploadImage.php',
+        url: 'server/php/uploadImage.php',
         type: 'POST',
         data: formData,
         cache: false,
@@ -538,7 +538,7 @@ $("#formUploadProject").on('submit', function(e)
     
     $.ajax({type: "POST",
             dataType : 'json',
-            url: 'save_to_disc.php',
+            url: 'server/php/save_to_disc.php',
             data:
             {
                 data: JSON.stringify(jsonFicheroPrincipal), 
@@ -549,7 +549,7 @@ $("#formUploadProject").on('submit', function(e)
     $('#loadingModal').modal('show');   
     
     $.ajax( {
-        url: 'uploadFile.php',
+        url: 'server/php/uploadFile.php',
         type: 'POST',
         data: formData,
         cache: false,

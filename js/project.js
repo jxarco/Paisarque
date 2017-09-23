@@ -644,7 +644,7 @@ Project.prototype.save = function( overwrite, extra )
     $.ajax({
             type: "POST",
             //dataType : 'json',
-            url: 'save_to_disc.php',
+            url: 'server/php/save_to_disc.php',
             data: { 
                 data: JSON.stringify(json),
                 file: path

@@ -100,7 +100,7 @@ function systemReady()
                 
                 $.ajax({type: "POST",
                     dataType : 'json',
-                    url: 'createUserFolder.php',
+                    url: 'server/php/createUserFolder.php',
                     data: { user: values["username"]}
                 });
                 
