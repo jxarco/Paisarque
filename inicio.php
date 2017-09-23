@@ -35,8 +35,9 @@
                 <div class="col-md-6 col-md-offset-3">
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <button id="addProject" class="submit-button btn inicio btn-lg btn-block ladda-button" data-style="slide-up" data-color="green" type="submit" data-toggle="modal" data-target="#GSCCModal"><span class="ladda-label">Crear nuevo proyecto</span><span class="ladda-spinner"></span></button>
-                            <button id="delete-project" class="submit-button btn inicio btn-lg btn-block ladda-button" data-style="slide-up" data-color="green" type="submit"><span class="ladda-label">Eliminar proyecto existente</span><span class="ladda-spinner"></span></button>
+                            
+                            <button id="addProject" class="submit-button btn table-btn btn-lg btn-block ladda-button" data-style="slide-up" data-color="green" type="submit" data-toggle="modal" data-target="#GSCCModal"><span class="ladda-label">Crear nuevo proyecto</span><span class="ladda-spinner"></span></button>
+                            <button id="delete-project" class="submit-button btn table-btn btn-lg btn-block ladda-button" data-style="slide-up" data-color="green" type="submit"><span class="ladda-label">Eliminar proyecto existente</span><span class="ladda-spinner"></span></button>
                             
                             <!-- Listamos los ficheros que hay en el servidor/carpeta y sus propiedades -->
                             <table id="projects-tb" class="table table-striped table-hover ">

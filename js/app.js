@@ -141,24 +141,37 @@ var APP = {
         obj.name = "mesh 3d";
         obj.position = [0,0,0];
         obj.scale([5,5,5]);
-//        obj.mesh = meshURL;
-        obj.mesh = wBinURL;
+        obj.mesh = meshURL;
+        
+        // at this time using this:*************
+        // sync request
+        
+        var on_complete = function(){
+            // load mesh and texture for obj model
+            var mesh = GL.Mesh.fromURL( obj.mesh, function () {
+                $("#placeholder").css("background-image", "none");
+                $('#myCanvas').css({"opacity": 0, "visibility": "visible"}).animate({"opacity": 1.0}, 1500);
+                putCanvasMessage("Recuerda: guarda el proyecto al realizar cambios!", 3000);
+                putCanvasMessage("Puedes cancelar cualquier acción con la tecla ESC", 3000);
+                if(!rotaciones.length)
+                    putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "error"}); 
+            }); //load from URL
+            renderer.meshes[obj.mesh] = mesh;
+        };
+        
+        urlExists(wBinURL, {on_success: function(){
+            // case it is
+            console.log("binary found!")
+            obj.mesh = wBinURL;
+            // in other case, original obj is used
+        }, on_complete: on_complete});
+                  
+        // *************************************
         
         // one texture
         if (!isArray(textureURL)) {
             obj.texture = textureURL;
         }
-        
-        // load mesh and texture for obj model
-        var mesh = GL.Mesh.fromURL( obj.mesh, function () {
-            $("#placeholder").css("background-image", "none");
-            $('#myCanvas').css({"opacity": 0, "visibility": "visible"}).animate({"opacity": 1.0}, 1500);
-            putCanvasMessage("Recuerda: guarda el proyecto al realizar cambios!", 3000);
-            putCanvasMessage("Puedes cancelar cualquier acción con la tecla ESC", 3000);
-            if(!rotaciones.length)
-                putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "error"}); 
-        } ); //load from URL
-        renderer.meshes[wBinURL] = mesh;
         
         var obj_texture = renderer.loadTexture(obj.texture, renderer.default_texture_settings);
         
@@ -228,7 +241,7 @@ var APP = {
         }
 
         //global settings
-        var bg_color = vec4.fromValues(0.823, 0.823, 0.823, 1);
+        var bg_color = vec4.fromValues(0.937, 0.937, 0.937, 1);
 
         //main render loop
         var last = now = getTime();
@@ -304,22 +317,8 @@ var APP = {
         {   
             keys[e.keyCode] = false;        
 
-            if(e.keyCode === 13) // Enter
-            {
-                if(APP.rotation){
-                    APP.rotation = false;
-                    scene.root.getNodeByName("grid").flags.visible = APP.rotation;
-
-                    if(APP.rotation)
-                        revealDOMElements([$("#cardinal-axis"), $('.sliders')], true);
-                    else
-                        revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
-
-                    project.setRotations(obj._rotation);
-                    project.save();
-                    putCanvasMessage("¡Guardado!", 2000);
-                }
-            }
+            if(e.keyCode === KEY_ENTER) // Enter
+                APP.applyRotation(obj._rotation);
 
             if(e.keyCode === KEY_ESC)
                 APP.disableAllFeatures();
@@ -327,9 +326,8 @@ var APP = {
            if(e.keyCode === KEY_D)
                 download(renderer.meshes[obj.mesh], "wbin");
             
-            if(e.keyCode === KEY_S){
+            if(e.keyCode === KEY_S)
                 renderer.loadShaders("data/shaders.glsl");
-            }
         }
 
         context.captureMouse(true);
@@ -344,7 +342,7 @@ var APP = {
             camera.smooth = false;
     },
 
-    anotar: function(modoAnotacion)
+    anotate: function(modoAnotacion)
     {
         if (modoAnotacion) {
             $("#desAnot").css('opacity', '1');
@@ -457,6 +455,8 @@ var APP = {
             else
                 $(".dialog-option.help").fadeOut();
         });
+        
+        $("#add-dialog").click();
     },
     
     setRotation: function ()
@@ -479,7 +479,7 @@ var APP = {
 
         if(APP.rotation)
         {
-            putCanvasMessage("Usa los sliders o bien mantén pulsadas las teclas A, S y D mientras arrastras para rotar en cada eje. (¡Guarda al acabar!)", 5000, {type: "help"});
+            putCanvasMessage("Usa los sliders o bien mantén pulsadas las teclas A, S y D mientras arrastras para rotar en cada eje.", 5000, {type: "help"});
 
             $("#cardinal-axis").fadeIn();
             $('.sliders').fadeIn();
@@ -521,14 +521,28 @@ var APP = {
 
     },
     
+    applyRotation: function()
+    {
+        if(APP.rotation){
+            APP.rotation = false;
+            scene.root.getNodeByName("grid").flags.visible = APP.rotation;
+            revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
+
+            project.setRotations(obj._rotation);
+            project.save();
+            putCanvasMessage("¡Guardado!", 2000);
+        }
+    },
+    
     calcDistance: function ()
     {
-        if(project._meter === -1)
+        if(project._meter == -1){
+            putCanvasMessage("Primero configura la escala.", 3000, {type: "error"});
             return;
+        }
 
         // clear first
-        APP.destroyElements(scene.root.children, "config");
-        $(".draggable").remove();
+        APP.disableAllFeatures();
 
         // open dialog
         testDialog();
@@ -622,7 +636,6 @@ var APP = {
                     }
             }
 
-            APP.destroyElements(scene.root.children, "config-tmp");
             context.onmousedown = function(e) {}
             $("#myCanvas").css("cursor", "default");
 
@@ -645,6 +658,9 @@ var APP = {
                 project.insertMeasure(camera, tmp, distance, {display: true, push: true});
             else 
                 project.insertSegmentMeasure(tmp, distance, {display: true, push: true});
+            
+            //clear all
+            APP.disableAllFeatures();
 
         });
         
@@ -659,17 +675,14 @@ var APP = {
             return;
         }
 
-         // clear first
-        APP.destroyElements(scene.root.children, "config");
-        $(".draggable").remove();
+        // clear first
+        APP.disableAllFeatures();
 
         // open dialog
         testDialog();
 
         putCanvasMessage("Añade puntos sobre el plano de planta.", 3000);
         putCanvasMessage("El último punto debe coincidir con el primero.", 5000, {type: "alert"});
-        $(".sub-btns").hide();
-        $("#measure-opt-btn").find("i").html("add_circle_outline");
 
         window.tmp = [];
         var index = vista === PLANTA ? 1 : 2;
@@ -745,11 +758,6 @@ var APP = {
                             grid.rotate(90 * DEG2RAD, RD.FRONT);
                         scene.root.addChild(grid);
 
-                        // set opacity to the main object
-                        // idea: plane over obj
-//                        obj.blend_mode = 1;
-//                        obj.opacity = 0.75;
-                        
                         var ind = new SceneIndication();
                         ind = ind.ball(scene, result, {depth_test: false});
                     }
@@ -761,7 +769,7 @@ var APP = {
                     APP.destroyElements(scene.root.children, "config-tmp");
                     
                     var ind = new SceneIndication();
-                    ind = ind.ball(scene, result, {depth_test: false});
+                    ind = ind.ball(scene, result);
 
                     for(var i = 0; i < tmp.length; ++i)
                     {
@@ -964,17 +972,17 @@ var APP = {
     disableAllFeatures: function ()
     {
         context.onmousedown = function(e) {};
-        APP.rotation = false;
+        
+        APP.fadeAllTables(showing);
         scene.root.getNodeByName("grid").flags.visible = false;
-
-        revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
+        revealDOMElements([$("#cardinal-axis"), $('.sliders'), $(".sub-btns")], false);
         APP.destroyElements(scene.root.children, "config");
         APP.destroyElements(scene.root.children, "config-tmp");
         $("#myCanvas").css("cursor", "default");
         $("#measure-opt-btn").find("i").html("add_circle_outline");
-        $(".sub-btns").hide();
         $(".draggable").remove();
         $("#cont-msg").empty();
+        APP.rotation = false;
 
         //on-point class
         $(".on-point").removeClass("on-point");

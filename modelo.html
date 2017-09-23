@@ -73,6 +73,7 @@
             <div class="w3-col w3-container">
 
                 <ul class="tabs" role="tablist">
+                    <!-- info tab                   -->
                     <li>
                         <input type="radio" name="tabs" id="tab1" checked />
                         <label for="tab1" 
@@ -88,7 +89,7 @@
                           <textarea style="width:100%;height:75px; resize: none;" class="form-control pro-info" rows="5"></textarea>
                         </div>
                     </li>
-
+                    <!-- tools tab                   -->
                     <li>
                         <input type="radio" name="tabs" id="tab2" />
                         <label for="tab2"
@@ -111,7 +112,7 @@
                             
                         </div>
                     </li>
-                    
+                    <!-- anotaciones tab                   -->
                     <li>
                         <input type="radio" name="tabs" id="tab3" />
                         <label for="tab3" 
@@ -138,20 +139,6 @@
                 <!--      CANVAS          -->
                 <div class="col-sm-10 text-left" id= "myCanvas"></div>
                 
-                <div class="sliders">
-                    <div class="slider">
-                        <p style="color:black;">X </p>
-                        <input id="s1" type="range" value="0" step="0.01" min="-6.5" max="6.5">
-                    </div>
-                    <div class="slider">
-                        <p style="color:black;">Y </p>
-                        <input id="s2" type="range" value="0" step="0.01" min="-6.5" max="6.5">
-                    </div>
-                    <div class="slider">
-                        <p style="color:black;">Z </p>
-                        <input id="s3" type="range" value="0" step="0.01" min="-6.5" max="6.5">
-                    </div>
-                </div>
                 <img id="cardinal-axis" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Br%C3%BAjula.svg/300px-Br%C3%BAjula.svg.png">
                 
                 <div id="cont-msg">
@@ -165,9 +152,9 @@
             <div class="w3-col w3-container w3-hide-medium w3-hide-small" id="tools">
                 
                 <ul class="tabs" role="tablist">
-<!--                info-->
+                    <!-- info-->
                     <li>
-                        <input type="radio" name="tabs-large" id="tab1-large" checked />
+                        <input type="radio" name="tabs-large" id="tab1-large" checked/>
                         <label for="tab1-large" 
                                role="tab" 
                                aria-selected="true" 
@@ -192,9 +179,9 @@
                         </div>
                     </li>
                     
-<!--                tools-->
+                    <!-- tools -->
                     <li id="tools-tab">
-                        <input type="radio" name="tabs-large" id="tab2-large" />
+                        <input type="radio" name="tabs-large" id="tab2-large"/>
                         <label for="tab2-large"
                                role="tab" 
                                aria-selected="false" 
@@ -328,10 +315,34 @@
                                     </a>
                             </div>
                             
+                            <div class="sliders">
+                                <label>Configuración de la rotación inicial</label>
+                                <br>
+                                <div class="slider">
+                                    <p style="color:black;">X </p>
+                                    <input id="s1" type="range" value="0" step="0.01" min="-6.5" max="6.5">
+                                </div>
+                                <div class="slider">
+                                    <p style="color:black;">Y </p>
+                                    <input id="s2" type="range" value="0" step="0.01" min="-6.5" max="6.5">
+                                </div>
+                                <div class="slider">
+                                    <p style="color:black;">Z </p>
+                                    <input id="s3" type="range" value="0" step="0.01" min="-6.5" max="6.5">
+                                </div>
+                                
+                                <div style="display: flex;">
+                                    <a title="Aplicar cambios" onclick="APP.applyRotation()" style="margin-right: 4px;" class="btn table-btn">
+                                        Aplicar
+                                    </a>
+                                    <button title='Cancelar' onclick="APP.disableAllFeatures()" class='btn dialog-btn info'><i class='material-icons'>close</i></button>
+                                </div>
+                            </div>
+                            
                         </div>
                     </li>
                     
-                    <!--       anotaciones tab             -->
+                    <!-- anotaciones tab -->
                     <li>
                         <input type="radio" name="tabs-large" id="tab3-large" />
                         <label for="tab3-large" 
@@ -369,11 +380,11 @@
                                 <i class="material-icons">visibility_off</i>
                                 <p class="info_hover_box">Esconder</p>
                             </a>
-                            <a onclick="APP.anotar(true)" class="btn tool-btn anot" id="actAnot">
+                            <a onclick="APP.anotate(true)" class="btn tool-btn anot" id="actAnot">
                                 <i class="material-icons">create</i>
                                 <p class="info_hover_box">Crear</p>
                             </a>
-                            <a onclick="APP.anotar(false)" id="desAnot" class="btn tool-btn anot nodisplay">
+                            <a onclick="APP.anotate(false)" id="desAnot" class="btn tool-btn anot nodisplay">
                                 <i class="material-icons">remove_circle</i>
                                 <p class="info_hover_box">No crear</p>
                             </a>

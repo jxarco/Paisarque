@@ -320,9 +320,9 @@ Project.prototype.deleteDistance = function( id, type )
 */
 Project.prototype.restoreDistances = function( )
 {
-    $('#distances-table').find("tr").remove();
-    $('#segment-distances-table').find("tr").remove();
-    $('#areas-table').find("tr").remove();
+    $('#distances-table').find("tbody").empty();
+    $('#segment-distances-table').find("tbody").empty();
+    $('#areas-table').find("tbody").empty();
     
     var length = this._measures.length;
     
@@ -623,6 +623,8 @@ Project.prototype.save = function( overwrite, extra )
         project += extra;
     
     var path = "data/" + project + '.json';
+    
+    console.log(path);
     
     var json = {
         "id": this._id,

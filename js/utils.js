@@ -1,7 +1,7 @@
 var keys = {};
 var KEY_W = 87, KEY_A = 65, KEY_S = 83, KEY_D = 68, KEY_F = 70, KEY_B = 66;
 var KEY_LEFT = 37, KEY_UP = 38, KEY_RIGHT = 39, KEY_DOWN = 40;
-var KEY_SPACE = 32, KEY_ESC = 27;
+var KEY_SPACE = 32, KEY_ESC = 27, KEY_ENTER = 13;
 
 var PLANTA = 0, ALZADO = 1;
 
@@ -93,34 +93,7 @@ function uncapitalizeFirstLetter(string) {
 }
 
 /*
-* Loads the important data from the current project
-* and executes init function located at parseJSON.
-* AJAX
-*/
-
-function loadJSON()
-{
-    $.ajax({dataType: "json",
-        url: "data/" + current_project + '.json',
-        error: function(err)
-        {
-            console.error(err)
-        },
-        success:function(data)
-        {
-            $('#project').html(data.id + "<span class='caret'></span>");
-            if(APP.parseJSON)
-            {
-                APP.parseJSON(data);
-                // LOAD ALWAYS AFTER GETTING DATA
-                loadMapsAPI();
-            }
-        }
-    });
-}
-
-/*
-*  Dragging stuff
+*  Dragging stuff bout anotations removing
 */
 
 function allowDrop(ev) {
@@ -160,8 +133,6 @@ var onlyNumbers = function(e) {
     for (i = 48; i < 58; i++)
         a.push(i);
     
-    //comma
-    //a.push(44);
     //period
     a.push(46);
     
@@ -169,7 +140,8 @@ var onlyNumbers = function(e) {
         e.preventDefault();
 };
 
- window.download = function(mesh, format)
+// download binary mesh
+ window.download = function( mesh, format )
 {
     var file = null;
     if(format == "wbin")
@@ -185,3 +157,17 @@ var onlyNumbers = function(e) {
     element.click();
     document.body.removeChild(element);
 }
+ 
+function urlExists( url, o )
+{
+    $.get(url)
+    .done(function() { 
+        o.on_success();
+    }).fail(function(err) { 
+        if(o.on_error)
+            o.on_error(err);
+    }).always(function(){
+        o.on_complete();
+    });
+}
+

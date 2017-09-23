@@ -36,6 +36,32 @@ var LOADER = {
     }
 };
 
+/*
+* Loads the important data from the current project
+* and executes init function located at parseJSON.
+* AJAX
+*/
+
+function loadJSON()
+{
+    $.ajax({dataType: "json",
+        url: "data/" + current_project + '.json',
+        error: function(err)
+        {
+            console.error(err)
+        },
+        success:function(data)
+        {
+            if(APP.parseJSON)
+            {
+                APP.parseJSON(data);
+                // LOAD ALWAYS AFTER GETTING DATA
+                loadMapsAPI();
+            }
+        }
+    });
+}
+
 // FINISH GETTING DATA FROM JSONS
 
 function deleteProject(user, project)
@@ -363,13 +389,12 @@ function testDialog(options)
     var lowerbtn = options.lower || "Finalizar";
     
     var location = $("#tab-content2-large");
-    var margin = options.scale ? "250px;" : "15px;";
     
     var html = "<div " +
                     "class='draggable ui-widget-content' " +
                   "style='" +
 //                  "width: 30%; " +
-                  "margin-top: " + margin +
+                  "margin-top: 265px;" +
                   "text-align: center;'>" +
                   "<button title='Cancelar' id='close-dialog' class='btn dialog-btn info'><i class='material-icons'>close</i></button>" +
                   "<div class='dialog-option'>" +
@@ -780,8 +805,3 @@ function JSONtoString(sample)
     
     return str;
 }
-
-
-
-
-
