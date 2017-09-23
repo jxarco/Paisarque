@@ -124,9 +124,7 @@ $("#formAddImage").on('submit', function(e)
                 urlImage += nameMesh;
             }
         
-//        console.log(urlImage);
         // add image to project
-        
         if(copy._extra.length)
             extraCounter = copy._extra[copy._extra.length-1].name.split("_")[1];
         else

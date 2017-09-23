@@ -5,6 +5,7 @@ var proj_to_delete = "test";
 var delete_project_active = false;
 
 var copy = null;
+var dropbox = null;
 var separator = "__________________________________________________\n";
 
 // LOAD DATA FROM JSON
@@ -57,12 +58,32 @@ function loadJSON()
                 APP.parseJSON(data);
                 // LOAD ALWAYS AFTER GETTING DATA
                 loadMapsAPI();
+                //Allows to DRAG AND DROP files
+                dropbox = document.getElementById("myCanvas");
+                dropbox.addEventListener("dragenter", onDragEvent, false);
+                
+                // clear tmp files
+                $.ajax({
+                  url: 'emptyFolder.php',
+                  data: {
+                        'folder': "data/uploadedfiles/tmp",
+                        }
+                });
             }
         }
     });
 }
-
 // FINISH GETTING DATA FROM JSONS
+
+function onDragEvent(evt)
+{
+//    if(evt.type == "dragenter")
+//        dropbox.style.border = "3px dotted red";
+//    if(evt.type == "dragleave")
+//        dropbox.style.border = "none";
+//    if(evt.type == "drop")
+//        dropbox.style.border = "none";
+}
 
 function deleteProject(user, project)
 {

@@ -96,7 +96,7 @@
                         </div>
                     </div>
                     
-                    <img src="data/bbva.png" class="img-responsive" style="margin-left: calc(50% - 50px); width: 100px;">
+                    <img src="data/assets/bbva.png" class="img-responsive" style="margin-left: calc(50% - 50px); width: 100px;">
                         
                 </div>
 	       </div>

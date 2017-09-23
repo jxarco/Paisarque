@@ -113,7 +113,7 @@ var APP = {
     {
         //create the rendering context
         context = GL.create({width: window.innerWidth, height:window.innerHeight, alpha:true});
-        renderer = new RD.Renderer(context, {shaders_file: "data/shaders.glsl"});
+        renderer = new RD.Renderer(context, {shaders_file: "data/shaders/shaders.glsl"});
         placer = document.getElementById("myCanvas");
         placer.appendChild(renderer.canvas); //attach
 
@@ -385,6 +385,13 @@ var APP = {
             else if(description == elements[i].description)
                 elements[i].destroy();
         }
+    },
+    
+    setCubeMap: function( url )
+    {
+        var cubeMaptexture = GL.Texture.cubemapFromURL(url,{is_cross: 1, minFilter: gl.LINEAR_MIPMAP_LINEAR });
+        cubeMaptexture.bind(0);
+        renderer.textures["skybox"] = cubeMaptexture;  
     },
 
     setScale: function ()

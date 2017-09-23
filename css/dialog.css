@@ -12,9 +12,12 @@ input{
     width: 100%;
     background: none;
     border-radius: 2px;
-    padding-top: 10px;
-    padding-bottom: 10px;
     position: relative;
+    
+    -moz-box-shadow:  0px 0px 3px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow:  0px 0px 3px rgba(0, 0, 0, 0.3);
+  box-shadow:  0px 0px 3px rgba(0, 0, 0, 0.3);
+    padding: 10px;
 }
 
 .dialog-option{
@@ -50,8 +53,8 @@ input{
 }
 
 .dialog-btn.selected{
-    background: rgb(150, 150, 150) !important;
-    border: 2px solid rgba(62, 164, 155, 0.95);
+    background: rgb(160, 170, 180) !important;
+    border: 2px solid rgb(66, 134, 244);
     color: whitesmoke;
 }
 

@@ -204,7 +204,7 @@ h1, h2, h3, h4, h5, h6{
 }
 
 #placeholder {
-    background-image: url("../data/loading.gif");
+    background-image: url("../data/assets/loading.gif");
     background-repeat: no-repeat;
     background-size: 15em;
     background-position: center;
@@ -214,8 +214,6 @@ h1, h2, h3, h4, h5, h6{
     width: calc(100% - 375px);
     float: left;
     overflow-y: hidden;
-    
-    /*    border: 1px solid green;*/
 }
 
 @media only screen and (max-width: 993px) {

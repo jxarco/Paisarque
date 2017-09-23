@@ -125,6 +125,20 @@ function equals(a, b) {
   return (Math.abs(a[0] - b[0]) <= 0.1) && (Math.abs(a[1] - b[1]) <= 0.1) && (Math.abs(a[2] - b[2]) <= 0.1);
 };
 
+function power_of_2(n) {
+    if (typeof n !== 'number') 
+      return 'Not a number'; 
+
+    return n && (n & (n - 1)) === 0;
+}
+
+function is_cubemap(w, h) {
+    
+    if (typeof w !== 'number' || typeof h !== 'number') 
+      return 'Bad args'; 
+
+    return power_of_2(w) && (h === w * 0.75 );
+}
 
 var onlyNumbers = function(e) {
     var a = [];
@@ -162,12 +176,37 @@ function urlExists( url, o )
 {
     $.get(url)
     .done(function() { 
-        o.on_success();
+        if(o.on_success)
+            o.on_success();
     }).fail(function(err) { 
         if(o.on_error)
             o.on_error(err);
     }).always(function(){
-        o.on_complete();
+        if(o.on_complete)
+            o.on_complete();
     });
 }
 
+function readImage (file, callback) {
+
+    var reader = new FileReader();
+    var o = null;
+
+    reader.addEventListener("load", function () {
+        var image  = new Image();
+        image.addEventListener("load", function () {
+            var info = {
+                file: file.name,
+                width: parseInt(image.width),
+                height: parseInt(image.height),
+                type: file.type,
+                size: Math.round(file.size/1024) + 'KB'
+            }
+            callback(info);
+        });
+
+        image.src = reader.result;
+    });
+
+    reader.readAsDataURL(file);  
+}

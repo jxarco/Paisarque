@@ -40,7 +40,6 @@
     </head>
 
     <body>
-        
         <!-- Navbar -->
         <div class="w3-top">
           <div class="w3-bar w3-card-2">
@@ -316,8 +315,7 @@
                             </div>
                             
                             <div class="sliders">
-                                <label>Configuración de la rotación inicial</label>
-                                <br>
+                                <button title='Cancelar' style="margin-left: 40% !important;" onclick="APP.disableAllFeatures()" class='btn dialog-btn info'><i class='material-icons'>close</i></button>
                                 <div class="slider">
                                     <p style="color:black;">X </p>
                                     <input id="s1" type="range" value="0" step="0.01" min="-6.5" max="6.5">
@@ -331,12 +329,9 @@
                                     <input id="s3" type="range" value="0" step="0.01" min="-6.5" max="6.5">
                                 </div>
                                 
-                                <div style="display: flex;">
-                                    <a title="Aplicar cambios" onclick="APP.applyRotation()" style="margin-right: 4px;" class="btn table-btn">
-                                        Aplicar
-                                    </a>
-                                    <button title='Cancelar' onclick="APP.disableAllFeatures()" class='btn dialog-btn info'><i class='material-icons'>close</i></button>
-                                </div>
+                                <a title="Aplicar cambios" onclick="APP.applyRotation()" class="btn table-btn">
+                                    Aplicar
+                                </a>
                             </div>
                             
                         </div>
@@ -423,11 +418,14 @@
         </body>
         
         <footer>
-        
+        <input id="fileupload" type="file" name="files[]" data-url="data/uploadedfiles/" style="display: none;" multiple>
         </footer><!--   footer end-->
     
         <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="js/fileupload/jquery.fileupload.js"></script>
+        <script src="js/fileupload/jquery.ui.widget.js"></script>
+        <script src="js/fileupload/jquery.iframe-transport.js"></script>
         <script type="text/javascript" src="http://www.tamats.com/projects/litegl/external/wbin.js"></script>
         <script type="text/javascript" src="js/extra/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/extra/custom.js"></script>
@@ -445,7 +443,21 @@
         </script>
         <script type="text/javascript" src="js/tools.js"></script>
         <script type="text/javascript" src="js/app.js"></script>
-        <script type="text/javascript" src="js/events.js"></script>    
+        <script type="text/javascript" src="js/events.js"></script> 
+        <script>
+            $(function () {
+                $('#fileupload').fileupload({
+                    dataType: 'json',
+                    done: function (e, data) {
+                        if(data.result.files.length)
+                        {
+                            var url = "data/uploadedfiles/tmp/" + data.result.files[0].name;
+                            APP.setCubeMap(url);
+                        }
+                    }
+                });
+            });
+        </script>
         <script>
             LOADER.load();
         </script>
