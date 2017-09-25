@@ -11,12 +11,10 @@
         <!--    CSS    -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" >
-        <link href="css/custom.min.css" rel="stylesheet">
         <link href="css/estilo.css" rel="stylesheet">
         <link href="css/header.css" rel="stylesheet">
         <link href="css/dialog.css" rel="stylesheet">
         <link href="css/iconbar.css" rel="stylesheet">
-<!--        <link href="css/verticalText.css" rel="stylesheet">-->
         <link href="css/rangeslider.css" rel="stylesheet">
         <link rel="stylesheet" href="css/RWD.css"> <!-- responsive web design -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
@@ -256,8 +254,6 @@
                                  <thead>
                                     <tr>
                                         <th></th>
-<!--                                    <th>P1</th>
-                                        <th>P2</th>-->
                                         <th>Distancia (m)</th>
                                         <th></th>
                                     </tr>
@@ -417,9 +413,7 @@
         
         </body>
         
-        <footer>
         <input id="fileupload" type="file" name="files[]" data-url="data/uploadedfiles/" style="display: none;" multiple>
-        </footer><!--   footer end-->
     
         <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -451,7 +445,7 @@
                     done: function (e, data) {
                         if(data.result.files.length)
                         {
-                            var url = "data/uploadedfiles/tmp/" + data.result.files[0].name;
+                            var url = "data/uploadedfiles/files/" + data.result.files[0].name;
                             APP.setCubeMap(url);
                         }
                     }

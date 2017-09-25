@@ -1,28 +1,21 @@
-var default_project = null;
-var current_project = getQueryVariable("r") || default_project;
+var default_project         = null;
+var delete_project_active   = false;
+var current_project = getQueryVariable("r");
 
-var proj_to_delete = "test";
-var delete_project_active = false;
-
+// @copy of the project
 var copy = null;
+// @drop zone for skybox
 var dropbox = null;
-var separator = "__________________________________________________\n";
-
-// LOAD DATA FROM JSON
-
-// prevent of NO LOGIN
-// COMMENT TO DEBUG IN LOCAL
-//if(session === null)
-//    $("#all").hide();
-//
 
 var LOADER = {
+    // 3d tab
     load: function(){
         if(current_project !== null)
             loadJSON();
         window.onresize = APP.resize;
         init_sliders(); // canvas rotations
     },
+    // info extra tab
     loadExtra: function(){
         var data = sessionStorage.getItem("project");
         copy = new Project({}, current_user, {no_construct: true});
@@ -30,6 +23,7 @@ var LOADER = {
         parseExtraJSON(copy._extra, {parseAll: true});
         SlickJS.init();
     },
+    // rest of tabs
     loadProject: function(){
         var data = sessionStorage.getItem("project");
         copy = new Project({}, current_user, {no_construct: true});
@@ -66,8 +60,8 @@ function loadJSON()
                 $.ajax({
                   url: 'server/php/emptyFolder.php',
                   data: {
-                        'folder': "data/uploadedfiles/tmp",
-                        }
+                    'folder': "../../data/uploadedfiles/files",
+                    }
                 });
             }
         }
@@ -98,8 +92,8 @@ function deleteProject(user, project)
     }
         
     var project_to_delete = [
-        "data/" + user + "/" + project + ".json",
-        "data/" + user + "/" + project,
+        "../../data/" + user + "/" + project + ".json",
+        "../../data/" + user + "/" + project,
     ]
     
     $.ajax({
@@ -116,28 +110,29 @@ function deleteProject(user, project)
 
 function loadContent(url, id)
 {
-    if(!delete_project_active)
-    {
-        console.log("loading content " + url);
-        
-        if(url === 'inicio.php')
-            document.location.href = url+"?user=" + current_user;
-            
-        else {
-            // pass project information to reload it later
-            var preurl = document.location.pathname;
-            if(preurl.includes("/modelo.html"))
-                sessionStorage.setItem("project", JSON.stringify(project));     
-            if(preurl.includes("/infoextra.html"))
-                sessionStorage.setItem("project", JSON.stringify(copy));     
-            
-            document.location.href = url+"?r="+(id || current_project).toString();        
-        }
-    }
-    else
+    if(delete_project_active)
     {
         var dproject = id.split('/')[1];
         deleteProject(current_user, dproject);
+        return;
+    }
+    
+    // load content 
+    console.log("loading content " + url);
+        
+    if(url === 'inicio.php'){
+        document.location.href = url+"?user=" + current_user;
+    }
+
+    else {
+        // pass project information to reload it later
+        var preurl = document.location.pathname;
+        if(preurl.includes("/modelo.html"))
+            sessionStorage.setItem("project", JSON.stringify(project));     
+        if(preurl.includes("/infoextra.html"))
+            sessionStorage.setItem("project", JSON.stringify(copy));     
+
+        document.location.href = url+"?r="+(id || current_project).toString();        
     }
 }
 
@@ -148,9 +143,6 @@ function loadMapsAPI()
 
 function initMap(lat, lng) 
 {
-    // https://developers.google.com/maps/documentation/javascript/examples/infowindow-simple
-    //console.log(typeof project._coordinates.lat);
-    
     var latitud     = lat || parseFloat(project._coordinates.lat);
     var longitud    = lng || parseFloat(project._coordinates.lng);
     var location    = project._location;
@@ -304,7 +296,6 @@ function build(sampleObj, options)
     
     if(sampleObj.type == "image"){
         return '<div><img src="'+ sampleObj.data +'" class="img-responsive image ' + sampleObj.name + '" onclick="select(this, ' + "'image'" + ')" alt="Responsive image"></div>';
-//        return '<li class="imageli"><img src="'+ sampleObj.data +'" class="img-responsive image ' + sampleObj.name + '" onclick="select(this, ' + "'image'" + ')" alt="Responsive image"></li>';
     }
     
     if(sampleObj.type == "text"){
@@ -325,9 +316,9 @@ function build(sampleObj, options)
 }
 
 /*
-* @param parent: node to add child to it
-* @param son: node to transform 
-* @return object with two nodes
+* @param parent {sceneNode} node to add child to it
+* @param son {sceneNode} node to transform 
+* @return {object} with two nodes
 */
 function setParent(parent, son)
 {
@@ -361,9 +352,9 @@ function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id)
 }
 
 /*
-* @param text: message to display in canvas
-* @param ms: time to display before hidding
-* @param options: color, background-color, font-size 
+* @param text {string} message to display in canvas
+* @param ms {number} time to display before hidding
+* @param options {object} color, background-color, font-size 
 */
 var last_message_id = 999;
 function putCanvasMessage(text, ms, options)

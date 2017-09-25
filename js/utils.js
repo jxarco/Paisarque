@@ -1,3 +1,4 @@
+var separator = "__________________________________________________\n";
 var keys = {};
 var KEY_W = 87, KEY_A = 65, KEY_S = 83, KEY_D = 68, KEY_F = 70, KEY_B = 66;
 var KEY_LEFT = 37, KEY_UP = 38, KEY_RIGHT = 39, KEY_DOWN = 40;
@@ -18,7 +19,9 @@ var PAS = {
         if(localStorage.length)
         {
             session = JSON.parse(localStorage.session);
-            current_user = session.user.username;    
+            current_user = session.user.username;   
+        }else{
+            current_user = getQueryVariable('user') || getQueryVariable('r').split("/")[0];
         }
     }
 }

@@ -1,8 +1,3 @@
-var youtubeLinkCounter = 0;
-var pdfLinkCounter = 0;
-var imagenLinkCounter = 0;
-var textLinkCounter = 0;
-
 var extraCounter = null;
 
 /* EXPORT STUFF */
@@ -54,7 +49,10 @@ $(".export-xls").click(function(){
 
 /* EXTRA STUFF */
 
-// Adding any type of extra to the list of _extra in the project
+/* 
+* Adding any type of extra to the list of _extra in the project
+* from URL
+*/
 $(".add_extra").click(function(){
     
     var from = "#" + $(this).data("from");
@@ -84,7 +82,7 @@ $(".add_extra").click(function(){
     parseExtraJSON(copy._extra);
 });
 
-// refresh all extra
+// refresh all extra list
 $(".refresh").click(function(){
     parseExtraJSON(copy._extra, {parseAll: true});
 });
@@ -92,7 +90,6 @@ $(".refresh").click(function(){
 // upload image from disc
 $("#formAddImage").on('submit', function(e)
 {
-    console.log("uploading image");
     e.preventDefault();
     $('#TESTModal').modal('hide');   
     
@@ -134,7 +131,6 @@ $("#formAddImage").on('submit', function(e)
         var name = "extra_" + extraCounter;
         
         copy.pushExtra(name, "image", urlImage);
-        
     });
     
     $('#loadingModal').modal('show');   
@@ -157,7 +153,7 @@ $("#formAddImage").on('submit', function(e)
     
     // Resetear campos del form
     $(this).trigger("reset");
-    $(".refresh").click();
+    parseExtraJSON(copy._extra);
 });
 
 // *******************************************************************************
@@ -174,7 +170,7 @@ $('.form-signin').each(function() {
 });
 
 /*
-*   Button: Insert annotation to project
+*   Insert annotation to project
 */
 $("#saveTextButton").click(function(e)
 {
@@ -201,7 +197,7 @@ $("#saveTextButton").click(function(e)
 });
 
 /*
-*   Key: Click #saveTextButton
+*   Enter trigger clicks
 */
 $('#message-text').keyup(function(e) 
 {
@@ -234,6 +230,9 @@ $('#coord-btn').click(function(e)
 $("#lat").keypress(onlyNumbers);
 $("#lon").keypress(onlyNumbers);
 
+/*
+*   do orbit button stuff
+*/
 $("#orbit").click(function(){
    
     APP.orbit = !APP.orbit;
@@ -246,19 +245,25 @@ $("#orbit").click(function(){
 });
 
 /*
-*   Button: Delete all annotations in project
+*   Delete all annotations in project
 */
 $("#delete-anot-btn").click(function() {
     
     if(!project.getAnnotations().length)
+    {
+        putCanvasMessage("No hay anotaciones", 3000, {type: "error"});
         return;
+    }
     
-    if(confirm("¿Estas seguro?"))
+    else if(confirm("¿Estas seguro?")){
         project.deleteAllAnotations( obj );
+        putCanvasMessage("¡Borrado!", 3000);
+    }
+        
 });
 
 /*
-*   Button: Enable deleting a project at the main page
+*   Enable deleting a project at the main page
 */
 $("#delete-project").click(function() {
     
@@ -272,12 +277,11 @@ $("#delete-project").click(function() {
 */
 $(".viz_on").click(function() 
 {
-    if(obj.children.length)
-        var visible = obj.children[0].flags.visible;
-    APP.showElements(obj.children, visible);
+    APP.anot_visible = !APP.anot_visible;
+    APP.showElements(obj.children, APP.anot_visible);
     
-    var extra = visible === false ? "" : "_off";
-    var tooltip = visible === false ? "Mostrar" : "Esconder";
+    var extra = APP.anot_visible === false ? "" : "_off";
+    var tooltip = APP.anot_visible === false ? "Mostrar" : "Esconder";
     $(this).html( "<i class='material-icons'>visibility" + extra + "</i>" +
                 "<p class='info_hover_box'>" + tooltip + "</p>");
 });
@@ -293,7 +297,6 @@ $("#show_dt").click(function()
     var table = $('#distances-table');
     var btn = $('#measure-btn');
     revealDOMElements([table, btn], showing["t1"]);
-    
 });
 
 /*
@@ -417,101 +420,41 @@ $("#capture-scene").click(function(){
 
 $("#formUploadProject").on('submit', function(e)
 {
-    console.log("uploading project");
-    e.preventDefault();
+    console.log("preparing to upload project...");
     $('#GSCCModal').modal('hide');   
     
-    //Cogemos los valores y quitamos el comportamiento por defecto del botón submit
+    e.preventDefault();
     var values = getFormValues(this);
+    var formData = new FormData(this);
     
-    // Por si el nombre del proyecto tiene espacios!
-    var project_id = uncapitalizeFirstLetter(values["idProyecto"].replace(/ /g, '_'));
-
     // Enviar tambien la informacion de en que usuario estamos
     // para subir los ficheros a la carpeta que le corresponde
     
-    var formData = new FormData(this);
-    var user = getQueryVariable("user") || "guest";
+    var project_id = values["idProyecto"];
+    
+    var user = getQueryVariable("user");
     formData.append("user", user);
     
     var urlMesh = project_id + "/"; 
     var urlTexture = project_id + "/"; 
     
-    var listaExtra = [];
-    
     $(':file').each(function() {
         
+        console.log("file");
+        
         var input = $(this);   
-        var nameInput = input[0]["name"];
+        var nameInput = input[0]["id"];
         
         if (nameInput == "mesh") {
-            if (input[0]["value"] == ""){
-                alert("No subiste una mesh");
-                return true;
-            } else {
-                var auxList = input[0]["value"].split('\\');
-                var nameMesh = auxList[auxList.length - 1];
-                urlMesh = urlMesh + nameMesh;
-            }
-        } else if (nameInput == "texture"){
-            if (input[0]["value"] == ""){
-                alert("No subiste una textura");
-                return true;
-            } else {
-                var auxList = input[0]["value"].split('\\');
-                var nameTexture = auxList[auxList.length - 1];
-                urlTexture = urlTexture + nameTexture;
-            }
-        } else if (nameInput.includes("pdf")){
-            var urlPdf = "data/" + user + "/" + project_id + "/"; 
             var auxList = input[0]["value"].split('\\');
-            var namePdf = auxList[auxList.length - 1];
-            urlPdf = urlPdf + namePdf;
-            
-            var objectPdf = {"type": "pdf", "data": urlPdf};
-            
-            listaExtra.push(objectPdf);
-        } else if (nameInput.includes("image")) {
-            var urlImagen = "data/" + user + "/" + project_id + "/"; 
+            var nameMesh = auxList[auxList.length - 1];
+            urlMesh = urlMesh + nameMesh;
+        } else if (nameInput == "textura"){
             var auxList = input[0]["value"].split('\\');
-            var nameImagen = auxList[auxList.length - 1];
-            urlImagen = urlImagen + nameImagen;
-            
-            var objectImage = {"type": "image", "data": urlImagen};
-            
-            listaExtra.push(objectImage);
+            var nameTexture = auxList[auxList.length - 1];
+            urlTexture = urlTexture + nameTexture;
         }
-        
     });
-    
-    if (!project_id.length || !values["autor"].length || !values["lugar"].length || !values["latitud"].length || !values["longitud"].length) {
-        alert("Rellena todos los campos");
-        return true;
-    }
-    
-    for (var key in values) {
-        if (key.includes("text")) {
-            var objectText = {"type": "text", "data": values[key]};
-            if (values[key] == ""){
-                alert("Rellena todos los campos");
-                return;
-            }
-            listaExtra.push(objectText);
-        } else if (key.includes("youtube")) {
-            var objectYoutube = {"type":"youtube", "data": values[key]};
-            if (values[key] == ""){
-                alert("Rellena todos los campos");
-                return;
-            }
-            listaExtra.push(objectYoutube);
-        }
-    }
-    
-    /* 
-    *   Se permite crear unas rotaciones básicas en el primer uso de la mesh,
-    *   así que ahora están vacías. Lo relativo a un metro también se guardará
-    *   en el json del proyecto.
-    */
     
     var jsonFicheroPrincipal = {
         "id": project_id,
@@ -521,57 +464,55 @@ $("#formUploadProject").on('submit', function(e)
         "coordenadas": {"lat": values["latitud"], "lng": values["longitud"]},
         "render":{
             "id": project_id, 
-            "mesh":urlMesh, 
+            "mesh": urlMesh, 
             "texture":
                 [urlTexture],
               "rotaciones":[], 
             "metro": -1
         },
-        "extra": listaExtra,
+        "extra": [],
         "anotaciones": [],
         "medidas": [],
         "segmentos": [],
         "areas": []
     };
-        
-    var fileNameString = "data/" + user + "/" + project_id + '.json';
     
-    $.ajax({type: "POST",
-            dataType : 'json',
-            url: 'server/php/save_to_disc.php',
-            data:
-            {
-                data: JSON.stringify(jsonFicheroPrincipal), 
-                file: fileNameString
-            }
+    var fileNameString = "../../data/" + user + "/" + project_id + '.json';
+    
+    $.ajax({
+        type: "POST",
+        dataType : 'json',
+        url: 'server/php/save_to_disc.php',
+        data:
+        {
+            data: JSON.stringify(jsonFicheroPrincipal), 
+            file: fileNameString
+        }
     });
     
     $('#loadingModal').modal('show');   
     
     $.ajax( {
-        url: 'server/php/uploadFile.php',
+        url: 'upload.php',
         type: 'POST',
         data: formData,
         cache: false,
         contentType: false,
         processData: false, 
-        success: function(data) {
-            
+        success: function() {
             $('#loadingModal').modal('hide');               
             // volver a cargar el contenido
-            location = location;
+//            location = location;
+        },
+        error: function(err) {
+            console.error(err);
+            $('#loadingModal').modal('hide');               
         }
     } );
     
     // Resetear campos del form
     $(this).trigger("reset");
     
-});
-
-$('#cargarProyecto').click( function() 
-{
-//    console.log("cargando proyecto");
-    $('#GSCCModal').model('hide');
 });
 
 $(".save").click(function(){
@@ -590,50 +531,3 @@ $(".save").click(function(){
     }
     
 });
-
-/*
-*   Opening more links in Extra info when 
-*/
-
-$('#videoLink').click(function () 
-{
-    var src = 'https://www.youtube.com/embed/VI04yNch1hU;autoplay=1';
-    $('#introVideo iframe').attr('src', src);
-});
-
-$('#introVideo button.close').on('hidden.bs.modal', function ()
-{
-    $('#introVideo iframe').removeAttr('src');
-});
-
-$('#buttonYoutubeLink').click( function() 
-{
-    var stringYoutubeLink = '<div class="form-group"><label for="youtube' + (youtubeLinkCounter+1) + '" class="col-lg-2 control-label">Youtube Link</label><div class="col-lg-10"><input type="url" class="form-control" id="youtube' + (youtubeLinkCounter+1) + '" name="youtube' + (youtubeLinkCounter+1) + '"></div></div>';
-        
-    $('#fieldset').append(stringYoutubeLink);
-    youtubeLinkCounter++;
-})
-
-$('#buttonPDFLink').click( function() 
-{
-    var stringPDFLink = '<div class="form-group"><label for="pdfLink' + (pdfLinkCounter+1) + '" class="col-lg-2 control-label">PDF Link</label><div class="col-lg-10"><input type="file" class="form-control" id="pdfLink' + (pdfLinkCounter+1) + '" name="pdfLink' + (pdfLinkCounter+1) + '"></div></div>';
-        
-    $('#fieldset').append(stringPDFLink);
-    pdfLinkCounter++;
-})
-
-$('#buttonImageLink').click( function() 
-{
-    var stringImageLink = '<div class="form-group"><label for="image' + (imagenLinkCounter+1) + '" class="col-lg-2 control-label">Image Link</label><div class="col-lg-10"><input type="file" class="form-control" id="image' + (imagenLinkCounter+1) + '" name="image' + (imagenLinkCounter+1)+ '" ></div></div>';
-        
-    $('#fieldset').append(stringImageLink);
-    imagenLinkCounter++;
-})
-
-$('#buttonTextLink').click( function() 
-{
-    var stringTextLink = '<div class="form-group"><label for="text' + (textLinkCounter+1) + '" class="col-lg-2 control-label">Textos</label><div class="col-lg-10"><input type="text" class="form-control" id="text' + (textLinkCounter+1) + '" name="text' + (textLinkCounter+1) + '"></div></div>';
-        
-    $('#fieldset').append(stringTextLink);
-    textLinkCounter++;
-})

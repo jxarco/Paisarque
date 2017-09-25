@@ -1,6 +1,6 @@
 <?php
     $first_to_delete = $_REQUEST["file"];  
-    $folder_to_delete = $_REQUEST["folder"];  
+    $folder_to_delete = $_REQUEST["folder"]; 
     
     unlink($first_to_delete);
 

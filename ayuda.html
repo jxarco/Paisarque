@@ -10,7 +10,6 @@
     
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/custom.min.css" rel="stylesheet">
     <link href="css/header.css" rel="stylesheet">
     <link href="css/estilo.css" rel="stylesheet">
     <link rel="stylesheet" href="css/RWD.css"> <!-- responsive web design -->
@@ -18,6 +17,7 @@
     <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="css/accordion.css" rel="stylesheet">
 
     <script type="text/javascript">
         // Used to toggle the menu on small screens when clicking on the menu button
@@ -64,7 +64,7 @@
         
         <content class="row"><div class="col-lg-12" style="margin-top: 46px;">
             
-            <h3 class="w3-xxlarge"><b>TUTORIALES</b></h3>
+            <h3 class="w3-xlarge"><b>TUTORIALES</b></h3>
             <br>
             <ul  class="nav nav-tabs">
                 <li class="active"> <a href="#uno" data-toggle="tab" aria-expanded="true">Tomar las fotografías</a> </li>
@@ -73,164 +73,200 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane fade active in" id="uno">
-                  <p>La fotogrametría es un proceso de toma de fotos para la modelación de un objeto real al mundo 3D. A continuación podrás ver un tutorial en el que aprenderás a tomar unas buenas fotografías para, más adelante, reconstruir la escena en un archivo OBJ y poder visualizarlo en nuestra página.</p>
+                    
+                    <div class="contacto-panel">
+                        <p class="kawaii">La fotogrametría es un proceso de toma de fotos para la modelación de un objeto real al mundo 3D. A continuación podrás ver un tutorial en el que aprenderás a tomar unas buenas fotografías para, más adelante, reconstruir la escena en un archivo OBJ y poder visualizarlo en nuestra página.</p>
+                    </div>
+                
                     <br/>
-                    <div align="center" class="embed-responsive embed-responsive-16by9">
+                    <div align="center" class="embed-responsive embed-responsive-16by9" style="margin-bottom: 55px;">
                          <iframe src="https://www.youtube.com/embed/nAlfN-FGcYw" frameborder="0" allowfullscreen></iframe>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="dos">
-                    <p>¿Dices que tienes unas buenas fotografías para crear un objeto pero no sabes como reconstruirlo? Aquí tienes un tutorial sobre cómo modelar tu objeto a partir de las fotografías tomadas anteriormente. Asegúrate de haber tomado las medidas necesarias y haber realizado el proceso de fotogrametría correctamente.</p>
+                    <div class="contacto-panel">
+                        <p class="kawaii">¿Dices que tienes unas buenas fotografías para crear un objeto pero no sabes como reconstruirlo? Aquí tienes un tutorial sobre cómo modelar tu objeto a partir de las fotografías tomadas anteriormente. Asegúrate de haber tomado las medidas necesarias y haber realizado el proceso de fotogrametría correctamente.</p>
+                    </div>
                     <br/>
-                    <div align="center" class="embed-responsive embed-responsive-16by9">
+                    <div align="center" class="embed-responsive embed-responsive-16by9" style="margin-bottom: 55px;">
                          <iframe src="https://www.youtube.com/embed/6W3R5ItkREk" frameborder="0" allowfullscreen></iframe>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="tres">
-                    <h4>Información</h4>
+                    <div class="accordion">
+                        <dl>
+                            <dt>
+                                <a href="#accordion1" aria-expanded="false" aria-controls="accordion1" class="accordion-title accordionTitle js-accordionTrigger">3D</a>
+                            </dt>
+                              <dd class="accordion-content accordionItem is-collapsed" id="accordion1" aria-hidden="true">
+
+                                  <h6>Información</h6>
+                                  <div class="info-panel">
+                                    <p class="kawaii">Usa el cuadro de texto para añadir una breve descripción sobre el proyecto.</p>
+                                    <p class="kawaii">El mapa indica la posición real de tu modelo 3D.</p>
+                                    <p class="kawaii">Para modificarla, solo introduce los nuevos valores de las coordenadas y pulsa el <a class="src">botón.<img class="help" src="data/assets/coord-btn.jpg"></a></p>
+                                    <p class="kawaii">Guarda los cambios en Herramientas con el botón '<b>Guardar proyecto</b>'</p>
+                                </div>
+
+                                  <h6>Establecer rotaciones por defecto</h6>
+                                    <a class="btn tool-btn info">
+                                        <i class="material-icons">3d_rotation</i>
+                                    </a>
+                                    <div class="info-panel">
+                                        <p class="kawaii">Usa las barras que aparecerán en la parte superior izquierda para rotar el objeto 3D a tu gusto.</p>
+                                        <p class="kawaii">Puedes hacerlo guiándote por los ejes cardinales o por cualquier otra base.</p>
+                                        <p class="kawaii">Prueba a pulsar las teclas A, S, D de tu teclado mientras rotas el objeto. Cada tecla corresponde a un eje diferente.</p>
+                                        <p class="kawaii">Realizando esto, no tendrás que volver a rotar la cámara buscando la posición idónea de tu modelo.</p>
+                                        <p class="kawaii warning">Una vez hecho, !no olvides guardar! </p>    
+                                    </div>    
+
+                                    <br>
+
+                                    <h6>Guardar estado del proyecto</h6>
+                                    <a class="btn tool-btn info">
+                                        <i class="material-icons">save</i>
+                                    </a>
+                                    <div class="info-panel">
+                                        <p class="kawaii">Utiliza esta herramienta para guardar todos los cambios aplicados al proyecto.</p> 
+                                        <p class="kawaii warning">Si no se usa al acabar, tendrás que volver a realizar todos los cambios.</p><br>
+                                    </div>
+
+                                    <h6>Configurar la escala</h6>
+                                    <a class="btn tool-btn info">
+                                        <i class="material-icons">settings</i>
+                                    </a>
+                                    <div class="info-panel">
+                                        <p class="kawaii">En PaisArque no sabemos cómo de grande es tu modelo. Por ello necesitamos alguna información relacionada con la escala.</p>
+                                        <p class="kawaii">Selecciona en el modelo 3D una distancia mencionando cuánto mide en la realidad.</p>
+                                        <p class="kawaii">De esa manera sabremos la escala de tu modelo. Puede elegir cualquier distancia como base.</p>
+                                        <p class="kawaii">Una vez hecho, la distancia quedará configurada y las mediciones ya estarán disponibles.</p>
+                                        <p class="kawaii warning">Si no existe esta configuración, cualquier medición estará deshabilitada.</p><br>
+                                    </div>
+
+                                    <h6>Medir distancia</h6>
+                                    <a class="btn tool-btn info">
+                                        <i class="material-icons">space_bar</i>
+                                    </a>
+                                    <div class="info-panel">
+                                        <p class="kawaii">Este es el medidor por defecto de la aplicación. Dispone de dos botones, añadir punto y finalizar medición.</p>
+                                        <p class="kawaii">Haz click en añadir punto cuando la cámara esté en su sitio.</p>
+                                        <p class="kawaii">Aplica la regla anterior las veces que sea necesaria para crear, ya sea una distancia entre dos puntos o una medición por segmentos.</p>
+                                        <p class="kawaii">Al finalizar, la medición quedará guardada en las tablas.</p>
+                                        <p class="kawaii warning">Asegúrate de finalizar la medición con el botón correspondiente y de guardar el proyecto si quieres que las tablas guarden su estado.</p><br>
+                                    </div>
+
+
+                                    <h6>Medir area</h6>
+                                    <a class="btn tool-btn info">
+                                        <i class="material-icons">crop_din</i>
+                                    </a>
+                                    <a class="btn tool-btn info">
+                                        <i class="material-icons">crop_portrait</i>
+                                    </a>
+                                    <div class="info-panel">
+                                        <p class="kawaii">Las opciones disponibles para medir un area, son el area de planta y de alzado. Es decir, desde arriba y de frente.</p>
+                                        <p class="kawaii">El primer punto de cada area determinará a posición del plano donde se colocarán los puntos.</p>
+                                        <p class="kawaii">Con el panel por defecto, continua añadiendo puntos hasta que el area se complete. Pulsa finalizar cuando hayas acabado.</p>
+                                        <p class="kawaii warning">Recuerda cerrar el area siempre con el punto inicial.</p>
+                                        <br>
+                                    </div>
+
+
+                                    <h6>Mostrar tabla de distancias origen-destino</h6>
+                                    <a class="btn tool-btn info">
+                                        <i class="material-icons">filter_1</i>
+                                    </a>
+                                    <div class="info-panel">
+                                        <p class="kawaii">Mostrar las tablas que contienen todas las mediciones de dos puntos. Muestran las coordenadas de los puntos y la distancia entre ellos.</p>
+                                        <p class="kawaii">Vuelve a clicar para esconder.</p><br>
+                                    </div>
+
+                                    <h6>Mostrar tabla de distancias por segmentos</h6>
+                                    <a class="btn tool-btn info">
+                                        <i class="material-icons">filter_2</i>
+                                    </a>
+                                    <div class="info-panel">
+                                        <p class="kawaii">Mostrar las tablas que contienen todas las mediciones por segmentos. Muestran el número de segmentos de la medición y la suma de la longitud de todos ellos.</p>
+                                        <p class="kawaii">Vuelve a clicar para esconder.</p><br>
+                                    </div>
+
+                                    <h6>Mostrar áreas calculadas</h6>
+                                    <a class="btn tool-btn info">
+                                        <i class="material-icons">filter_3</i>
+                                    </a>
+                                    <div class="info-panel">
+                                        <p class="kawaii">Mostrar las tablas que contienen todas las areas calculadas. Muestran el tipo de area calculada y el area en m2.</p>
+                                        <p class="kawaii">Vuelve a clicar para esconder.</p><br>
+                                    </div>
+
+                                    <h4>Anotaciones</h4>
+
+                                    <h6>Crear</h6>
+                                    <a class="btn tool-btn info">
+                                        <i class="material-icons">create</i>
+                                    </a>
+                                    <div class="info-panel">
+                                        <p class="kawaii">Pulsa este botón para activar el modo edición. Lo primero es seleccionar un punto.</p>
+                                        <p class="kawaii">Lo segundo, darle una descripción. ¡No hay más!</p>
+                                    </div>
+                                    <a class="btn tool-btn info">
+                                        <i class="material-icons">remove_circle</i>
+                                    </a>
+                                    <div class="info-panel">
+                                        <p class="kawaii">Para desactivar el modo edición, solo pulsa este botón.</p>
+                                        <br>
+                                    </div>
+
+                                    <h6>Visualizar</h6>
+                                    <a class="btn tool-btn info">
+                                        <i class="material-icons">visibility_off</i>
+                                    </a>
+                                    <div class="info-panel">
+                                        <p class="kawaii">Todas las anotaciones creadas aparecerán en la tabla que podrás ver debajo de los botones.</p>
+                                        <p class="kawaii">Para ver cada anotación en el modelo 3D, tócala en la tabla.</p>
+                                        <p class="kawaii">La cámara cambiará para representar la anotación que se haya tocado y  esta parpadeará para destacarse entre el resto.</p>
+                                        <br>
+                                    </div>
+
+                                    <h6>Eliminar</h6>
+                                    <a class="btn tool-btn info">
+                                        <i class="material-icons">delete</i>
+                                    </a>
+                                    <div class="info-panel" style="margin-bottom: 55px;">
+                                        <p class="kawaii">Una sola anotación puede borrarse arrastrándola a la papelera desde la tabla.</p>
+                                        <p class="kawaii">En caso de querer borrárlas todas, pulsa el botón que verás al lado de la papelera.</p>
+                                        <p class="kawaii warning">Guarda el proyecto si quieres conservar los cambios.</p>
+                                        <br>
+                                    </div>
+                              </dd>
+                              <dt>
+                                <a href="#accordion2" aria-expanded="false" aria-controls="accordion2" class="accordion-title accordionTitle js-accordionTrigger">Aportaciones</a>
+                              </dt>
+                              <dd class="accordion-content accordionItem is-collapsed" id="accordion2" aria-hidden="true">
+                                    En construcción
+                              </dd>
+
+                                <dt>
+                                <a href="#accordion2" aria-expanded="false" aria-controls="accordion2" class="accordion-title accordionTitle js-accordionTrigger">Exportar</a>
+                              </dt>
+                              <dd class="accordion-content accordionItem is-collapsed" id="accordion2" aria-hidden="true">
+                                  En construcción
+                              </dd>
+
+
+                        </dl>
                     
-                    <div class="info-panel">
-                        <p class="kawaii">Usa el cuadro de texto para añadir una breve descripción sobre el proyecto.</p>
-                        <p class="kawaii">El mapa indica la posición real de tu modelo 3D.</p>
-                        <p class="kawaii">Para modificarla, solo introduce los nuevos valores de las coordenadas y pulsa el <a class="src">botón.<img class="help" src="data/assets/coord-btn.jpg"></a></p>
-                        <p class="kawaii">Guarda los cambios en Herramientas con el botón '<b>Guardar proyecto</b>'</p>
-                    </div>
+            </div>            
+<!--
+                    
                     
                     <br>
                     
                     <h4>Herramientas</h4>
 
-                    <h6>Establecer rotaciones por defecto</h6>
-                    <a class="btn tool-btn info">
-                        <i class="material-icons">3d_rotation</i>
-                    </a>
-                    <div class="info-panel">
-                        <p class="kawaii">Usa las barras que aparecerán en la parte superior izquierda para rotar el objeto 3D a tu gusto.</p>
-                        <p class="kawaii">Puedes hacerlo guiándote por los ejes cardinales o por cualquier otra base.</p>
-                        <p class="kawaii">Prueba a pulsar las teclas A, S, D de tu teclado mientras rotas el objeto. Cada tecla corresponde a un eje diferente.</p>
-                        <p class="kawaii">Realizando esto, no tendrás que volver a rotar la cámara buscando la posición idónea de tu modelo.</p>
-                        <p class="kawaii warning">Una vez hecho, !no olvides guardar! </p>    
-                    </div>    
                     
-                    <br>
-                    
-                    <h6>Guardar estado del proyecto</h6>
-                    <a class="btn tool-btn info">
-                        <i class="material-icons">save</i>
-                    </a>
-                    <div class="info-panel">
-                        <p class="kawaii">Utiliza esta herramienta para guardar todos los cambios aplicados al proyecto.</p> 
-                        <p class="kawaii warning">Si no se usa al acabar, tendrás que volver a realizar todos los cambios.</p><br>
-                    </div>
-                    
-                    <h6>Configurar la escala</h6>
-                    <a class="btn tool-btn info">
-                        <i class="material-icons">settings</i>
-                    </a>
-                    <div class="info-panel">
-                        <p class="kawaii">En PaisArque no sabemos cómo de grande es tu modelo. Por ello necesitamos alguna información relacionada con la escala.</p>
-                        <p class="kawaii">Selecciona en el modelo 3D una distancia mencionando cuánto mide en la realidad.</p>
-                        <p class="kawaii">De esa manera sabremos la escala de tu modelo. Puede elegir cualquier distancia como base.</p>
-                        <p class="kawaii">Una vez hecho, la distancia quedará configurada y las mediciones ya estarán disponibles.</p>
-                        <p class="kawaii warning">Si no existe esta configuración, cualquier medición estará deshabilitada.</p><br>
-                    </div>
-                    
-                    <h6>Medir distancia</h6>
-                    <a class="btn tool-btn info">
-                        <i class="material-icons">space_bar</i>
-                    </a>
-                    <div class="info-panel">
-                        <p class="kawaii">Este es el medidor por defecto de la aplicación. Dispone de dos botones, añadir punto y finalizar medición.</p>
-                        <p class="kawaii">Haz click en añadir punto cuando la cámara esté en su sitio.</p>
-                        <p class="kawaii">Aplica la regla anterior las veces que sea necesaria para crear, ya sea una distancia entre dos puntos o una medición por segmentos.</p>
-                        <p class="kawaii">Al finalizar, la medición quedará guardada en las tablas.</p>
-                        <p class="kawaii warning">Asegúrate de finalizar la medición con el botón correspondiente y de guardar el proyecto si quieres que las tablas guarden su estado.</p><br>
-                    </div>
-
-                    
-                    <h6>Medir area</h6>
-                    <a class="btn tool-btn info">
-                        <i class="material-icons">crop_din</i>
-                    </a>
-                    <a class="btn tool-btn info">
-                        <i class="material-icons">crop_portrait</i>
-                    </a>
-                    <div class="info-panel">
-                        <p class="kawaii">Las opciones disponibles para medir un area, son el area de planta y de alzado. Es decir, desde arriba y de frente.</p>
-                        <p class="kawaii">El primer punto de cada area determinará a posición del plano donde se colocarán los puntos.</p>
-                        <p class="kawaii">Con el panel por defecto, continua añadiendo puntos hasta que el area se complete. Pulsa finalizar cuando hayas acabado.</p>
-                        <p class="kawaii warning">Recuerda cerrar el area siempre con el punto inicial.</p>
-                        <br>
-                    </div>
-
-                    
-                    <h6>Mostrar tabla de distancias origen-destino</h6>
-                    <a class="btn tool-btn info">
-                        <i class="material-icons">filter_1</i>
-                    </a>
-                    <div class="info-panel">
-                        <p class="kawaii">Mostrar las tablas que contienen todas las mediciones de dos puntos. Muestran las coordenadas de los puntos y la distancia entre ellos.</p>
-                        <p class="kawaii">Vuelve a clicar para esconder.</p><br>
-                    </div>
-                    
-                    <h6>Mostrar tabla de distancias por segmentos</h6>
-                    <a class="btn tool-btn info">
-                        <i class="material-icons">filter_2</i>
-                    </a>
-                    <div class="info-panel">
-                        <p class="kawaii">Mostrar las tablas que contienen todas las mediciones por segmentos. Muestran el número de segmentos de la medición y la suma de la longitud de todos ellos.</p>
-                        <p class="kawaii">Vuelve a clicar para esconder.</p><br>
-                    </div>
-                    
-                    <h6>Mostrar áreas calculadas</h6>
-                    <a class="btn tool-btn info">
-                        <i class="material-icons">filter_3</i>
-                    </a>
-                    <div class="info-panel">
-                        <p class="kawaii">Mostrar las tablas que contienen todas las areas calculadas. Muestran el tipo de area calculada y el area en m2.</p>
-                        <p class="kawaii">Vuelve a clicar para esconder.</p><br>
-                    </div>
-                    
-                    <h4>Anotaciones</h4>
-                    
-                    <h6>Crear</h6>
-                    <a class="btn tool-btn info">
-                        <i class="material-icons">create</i>
-                    </a>
-                    <div class="info-panel">
-                        <p class="kawaii">Pulsa este botón para activar el modo edición. Lo primero es seleccionar un punto.</p>
-                        <p class="kawaii">Lo segundo, darle una descripción. ¡No hay más!</p>
-                    </div>
-                    <a class="btn tool-btn info">
-                        <i class="material-icons">remove_circle</i>
-                    </a>
-                    <div class="info-panel">
-                        <p class="kawaii">Para desactivar el modo edición, solo pulsa este botón.</p>
-                        <br>
-                    </div>
-                    
-                    <h6>Visualizar</h6>
-                    <a class="btn tool-btn info">
-                        <i class="material-icons">visibility_off</i>
-                    </a>
-                    <div class="info-panel">
-                        <p class="kawaii">Todas las anotaciones creadas aparecerán en la tabla que podrás ver debajo de los botones.</p>
-                        <p class="kawaii">Para ver cada anotación en el modelo 3D, tócala en la tabla.</p>
-                        <p class="kawaii">La cámara cambiará para representar la anotación que se haya tocado y  esta parpadeará para destacarse entre el resto.</p>
-                        <br>
-                    </div>
-                    
-                    <h6>Eliminar</h6>
-                    <a class="btn tool-btn info">
-                        <i class="material-icons">delete</i>
-                    </a>
-                    <div class="info-panel">
-                        <p class="kawaii">Una sola anotación puede borrarse arrastrándola a la papelera desde la tabla.</p>
-                        <p class="kawaii">En caso de querer borrárlas todas, pulsa el botón que verás al lado de la papelera.</p>
-                        <p class="kawaii warning">Guarda el proyecto si quieres conservar los cambios.</p>
-                        <br>
-                    </div>
                   
+-->
                 </div>
             </div>
 
@@ -250,6 +286,7 @@
         <script type="text/javascript" src="js/extra/rangeslider.min.js"></script>
         <script type="text/javascript" src="js/extra/litegl.js"></script>
         <script type="text/javascript" src="js/extra/rendeer.js"></script>
+        <script type="text/javascript" src="js/extra/accordion.js"></script>
         <script src="litefile/litefileserver.js"></script>
         <script src="litefile/js/codeLite.js"></script>
         <script src="js/utils.js"></script>

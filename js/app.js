@@ -5,7 +5,6 @@ var context         = null;
 var scene           = null;
 var renderer        = null;
 var camera          = null;
-var tmp_camera      = null;
 var _dt             = 0.0;
 
 var showing = {
@@ -17,6 +16,7 @@ var showing = {
 var APP = {
     // variables of APP
     rotation: false,
+    anot_visible: true,
     value: 0,
     orbit: false,
     result: vec3.create(),
@@ -141,7 +141,7 @@ var APP = {
         obj.name = "mesh 3d";
         obj.position = [0,0,0];
         obj.scale([5,5,5]);
-        obj.mesh = meshURL;
+        obj.mesh = meshURL; // assign first the obj file
         
         // at this time using this:*************
         // sync request
@@ -179,14 +179,11 @@ var APP = {
         var rotaciones = project.getRotations();
 
         if(!rotaciones.length)
-            console.log("No default rotations");
+            console.error("No default rotations");
         else
         {
-            obj._rotation[0] = rotaciones[0].r0;
-            obj._rotation[1] = rotaciones[1].r1;
-            obj._rotation[2] = rotaciones[2].r2;
-            obj._rotation[3] = rotaciones[3].r3;
-
+            for(var r in rotaciones)
+                obj._rotation[r] = rotaciones[r];
             obj.updateMatrices();
         }
 
@@ -323,8 +320,8 @@ var APP = {
             if(e.keyCode === KEY_ESC)
                 APP.disableAllFeatures();
             
-           if(e.keyCode === KEY_D)
-                download(renderer.meshes[obj.mesh], "wbin");
+//           if(e.keyCode === KEY_D)
+//                download(renderer.meshes[obj.mesh], "wbin");
             
             if(e.keyCode === KEY_S)
                 renderer.loadShaders("data/shaders.glsl");
@@ -675,7 +672,7 @@ var APP = {
         $("#add-dialog").click();
     },
 
-    calcArea: function (vista)
+    calcArea: function (area_type)
     {
         if(project._meter == -1){
             putCanvasMessage("Primero configura la escala.", 3000, {type: "error"});
@@ -692,7 +689,7 @@ var APP = {
         putCanvasMessage("El último punto debe coincidir con el primero.", 5000, {type: "alert"});
 
         window.tmp = [];
-        var index = vista === PLANTA ? 1 : 2;
+        var index = area_type === PLANTA ? 1 : 2;
 
         $("#add-dialog").click(function(){ 
 
@@ -703,7 +700,7 @@ var APP = {
             {
                 var result = vec3.create();
                 // normal depending on the type of area
-                var normal = vista === PLANTA ? vec3.fromValues(0, 1, 0) : vec3.fromValues(1, 0, 0);
+                var normal = area_type === PLANTA ? vec3.fromValues(0, 1, 0) : vec3.fromValues(1, 0, 0);
                 var ray = camera.getRay( e.canvasx, e.canvasy );
                 var node = null;
 
@@ -744,7 +741,7 @@ var APP = {
                         plane.description = "config";
                         plane.flags.two_sided = true;
                         
-                        if(vista === ALZADO)
+                        if(area_type === ALZADO)
                             plane.rotate(90 * DEG2RAD, RD.FRONT);
                         scene.root.addChild(plane);
                         
@@ -761,7 +758,7 @@ var APP = {
                         grid.primitive =gl.LINES;
                         grid.scale([50, 50, 50]);    
                         
-                        if(vista === ALZADO)
+                        if(area_type === ALZADO)
                             grid.rotate(90 * DEG2RAD, RD.FRONT);
                         scene.root.addChild(grid);
 
@@ -976,12 +973,14 @@ var APP = {
         APP.value = slider.value;
     },
 
-    disableAllFeatures: function ()
+    disableAllFeatures: function (options)
     {
+        options = options || {};
         context.onmousedown = function(e) {};
         
         APP.fadeAllTables(showing);
         scene.root.getNodeByName("grid").flags.visible = false;
+        APP.rotation = false;
         revealDOMElements([$("#cardinal-axis"), $('.sliders'), $(".sub-btns")], false);
         APP.destroyElements(scene.root.children, "config");
         APP.destroyElements(scene.root.children, "config-tmp");
@@ -989,12 +988,13 @@ var APP = {
         $("#measure-opt-btn").find("i").html("add_circle_outline");
         $(".draggable").remove();
         $("#cont-msg").empty();
-        APP.rotation = false;
 
         //on-point class
         $(".on-point").removeClass("on-point");
         
-        putCanvasMessage("Hecho!", 1000);
+        var msg = options.msg || "Hecho";
+        var ms = options.ms || 1250;
+        putCanvasMessage(msg, ms);
     },
     
     fadeAllTables: function (o)

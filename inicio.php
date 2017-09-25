@@ -10,7 +10,6 @@
         <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/custom.min.css" rel="stylesheet">
         <link href="css/estilo.css" rel="stylesheet">
         <link href="css/header.css" rel="stylesheet">
         <link rel="stylesheet" href="css/RWD.css"> <!-- responsive web design -->
@@ -132,31 +131,31 @@
                             <div class="form-group">
                                 <label for="idProyecto" class="col-lg-2 control-label">Nombre</label>
                                 <div class="col-lg-10">
-                                    <input type="text" class="form-control" id="idProyecto" placeholder="Nombre del proyecto" name="idProyecto">
+                                    <input required type="text" class="form-control" id="idProyecto" placeholder="Nombre del proyecto" name="idProyecto" style="text-transform:lowercase" >
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="autor" class="col-lg-2 control-label">Autor</label>
                                 <div class="col-lg-10">
-                                    <input type="text" class="form-control" id="autor" placeholder="Autor" name="autor">
+                                    <input required type="text" class="form-control" id="autor" placeholder="Autor" name="autor">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="lugar" class="col-lg-2 control-label">Lugar</label>
                                 <div class="col-lg-10">
-                                    <input type="text" class="form-control" id="lugar" placeholder="Lugar" name="lugar">
+                                    <input required type="text" class="form-control" id="lugar" placeholder="Lugar" name="lugar">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="latitud" class="col-lg-2 control-label">Latitud</label>
                                 <div class="col-lg-10">
-                                    <input  type="number" step="any"  class="form-control" id="latitud" name="latitud" placeholder="Latitud">
+                                    <input required type="number" step="any"  class="form-control" id="latitud" name="latitud" placeholder="Latitud">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="longitud" class="col-lg-2 control-label">Longitud</label>
                                 <div class="col-lg-10">
-                                    <input  type="number" step="any" class="form-control" id="longitud" name="longitud" 
+                                    <input required type="number" step="any" class="form-control" id="longitud" name="longitud" 
                                     placeholder="Longitud">
                                 </div>
                             </div>
@@ -169,34 +168,9 @@
                             <div class="form-group">
                                 <label for="textura" class="col-lg-2 control-label">Textura</label>
                                 <div class="col-lg-10">
-                                    <input type="file" class="form-control" id="textura" name="texture" accept="image/*">
+                                    <input type="file" class="form-control" id="textura" name="textura">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="col-lg-10 text-center"> 
-                                    <button id="buttonYoutubeLink" type="button" class="btn btn-default addExtraData">
-                                        <i class="material-icons">add_circle_outline</i> <p>Youtube Link</p> </button>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-lg-10 text-center"> 
-                                    <button id="buttonPDFLink" type="button" class="btn btn-default addExtraData">
-                                        <i class="material-icons">add_circle_outline</i> <p>PDF</p> </button>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-lg-10 text-center"> 
-                                    <button id="buttonImageLink" type="button" class="btn btn-default addExtraData">
-                                        <i class="material-icons">add_circle_outline</i> <p>Imagen</p> </button>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-lg-10 text-center"> 
-                                    <button id="buttonTextLink" type="button" class="btn btn-default addExtraData">
-                                        <i class="material-icons">add_circle_outline</i> <p>Texto</p> </button>
-                                </div>
-                            </div>
-                            
                         </fieldset>
                         <div class="modal-footer">
                             <div class="form-group">
@@ -222,11 +196,11 @@
         
         
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script src="js/extra/bootstrap.min.js"></script>
         <script src="js/extra/custom.js"></script>
         <script type="text/javascript" src="js/extra/gl-matrix-min.js"></script>
-        <script type="text/javascript" src="https://threejs.org/build/three.min.js"></script>
         <script type="text/javascript" src="js/extra/litegl.js"></script>
         <script type="text/javascript" src="js/extra/rendeer.js"></script>
         <script src="litefile/litefileserver.js"></script>
@@ -237,6 +211,16 @@
         </script>
         <script src="js/tools.js"></script>
         <script src="js/events.js"></script>
+        <script type="text/javascript">
+        
+        $(function() {
+            $('#idProyecto').on('keypress', function(e) {
+                if (e.which == 32)
+                    return false;
+            });
+        });
+        
+        </script>
     </body>
     
 </html>

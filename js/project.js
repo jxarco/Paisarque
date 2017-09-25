@@ -3,12 +3,6 @@
 * @class Project
 */
 
-var last_project_id         = 0;
-var last_extra_id           = 0;
-var last_measure_id         = 0;
-var last_seg_measure_id     = 100;
-var last_area_measure_id    = 1000;
-
 function Project( data, user, flags )
 {
 	if(this.constructor !== Project)
@@ -20,11 +14,21 @@ function Project( data, user, flags )
 
 Project.prototype._ctor = function( data )
 {
+    
+    this._last_project_id = 0;
+    this._last_measure_id = 0;
+    this._last_seg_measure_id = 100;
+    this._last_area_measure_id = 1000;
+    
     this._anotations    = [];
     this._textures      = [];
     this._measures      = [];
     this._segments      = [];
     this._areas         = [];
+    
+    this._auto_save = false;
+//    this._max_extra_size = 20;
+//    this._max_measures_size = 20;
     
 	this.FROMJSON( data );
 }
@@ -32,8 +36,8 @@ Project.prototype._ctor = function( data )
 /*
 *   @method pushExtra
 *   Insert extra information to the _extra list.
-*   @param type: data type (pdf, image, etc)
-*   @param data: path to data (or link)
+*   @param type {string} data type (pdf, image, etc)
+*   @param data {string} path to data (or link)
 */
 Project.prototype.pushExtra = function( name, type, data )
 {
@@ -42,13 +46,16 @@ Project.prototype.pushExtra = function( name, type, data )
         data: data,
         name: name
     });
+    
+    if(this._auto_save)
+        this.save();
 }
 
 /*
 *   @method deleteExtra
 *   Delete one single extra information of the _extra list.
-*   @param type: data type (pdf, image, etc)
-*   @param data: path to data (or link)
+*   @param type {string} data type (pdf, image, etc)
+*   @param data {string} path to data (or link)
 */
 Project.prototype.deleteExtra = function( selector, type )
 {
@@ -73,12 +80,15 @@ Project.prototype.deleteExtra = function( selector, type )
     if (index > -1) {
         this._extra.splice(index, 1);
     }
+    
+    if(this._auto_save)
+        this.save();
 }
 
 /*
 *   @method rename
 *   Renames project (ID!!)
-*   @param name: new name
+*   @param name {string} new name
 */
 Project.prototype.rename = function( name )
 {
@@ -86,6 +96,9 @@ Project.prototype.rename = function( name )
     new_name = new_name.charAt(0).toLowerCase() + string.slice(1);
     
 	this._id = new_name;
+    
+    if(this._auto_save)
+        this.save();
 }
 
 /*
@@ -95,9 +108,9 @@ Project.prototype.rename = function( name )
 
 /*
 *   @method insertAnotation
-*   @param camera: contains position, target and up
-*   @param position: x y z of the anotation
-*   @param status: text of the anotation
+*   @param camera {vec3} contains position, target and up
+*   @param position {vec3} x y z of the anotation
+*   @param status {string} text of the anotation
 */
 Project.prototype.insertAnotation = function( id, camera, position, status )
 {
@@ -124,6 +137,9 @@ Project.prototype.insertAnotation = function( id, camera, position, status )
     +"</tr>";
     
     $("#anotacion_tabla").append(totalString);
+    
+    if(this._auto_save)
+        this.save();
 }
 
 Project.prototype.getAnnotations = function()
@@ -134,13 +150,10 @@ Project.prototype.getAnnotations = function()
 /*
 *   @method deleteAnotation
 *   Deletes a single annotation
-*   @param id: id of the annotation to delete
+*   @param id {integer} id of the annotation to delete
 */
 Project.prototype.deleteAnotation = function( id )
 {
-//    console.log("to delete: " + id);
-//    console.log(this._anotations);
-    
     //anotations list
     var index = null;
 	for(var i = 0; i < this._anotations.length; ++i)
@@ -149,13 +162,10 @@ Project.prototype.deleteAnotation = function( id )
             break;
         }
                 
-         
     if(index === null)
         throw("no annotation to delete");
     
     //table
-//    console.log($("#" + (index)));
-//    console.log($("#" + (index+1)));
     $("#" + (index+1)).remove();
     
     // reorder table
@@ -190,12 +200,15 @@ Project.prototype.deleteAnotation = function( id )
         obj.children[i].destroy();
         return;
     }
+    
+    if(this._auto_save)
+        this.save();
 }
 
 /*
 *   @method deleteAllAnotations
 *   Deletes all annotations
-*   @param obj: current global mesh of the project
+*   @param obj {sceneNode} current global mesh of the project
 */
 
 Project.prototype.deleteAllAnotations = function( obj )
@@ -206,6 +219,9 @@ Project.prototype.deleteAllAnotations = function( obj )
     $('#anotacion_tabla').empty();
     // scene
     obj.children.splice(0, obj.children.length);
+    
+    if(this._auto_save)
+        this.save();
 }
 
 /*
@@ -221,21 +237,15 @@ Project.prototype.getRotations = function()
 /*
 *   @method setRotations
 *   Sets the current rotations to the project
-*   @param rotation: array list of the object rotations
+*   @param rotation {vec4} array list of the object rotations
 */
 
 Project.prototype.setRotations = function( rotation )
 {
-    var r0 = rotation[0];
-    var r1 = rotation[1];
-    var r2 = rotation[2];
-    var r3 = rotation[3];
+    this._rotations = rotation;
     
-    this._rotations = [{"r0": r0},
-        {"r1": r1},
-        {"r2": r2},
-        {"r3": r3}
-    ];
+    if(this._auto_save)
+        this.save();
 }
 
 /*
@@ -310,13 +320,15 @@ Project.prototype.deleteDistance = function( id, type )
     else{
         console.error("bad index");
     }
+    
+    if(this._auto_save)
+        this.save();
 }
 
 /*  
 *   @method setDistances
 *   Insertar solo las medidas en las tablas
 *   cuando se actualiza el metro
-*   @param data
 */
 Project.prototype.restoreDistances = function( )
 {
@@ -360,6 +372,9 @@ Project.prototype.restoreDistances = function( )
         }
         this.insertArea( points, msr.area, msr.index, msr.name, {display: false, push: false, id: msr.id});    
     }
+    
+    if(this._auto_save)
+        this.save();
 }
 
 Project.prototype.update_meter = function(relation)
@@ -390,14 +405,15 @@ Project.prototype.update_meter = function(relation)
     
     this._meter = relation;
     this.restoreDistances();
-    this.save();
+    if(this._auto_save)
+        this.save();
 }
 
 /*
 *   @method insertMeasure
 *   Push a new measure to the list project
-*   @param camera: get camera properties
-*   @param points: points within distance is calculated
+*   @param camera {vec3} get camera properties
+*   @param points {array} points within distance is calculated
 *   @param options {object} push / display flags
 */
 
@@ -410,7 +426,7 @@ Project.prototype.insertMeasure = function( camera, points, distance, options )
     
     var table = $('#distances-table');
     var bodyTable = table.find('tbody');
-    var id = options.id >= 0 ? options.id : last_measure_id++;
+    var id = options.id >= 0 ? options.id : this._last_measure_id++;
     
     var row = "<tr id=" + id + " a class='pointer'>" + 
     "<td onclick='show($(this))' data-type='m'>" + "<i class='material-icons show'>fiber_manual_record</i></td>" +
@@ -432,13 +448,16 @@ Project.prototype.insertMeasure = function( camera, points, distance, options )
             "points": points,
             "distance": distance
         });
+    
+    if(this._auto_save)
+        this.save();
 }
 
 /*
 *   @method insertSegmentMeasure
 *   Push a new segment measure to the list project
-*   @param points: list of vertices
-*   @param display: show or not the table after inserting measure
+*   @param points {array} list of vertices
+*   @param display {bool} show or not the table after inserting measure
 */
 
 Project.prototype.insertSegmentMeasure = function( points, distance, options )
@@ -450,7 +469,7 @@ Project.prototype.insertSegmentMeasure = function( points, distance, options )
     
     var table = $('#segment-distances-table');
     var bodyTable = table.find('tbody');
-     var id = options.id ? options.id : last_seg_measure_id++;
+     var id = options.id ? options.id : this._last_seg_measure_id++;
     
     var row = "<tr id=" + id + " a class='pointer'>" + 
     "<td onclick='show($(this))' data-type='s'>" + "<i class='material-icons show'>fiber_manual_record</i></td>" +
@@ -470,13 +489,16 @@ Project.prototype.insertSegmentMeasure = function( points, distance, options )
             "points": points,
             "distance": distance
         } );
+    
+    if(this._auto_save)
+        this.save();
 }
 
 /*
 *   @method insertArea
 *   Push a new area measure to the list project
-*   @param points: list of vertices
-*   @param display: show or not the table after inserting measure
+*   @param points {array} list of vertices
+*   @param display {bool} show or not the table after inserting measure
 */
 
 Project.prototype.insertArea = function( points, area, index, name, options )
@@ -488,7 +510,7 @@ Project.prototype.insertArea = function( points, area, index, name, options )
     
     var table = $('#areas-table');
     var bodyTable = table.find('tbody');
-    var id = options.id ? options.id : last_area_measure_id++;
+    var id = options.id ? options.id : this._last_area_measure_id++;
     var style = index === 1 ? "Planta" : "Alzado";
     
     var aux = "area-name" + id;
@@ -514,6 +536,9 @@ Project.prototype.insertArea = function( points, area, index, name, options )
             "index": index,
             "area": area
         } );
+    
+    if(this._auto_save)
+        this.save();
 }
 
 /*
@@ -530,7 +555,7 @@ Project.prototype.FROMJSON = function( data )
 {
     data = data || {};
     
-    this._uid = last_project_id++;
+    this._uid = this._last_project_id++;
     this._json = data;
     
 	// data
@@ -609,8 +634,8 @@ Project.prototype.FROMJSON = function( data )
 *   Guardar todos los datos a disco
 *   Se trata de sobreescribir (o no) el json original,
 *   con los atributos actuales del proyecto
-*   @param overwrite
-*   @param extra
+*   @param overwrite {bool}
+*   @param extra {string}
 */
 Project.prototype.save = function( overwrite, extra )
 {
@@ -622,8 +647,7 @@ Project.prototype.save = function( overwrite, extra )
     if(!overwrite)
         project += extra;
     
-    var path = "data/" + project + '.json';
-    
+    var path = "../../data/" + project + '.json';
     console.log(path);
     
     var json = {
@@ -653,7 +677,6 @@ Project.prototype.save = function( overwrite, extra )
                 console.log("SAVED!!");
             },
             error: function(error){
-//                console.log("error");
                 console.log(error);
             }
     });
@@ -682,7 +705,7 @@ Project.prototype.check = function()
 /*  
 *   @method fill
 *   Crea un proyecto a partir de un string con los datos
-*   @param data
+*   @param data {json}
 */
 Project.prototype.fill = function( data )
 {
@@ -709,12 +732,9 @@ Project.prototype.fill = function( data )
     this._areas = copy._areas;
 }
 
+/*
 Project.prototype.delete = function()
 {
-    /*  
-    *   Vaciar proyecto para cuando se hace logout o 
-    *   se cambia de proyecto
-    */
-    
-    
+
 }
+*/

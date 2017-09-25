@@ -9,7 +9,6 @@
     <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
     <!-- Bootstrap -->
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link href="css/custom.min.css" rel="stylesheet">
     <link href="css/estilo.css" rel="stylesheet">
     <link href="css/header.css" rel="stylesheet">
     <link href="css/tables.css" rel="stylesheet">
@@ -64,17 +63,6 @@
             
             <h3 class="w3-xlarge"><b>EXPORTAR</b></h3>
             <br>            
-            
-        <!--Aqui tendrian que haber diferentes opciones de export (jpg/pdf):
-        <br>
-        - Modelo 3D con sin info/medidas/anotaciones
-        <br>
-        - Snapshots de modelo 3D
-        <br>
-        - Opciones de modificar la imagen final (cambiar color de fondo, añadir escala)
-        <br>
-        - Posibilidad de exportar anotaciones en formato word/medidas, etc.-->
-            
             
             <div class="wrap">
                 <div class="css-table">
@@ -149,9 +137,6 @@
         </content>
         
         <footer>
-            <p>PaisArque (UPF)</p>
-            <p>CaSEs</p>
-            <p>GTI</p>
             
         </footer><!--   footer end-->
             

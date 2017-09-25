@@ -22,10 +22,11 @@ content{
 }
 
 footer{
+    position: fixed;
     bottom: 0;
     margin-bottom: 0px;
     width: 100%;
-    height: 100px;
+    height: 25px;
     background: linear-gradient(
         to bottom, 
         rgba(52, 154, 145,1)    0%,
@@ -34,9 +35,6 @@ footer{
         rgba(79, 179, 169,1)    75%, 
         rgba(84, 184, 174,1)   100%
     );
-    padding: 12px;
-    font-size: 18px;
-    text-align: center;
 }
 
 label, p{
