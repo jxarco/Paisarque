@@ -1,5 +1,18 @@
 var extraCounter = null;
 
+$("#tools-tab .btn.tool-btn").click(function(){
+    
+    var e = $(this);
+    var all = $("#tools-tab .btn.tool-btn");
+    
+   if(!e.hasClass("pressed")){
+        // clear previous
+        all.removeClass("pressed");
+        // add new onpoint or remove from the same one
+        e.addClass("pressed");
+    }
+});
+
 /* EXPORT STUFF */
 
 $(".export-pdf").click(function(){
@@ -231,20 +244,6 @@ $("#lat").keypress(onlyNumbers);
 $("#lon").keypress(onlyNumbers);
 
 /*
-*   do orbit button stuff
-*/
-$("#orbit").click(function(){
-   
-    APP.orbit = !APP.orbit;
-    
-    if(APP.orbit)
-        $(this).find("i").html("pause_circle_outline");
-   else
-        $(this).find("i").html("play_circle_outline");
-    
-});
-
-/*
 *   Delete all annotations in project
 */
 $("#delete-anot-btn").click(function() {
@@ -349,6 +348,7 @@ $("#capture-scene").click(function(){
    
     // clear capturing box
     APP.disableAllFeatures({no_msg: true});
+    putCanvasMessage("Capturando...", 1500);
     
     // get final canvas
     var canvas = gl.snapshot(0, 0, renderer.canvas.width, renderer.canvas.height);
@@ -356,9 +356,7 @@ $("#capture-scene").click(function(){
     function on_complete( img_blob )
 		{
 			var url = URL.createObjectURL( img_blob );
-            
 			var img = new Image();
-//			img.setAttribute("download","screen.png");
 			img.src = url;
             img.className = "download-image";
             $("#capturing").append("<a href='"+url+"' download='screenshot.png' class='btn table-btn'>Descargar captura</a>");

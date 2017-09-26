@@ -18,7 +18,7 @@ var APP = {
     rotation: false,
     anot_visible: true,
     value: 0,
-    orbit: false,
+    orbiting: false,
     result: vec3.create(),
 
     // methods of APP
@@ -254,7 +254,7 @@ var APP = {
             var dt = (now - last) * 0.001;
             renderer.clear(bg_color);
 
-            if(APP.orbit)
+            if(APP.orbiting)
                 camera.orbit(0.1 * dt, RD.UP);
             
             if(keys[KEY_LEFT])
@@ -381,6 +381,18 @@ var APP = {
                 elements[i].destroy();
             else if(description == elements[i].description)
                 elements[i].destroy();
+        }
+    },
+    
+    orbit: function(e)
+    {
+        APP.orbiting = !APP.orbiting;
+
+        if(APP.orbiting)
+            e.find("i").html("pause_circle_outline");
+        else{
+            e.find("i").html("play_circle_outline");
+            e.removeClass("pressed");
         }
     },
     
@@ -985,7 +997,7 @@ var APP = {
         $(".draggable").remove();
         $("#cont-msg").empty();
 
-        //on-point class
+        //remove active classes
         $(".on-point").removeClass("on-point");
         
         // clear capturing box

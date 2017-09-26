@@ -1,9 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Titillium+Web');
 
-#info-extra-tab label{
-    color: white !important;
-}
-
 .tab-content-extra{
     z-index: 1 !important;
 }

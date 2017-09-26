@@ -363,6 +363,28 @@ h1, h2, h3, h4, h5, h6{
     
 }
 
+.tool-btn.pressed{
+    background: linear-gradient(
+        to bottom, 
+        rgba(52, 154, 145,1)    0%,
+        rgba(62, 164, 155,1)    25%, 
+        rgba(72, 174, 165,1)    50%, 
+        rgba(79, 179, 169,1)    75%, 
+        rgba(84, 184, 174,1)   100%
+    );
+    color: whitesmoke!important;
+    margin-left: -8px;
+    width: 95px;
+    transition: 0.2s;
+}
+
+.tool-btn.pressed p {
+    font-size: 13px;
+    margin-left: 0px;
+    transition: 0.2s;
+    color: whitesmoke!important;
+}
+
 .info_hover_box{
     width: 100%;
     font-size: 10px;
@@ -372,13 +394,17 @@ h1, h2, h3, h4, h5, h6{
     color: rgb(62, 164, 155) !important;
     margin-left: -8px;
     width: 95px;
-    transition: 0.5s;
+    transition: 0.2s;
 }
 
 .tool-btn:hover p {
     font-size: 13px;
     margin-left: 0px;
-    transition: 0.5s;
+    transition: 0.2s;
+}
+
+.tool-btn.pressed:hover{
+   color: whitesmoke!important;
 }
 
 .m2{
