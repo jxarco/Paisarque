@@ -417,7 +417,7 @@ Project.prototype.update_meter = function(relation)
 *   @param options {object} push / display flags
 */
 
-Project.prototype.insertMeasure = function( camera, points, distance, options )
+Project.prototype.insertMeasure = function( camera, points, distance, name, options )
 {   
     if(!distance)
         return;
@@ -428,8 +428,11 @@ Project.prototype.insertMeasure = function( camera, points, distance, options )
     var bodyTable = table.find('tbody');
     var id = options.id >= 0 ? options.id : this._last_measure_id++;
     
+    var aux = "dist-name" + id;
+    
     var row = "<tr id=" + id + " a class='pointer'>" + 
     "<td onclick='show($(this))' data-type='m'>" + "<i class='material-icons show'>fiber_manual_record</i></td>" +
+    "<td id='" + aux + "'><p onclick='setInput(" + id + ", " + '"dist"' + ")'>" + name + "</p></td>" + 
     "<td>" + Math.round(distance * 1000) / 1000 + "</td>" + 
     "<td><i onclick='remove(this)' class='material-icons'>close</i></td>" + 
     "</tr>";
@@ -442,6 +445,7 @@ Project.prototype.insertMeasure = function( camera, points, distance, options )
     if(options.push)
         this._measures.push( {
             "id": id,
+            "name": name,
             "camera_position": vec3.clone(camera.position),
             "camera_target": vec3.clone(camera.target),
             "camera_up": vec3.clone(camera.up),
@@ -460,7 +464,7 @@ Project.prototype.insertMeasure = function( camera, points, distance, options )
 *   @param display {bool} show or not the table after inserting measure
 */
 
-Project.prototype.insertSegmentMeasure = function( points, distance, options )
+Project.prototype.insertSegmentMeasure = function( camera, points, distance, name, options )
 {   
     if(!distance)
         return;
@@ -469,10 +473,13 @@ Project.prototype.insertSegmentMeasure = function( points, distance, options )
     
     var table = $('#segment-distances-table');
     var bodyTable = table.find('tbody');
-     var id = options.id ? options.id : this._last_seg_measure_id++;
+    var id = options.id ? options.id : this._last_seg_measure_id++;
+    
+    var aux = "seg-name" + id;
     
     var row = "<tr id=" + id + " a class='pointer'>" + 
     "<td onclick='show($(this))' data-type='s'>" + "<i class='material-icons show'>fiber_manual_record</i></td>" +
+    "<td id='" + aux + "'><p onclick='setInput(" + id + ", " + '"seg"' + ")'>" + name + "</p></td>" + 
     "<td>" + (points.length - 1) + "</td>" + 
     "<td>" + Math.round(distance * 1000) / 1000 + "</td>" +
     "<td><i onclick='remove(this)' class='material-icons'>close</i></td>" + 
@@ -486,6 +493,10 @@ Project.prototype.insertSegmentMeasure = function( points, distance, options )
     if(options.push)
         this._segments.push( {
             "id": id,
+            "name": name,
+            "camera_position": vec3.clone(camera.position),
+            "camera_target": vec3.clone(camera.target),
+            "camera_up": vec3.clone(camera.up),
             "points": points,
             "distance": distance
         } );
@@ -517,7 +528,7 @@ Project.prototype.insertArea = function( points, area, index, name, options )
     
     var row = "<tr id=" + id + " a class='pointer'>" + 
     "<td onclick='show($(this))' data-type='a'>" + "<i class='material-icons show'>fiber_manual_record</i></td>" + 
-    "<td id='" + aux + "'><p onclick='setInput(" + id + ")'>" + name + "</p></td>" + 
+    "<td id='" + aux + "'><p onclick='setInput(" + id + ", " + '"area"' + ")'>" + name + "</p></td>" + 
     "<td>" + style + "</td>" + 
     "<td>" + Math.round(area * 1000) / 1000 + "</td>" + 
     "<td><i onclick='remove(this)' class='material-icons'>close</i></td>" + 
@@ -579,13 +590,16 @@ Project.prototype.FROMJSON = function( data )
     
     for(var i = 0; i < len; i++)
     {
-        var cam = {
+        var camera = {
             "position": data.anotaciones[i].camera_position,
             "target": data.anotaciones[i].camera_target,
             "up": data.anotaciones[i].camera_up
         };
         
-        this.insertAnotation( data.anotaciones[i].id, cam, data.anotaciones[i].position, data.anotaciones[i].text );
+        this.insertAnotation( data.anotaciones[i].id,
+                             camera,
+                             data.anotaciones[i].position,
+                             data.anotaciones[i].text );
     }
     
     // rotations
@@ -603,15 +617,28 @@ Project.prototype.FROMJSON = function( data )
             "target": data.medidas[i].camera_target,
             "up": data.medidas[i].camera_up
         };
-        
-        var distance = data.medidas[i].distance;
-        this.insertMeasure(camera, data.medidas[i].points, distance, {display: false, push: true});
+        this.insertMeasure(camera,
+                           data.medidas[i].points,
+                           data.medidas[i].distance,
+                           data.medidas[i].name,
+                           {display: false, push: true});
     }
     
     len = data.segmentos ? data.segmentos.length : 0;
     
     for(var i = 0; i < len; i++)
-        this.insertSegmentMeasure( data.segmentos[i].points, data.segmentos[i].distance, {display: false, push: true} );
+    {
+        var camera = {
+            "position": data.segmentos[i].camera_position,
+            "target": data.segmentos[i].camera_target,
+            "up": data.segmentos[i].camera_up
+        };
+        this.insertSegmentMeasure( camera, 
+                                  data.segmentos[i].points,
+                                  data.segmentos[i].distance,
+                                  data.segmentos[i].name,
+                                  {display: false, push: true} );
+    }
     
     len = data.areas ? data.areas.length : 0;
     
@@ -624,8 +651,11 @@ Project.prototype.FROMJSON = function( data )
             var point = [obj[0], obj[1], obj[2]];
             points.push(point);
         }
-        
-        this.insertArea( points, data.areas[i].area, data.areas[i].index, data.areas[i].name, {display: false, push: true} ); 
+        this.insertArea( points,
+                        data.areas[i].area,
+                        data.areas[i].index,
+                        data.areas[i].name,
+                        {display: false, push: true} ); 
     }
 }
 

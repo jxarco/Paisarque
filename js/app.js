@@ -654,14 +654,10 @@ var APP = {
             linea.flags.depth_test = false;
             scene.root.addChild(linea);
 
-            // remove dialog
-            $(".draggable").remove();
-            putCanvasMessage("Recuerda guardar...", 2000);
-            
             if(tmp.length == 2)
-                project.insertMeasure(camera, tmp, distance, {display: true, push: true});
+                project.insertMeasure(camera, tmp, distance, "nueva_dist", {display: true, push: true});
             else 
-                project.insertSegmentMeasure(tmp, distance, {display: true, push: true});
+                project.insertSegmentMeasure(camera, tmp, distance, "nuevo_segs", {display: true, push: true});
             
             //clear all
             APP.disableAllFeatures();
@@ -869,7 +865,7 @@ var APP = {
             putCanvasMessage("Recuerda guardar...", 2000);
 
             // passing 3d points list
-            project.insertArea(points, area, index, "+++++", {display: true, push: true});
+            project.insertArea(points, area, index, "nueva_area", {display: true, push: true});
 
             //clear all
             APP.disableAllFeatures();
@@ -992,6 +988,12 @@ var APP = {
         //on-point class
         $(".on-point").removeClass("on-point");
         
+        // clear capturing box
+        $("#capturing").fadeOut().empty();
+        
+        if(options.no_msg)
+            return;
+        
         var msg = options.msg || "Hecho";
         var ms = options.ms || 1250;
         putCanvasMessage(msg, ms);
@@ -999,6 +1001,7 @@ var APP = {
     
     fadeAllTables: function (o)
     {
+        // flags for visibility
         for(var i in o)
             o[i] = false;
         
@@ -1013,7 +1016,12 @@ var APP = {
 
         revealDOMElements(list, false, {e: ""});
     },
-
+    
+    goFullscreen: function()
+    {
+        renderer.gl.fullscreen()
+    },
+    
     resize: function() 
     {
         context.canvas.width   = placer.clientWidth;

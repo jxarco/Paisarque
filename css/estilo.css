@@ -136,8 +136,15 @@ h1, h2, h3, h4, h5, h6{
 /*********************************************************/
 /* modelo.php */
 
-#capture-scene{
-    background-color: firebrick !important;
+#capturing{
+    width: 100%;
+    height: auto;
+    margin-top: 255px !important;
+    display: none;
+}
+
+.download-image{
+    width: 100% !important;
 }
 
 .tablink{
@@ -145,7 +152,7 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .active a{
-    color: black !important;
+    color: black;
     border: none !important;
 }
 
@@ -341,9 +348,9 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .table-btn:hover{
-    background: rgb(200, 200, 200);
-    text-shadow: 0px 0px 2px black;
-/*    color: whitesmoke !important;*/
+    background: rgb(180, 180, 180);
+    text-shadow: 0px 0px 1px black;
+    color: whitesmoke !important;
 }
 
 .tool-btn{
@@ -525,6 +532,10 @@ h1, h2, h3, h4, h5, h6{
 
 .kawaii.warning{
     border-bottom: 2px solid rgb(224, 224, 20);
+}
+
+.kawaii.error{
+    border-bottom: 2px solid rgb(224, 20, 20);
 }
 
 /* -------------------------------------------- */

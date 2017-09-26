@@ -191,7 +191,13 @@
                              aria-hidden="true">
                             
                             <div class="w3-col m2 w3-center">
-                                <a onclick="renderer.gl.fullscreen()" class="btn tool-btn" title="Pantalla completa">
+                                <a class="btn tool-btn save" title="Guardar proyecto">
+                                    <i class="material-icons">save</i>
+                                    <p class="info_hover_box">Guardar</p>
+                                </a>
+                            </div>
+                            <div class="w3-col m2 w3-center">
+                                <a onclick="APP.goFullscreen();" class="btn tool-btn" title="Pantalla completa">
                                     <i class="material-icons">fullscreen</i>
                                     <p class="info_hover_box" >100%</p>
                                 </a>
@@ -213,12 +219,6 @@
                                     <i class="material-icons">3d_rotation</i>
                                     <br>
                                     <p class="info_hover_box">Rotaciones</p>
-                                </a>
-                            </div>
-                            <div class="w3-col m2 w3-center">
-                                <a class="btn tool-btn save" title="Guardar proyecto">
-                                    <i class="material-icons">save</i>
-                                    <p class="info_hover_box">Guardar</p>
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
@@ -254,6 +254,7 @@
                                  <thead>
                                     <tr>
                                         <th></th>
+                                        <th>Descripción</th>
                                         <th>Distancia (m)</th>
                                         <th></th>
                                     </tr>
@@ -270,8 +271,9 @@
                                  <thead>
                                     <tr>
                                         <th></th>
-                                        <th># Segmentos</th>
-                                        <th>Distancia (m)</th>
+                                        <th>Descripción</th>
+                                        <th>#S</th>
+                                        <th>Dist. (m)</th>
                                         <th></th>
                                     </tr>
                                 </thead>

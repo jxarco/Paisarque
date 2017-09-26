@@ -162,9 +162,12 @@ function initMap(lat, lng)
     });    
 }
 
-function setInput(id)
+function setInput(id, type)
 {
-    $("#area-name" + id).html("<textarea id='s_input' placeholder='Nombre'></textarea>");
+    var full_id = "#"+type+"-name"+id;
+    var old_name = $(full_id).find("p").html();
+    
+    $(full_id).html("<textarea id='s_input' placeholder='Nombre'></textarea>");
     $("#s_input").focus();
     $("#s_input").keyup(function(e)
     {
@@ -173,17 +176,25 @@ function setInput(id)
             var value = $(this).val();
             
             if(value == "")
-                $("#area-name" + id).html("<p onclick='setInput(" + id + ")'>" + project.getArea(id).name + "</p>");
+                $(full_id).html("<p onclick='setInput(" + id + ", " + type + ")'>" + old_name + "</p>");
             else
             {
-                project.getArea(id).name = value;
-                $("#area-name" + id).html("<p onclick='setInput(" + id + ")'>" + value + "</p>");
-                putCanvasMessage("Recuerda guardar...", 2000);
+                if(type == "area")
+                    project.getArea(id).name = value;
+                if(type == "dist")
+                    project.getMeasure(id).name = value;
+                if(type == "seg")
+                    project.getSegmentMeasure(id).name = value;
+                
+                
+                $(full_id).html("<p onclick='setInput(" + id + ", " + type + ")'>" + value + "</p>");
+                if(project._auto_save)
+                    project.save();
             }
         }
         
         if(e.keyCode == 27)
-            $("#area-name" + id).html("<p onclick='setInput(" + id + ")'>" + project.getArea(id).name + "</p>");
+            $(full_id).html("<p onclick='setInput(" + id + ", " + type + ")'>" + old_name + "</p>");
     });
 }
 

@@ -291,7 +291,7 @@ $(".viz_on").click(function()
 */
 $("#show_dt").click(function() 
 {
-     APP.fadeAllTables(showing);
+    APP.disableAllFeatures({no_msg: true});
     showing["t1"] = !showing["t1"];
     
     var table = $('#distances-table');
@@ -304,7 +304,7 @@ $("#show_dt").click(function()
 */
 $("#show_dst").click(function() 
 {
-     APP.fadeAllTables(showing);
+    APP.disableAllFeatures({no_msg: true});
     showing["t2"] = !showing["t2"];
     
     var table = $('#segment-distances-table');
@@ -317,7 +317,7 @@ $("#show_dst").click(function()
 */
 $("#show_areat").click(function() 
 {
-     APP.fadeAllTables(showing);
+    APP.disableAllFeatures({no_msg: true});
     showing["t3"] = !showing["t3"];
     
     var table = $('#areas-table');
@@ -347,71 +347,28 @@ $("#measure-opt-btn").click(function(){
 */
 $("#capture-scene").click(function(){
    
+    // clear capturing box
+    APP.disableAllFeatures({no_msg: true});
+    
+    // get final canvas
     var canvas = gl.snapshot(0, 0, renderer.canvas.width, renderer.canvas.height);
     
-    function inner_screenshot( img_blob )
+    function on_complete( img_blob )
 		{
 			var url = URL.createObjectURL( img_blob );
-
+            
 			var img = new Image();
-			img.setAttribute("download","screen.png");
+//			img.setAttribute("download","screen.png");
 			img.src = url;
-            $("#capturing").append("<a href='"+url+"' download='screenshot.png'>Descargar captura</a>")
-			//img.width = "100%";
+            img.className = "download-image";
+            $("#capturing").append("<a href='"+url+"' download='screenshot.png' class='btn table-btn'>Descargar captura</a>");
+            $("#capturing").append("<a onclick='' class='btn table-btn'>Añadir al proyecto</a>");
 			$("#capturing").append( img );
+            $("#capturing").append("<a onclick='APP.disableAllFeatures()' class='btn table-btn'>Cancelar</a>").fadeIn();
+            putCanvasMessage("¡Capturado! Ahora puedes guardar la imagen o añadirla al proyecto.", 5000);
 		}
     
-    var on_complete = inner_screenshot;
-    
     canvas.toBlob( on_complete, "image/png");
-    
-    /*var width = renderer.canvas.width;
-    var height = renderer.canvas.height;
-    var v3d = renderer;
-    
-    if( v3d.canvas.width >= width ) //render big and downscale
-    {
-        var canvas = createCanvas( width, height );
-        //document.body.appendChild(canvas);
-        var ctx = canvas.getContext("2d");
-        var scalew = width / v3d.canvas.width;
-        var scaleh = height / v3d.canvas.height;
-        var scale = Math.max( scalew, scaleh ); //the biggest so it fits all
-        if(scale == scaleh )
-            ctx.translate( ((scale * v3d.canvas.width) - width) * -0.5, 0 );
-        else
-            ctx.translate( 0, ((scale * v3d.canvas.height) - height) * -0.5 );
-        ctx.scale( scale, scale );
-        ctx.drawImage( v3d.canvas, 0, 0 );
-        
-        if(on_complete)
-        {
-            canvas.toBlob( on_complete, "image/png");
-            return null;
-        }
-       // data = canvas.toDataURL("image/png");
-    }
-    else //render to specific size
-    {
-        var old = [v3d.canvas.width,v3d.canvas.height];
-        v3d.resize(width,height);
-
-        this.render(true);
-        var data = null;
-
-        if(on_complete)
-        {
-            v3d.canvas.toBlob( on_complete, "image/png");
-            v3d.resize(old[0],old[1]);
-            RenderModule.render(true); //force render a frame to clean 
-            return null;
-        }
-
-        data = v3d.canvas.toDataURL("image/png");
-        v3d.resize(old[0],old[1]);
-    }
-    return data;*/
-    
 });
 
 /*
