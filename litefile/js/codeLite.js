@@ -43,28 +43,8 @@ LiteFileServer.setup("", function(status, resp) {
 //LOGOUT
 $(".logout-button").click( function(e) {
 
-    var previousSession = JSON.parse(localStorage.getItem('session'));
-    var newSession = new LiteFileServer.Session();
-
-    copySession(newSession, previousSession);
-
-    console.log("newSession")
-    console.log(newSession);
-
-    window.session = newSession;
-
-    console.log(session);        
-
-    if(!session)
-        return;
-
-    session.logout( function(session, result) {
-        localStorage.clear();
-//        session = null;
-        window.location.href = "index.html";
-        session = null;
-    });
-
+    localStorage.clear();
+    window.location.href = "index.html";
 });
 
 function systemReady()
@@ -110,10 +90,6 @@ function systemReady()
     {
         var sessionTry = JSON.parse(localStorage.getItem('session'));
         var user = sessionTry["user"];
-    }
-      
-        
-    if ($(".textUser").length > 0){
         $(".textUser").html(user["username"]);
         $(".textUser").append('<span style="margin-left: 10px;" class="glyphicon glyphicon-user"></span>');
     }
