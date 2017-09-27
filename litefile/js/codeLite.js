@@ -1,4 +1,4 @@
-var session = window.session || null;
+var session = null;
 var system_info = {};
 var filesview_mode = "thumbnails";
 var units = {};
@@ -13,66 +13,59 @@ $(".startup-dialog").show();
 // se esconde el dialogo para acceder
 $("#loginForm").hide();
 
-if(session === null)
-{
-    LiteFileServer.setup("", function(status, resp) {
-        console.log("server checked");
-        $(".startup-dialog").hide();
-        if(status == 1)
+LiteFileServer.setup("", function(status, resp) {
+    console.warn("Server checked");
+    $(".startup-dialog").hide();
+    if(status == 1)
+    {
+        system_info = resp.info;
+        console.warn("Server ready");
+        systemReady();
+
+        if(localStorage.length && session === null)
         {
-            system_info = resp.info;
-            console.log("Server ready");
-            systemReady();
-            console.log(session);
-
-//            if(window.session === null && localStorage.length)
-//            {
-//                session = JSON.parse(localStorage.session);
-//                localStorage.setItem('session', JSON.stringify(session));
-//                window.location.href = ("inicio.php?user=" + session.user.username);
-//
-//            }
-
+            var last_session = JSON.parse(localStorage.session);
+            window.location.href = "inicio.php?user=" + last_session.user.username;
         }
-	else
-	{
-		console.warn("Server not ready");
-		if(status == -10)
-			$(".warning-dialog .content").html("LiteFileServer config file not configured, please, check the <strong>config.sample.php</strong> file in includes and after configure it change the name to <strong>config.php</strong>.");
-		else
-			$(".warning-dialog .content").html("LiteFileServer database not found, please run the <a href='install.php'>install.php</a>.");
-		$(".warning-dialog").show();
-	}
-    });
-
-}
+            
+    }
+    else
+    {
+        console.warn("Server not ready");
+        if(status == -10)
+            $(".warning-dialog .content").html("LiteFileServer config file not configured, please, check the <strong>config.sample.php</strong> file in includes and after configure it change the name to <strong>config.php</strong>.");
+        else
+            $(".warning-dialog .content").html("LiteFileServer database not found, please run the <a href='install.php'>install.php</a>.");
+        $(".warning-dialog").show();
+    }
+});
 
 //LOGOUT
-	$(".logout-button").click( function(e) {
-        
-        var previousSession = JSON.parse(localStorage.getItem('session'));
-        var newSession = new LiteFileServer.Session();
-        
-        copySession(newSession, previousSession);
+$(".logout-button").click( function(e) {
 
-        console.log("newSession")
-        console.log(newSession);
-        
-        window.session = newSession;
-        
-        console.log(session);        
-        
-        if(!session)
-			return;
+    var previousSession = JSON.parse(localStorage.getItem('session'));
+    var newSession = new LiteFileServer.Session();
 
-        session.logout( function(session, result) {
-//            localStorage.setItem('session', JSON.stringify(session));
-            localStorage.clear();
-            session = null;
-            window.location.href = "index.html";
-        });
-			
-	});
+    copySession(newSession, previousSession);
+
+    console.log("newSession")
+    console.log(newSession);
+
+    window.session = newSession;
+
+    console.log(session);        
+
+    if(!session)
+        return;
+
+    session.logout( function(session, result) {
+        localStorage.clear();
+//        session = null;
+        window.location.href = "index.html";
+        session = null;
+    });
+
+});
 
 function systemReady()
 {    
@@ -104,7 +97,7 @@ function systemReady()
                     data: { user: values["username"]}
                 });
                 
-                //window.location.href = ("inicio.php?user=" + values["username"]);
+                window.location.href = "inicio.php?user=" + session.user.username;
             }
 			else
 				throw("error login in");

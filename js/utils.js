@@ -8,6 +8,7 @@ var PLANTA = 0, ALZADO = 1;
 
 // default user
 var current_user = "guest";
+var session = null;
 
 /*
 * Server session stuff
@@ -18,9 +19,15 @@ var PAS = {
     {
         if(localStorage.length)
         {
-            session = JSON.parse(localStorage.session);
+            var last_session = JSON.parse(localStorage.session);
+            var new_session = new LiteFileServer.Session();
+            
+            copySession(new_session, last_session);
+            session = new_session;
+            
             current_user = session.user.username;   
         }else{
+            console.warn("no session involved");
             current_user = getQueryVariable('user') || getQueryVariable('r').split("/")[0];
         }
     }

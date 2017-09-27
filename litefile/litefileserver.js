@@ -55,7 +55,7 @@ var LiteFileServer = {
 	//get server info status and config
 	checkServer: function( on_complete )
 	{
-		console.log("Checking Server");
+//		console.log("Checking Server");
 		return this.request(this.server_url, { action:"system/ready" }, function(resp) {
 			LFS.system_info = resp.info;
 			LFS.files_path = resp.info.files_path;
@@ -64,7 +64,7 @@ var LiteFileServer = {
 			if(on_complete)
 				on_complete(resp.status == 1, resp );
 		}, function(error){
-			console.log("Error Checking Server");
+			console.error("Error Checking Server");
 			if(on_complete)
 				on_complete(null, error);
 		});
