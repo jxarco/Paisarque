@@ -95,6 +95,16 @@ function uncapitalizeFirstLetter(string) {
     return string.charAt(0).toLowerCase() + string.slice(1);
 }
 
+function makeid(len) {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (var i = 0; i < len; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+}
+
 /*
 *  Dragging stuff bout anotations removing
 */
@@ -158,13 +168,14 @@ var onlyNumbers = function(e) {
 };
 
 // download binary mesh
- window.download = function( mesh, format )
+var download = function( mesh, format )
 {
     var file = null;
     if(format == "wbin")
         file = mesh.encode("wbin");
     else
         file = mesh.encode("obj");
+    
     var url = URL.createObjectURL( new Blob([file]) );
     var element = document.createElement("a");
     element.setAttribute('href', url);
@@ -181,12 +192,12 @@ function urlExists( url, o )
     .done(function() { 
         if(o.on_success)
             o.on_success();
-    }).fail(function(err) { 
-        if(o.on_error)
-            o.on_error(err);
     }).always(function(){
         if(o.on_complete)
             o.on_complete();
+    }).fail(function(err) { 
+        if(o.on_error)
+            o.on_error(err);
     });
 }
 

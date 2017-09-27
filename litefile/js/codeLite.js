@@ -13,7 +13,6 @@ $(".startup-dialog").show();
 // se esconde el dialogo para acceder
 $("#loginForm").hide();
 
-// poner if(1) cuando se suba al servidor
 if(session === null)
 {
     LiteFileServer.setup("", function(status, resp) {
@@ -24,14 +23,15 @@ if(session === null)
             system_info = resp.info;
             console.log("Server ready");
             systemReady();
+            console.log(session);
 
-            if(window.session === null && localStorage.length)
-            {
-                session = JSON.parse(localStorage.session);
-                localStorage.setItem('session', JSON.stringify(session));
-                window.location.href = ("inicio.php?user=" + session.user.username);
-
-            }
+//            if(window.session === null && localStorage.length)
+//            {
+//                session = JSON.parse(localStorage.session);
+//                localStorage.setItem('session', JSON.stringify(session));
+//                window.location.href = ("inicio.php?user=" + session.user.username);
+//
+//            }
 
         }
 	else
@@ -104,7 +104,7 @@ function systemReady()
                     data: { user: values["username"]}
                 });
                 
-                window.location.href = ("inicio.php?user=" + values["username"]);
+                //window.location.href = ("inicio.php?user=" + values["username"]);
             }
 			else
 				throw("error login in");

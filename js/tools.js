@@ -162,6 +162,37 @@ function initMap(lat, lng)
     });    
 }
 
+function uploadBLOB(e)
+{
+    var url = e.data("url");
+    var path = "data/" + current_project + "/" + makeid(8) + ".png";
+    
+    var on_success = function(){
+            // add image to project
+            if(project._extra.length)
+                extraCounter = project._extra[project._extra.length-1].name.split("_")[1];
+            else
+                extraCounter = -1;
+
+            extraCounter++;
+            var name = "extra_" + extraCounter;
+
+            project.pushExtra(name, "image", path);
+            project.save();
+        };
+    
+    
+    $.ajax({
+        type: "POST",
+        url: 'uploadURL.php',
+        data: {
+            'url' : url,
+            'path' : path
+            },
+        success: on_success
+    });
+}
+
 function setInput(id, type)
 {
     var full_id = "#"+type+"-name"+id;
@@ -233,7 +264,8 @@ function show(e)
     }
     else{
         e.removeClass("on-point");
-        APP.disableAllFeatures();
+        APP.destroyElements(scene.root.children, "config");
+        //APP.disableAllFeatures();
     }
 }
 

@@ -355,12 +355,13 @@ $("#capture-scene").click(function(){
     
     function on_complete( img_blob )
 		{
+            var src = canvas.toDataURL();
 			var url = URL.createObjectURL( img_blob );
 			var img = new Image();
-			img.src = url;
+			img.src = src;
             img.className = "download-image";
             $("#capturing").append("<a href='"+url+"' download='screenshot.png' class='btn table-btn'>Descargar captura</a>");
-            $("#capturing").append("<a onclick='' class='btn table-btn'>Añadir al proyecto</a>");
+            $("#capturing").append("<a data-url='"+src+"' onclick='uploadBLOB($(this))' class='btn table-btn'>Añadir al proyecto</a>");
 			$("#capturing").append( img );
             $("#capturing").append("<a onclick='APP.disableAllFeatures()' class='btn table-btn'>Cancelar</a>").fadeIn();
             putCanvasMessage("¡Capturado! Ahora puedes guardar la imagen o añadirla al proyecto.", 5000);
@@ -411,7 +412,8 @@ $("#formUploadProject").on('submit', function(e)
         }
     });
     
-    var jsonFicheroPrincipal = {
+    // json object to save
+    var o = {
         "id": project_id,
         "descripcion": "nodesc",
         "autor": values["autor"],
@@ -432,7 +434,7 @@ $("#formUploadProject").on('submit', function(e)
         "areas": []
     };
     
-    var fileNameString = "../../data/" + user + "/" + project_id + '.json';
+    var path = "../../data/" + user + "/" + project_id + '.json';
     
     $.ajax({
         type: "POST",
@@ -440,25 +442,42 @@ $("#formUploadProject").on('submit', function(e)
         url: 'server/php/save_to_disc.php',
         data:
         {
-            data: JSON.stringify(jsonFicheroPrincipal), 
-            file: fileNameString
+            data: JSON.stringify(o), 
+            file: path
         }
     });
     
-    $('#loadingModal').modal('show');   
+    $('#loadingModal').modal('show');  
+    
+    var on_success = function()
+    {
+        //$('#loadingModal').modal('hide');               
+        // volver a cargar el contenido
+        location = location;
+        
+        // upload also the binary file
+        var URL = "data/" + user + "/" + urlMesh;
+        var mesh = GL.Mesh.fromURL( URL, function (response) {
+            var bin = mesh.encode("wbin");
+            $.ajax({
+                type: "POST",
+                url: 'uploadURL.php',
+                data: {
+                    'url' : bin,
+                    'path' : "data/" + user + "/" + urlMesh.split(".")[0]
+                    },
+            });
+        });
+    }
     
     $.ajax( {
-        url: 'upload.php',
+        url: 'server/php/upload.php',
         type: 'POST',
         data: formData,
         cache: false,
         contentType: false,
         processData: false, 
-        success: function() {
-            $('#loadingModal').modal('hide');               
-            // volver a cargar el contenido
-//            location = location;
-        },
+        success: on_success,
         error: function(err) {
             console.error(err);
             $('#loadingModal').modal('hide');               

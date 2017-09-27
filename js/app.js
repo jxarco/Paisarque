@@ -131,41 +131,36 @@ var APP = {
         camera = new RD.Camera();
         camera.perspective( 45, gl.canvas.width / gl.canvas.height, 0.1, 10000 );
         camera.lookAt( [150,60,150],[0,0,0],[0,1,0] );
-        camera.direction = [120,60,120];
+        camera.direction = [150,60,150];
         camera.previous = vec3.clone(camera._position);
         
         var wBinURL = meshURL.split(".")[0] + ".wbin";
+        
+        var on_load = function()
+        {
+            renderer.meshes[obj.mesh] = mesh;  
+            $("#placeholder").css("background-image", "none");
+            $('#myCanvas').css({"opacity": 0, "visibility": "visible"}).animate({"opacity": 1.0}, 1500);
+            putCanvasMessage("Puedes cancelar cualquier acción con la tecla ESC", 3500);
+            if(!rotaciones.length)
+                putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "error"}); 
+        }
         
         //create an obj in the scene
         obj = new RD.SceneNode();
         obj.name = "mesh 3d";
         obj.position = [0,0,0];
         obj.scale([5,5,5]);
-        obj.mesh = meshURL; // assign first the obj file
+        obj.mesh = wBinURL;
         
-        // at this time using this:*************
-        // sync request
+        mesh = GL.Mesh.fromURL( obj.mesh, function (response) {
+            
+            if(response === null)
+                console.warn("no binary mesh found", obj.mesh);
+            else
+                on_load();
+        }); //load from URL
         
-        var on_complete = function(){
-            // load mesh and texture for obj model
-            var mesh = GL.Mesh.fromURL( obj.mesh, function () {
-                $("#placeholder").css("background-image", "none");
-                $('#myCanvas').css({"opacity": 0, "visibility": "visible"}).animate({"opacity": 1.0}, 1500);
-                putCanvasMessage("Recuerda: guarda el proyecto al realizar cambios!", 3000);
-                putCanvasMessage("Puedes cancelar cualquier acción con la tecla ESC", 3000);
-                if(!rotaciones.length)
-                    putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "error"}); 
-            }); //load from URL
-            renderer.meshes[obj.mesh] = mesh;
-        };
-        
-        urlExists(wBinURL, {on_success: function(){
-            // case it is
-            console.log("binary found!")
-            obj.mesh = wBinURL;
-            // in other case, original obj is used
-        }, on_complete: on_complete});
-                  
         // *************************************
         
         // one texture
@@ -910,7 +905,6 @@ var APP = {
 
         // points stuff
         var points = [];
-        console.log(msr.points.length);
         
         for(var i = 0; i < msr.points.length; ++i){
             var list = [];
