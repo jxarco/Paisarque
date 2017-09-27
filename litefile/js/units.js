@@ -2,6 +2,10 @@
 //CREATE UNIT
 $(".create-unit-button").click(function(e){
 
+    
+    console.error(session);
+    
+    
 	$("#new-unit-dialog .inputName").val("newUnit");
 
 	var min = 1024*1024;

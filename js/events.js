@@ -379,6 +379,42 @@ $("#formUploadProject").on('submit', function(e)
     console.log("preparing to upload project...");
     $('#GSCCModal').modal('hide');   
     
+    var path = "guest/foo/";
+    
+    session.createFolder( path, function(){
+                            console.log("completed");
+                        }, function(){
+                            console.log("error");
+                        } );
+    
+    return;
+    
+    
+    path = "/guest/foo.json";
+    
+    /**
+    * Uploads a file to the server (it allows to send other info too like preview)
+    * @method uploadFile
+    * @param {String} fullpath
+    * @param {ArrayBuffer||Blob||File||String} data 
+    * @param {Object} extra could be category, metadata (object or string), preview (in base64)
+    * @param {Function} on_complete
+    * @param {Function} on_error
+    * @param {Function} on_progress receives info about how much data has been sent
+    */
+    session.uploadFile( path, "foo", 0, 
+                       function(){
+                            console.log("completed");
+                        }, function(){
+                            console.log("error");
+                        });
+    return;
+    
+    
+    
+    
+    
+    
     e.preventDefault();
     var values = getFormValues(this);
     var formData = new FormData(this);
@@ -434,23 +470,6 @@ $("#formUploadProject").on('submit', function(e)
         "segmentos": [],
         "areas": []
     };
-    
-    
-    var path = "guest/foo.json";
-    
-    /**
-    * Uploads a file to the server (it allows to send other info too like preview)
-    * @method uploadFile
-    * @param {String} fullpath
-    * @param {ArrayBuffer||Blob||File||String} data 
-    * @param {Object} extra could be category, metadata (object or string), preview (in base64)
-    * @param {Function} on_complete
-    * @param {Function} on_error
-    * @param {Function} on_progress receives info about how much data has been sent
-    */
-    session.uploadFile( path, "foo", 0, function(){console.log("completed");}, function(){console.log("error");});
-    return;
-    
     
     var path = "../../data/" + user + "/" + project_id + '.json';
     
