@@ -677,10 +677,7 @@ Project.prototype.save = function( overwrite, extra )
     if(!overwrite)
         project += extra;
     
-    var path = "../../data/" + project + '.json';
-    console.log(path);
-    
-    var json = {
+    var o = {
         "id": this._id,
         "descripcion": this._description,
         "autor": this._author,
@@ -694,22 +691,20 @@ Project.prototype.save = function( overwrite, extra )
         "segmentos": this._segments,
         "areas": this._areas
     };
-        
-    $.ajax({
-            type: "POST",
-            //dataType : 'json',
-            url: 'server/php/save_to_disc.php',
-            data: { 
-                data: JSON.stringify(json),
-                file: path
-            },
-            succes: function(response){
-                console.log("SAVED!!");
-            },
-            error: function(error){
-                console.log(error);
-            }
-    });
+    
+    var on_complete = function(){
+        console.log("saved");
+    }
+    
+    var on_error = function(err){
+        console.error(err);
+    }
+
+    /* 
+    *   Upload configuration file as JSON
+    */
+    var path = current_user + "/projects/" + this._id + ".json";
+    session.uploadFile( path, JSON.stringify(o), 0, on_complete, on_error);
 }
 
 

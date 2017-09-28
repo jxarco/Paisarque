@@ -1,4 +1,5 @@
 var extraCounter = null;
+var input_files = [];
 
 $("#tools-tab .btn.tool-btn").click(function(){
     
@@ -396,41 +397,12 @@ $("#formUploadProject").on('submit', function(e)
     console.log("preparing to upload project...");
     $('#GSCCModal').modal('hide');   
     
-    /*var path = "guest/foo/";
-    
-    session.createFolder( path, function(){
-                            console.log("completed");
-                        }, function(){
-                            console.log("error");
-                        } );
-    
-    return;*/
-    
-    
-    var path = "guest/carpeta/foo.json";
-    
-    /**
-    * Uploads a file to the server (it allows to send other info too like preview)
-    * @method uploadFile
+    /*
+    UPLOAD FILE
     * @param {String} fullpath
     * @param {ArrayBuffer||Blob||File||String} data 
     * @param {Object} extra could be category, metadata (object or string), preview (in base64)
-    * @param {Function} on_complete
-    * @param {Function} on_error
-    * @param {Function} on_progress receives info about how much data has been sent
     */
-    session.uploadFile( path, "foo", 0, 
-                       function(){
-                            console.log("completed");
-                        }, function(){
-                            console.log("error");
-                        });
-    return;
-    
-    
-    
-    
-    
     
     e.preventDefault();
     var values = getFormValues(this);
@@ -439,7 +411,7 @@ $("#formUploadProject").on('submit', function(e)
     // Enviar tambien la informacion de en que usuario estamos
     // para subir los ficheros a la carpeta que le corresponde
     
-    var project_id = values["idProyecto"];
+    var project_id = values["idProyecto"].toLowerCase();
     
     var user = getQueryVariable("user");
     formData.append("user", user);
@@ -448,8 +420,6 @@ $("#formUploadProject").on('submit', function(e)
     var urlTexture = project_id + "/"; 
     
     $(':file').each(function() {
-        
-        console.log("file");
         
         var input = $(this);   
         var nameInput = input[0]["id"];
@@ -464,7 +434,7 @@ $("#formUploadProject").on('submit', function(e)
             urlTexture = urlTexture + nameTexture;
         }
     });
-    
+      
     // json object to save with information
     // about the entire project
     var o = {
@@ -488,57 +458,69 @@ $("#formUploadProject").on('submit', function(e)
         "areas": []
     };
     
-    var path = "../../data/" + user + "/" + project_id + '.json';
+    var on_complete = function(){
+//        location = location;
+        console.log("upload completed");
+    }
     
-    $.ajax({
-        type: "POST",
-        dataType : 'json',
-        url: 'server/php/save_to_disc.php',
-        data:
-        {
-            data: JSON.stringify(o), 
-            file: path
-        }
-    });
+    var on_error = function(err){
+        console.error(err);
+    }
+
+    /* 
+    *   Upload configuration file as JSON
+    */
+    var path = current_user + "/projects/" + project_id + ".json";
+    session.uploadFile( path, JSON.stringify(o), 0, on_complete, on_error);
     
     $('#loadingModal').modal('show');  
     
-    var on_success = function()
+    var uploadBinary = function(file, extension)
     {
-        //$('#loadingModal').modal('hide');               
-        // volver a cargar el contenido
-        location = location;
-        
-        // upload also the binary file
-        var URL = "data/" + user + "/" + urlMesh;
-        var mesh = GL.Mesh.fromURL( URL, function (response) {
-            var bin = mesh.encode("wbin");
-            $.ajax({
-                type: "POST",
-                url: 'uploadURL.php',
-                data: {
-                    'url' : bin,
-                    'path' : "data/" + user + "/" + urlMesh.split(".")[0]
-                    },
-            });
-        });
+//        var reader = new FileReader();
+//        reader.onload = function() { 
+//            var result = this.result;
+//            var mesh = new GL.Mesh();
+//            mesh.parse( result, extension );
+//            
+//            window.download(mesh, "wbin");
+//            
+//        };
+//        
+//        reader.readAsText(file);
+    }
+
+    var path = current_user + "/projects/" + project_id + "/";
+    session.createFolder(path, on_complete, on_error);
+    
+    for(var i = 0, f; f = input_files[i]; i++)
+    {
+        if(f.constructor == File)
+		{
+			var fileReader = new FileReader();
+            
+             fileReader.onload = (function(theFile) {
+                return function(e) {
+                    var arrayBuffer = this.result;
+                    var fullpath = current_user + "/projects/" + project_id + "/" + theFile.name;
+                    
+                    session.uploadFile( fullpath, arrayBuffer, 0, function(){
+                        
+                        var pos = theFile.name.lastIndexOf(".");
+                        var extension = theFile.name.substr(pos+1).toLowerCase();
+                        
+                        if(extension == "obj")
+                            uploadBinary(theFile, "obj");
+                        
+                            $('#loadingModal').modal('hide');                  
+                    }, on_error );
+                };
+              })(f);
+            
+            fileReader.readAsArrayBuffer( f );
+		}
     }
     
-    $.ajax( {
-        url: 'server/php/upload.php',
-        type: 'POST',
-        data: formData,
-        cache: false,
-        contentType: false,
-        processData: false, 
-        success: on_success,
-        error: function(err) {
-            console.error(err);
-            $('#loadingModal').modal('hide');               
-        }
-    } );
-    
-    // Resetear campos del form
     $(this).trigger("reset");
     
 });
@@ -559,3 +541,20 @@ $(".save").click(function(){
     }
     
 });
+
+
+function handleFileSelect(evt) {
+        var files = evt.target.files;
+
+        var output = [];
+        for (var i = 0, f; f = files[i]; i++){
+          console.warn(f);
+            input_files.push(f);
+        }
+          
+    }
+
+if(document.getElementById('mesh') && document.getElementById('textura')){
+    document.getElementById('mesh').addEventListener('change', handleFileSelect, false);
+    document.getElementById('textura').addEventListener('change', handleFileSelect, false);
+}

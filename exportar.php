@@ -74,15 +74,22 @@
                           </div>
                           <div class="bottom">
                               <?php 
+                              
+                                $info = explode("/", $_GET['r']);
+                              
+                                $user = $info[0];
+                                $project = $info[1];
+                              
+                                $path = "litefile/files/" . $user . "/projects/" . $project;
+                              
                                 echo '<a href="';
-                                echo 'data/' . $_GET['r'] . '/mesh.obj"';
+                                echo $path . '/mesh.obj"';
                                 echo 'download="" title="Descargar mesh">Mesh</a><br><br>';
-                             php?>
-                            <?php 
+                             
                                 echo '<a href="';
-                                echo 'data/' . $_GET['r'] . '/tex_0.jpg"';
+                                echo $path . '/tex_0.jpg"';
                                 echo 'download="" title="Descargar textura">Textura</a><br><br>';
-                             php?>
+                             ?>
                           </div>
                         </li>
 
@@ -120,11 +127,19 @@
                                 <a class="export-json _anotations" title="Exportar en JSON" href="">Anotaciones</a><br><br>
                                 <a class="export-json _measures" title="Exportar en JSON" href="">Medidas</a><br><br>
                                 <a class="export-json _areas" title="Exportar en JSON" href="">Areas</a><br><br>
-                                <?php 
+                                <?php
+                                
+                                    $info = explode("/", $_GET['r']);
+
+                                    $user = $info[0];
+                                    $project = $info[1];
+
+                                    $path = "litefile/files/" . $user . "/projects/" . $project;
+                                
                                     echo '<a href="';
-                                    echo 'data/' . $_GET['r'] . '.json"';
+                                    echo $path . '.json"';
                                     echo 'download="" title="Descargar configuración en JSON">Configuración</a><br><br>';
-                                 php?>
+                                 ?>
                                 <a class="export-json _extra" title="Exportar en JSON" href="">Aportaciones</a><br><br>
                           </div>
                         </li>

@@ -39,8 +39,12 @@ var LOADER = {
 
 function loadJSON()
 {
-    $.ajax({dataType: "json",
-        url: "data/" + current_project + '.json',
+    
+    var project = current_project.split("/")[1];
+    
+    $.ajax({
+        dataType: "json",
+        url: "litefile/files/" + current_user + "/projects/" + project  + '.json',
         error: function(err)
         {
             console.error(err)
@@ -52,9 +56,6 @@ function loadJSON()
                 APP.parseJSON(data);
                 // LOAD ALWAYS AFTER GETTING DATA
                 loadMapsAPI();
-                //Allows to DRAG AND DROP files
-//                dropbox = document.getElementById("myCanvas");
-//                dropbox.addEventListener("dragenter", onDragEvent, false);
                 
                 // clear tmp files
                 $.ajax({

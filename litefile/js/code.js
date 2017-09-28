@@ -360,6 +360,7 @@ function systemReady()
 
 	$("#fileinfo-dialog .open-button").click( function(e) {
 		var url = this.dataset["url"];
+        console.log(url);
 		window.open(url,"_blank");
 	});
 

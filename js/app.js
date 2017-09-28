@@ -38,78 +38,14 @@ var APP = {
             return;
         }
 
-        var meshURL = renderData.mesh;
-        var textureURL = renderData.texture;
-
-        if (textureURL.length > 1) {
-            console.log("MAS DE UNA TEXTURA");
-        }
-
-        /*Para calcular el path completo de la mesh*/ 
-
-        var string1 = current_project;
-        var string2 = meshURL;
-
-        string1 = string1.split('/');
-        string2 = string2.split('/');
-
-        var iNOIncluir;
-
-        for (var i = 0; i < string1.length; i++){
-            for (var j = 0; j < string2.length; j++) {
-                if (string1[i] == string2[j]){
-                    iNOIncluir = i;
-                }
-            }
-        }
-
-        var totalPathMesh = "data/";
-        for (var i = 0; i < string1.length; i++) {
-            if (i != iNOIncluir)  {
-                totalPathMesh = totalPathMesh + string1[i] + '/';
-            }
-        }
+        var root = "litefile/files/" + current_user + "/projects/";
+        var meshURL = root + renderData.mesh;
+        var textURL = root + renderData.texture;
         
-        for (var j = 0; j < string2.length; j++) {
-            totalPathMesh = totalPathMesh + string2[j];
-            if (j < string2.length-1) {
-                totalPathMesh = totalPathMesh + '/';
-            } 
-        }
-        /* Ya tenemos el path completo de la Mesh */ 
-
-        /* Para mirar cual es el path completo de la texture*/ 
-
-        // por ahora solo cojo la primera textura
-        string2 = textureURL[0];
-        string2 = string2.split('/');
-
-        for (var i = 0; i < string1.length; i++){
-            for (var j = 0; j < string2.length; j++) {
-                if (string1[i] == string2[j]){
-                    iNOIncluir = i;
-                }
-            }
-        }
-        var totalPathTexture = "data/";
-        for (var i = 0; i < string1.length; i++) {
-            if (i != iNOIncluir)  {
-                totalPathTexture = totalPathTexture + string1[i] + '/';
-            }
-        }
-        for (var j = 0; j < string2.length; j++) {
-            totalPathTexture = totalPathTexture + string2[j];
-            if (j < string2.length-1) {
-                totalPathTexture = totalPathTexture + '/';
-            } 
-        }
-
-        /* Ya tenemos el path completo de la Texture */     
-
-        APP.init(current_project, totalPathMesh, totalPathTexture);
+        APP.init(meshURL, textURL);
     },
 
-    init: function(current_project, meshURL, textureURL)
+    init: function(meshURL, textureURL)
     {
         //create the rendering context
         context = GL.create({width: window.innerWidth, height:window.innerHeight, alpha:true});
@@ -155,8 +91,21 @@ var APP = {
         
         mesh = GL.Mesh.fromURL( obj.mesh, function (response) {
             
-            if(response === null)
+            if(response === null){
                 console.warn("no binary mesh found", obj.mesh);
+                
+                obj.mesh = meshURL;
+                // load obj
+                mesh = GL.Mesh.fromURL( obj.mesh, function (response) {
+                    if(response === null){
+                        console.warn("no mesh found", obj.mesh);
+                    }
+                    else
+                        on_load();
+                }); //load from URL
+                
+            }
+                
             else
                 on_load();
         }); //load from URL
@@ -279,7 +228,7 @@ var APP = {
             _dt = dt;
         }
 
-        context.onmousemove = function(e)
+//        context.onmousemove = function(e)
         {
             mouse = [e.canvasx, gl.canvas.height - e.canvasy];
 

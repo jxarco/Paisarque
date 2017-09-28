@@ -1,0 +1,1 @@
+{"id":"foo","descripcion":"nodesc","autor":"Alex","lugar":"Parets del Vallés","coordenadas":{"lat":"21.1339","lng":"5.1833"},"render":{"id":"foo","mesh":"foo/mesh.obj","texture":["foo/tex_0.jpg"],"rotaciones":[],"metro":-1},"extra":[],"anotaciones":[],"medidas":[],"segmentos":[],"areas":[]}

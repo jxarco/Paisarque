@@ -70,13 +70,6 @@ function systemReady()
 				onLoggedIn(session);
                 console.log(session);
                 localStorage.setItem('session', JSON.stringify(session));
-                
-                $.ajax({type: "POST",
-                    dataType : 'json',
-                    url: 'server/php/createUserFolder.php',
-                    data: { user: values["username"]}
-                });
-                
                 window.location.href = "inicio.php?user=" + session.user.username;
             }
 			else
@@ -93,13 +86,6 @@ function systemReady()
         $(".textUser").html(user["username"]);
         $(".textUser").append('<span style="margin-left: 10px;" class="glyphicon glyphicon-user"></span>');
     }
-    
-    var tableInicio = document.getElementById("tableInicio");
-    if (tableInicio != null) {
-        var userElement = document.querySelector(".textUser");        
-        var pathElements = "data/" + userElement;
-    }
-    
     
      $("#formRegister").on('submit', function(e) {
         
@@ -131,6 +117,30 @@ function systemReady()
             if(created)
             {
                 window.alert("Usuario creado");
+                
+                
+                LiteFileServer.login( values["username"], values["password"], function(session, result){
+            
+                    // si el login es correcto, se entra y se va a la url de inicio
+                    if( session.status == LiteFileServer.LOGGED ) {
+                        onLoggedIn(session);
+                        console.log(session);
+                        localStorage.setItem('session', JSON.stringify(session));
+                        
+                        var fullpath = session.user.username;
+                        session.createFolder(fullpath);
+                        
+                        fullpath += "/projects/";
+                        session.createFolder(fullpath);
+                        
+                        window.location.href = "inicio.php?user=" + session.user.username;
+                    }
+                    else
+                        throw("error login in");
+                });
+                
+                
+                
             } 
         } ,null, session ? session.token : null, valuesString);
         

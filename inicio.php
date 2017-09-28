@@ -50,7 +50,7 @@
                                 <tbody id="tableInicio">
                                     <!-- Esto es necesario para saber cuantos JSON hay y hacer una lista de ellos para luego acceder al modelo -->
                                     <?php                                         
-                                        $directory = "data/" . $_GET['user'] ."/";
+                                        $directory = "litefile/files/" . $_GET['user'] ."/projects/";
 
                                         $filecount = 0;
                                         $files = glob($directory . "*.{json}",GLOB_BRACE);
@@ -61,14 +61,15 @@
 
                                         for ($i = 0; $i < $filecount; $i = $i+1) {
 
-                                            $user = substr(substr($files[$i], 5),0, -5);
                                             $username = $_GET['user'];
-                                            $project = substr($user, strlen($username) + 1, strlen($user));
-
+                                            $hoops = strlen("litefile/files/") + strlen($username) + strlen("/projects/");
+                                            $project = substr(substr($files[$i], $hoops),0, -5); // -5(.json)
+                                            $folder = $username . "/" . $project;
+                                            
                                             echo '<tr a class="pointer" id="' . $project . '" onclick' . '=' . '"loadContent(' . "'modelo.html','";
-                                            echo $user;
+                                            echo $folder;
                                             echo "')" . '"' . ">" . "<td>";
-                                            echo str_replace('_', ' ', ucfirst($project))  . "</td>" . "<td>";
+                                            echo ucfirst($project)  . "</td>" . "<td>";
 
                                             $string = file_get_contents($files[$i]);
                                             $json_a = json_decode($string, true);
@@ -162,13 +163,13 @@
                             <div class="form-group">
                                 <label for="mesh" class="col-lg-2 control-label">Mesh</label>
                                 <div class="col-lg-10">
-                                    <input type="file" class="form-control" id="mesh" name="mesh">
+                                    <input required type="file" class="form-control" id="mesh" name="mesh">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="textura" class="col-lg-2 control-label">Textura</label>
                                 <div class="col-lg-10">
-                                    <input type="file" class="form-control" id="textura" name="textura">
+                                    <input required type="file" class="form-control" id="textura" name="textura">
                                 </div>
                             </div>
                         </fieldset>
