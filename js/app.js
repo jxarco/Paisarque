@@ -187,7 +187,7 @@ var APP = {
         rot_grid = rot_grid.grid(5, {visible: false});
         
         //  skybox texture
-        var cubeMaptexture = GL.Texture.cubemapFromURL("data/skybox.png",{is_cross: 1, minFilter: gl.LINEAR_MIPMAP_LINEAR });
+        var cubeMaptexture = GL.Texture.cubemapFromURL("data/cubemaps/skybox.png",{is_cross: 1, minFilter: gl.LINEAR_MIPMAP_LINEAR });
         cubeMaptexture.bind(0);
         renderer.textures["skybox"] = cubeMaptexture;
         

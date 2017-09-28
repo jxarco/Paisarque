@@ -136,7 +136,44 @@ h1, h2, h3, h4, h5, h6{
 /*********************************************************/
 /* modelo.php */
 
-#capturing{
+
+#tab-content1-large{ /* info div */
+    overflow-y: scroll !important;
+}
+
+#tab-content1-large::-webkit-scrollbar { 
+    display: none; 
+}
+
+#cubemaps{
+    width: 100%;
+    height: 220px;
+    box-sizing: border-box;
+}
+
+.responsive div img {
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+}
+
+.responsive div img:hover {
+    border: 2px solid #777;
+}
+
+.responsive {
+    float: left;
+    width: 49.99999%;
+    margin: 6px 0;
+}
+
+#pr-options{
+    display: none;
+    width: 100%;
+    height: 200px;
+}
+
+#capturing{ /* here goes the screenshot*/
     width: 100%;
     height: auto;
     margin-top: 255px !important;

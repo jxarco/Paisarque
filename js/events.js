@@ -13,6 +13,23 @@ $("#tools-tab .btn.tool-btn").click(function(){
     }
 });
 
+$(".slide-tab").click(function(){
+    
+    var target_id = $(this).data("target");
+    var target = $(target_id);
+    
+    if(target.css("display") == "none")
+        target.slideDown('slow'); 
+    else
+        target.slideUp('slow'); 
+   
+});
+
+$(".cubemap-img").click(function(){
+   var url = $(this).data("src");
+    APP.setCubeMap(url);
+});
+
 /* EXPORT STUFF */
 
 $(".export-pdf").click(function(){
@@ -379,7 +396,7 @@ $("#formUploadProject").on('submit', function(e)
     console.log("preparing to upload project...");
     $('#GSCCModal').modal('hide');   
     
-    var path = "guest/foo/";
+    /*var path = "guest/foo/";
     
     session.createFolder( path, function(){
                             console.log("completed");
@@ -387,10 +404,10 @@ $("#formUploadProject").on('submit', function(e)
                             console.log("error");
                         } );
     
-    return;
+    return;*/
     
     
-    path = "/guest/foo.json";
+    var path = "guest/carpeta/foo.json";
     
     /**
     * Uploads a file to the server (it allows to send other info too like preview)

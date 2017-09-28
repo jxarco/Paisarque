@@ -900,7 +900,9 @@ Session.prototype.uploadFile = function( fullpath, data, extra, on_complete, on_
 		console.error("Filename has invalid characters: " + fullpath );
 		return;
 	}
-
+    
+    console.log("Debug", info);
+    
 	var unit = info.unit;
 	if(!unit)
 	{

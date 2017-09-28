@@ -53,8 +53,8 @@ function loadJSON()
                 // LOAD ALWAYS AFTER GETTING DATA
                 loadMapsAPI();
                 //Allows to DRAG AND DROP files
-                dropbox = document.getElementById("myCanvas");
-                dropbox.addEventListener("dragenter", onDragEvent, false);
+//                dropbox = document.getElementById("myCanvas");
+//                dropbox.addEventListener("dragenter", onDragEvent, false);
                 
                 // clear tmp files
                 $.ajax({
@@ -63,21 +63,16 @@ function loadJSON()
                     'folder': "../../data/uploadedfiles/files",
                     }
                 });
+                        
+                addCubemap("skybox.png", "skybox_preview.png");
+                addCubemap("skybox2.png", "skybox2_preview.png");
+                addCubemap("skybox3.png", "skybox3_preview.png");
+                addCubemap("skybox4.png", "skybox4_preview.png");
             }
         }
     });
 }
 // FINISH GETTING DATA FROM JSONS
-
-function onDragEvent(evt)
-{
-//    if(evt.type == "dragenter")
-//        dropbox.style.border = "3px dotted red";
-//    if(evt.type == "dragleave")
-//        dropbox.style.border = "none";
-//    if(evt.type == "drop")
-//        dropbox.style.border = "none";
-}
 
 function deleteProject(user, project)
 {
@@ -159,7 +154,19 @@ function initMap(lat, lng)
         position: marker,
         map: map,
         title: location
-    });    
+    });  
+}
+
+function addCubemap(src, preview)
+{
+    var container = $("#cubemaps-in");
+    
+    container.append(
+        '<div class="responsive">' +
+            '<div class="gallery">' +
+                '<img class="cubemap-img" src="data/cubemaps/' + preview + '" data-src="data/cubemaps/' + src + '">' +
+            '</div>' +
+        '</div>');
 }
 
 function uploadBLOB(e)
