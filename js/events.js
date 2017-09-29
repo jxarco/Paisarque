@@ -26,11 +26,6 @@ $(".slide-tab").click(function(){
    
 });
 
-$(".cubemap-img").click(function(){
-   var url = $(this).data("src");
-    APP.setCubeMap(url);
-});
-
 /* EXPORT STUFF */
 
 $(".export-pdf").click(function(){
@@ -124,33 +119,23 @@ $("#formAddImage").on('submit', function(e)
     e.preventDefault();
     $('#TESTModal').modal('hide');   
     
-    //Cogemos los valores y quitamos el comportamiento por defecto del botón submit
     var values = getFormValues(this);
     
     /*       guest/grave       */
     var project_id = current_project;
 
-    // Enviar tambien la informacion de en que usuario estamos
-    // para subir los ficheros a la carpeta que le corresponde
-    
     var formData = new FormData(this);
     var user = getQueryVariable("user") || "guest";
     formData.append("user", user);
     formData.append("id", project_id);
     
-    var urlImage = "data/" + project_id + "/"; 
+    var urlImage = "litefile/files/" + current_user + "/projects/" + copy._id + "/";
     
     $(':file').each(function() {
         var input = $(this);
-        
-        if (input[0]["value"] == ""){
-                alert("Asegúrate de subir una imagen!");
-                return 0;
-            } else {
-                var auxList = input[0]["value"].split('\\');
-                var nameMesh = auxList[auxList.length - 1];
-                urlImage += nameMesh;
-            }
+        var auxList = input[0]["value"].split('\\');
+        var nameMesh = auxList[auxList.length - 1];
+        urlImage += nameMesh;
         
         // add image to project
         if(copy._extra.length)
@@ -164,27 +149,32 @@ $("#formAddImage").on('submit', function(e)
         copy.pushExtra(name, "image", urlImage);
     });
     
-    $('#loadingModal').modal('show');   
+    $('#loadingModal').modal('show'); 
+    // Upload file
     
-    //  UNCOMMENT TO DEBUG
-    //  return 0;
-    //
-    
-    $.ajax( {
-        url: 'server/php/uploadImage.php',
-        type: 'POST',
-        data: formData,
-        cache: false,
-        contentType: false,
-        processData: false, 
-        success: function(data) {
-            $('#loadingModal').modal('hide');               
-        }
-    } );
-    
-    // Resetear campos del form
-    $(this).trigger("reset");
-    parseExtraJSON(copy._extra);
+    for(var i = 0, f; f = input_files[i]; i++)
+    {
+        if(f.constructor == File)
+		{
+			var fileReader = new FileReader();
+            
+             fileReader.onload = (function(theFile) {
+                return function(e) {
+                    var arrayBuffer = this.result;
+                    var fullpath = current_user + "/projects/" + copy._id + "/" + theFile.name;
+                    
+                    session.uploadFile( fullpath, arrayBuffer, 0, function(){
+                        $('#loadingModal').modal('hide');
+                        // Resetear campos del form
+                        $(this).trigger("reset");
+                        parseExtraJSON(copy._extra);
+                    });
+                };
+              })(f);
+            
+            fileReader.readAsArrayBuffer( f );
+		}
+    }
 });
 
 // *******************************************************************************
@@ -474,21 +464,6 @@ $("#formUploadProject").on('submit', function(e)
     session.uploadFile( path, JSON.stringify(o), 0, on_complete, on_error);
     
     $('#loadingModal').modal('show');  
-    
-    var uploadBinary = function(file, extension)
-    {
-//        var reader = new FileReader();
-//        reader.onload = function() { 
-//            var result = this.result;
-//            var mesh = new GL.Mesh();
-//            mesh.parse( result, extension );
-//            
-//            window.download(mesh, "wbin");
-//            
-//        };
-//        
-//        reader.readAsText(file);
-    }
 
     var path = current_user + "/projects/" + project_id + "/";
     session.createFolder(path, on_complete, on_error);
@@ -505,14 +480,7 @@ $("#formUploadProject").on('submit', function(e)
                     var fullpath = current_user + "/projects/" + project_id + "/" + theFile.name;
                     
                     session.uploadFile( fullpath, arrayBuffer, 0, function(){
-                        
-                        var pos = theFile.name.lastIndexOf(".");
-                        var extension = theFile.name.substr(pos+1).toLowerCase();
-                        
-                        if(extension == "obj")
-                            uploadBinary(theFile, "obj");
-                        
-                            $('#loadingModal').modal('hide');                  
+                        $('#loadingModal').modal('hide');                  
                     }, on_error );
                 };
               })(f);
@@ -521,6 +489,7 @@ $("#formUploadProject").on('submit', function(e)
 		}
     }
     
+    input_files = [];
     $(this).trigger("reset");
     
 });
@@ -557,4 +526,8 @@ function handleFileSelect(evt) {
 if(document.getElementById('mesh') && document.getElementById('textura')){
     document.getElementById('mesh').addEventListener('change', handleFileSelect, false);
     document.getElementById('textura').addEventListener('change', handleFileSelect, false);
+}
+
+if(document.getElementById('image')){
+    document.getElementById('image').addEventListener('change', handleFileSelect, false);
 }

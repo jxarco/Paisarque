@@ -93,15 +93,33 @@ var APP = {
             
             if(response === null){
                 console.warn("no binary mesh found", obj.mesh);
-                
-                obj.mesh = meshURL;
                 // load obj
+                obj.mesh = meshURL;
                 mesh = GL.Mesh.fromURL( obj.mesh, function (response) {
                     if(response === null){
                         console.warn("no mesh found", obj.mesh);
                     }
-                    else
+                    else// upload binary mesh for next use
+                    {
+                        var file = mesh.encode("wbin");
+                        if(file)
+                        {
+                            var fileReader = new FileReader();
+                            fileReader.onload = function() {
+                                    var arrayBuffer = this.result;
+                                    var fullpath = current_user + "/projects/" + project._id + "/mesh.wbin";
+                                    session.uploadFile( fullpath, arrayBuffer, 0, function(){
+                                        console.log("binary uploaded");
+                                    }, function(err){
+                                        console.error(err);
+                                    });
+                            };
+                            fileReader.readAsArrayBuffer( new Blob([file]) );
+                        }else
+                            console.error("encoding error");
+                        
                         on_load();
+                    }
                 }); //load from URL
                 
             }
@@ -228,7 +246,7 @@ var APP = {
             _dt = dt;
         }
 
-//        context.onmousemove = function(e)
+        context.onmousemove = function(e)
         {
             mouse = [e.canvasx, gl.canvas.height - e.canvasy];
 

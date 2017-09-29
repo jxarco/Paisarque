@@ -1,1 +1,0 @@
-{"id":"temple","descripcion":"nodesc","autor":"Melanie","lugar":"Sudan","coordenadas":{"lat":13.63101,"lng":29.218989},"render":{"id":"temple","mesh":"Temple/mesh.obj","texture":["Temple/tex01.jpg"],"rotaciones":[-0.49897289276123047, -0.47758761048316956, -0.48578038811683655, 0.535669207572937],"metro":-1},"extra":[],"anotaciones":[],"medidas":[],"segmentos":[], "areas":[]}

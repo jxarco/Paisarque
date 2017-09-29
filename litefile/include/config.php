@@ -34,7 +34,7 @@ define('USE_EXTENSIONS_BLACKLIST',true); //in case you want to ban some type of 
 define('EXTENSIONS_BLACKLIST','exe,o,dll,php,py,rb,app,apk,bat,cmd,com,inx,ipa,isu,job,lnk,msc,msi,msp,mst,osx,out,paf,pif,reg,run,rgs,sct,shb,shs,u3p,vb,vbe,vbs,ws,wsf');
 
 define('VALID_EXTENSIONS','png,jpg,jpeg,bmp,txt,json,js,css,html,htm,ttf,otf,wbin,obj,dae');
-define('ALLOW_REMOTE_FILE_DOWNLOADING', false );  //allows to upload files that are not in this server
+define('ALLOW_REMOTE_FILE_DOWNLOADING', true );  //allows to upload files that are not in this server
 
 //used to rename categories by file type
 $categories_by_type = Array();

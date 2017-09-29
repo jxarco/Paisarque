@@ -4,8 +4,6 @@ var current_project = getQueryVariable("r");
 
 // @copy of the project
 var copy = null;
-// @drop zone for skybox
-var dropbox = null;
 
 var LOADER = {
     // 3d tab
@@ -39,7 +37,6 @@ var LOADER = {
 
 function loadJSON()
 {
-    
     var project = current_project.split("/")[1];
     
     $.ajax({
@@ -64,16 +61,47 @@ function loadJSON()
                     'folder': "../../data/uploadedfiles/files",
                     }
                 });
-                        
-                addCubemap("skybox.png", "skybox_preview.png");
-                addCubemap("skybox2.png", "skybox2_preview.png");
-                addCubemap("skybox3.png", "skybox3_preview.png");
-                addCubemap("skybox4.png", "skybox4_preview.png");
+                    
+                // get data from DATA variable and fill any gap
+                parseDATA(0, null);
             }
         }
     });
 }
 // FINISH GETTING DATA FROM JSONS
+
+function parseDATA(active, options)
+{
+    if(!DATA || active)
+        return 0;
+    
+    // load by default cubemaps   
+    for(var i in DATA.cubemaps)
+    {
+        var o = DATA.cubemaps[i];
+        var src = o.src;
+        var pre = o.preview;
+        
+        var container = $("#cubemaps-in");
+        container.append(
+            '<div class="responsive">' +
+                '<div class="gallery">' +
+                    '<img class="cubemap-img" src="data/cubemaps/' + pre + '" data-src="data/cubemaps/' + src + '">' +
+                '</div>' +
+            '</div>');
+
+        $(".cubemap-img").click(function(){
+           var url = $(this).data("src");
+            APP.setCubeMap(url);
+        });
+    }
+    
+    if(!options)
+        return 0;
+    
+    //
+}
+
 
 function deleteProject(user, project)
 {
@@ -158,47 +186,41 @@ function initMap(lat, lng)
     });  
 }
 
-function addCubemap(src, preview)
-{
-    var container = $("#cubemaps-in");
-    
-    container.append(
-        '<div class="responsive">' +
-            '<div class="gallery">' +
-                '<img class="cubemap-img" src="data/cubemaps/' + preview + '" data-src="data/cubemaps/' + src + '">' +
-            '</div>' +
-        '</div>');
-}
-
 function uploadBLOB(e)
 {
     var url = e.data("url");
-    var path = "data/" + current_project + "/" + makeid(8) + ".png";
+    var path = "litefile/files/" + current_user + "/projects/" + project._id + "/" + makeid(8) + ".png";
+    var php_path = "../../" + path;
     
     var on_success = function(){
-            // add image to project
-            if(project._extra.length)
-                extraCounter = project._extra[project._extra.length-1].name.split("_")[1];
-            else
-                extraCounter = -1;
+        // add image to project
+        if(project._extra.length)
+            extraCounter = project._extra[project._extra.length-1].name.split("_")[1];
+        else
+            extraCounter = -1;
 
-            extraCounter++;
-            var name = "extra_" + extraCounter;
+        extraCounter++;
+        var name = "extra_" + extraCounter;
 
-            project.pushExtra(name, "image", path);
-            project.save();
-        };
-    
+        project.pushExtra(name, "image", path);
+        project.save(); // necessary to avoid losing data
+    };
     
     $.ajax({
         type: "POST",
-        url: 'uploadURL.php',
+        url: 'server/php/uploadURL.php',
         data: {
             'url' : url,
-            'path' : path
+            'path' : php_path
             },
         success: on_success
     });
+    
+    
+    // ASK FOR IT ???
+//    session.uploadRemoteFile(url, path, null, function(err){
+//        console.error(err);
+//    });
 }
 
 function setInput(id, type)
