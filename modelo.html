@@ -162,9 +162,11 @@
                              role="tabpanel" 
                              aria-labelledby="informacion" 
                              aria-hidden="false">
+                            
+                            <label style="display: flex;"><p>Auto-guardado</p><i id="auto-save-btn" class="material-icons show">fiber_manual_record</i></label>         
                             <label style="display: flex;" for="comment" class="slide-tab" data-target='#comment'><p>Descripción</p><i class="material-icons">keyboard_arrow_down</i></label>
                             <textarea class="form-control pro-info" rows="5" id="comment"></textarea>
-                            <label style="display: flex;" for="comment" class="slide-tab" data-target='#map'><p>Ubicación</p><i class="material-icons">keyboard_arrow_down</i></label>
+                            <label style="display: flex;" class="slide-tab" data-target='#map'><p>Ubicación</p><i class="material-icons">keyboard_arrow_down</i></label>
                             <div id="map"></div>
                             <div style="display: flex;">
                                 <textarea id="lat" placeholder="LAT" class="form-control newcoord"></textarea>
@@ -172,19 +174,11 @@
                                 <button class="newcoord btn" id="coord-btn"><i class="material-icons">repeat</i></button>
                             </div>
                             <label style="display: flex;" class="slide-tab" data-target='#cubemaps'><p>Fondos</p><i class="material-icons">keyboard_arrow_down</i></label>
-                            <div id="cubemaps">
+                            <div id="cubemaps" style="display: none;">
                                 <div id="cubemaps-in">
                                     
                                 </div>
                             </div>
-<!--
-                            <label style="display: flex;" class="slide-tab" data-target='#pr-options'><p>Otras opciones</p><i class="material-icons">keyboard_arrow_down</i></label>
-                            <div id="pr-options">
-                                <p onclick=''><i class='material-icons show'>fiber_manual_record</i>Auto-guardado</p> 
-                                <p onclick=''><i class='material-icons show'>fiber_manual_record</i>Auto-guardado</p> 
-                                <p onclick=''><i class='material-icons show'>fiber_manual_record</i>Auto-guardado</p> 
-                            </div>
--->
                         </div>
                     </li>
                     

@@ -42,6 +42,7 @@
                             <table id="projects-tb" class="table table-striped table-hover ">
                                 <thead>
                                     <tr>
+                                        <th>Vista previa</th>
                                         <th>Nombre proyecto</th>
                                         <th>Autor proyecto</th>
                                         <th>Lugar</th>
@@ -58,35 +59,42 @@
                                         if ($files){
                                             $filecount = count($files);
                                         }
-
+                                    
                                         for ($i = 0; $i < $filecount; $i = $i+1) {
 
                                             $username = $_GET['user'];
                                             $hoops = strlen("litefile/files/") + strlen($username) + strlen("/projects/");
                                             $project = substr(substr($files[$i], $hoops),0, -5); // -5(.json)
                                             $folder = $username . "/" . $project;
+                                            $src_preview = "litefile/files/" . $_GET['user'] ."/projects/" . $project . "/preview.png"; 
                                             
-                                            echo '<tr a class="pointer" id="' . $project . '" onclick' . '=' . '"loadContent(' . "'modelo.html','";
-                                            echo $folder;
-                                            echo "')" . '"' . ">" . "<td>";
-                                            echo ucfirst($project)  . "</td>" . "<td>";
-
+                                            $exists = file_exists($src_preview);
+                                            if(!$exists)
+                                                 $src_preview = "litefile/files/project-preview.png"; 
+                                            
+                                            print_r( '<tr class="pointer" id="' . $project . '" onclick' . '=' . '"loadContent(' . "'modelo.html','");
+                                            print_r( $folder );
+                                            print_r( "')" . '"' . ">" );
+                                            print_r( "<td>" . "<img class='project-preview' src='" . $src_preview . "' title='Vista previa de " . $project . "'>" . "</td>" );
+                                            print_r( "<td>" . ucfirst($project)  . "</td>");
+                                            
+                                            print_r("<td>");
                                             $string = file_get_contents($files[$i]);
                                             $json_a = json_decode($string, true);
 
                                             foreach ($json_a as $k => $v) {
                                                 if ($k == "autor")
-                                                    echo $v;
+                                                     print_r($v);
                                             }
 
-                                            echo "</td>" . "<td>";
+                                            print_r("</td><td>");
 
                                             foreach ($json_a as $k => $v) {
                                                 if ($k == "lugar")
-                                                    echo $v;
+                                                    print_r($v);
                                             }
 
-                                            echo "</td>" . "</tr>". "<br>";
+                                            print_r("</td></tr><br>");
 
                                         }
                                     ?>

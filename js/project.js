@@ -34,6 +34,18 @@ Project.prototype._ctor = function( data )
 }
 
 /*
+*   @methods setters of attrs
+*/
+
+Project.prototype.setAuthor = function(author)
+{
+    this._author = author;
+    
+    if(this._auto_save)
+        this.save();
+}
+
+/*
 *   @method pushExtra
 *   Insert extra information to the _extra list.
 *   @param type {string} data type (pdf, image, etc)
@@ -80,22 +92,6 @@ Project.prototype.deleteExtra = function( selector, type )
     if (index > -1) {
         this._extra.splice(index, 1);
     }
-    
-    if(this._auto_save)
-        this.save();
-}
-
-/*
-*   @method rename
-*   Renames project (ID!!)
-*   @param name {string} new name
-*/
-Project.prototype.rename = function( name )
-{
-    var new_name = name.replace(/ /g, '_');
-    new_name = new_name.charAt(0).toLowerCase() + string.slice(1);
-    
-	this._id = new_name;
     
     if(this._auto_save)
         this.save();
@@ -569,6 +565,8 @@ Project.prototype.FROMJSON = function( data )
     this._uid = this._last_project_id++;
     this._json = data;
     
+    this._auto_save = data.config["auto-save"];
+    
 	// data
 	this._description = data.descripcion;
     this._id = data.id;
@@ -669,13 +667,13 @@ Project.prototype.FROMJSON = function( data )
 */
 Project.prototype.save = function( overwrite, extra )
 {
-    overwrite = overwrite || true;
-    extra = extra || "";
-    
-    var project = this._user + "/" + this._id;
-    
-    if(!overwrite)
-        project += extra;
+//    overwrite = overwrite || true;
+//    extra = extra || "";
+//    
+//    var project = this._user + "/" + this._id;
+//    
+//    if(!overwrite)
+//        project += extra;
     
     var o = {
         "id": this._id,
@@ -689,8 +687,13 @@ Project.prototype.save = function( overwrite, extra )
         "anotaciones": this._anotations,
         "medidas": this._measures,
         "segmentos": this._segments,
-        "areas": this._areas
+        "areas": this._areas,
+        "config": {
+                "auto-save": this._auto_save
+        }
     };
+    
+//    console.log(JSON.stringify(o));
     
     var on_complete = function(){
         console.log("saved");
@@ -709,11 +712,11 @@ Project.prototype.save = function( overwrite, extra )
 
 
 /*  
-*   @method check
+*   @method config
 *   Cambiamos propiedades de la página dependiendo de 
 *   atributos del proyecto
 */
-Project.prototype.check = function()
+Project.prototype.config = function()
 {
     if(this._meter !== -1)
         $(".measures-btns").css('opacity', '1');
@@ -724,6 +727,10 @@ Project.prototype.check = function()
     // coordinates
     $("#lat").val(this._coordinates.lat);
     $("#lon").val(this._coordinates.lng);
+    
+    // auto save css
+    if(this._auto_save)
+        $("#auto-save-btn").addClass("auto-saving");
 }
 
 
@@ -755,11 +762,30 @@ Project.prototype.fill = function( data )
     this._measures = copy._measures;
     this._segments = copy._segments;
     this._areas = copy._areas;
+    this._auto_save = copy._auto_save;
 }
 
-/*
-Project.prototype.delete = function()
-{
+// some projects events
 
-}
-*/
+$("#auto-save-btn").click(function(){
+   
+    var e = $(this);
+    
+    if(!project){
+        console.error("no project");
+        return 0;
+    }
+    
+    if(!e.hasClass("auto-saving")){
+        e.addClass("auto-saving");
+        
+        project._auto_save = true;
+        project.save();
+    }
+    else{
+        e.removeClass("auto-saving");
+        project._auto_save = false;
+        project.save();
+    }
+    
+});

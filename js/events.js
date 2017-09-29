@@ -445,7 +445,11 @@ $("#formUploadProject").on('submit', function(e)
         "anotaciones": [],
         "medidas": [],
         "segmentos": [],
-        "areas": []
+        "areas": [],
+        "config":
+        {
+            "auto-save":false
+        }
     };
     
     var on_complete = function(){
@@ -480,7 +484,8 @@ $("#formUploadProject").on('submit', function(e)
                     var fullpath = current_user + "/projects/" + project_id + "/" + theFile.name;
                     
                     session.uploadFile( fullpath, arrayBuffer, 0, function(){
-                        $('#loadingModal').modal('hide');                  
+                        $('#loadingModal').modal('hide');     
+                        location = location;
                     }, on_error );
                 };
               })(f);

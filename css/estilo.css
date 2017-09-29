@@ -78,6 +78,20 @@ h1, h2, h3, h4, h5, h6{
 /*********************************************************/
 /* inicio.php */
 
+#tableInicio tr, #tableInicio td{
+    height: 125px;
+    line-height: 125px;
+}
+
+#tableInicio td{
+    width: 25%;
+}
+
+.project-preview{
+    height: 100%;
+    width: 80%;
+}
+
 .form-control.index{
     width: 50%;
     margin-left: 25%;
@@ -506,9 +520,10 @@ h1, h2, h3, h4, h5, h6{
     text-shadow: 0 0 5px grey;
     margin-left: 5px;
     margin-top: 5px;
+    cursor: pointer;
 }
 
-.on-point .show{
+.on-point .show, .show.auto-saving{
     color: rgb(66, 134, 244) !important;
     text-shadow: 0 0 5px rgb(66, 134, 244) !important;
 }

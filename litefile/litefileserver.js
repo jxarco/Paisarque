@@ -901,7 +901,7 @@ Session.prototype.uploadFile = function( fullpath, data, extra, on_complete, on_
 		return;
 	}
     
-    console.log("Debug", info);
+//    console.log("Debug", info);
     
 	var unit = info.unit;
 	if(!unit)

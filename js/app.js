@@ -26,7 +26,7 @@ var APP = {
     {
         if(project === null){
             project = new Project( json, current_user, {no_construct: false} );
-            project.check();
+            project.config();
         } 
 
         /****************************************************************/
@@ -452,49 +452,29 @@ var APP = {
         $("#segment-distances-table").find("tbody").empty();
         $("#areas-table").find("tbody").empty();
 
-        APP.rotation = !APP.rotation;
-        scene.root.getNodeByName("grid").flags.visible = APP.rotation;;
+        APP.rotation = true;
+        scene.root.getNodeByName("grid").flags.visible = true;
 
-        if(APP.rotation)
+        putCanvasMessage("Usa los sliders o bien mantén pulsadas las teclas A, S y D mientras arrastras para rotar en cada eje.", 5000, {type: "help"});
+
+        $("#cardinal-axis").fadeIn();
+        $('.sliders').fadeIn();
+
+        context.onmousemove = function(e)
         {
-            putCanvasMessage("Usa los sliders o bien mantén pulsadas las teclas A, S y D mientras arrastras para rotar en cada eje.", 5000, {type: "help"});
-
-            $("#cardinal-axis").fadeIn();
-            $('.sliders').fadeIn();
-
-            context.onmousemove = function(e)
-            {
-                mouse = [e.canvasx, gl.canvas.height - e.canvasy];
-                if (e.dragging && e.leftButton)
-                    if(keys[KEY_A])
-                        obj.rotate(-e.deltax * 0.1 * _dt, RD.UP);
-                    else if(keys[KEY_S])
-                        obj.rotate(-e.deltax * 0.1 * _dt, RD.FRONT);
-                    else if(keys[KEY_D])
-                        obj.rotate(-e.deltax * 0.1 * _dt, RD.LEFT);
-                    else
-                        {
-                            camera.orbit(-e.deltax * 0.1 * _dt, RD.UP,  camera._target);
-                            camera.orbit(-e.deltay * 0.1 * _dt, camera._right, camera._target );
-                        }
-            }
-        }
-        else
-        {
-            $("#cardinal-axis").fadeOut();
-            $('.sliders').fadeOut();        
-
-            context.onmousemove = function(e)
-            {
-                mouse = [e.canvasx, gl.canvas.height - e.canvasy];
-                if (e.dragging && e.leftButton) {
-                    camera.orbit(-e.deltax * 0.1 * _dt, RD.UP,  camera._target);
-                    camera.orbit(-e.deltay * 0.1 * _dt, camera._right, camera._target );
-                }
-                if (e.dragging && e.rightButton) {
-                    camera.moveLocal([-e.deltax * 0.5 * _dt, e.deltay * 0.5 * _dt, 0]);
-                }
-            }
+            mouse = [e.canvasx, gl.canvas.height - e.canvasy];
+            if (e.dragging && e.leftButton)
+                if(keys[KEY_A])
+                    obj.rotate(-e.deltax * 0.1 * _dt, RD.UP);
+                else if(keys[KEY_S])
+                    obj.rotate(-e.deltax * 0.1 * _dt, RD.FRONT);
+                else if(keys[KEY_D])
+                    obj.rotate(-e.deltax * 0.1 * _dt, RD.LEFT);
+                else
+                    {
+                        camera.orbit(-e.deltax * 0.1 * _dt, RD.UP,  camera._target);
+                        camera.orbit(-e.deltay * 0.1 * _dt, camera._right, camera._target );
+                    }
         }
 
     },
@@ -503,12 +483,35 @@ var APP = {
     {
         if(APP.rotation){
             APP.rotation = false;
-            scene.root.getNodeByName("grid").flags.visible = APP.rotation;
+            scene.root.getNodeByName("grid").flags.visible = false;
             revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
-
+            
             project.setRotations(obj._rotation);
             project.save();
             putCanvasMessage("¡Guardado!", 2000);
+            
+             // upload project preview
+            var canvas = gl.snapshot(0, 0, renderer.canvas.width, renderer.canvas.height);
+
+            function on_complete( img_blob )
+                {
+                    var url = canvas.toDataURL();
+                    var path = "../../litefile/files/" + current_user + "/projects/" + project._id + "/" + "preview.png";
+
+                    $.ajax({
+                        type: "POST",
+                        url: 'server/php/uploadURL.php',
+                        data: {
+                            'url' : url,
+                            'path' : path
+                            },
+                        success: on_success = function(){
+                            console.log("done");
+                        }
+                    });
+                }
+
+            canvas.toBlob( on_complete, "image/png");
         }
     },
     
