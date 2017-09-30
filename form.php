@@ -8,7 +8,7 @@
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/estilo.css" rel="stylesheet">
+    <link href="css/stylesheet.css" rel="stylesheet">
         
     </head>
     <body class="container">

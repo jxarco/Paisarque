@@ -2,8 +2,31 @@ var default_project         = null;
 var delete_project_active   = false;
 var current_project = getQueryVariable("r");
 
-// @copy of the project
-var copy = null;
+var copy = null; // copy of the project
+var current_user = "guest"; // default user
+var session = null;
+
+/*
+* Server session stuff
+*/
+var PAS = {
+    recover: function()
+    {
+        if(localStorage.length)
+        {
+            var last_session = JSON.parse(localStorage.session);
+            var new_session = new LiteFileServer.Session();
+            
+            copySession(new_session, last_session);
+            session = new_session;
+            
+            current_user = session.user.username;   
+        }else{
+            console.warn("no session involved");
+            current_user = getQueryVariable('user') || getQueryVariable('r').split("/")[0];
+        }
+    }
+}
 
 var LOADER = {
     // 3d tab

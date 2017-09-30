@@ -1,37 +1,9 @@
-var separator = "__________________________________________________\n";
 var keys = {};
 var KEY_W = 87, KEY_A = 65, KEY_S = 83, KEY_D = 68, KEY_F = 70, KEY_B = 66;
 var KEY_LEFT = 37, KEY_UP = 38, KEY_RIGHT = 39, KEY_DOWN = 40;
 var KEY_SPACE = 32, KEY_ESC = 27, KEY_ENTER = 13;
-
+var separator = "__________________________________________________\n";
 var PLANTA = 0, ALZADO = 1;
-
-// default user
-var current_user = "guest";
-var session = null;
-
-/*
-* Server session stuff
-*/
-
-var PAS = {
-    recover: function()
-    {
-        if(localStorage.length)
-        {
-            var last_session = JSON.parse(localStorage.session);
-            var new_session = new LiteFileServer.Session();
-            
-            copySession(new_session, last_session);
-            session = new_session;
-            
-            current_user = session.user.username;   
-        }else{
-            console.warn("no session involved");
-            current_user = getQueryVariable('user') || getQueryVariable('r').split("/")[0];
-        }
-    }
-}
 
 /*
 * Return query variable from the url
@@ -78,7 +50,6 @@ function revealDOMElements( elements, showing, options )
         if(showing){
             list[i].fadeIn();
         }
-            
         else
         {
             if(options.e == "")
@@ -86,12 +57,12 @@ function revealDOMElements( elements, showing, options )
             else
                 list[i].fadeOut();
         }
-            
 }
 
 /*
-* Capitalize first letter of a string
+* Capitalize or Uncapitalize first letter of a string
 * passed as parameter
+* return {string} result
 */
 
 function capitalizeFirstLetter(string) {
@@ -101,6 +72,12 @@ function capitalizeFirstLetter(string) {
 function uncapitalizeFirstLetter(string) {
     return string.charAt(0).toLowerCase() + string.slice(1);
 }
+
+/*
+* Make a random name 
+* @param len {number} length of the resulting name
+* return {string} result
+*/
 
 function makeid(len) {
   var text = "";
@@ -136,7 +113,6 @@ function drop(ev) {
     if(ev.target.id === "drag-cont")
     {
         $("#drag-cont").removeClass("drag-cont-over");
-//        console.log(data);
         project.deleteAnotation(data);
     }
 }
@@ -193,23 +169,7 @@ var download = function( mesh, format )
     document.body.removeChild(element);
 }
  
-function urlExists( url, o )
-{
-    $.get(url)
-    .done(function() { 
-        if(o.on_success)
-            o.on_success();
-    }).always(function(){
-        if(o.on_complete)
-            o.on_complete();
-    }).fail(function(err) { 
-        if(o.on_error)
-            o.on_error(err);
-    });
-}
-
 function readImage (file, callback) {
-
     var reader = new FileReader();
     var o = null;
 

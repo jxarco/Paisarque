@@ -10,12 +10,10 @@
         <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/estilo.css" rel="stylesheet">
-        <link href="css/header.css" rel="stylesheet">
-        <link rel="stylesheet" href="css/RWD.css"> <!-- responsive web design -->
+        <link href="css/stylesheet.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/responsive-design.css"> <!-- responsive web design -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">        
     </head>
     <body>
         
@@ -226,10 +224,10 @@
         <script type="text/javascript" src="litefile/litefileserver.js"></script>
         <script type="text/javascript" src="litefile/js/codeLite.js"></script>
         <script src="js/utils.js"></script>
+        <script src="js/tools.js"></script>
         <script type="text/javascript">
             PAS.recover(); // load paisarque session
         </script>
-        <script src="js/tools.js"></script>
         <script src="js/events.js"></script>
         <script type="text/javascript">
         

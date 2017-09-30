@@ -9,10 +9,8 @@
     <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
     <!-- Bootstrap -->
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link href="css/estilo.css" rel="stylesheet">
-    <link href="css/header.css" rel="stylesheet">
-    <link href="css/tables.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/RWD.css"> <!-- responsive web design -->
+    <link href="css/stylesheet.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/responsive-design.css"> <!-- responsive web design -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -176,10 +174,11 @@
         <script src="litefile/js/codeLite.js"></script>
         <script src="js/project.js"></script>
         <script src="js/utils.js"></script>
-       <script type="text/javascript">
+        <script src="js/tools.js"></script>
+        <script type="text/javascript">
             PAS.recover(); // load paisarque session
         </script>
-        <script src="js/tools.js"></script>
+        
         <script src="js/events.js"></script>
         <script>
             LOADER.loadProject();
