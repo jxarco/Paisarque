@@ -3,49 +3,81 @@
 @import url('https://fonts.googleapis.com/css?family=Julius+Sans+One|Lobster+Two|Satisfy');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300');
 
-body, html{
-    margin: 0 !important;
+
+html{
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
     padding: 0 !important;
-    font-size: 16px;
+    margin: 0 !important;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body{
+    position: relative;
+    padding: 0 !important;
+    margin: 0 !important;
+    padding-bottom: 150px !important;
+    min-height: 100%;
     font-family: 'Noto Sans', sans-serif !important;
+    
+    font-size: 16px;
     -webkit-font-smoothing: antialiased;
     background-color: rgb(250, 250, 250);
     width: 100% !important;
-    height: 100% !important;
-    min-height: 100% !important;
     color: #333;
+    
     -webkit-user-select: none; /* Chrome/Safari */        
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+ */
 }
 
-body{
-    
-}
 
 content{
-    height: 100% !important;
-    
+    margin: 0 auto;
 }
 
 footer{
-    margin-bottom: 0px;
+    font-size: 12px;
+    height: 150px;
+    background: #e2e2e2;
+    position: absolute;
+    right: 0;
     bottom: 0;
     left: 0;
-    right: 0;
-    color: white !important;
+    padding: 1.5rem;
     text-align: center;
-    font-size: 13px;
-    padding: 15px;
-    clear: both;
-    position: relative;
-    height: auto;
-    background: #e2e2e2;
 }
 
 footer a{
     color: #0070c9;
 }
+
+@media only screen and (max-width: 796px) {
+    /* For medium and small */
+    footer{
+     height: 170px;
+    }
+    body{
+        padding-bottom: 170px;
+    }
+}
+
+@media only screen and (max-width: 674px) {
+    /* For medium and small */
+    footer{
+     height: 220px;
+    }
+    body{
+        padding-bottom: 220px;
+    }
+}
+
 
 label, p{
     color: black;
@@ -93,8 +125,8 @@ h1, h2, h3, h4, h5, h6{
 }
 
 #tableInicio tr, #tableInicio td{
-    height: 125px;
     line-height: 125px;
+    height: 125px !important;
 }
 
 #tableInicio tr{
@@ -103,7 +135,13 @@ h1, h2, h3, h4, h5, h6{
 }
 
 #tableInicio td{
-    width: 25%;
+    
+}
+
+#tableInicio td div{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #tableInicio tr:nth-child(even){
@@ -129,7 +167,7 @@ h1, h2, h3, h4, h5, h6{
 
 .project-preview{
     height: 100%;
-    width: 80%;
+/*    width: 80%;*/
 }
 
 .form-control.index{
@@ -303,16 +341,16 @@ h1, h2, h3, h4, h5, h6{
     overflow-y: hidden;
 }
 
-@media only screen and (max-width: 993px) {
+@media only screen and (max-width: 952px) {
     /* For medium and small */
     .myPlaceholder {
         width: 100% !important;
-        margin-top: 110px !important;
+        margin-top: 46px !important;
         height: calc(100vh - 225px) !important;
     }
     
-    .tutorial{
-        display: none;
+    #tools{
+        width: 100% !important;
     }
 }
 

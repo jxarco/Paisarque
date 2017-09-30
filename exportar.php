@@ -32,7 +32,7 @@
 
         
 </head>
-    <body class="container">
+    <body style="padding-bottom: 200px !important;">
         
        <!-- Navbar -->
         <div class="w3-top">
@@ -149,7 +149,7 @@
         
         </content>
         
-        <footer style="position: absolute;">
+        <footer>
             <p>Proyecto PaisArque - <a href="https://www.upf.edu/web/paisarque">upf.edu/web/paisarque</a></p>
             <p>CaSES: Complexity and Socio-Ecological Dynamics - Edificio Mercè Rodoreda (Campus de la Ciutadella)
                 Ramon Trias Fargas, 25-27

@@ -37,7 +37,7 @@
         </script>
     </head>
 
-    <body>
+    <body style="padding-bottom: 200px !important;">
         <!-- Navbar -->
         <div class="w3-top">
           <div class="w3-bar w3-card-2">
@@ -63,71 +63,6 @@
             <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large">AYUDA</a>
         </div>
       
-        <div class="w3-row w3-hide-large" style="margin-top: 46px;">
-            
-            <div class="w3-col w3-container">
-
-                <ul class="tabs" role="tablist">
-                    <!-- info tab                   -->
-                    <li>
-                        <input type="radio" name="tabs" id="tab1" checked />
-                        <label for="tab1" 
-                               role="tab" 
-                               aria-selected="true" 
-                               aria-controls="panel1" 
-                               tabindex="0">Info</label>
-                        <div id="tab-content1" 
-                             class="tab-content" 
-                             role="tabpanel" 
-                             aria-labelledby="informacion" 
-                             aria-hidden="false">
-                          <textarea style="width:100%;height:75px; resize: none;" class="form-control pro-info" rows="5"></textarea>
-                        </div>
-                    </li>
-                    <!-- tools tab                   -->
-                    <li>
-                        <input type="radio" name="tabs" id="tab2" />
-                        <label for="tab2"
-                               role="tab" 
-                               aria-selected="false" 
-                               aria-controls="panel2" 
-                               tabindex="0">Tools</label>
-                        <div id="tab-content2" 
-                             class="tab-content"
-                             role="tabpanel" 
-                             aria-labelledby="tools" 
-                             aria-hidden="true">
-                            
-                            <a class="btn tool-btn anot viz_on">
-                                    <i class="material-icons">visibility_off</i>
-                            </a>
-                            <a class="btn tool-btn save">
-                                <i class="material-icons">save</i>
-                            </a>
-                            
-                        </div>
-                    </li>
-                    <!-- anotaciones tab                   -->
-                    <li>
-                        <input type="radio" name="tabs" id="tab3" />
-                        <label for="tab3" 
-                               role="tab" 
-                               aria-selected="false" 
-                               aria-controls="panel3" 
-                               tabindex="0">Notas</label>
-                        <div id="tab-content3" 
-                             class="tab-content" 
-                             role="tabpanel" 
-                             aria-labelledby="anotaciones" 
-                             aria-hidden="true">
-                          <p>anotaciones</p>
-                        </div>
-                    </li>
-                </ul>
-               
-            </div>
-        </div>
-        
         <div class="w3-row">
             <div class="w3-col w3-container myPlaceholder" id="placeholder">
                 
@@ -144,7 +79,7 @@
             </div>
             
             <!--    TOOLS       -->
-            <div class="w3-col w3-container w3-hide-medium w3-hide-small" id="tools">
+            <div class="w3-col w3-container" id="tools">
                 
                 <ul class="tabs" role="tablist">
                     <!-- info-->
