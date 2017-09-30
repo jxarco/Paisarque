@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-        <title>PaisArque Application</title>
+        <title>PaisArque - Proyectos (ES)</title>
         <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -31,21 +31,23 @@
         <content class="container" id="all">
             
             <div class="row" style="margin-top: 46px;">
-                <div class="col-md-6 col-md-offset-3">
+                <div class="col-md-6 col-md-offset-3" style="max-height: 450px; overflow-y: scroll;">
                     <div class="panel panel-default">
                         <div class="panel-body">
                             
-                            <button id="addProject" class="submit-button btn table-btn btn-lg btn-block ladda-button" data-style="slide-up" data-color="green" type="submit" data-toggle="modal" data-target="#GSCCModal"><span class="ladda-label">Crear nuevo proyecto</span><span class="ladda-spinner"></span></button>
-                            <button id="delete-project" class="submit-button btn table-btn btn-lg btn-block ladda-button" data-style="slide-up" data-color="green" type="submit"><span class="ladda-label">Eliminar proyecto existente</span><span class="ladda-spinner"></span></button>
+                            <button id="addProject" class="submit-button btn btn-lg btn-block inicio" data-style="slide-up" data-color="green" type="submit" data-toggle="modal" data-target="#GSCCModal"><span class="ladda-label">Crear nuevo proyecto</span><span class="ladda-spinner"></span></button>
+<!--
+                            <button id="delete-project" class="submit-button btn  btn-lg btn-block ladda-button inicio" data-style="slide-up" data-color="green" type="submit"><span class="ladda-label">Eliminar proyecto existente</span><span class="ladda-spinner"></span></button>
                             
+-->
                             <!-- Listamos los ficheros que hay en el servidor/carpeta y sus propiedades -->
-                            <table id="projects-tb" class="table table-striped table-hover ">
+                            <table id="projects-tb" class="table">
                                 <thead>
                                     <tr>
-                                        <th>Vista previa</th>
+                                        <th class="w3-hide-small w3-hide-medium">Vista previa</th>
                                         <th>Nombre proyecto</th>
                                         <th>Autor proyecto</th>
-                                        <th>Lugar</th>
+                                        <th class='w3-hide-small w3-hide-medium'>Lugar</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tableInicio">
@@ -75,7 +77,7 @@
                                             print_r( '<tr class="pointer" id="' . $project . '" onclick' . '=' . '"loadContent(' . "'modelo.html','");
                                             print_r( $folder );
                                             print_r( "')" . '"' . ">" );
-                                            print_r( "<td>" . "<img class='project-preview' src='" . $src_preview . "' title='Vista previa de " . $project . "'>" . "</td>" );
+                                            print_r( "<td class='w3-hide-small w3-hide-medium'>" . "<img class='project-preview ' src='" . $src_preview . "' title='Vista previa de " . $project . "'>" . "</td>" );
                                             print_r( "<td>" . ucfirst($project)  . "</td>");
                                             
                                             print_r("<td>");
@@ -87,7 +89,7 @@
                                                      print_r($v);
                                             }
 
-                                            print_r("</td><td>");
+                                            print_r("</td><td class='w3-hide-small w3-hide-medium'>");
 
                                             foreach ($json_a as $k => $v) {
                                                 if ($k == "lugar")
@@ -95,7 +97,6 @@
                                             }
 
                                             print_r("</td></tr><br>");
-
                                         }
                                     ?>
                                 </tbody>
@@ -197,8 +198,16 @@
 
         </content><!--  content end-->
         
-        <footer>
-        
+        <footer style="position: absolute;">
+            <p>Proyecto PaisArque - <a href="https://www.upf.edu/web/paisarque">upf.edu/web/paisarque</a></p>
+            <p>CaSES: Complexity and Socio-Ecological Dynamics - Edificio Mercè Rodoreda (Campus de la Ciutadella)
+                Ramon Trias Fargas, 25-27
+                08005 Barcelona
+                cases@upf.edu - <a href="https://www.upf.edu/web/cases">upf.edu/web/cases</a></p>
+            <p>Interactive Technologies Group - Edificio Tànger (Campus de la Comunicació-Poblenou)
+                    Tànger, 122-140 
+                    08018 Barcelona - <a href="http://gti.upf.edu/">gti.upf.edu</a></p>
+            <img height="20px;" src="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
         </footer><!--   footer end-->
             
 

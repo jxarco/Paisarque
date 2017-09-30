@@ -43,7 +43,6 @@
             <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">APORTACIONES</a>
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium active">EXPORTAR</a>
             <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">AYUDA</a>
-            <a onclick="loadContent('contacto.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">CONTACTO</a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium textUser">username</a>
           </div>
@@ -56,7 +55,6 @@
             <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large">APORTACIONES</a>
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large">EXPORTAR</a>
             <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large">AYUDA</a>
-            <a onclick="loadContent('contacto.html')" class="w3-bar-item w3-button w3-padding-large">CONTACTO</a>
         </div>
         
         <content class="row"><div class="col-lg-12" style="margin-top:46px">
@@ -151,8 +149,16 @@
         
         </content>
         
-        <footer>
-            
+        <footer style="position: absolute;">
+            <p>Proyecto PaisArque - <a href="https://www.upf.edu/web/paisarque">upf.edu/web/paisarque</a></p>
+            <p>CaSES: Complexity and Socio-Ecological Dynamics - Edificio Mercè Rodoreda (Campus de la Ciutadella)
+                Ramon Trias Fargas, 25-27
+                08005 Barcelona
+                cases@upf.edu - <a href="https://www.upf.edu/web/cases">upf.edu/web/cases</a></p>
+            <p>Interactive Technologies Group - Edificio Tànger (Campus de la Comunicació-Poblenou)
+                    Tànger, 122-140 
+                    08018 Barcelona - <a href="http://gti.upf.edu/">gti.upf.edu</a></p>
+            <img height="20px;" src="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
         </footer><!--   footer end-->
             
 

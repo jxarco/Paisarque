@@ -34,14 +34,7 @@
 }
 
 .extra-btn:hover{
-    color: rgb(82, 184, 175);
-}
-
-#image-url{
-    height: 50px; 
-    width: 40%;  
-    min-width: 200px;  
-    padding: 5px;
+    color: #0070c9;
 }
 
 .url-loc{
@@ -81,11 +74,18 @@
 
 /* @text */
 
-#text-url{
-    height: 50px; 
+#text-url, #image-url, #pdf-url, #video-url{
+    height: 45px; 
+    line-height: 45px;
     width: 40%;  
     min-width: 205px;  
     padding: 5px;
+    background: grey;
+    color: white !important;
+    border-radius: 5px;
+    border: none;
+    font-size: 14px;
+    outline: none;
 }
 
 #texto{
@@ -126,13 +126,6 @@
 }
 
 /* @videos */
-
-#pdf-url, #video-url{
-    height: 50px; 
-    width: 40%;  
-    min-width: 200px;  
-    padding: 5px;
-}
 
 #videos{
     background-color: none;

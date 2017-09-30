@@ -49,7 +49,6 @@
             <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">APORTACIONES</a>
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">EXPORTAR</a>
             <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">AYUDA</a>
-            <a onclick="loadContent('contacto.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">CONTACTO</a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium textUser">username</a>
           </div>
@@ -62,7 +61,6 @@
             <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large">APORTACIONES</a>
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large">EXPORTAR</a>
             <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large">AYUDA</a>
-            <a onclick="loadContent('contacto.html')" class="w3-bar-item w3-button w3-padding-large">CONTACTO</a>
         </div>
       
         <div class="w3-row w3-hide-large" style="margin-top: 46px;">
@@ -156,14 +154,14 @@
                                role="tab" 
                                aria-selected="true" 
                                aria-controls="panel1-large" 
-                               tabindex="0">Sobre el proyecto</label>
+                               tabindex="0">Proyecto</label>
                         <div id="tab-content1-large" 
                              class="tab-content-large" 
                              role="tabpanel" 
                              aria-labelledby="informacion" 
                              aria-hidden="false">
                             
-                            <label style="display: flex;"><p>Auto-guardado</p><i id="auto-save-btn" class="material-icons show">fiber_manual_record</i></label>         
+                            <label style="display: flex;"><p>Auto-guardado</p><i title="Activar/desactivar" id="auto-save-btn" class="material-icons show">fiber_manual_record</i></label>         
                             <label style="display: flex;" for="comment" class="slide-tab" data-target='#comment'><p>Descripción</p><i class="material-icons">keyboard_arrow_down</i></label>
                             <textarea class="form-control pro-info" rows="5" id="comment"></textarea>
                             <label style="display: flex;" class="slide-tab" data-target='#map'><p>Ubicación</p><i class="material-icons">keyboard_arrow_down</i></label>
@@ -171,7 +169,7 @@
                             <div style="display: flex;">
                                 <textarea id="lat" placeholder="LAT" class="form-control newcoord"></textarea>
                                 <textarea id="lon" placeholder="LON" class="form-control newcoord"></textarea>
-                                <button class="newcoord btn" id="coord-btn"><i class="material-icons">repeat</i></button>
+                                <button title="Aplicar nuevas coordenadas" class="newcoord btn" id="coord-btn"><i class="material-icons">repeat</i></button>
                             </div>
                             <label style="display: flex;" class="slide-tab" data-target='#cubemaps'><p>Fondos</p><i class="material-icons">keyboard_arrow_down</i></label>
                             <div id="cubemaps" style="display: none;">
@@ -403,7 +401,7 @@
                             <div id="deleting-div">
                                 <a class="btn tool-btn anot" id="delete-anot-btn">
                                     <i class="material-icons">delete</i>
-                                    <p class="info_hover_box">Borrar todas</p>
+                                    <p class="info_hover_box">Todo</p>
                                 </a>
 
                                 <div id="drag-cont" ondrop="drop(event)" ondragleave="disallowDrop()" ondragover="allowDrop(event)">
@@ -419,8 +417,22 @@
             <!--  END TOOLS       -->
         </div>
         
+        <footer>
+            <p>Proyecto PaisArque - <a href="https://www.upf.edu/web/paisarque">upf.edu/web/paisarque</a></p>
+            <p>CaSES: Complexity and Socio-Ecological Dynamics - Edificio Mercè Rodoreda (Campus de la Ciutadella)
+                Ramon Trias Fargas, 25-27
+                08005 Barcelona
+                cases@upf.edu - <a href="https://www.upf.edu/web/cases">upf.edu/web/cases</a></p>
+            <p>Interactive Technologies Group - Edificio Tànger (Campus de la Comunicació-Poblenou)
+                    Tànger, 122-140 
+                    08018 Barcelona - <a href="http://gti.upf.edu/">gti.upf.edu</a></p>
+            <img height="20px;" src="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
+        </footer><!--   footer end-->
+        
         </body>
         
+        
+    
         <input id="fileupload" type="file" name="files[]" data-url="data/uploadedfiles/" style="display: none;" multiple>
     
         <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>

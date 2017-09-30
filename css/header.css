@@ -14,6 +14,8 @@
     font-size: 22px;
     text-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
     color: rgb(240, 240, 240);
+    font-weight: 700;
+    margin-left: 5%;
 }
 
 .w3-top{
@@ -21,32 +23,36 @@
 }
 
 .w3-bar{
-/*    background:rgb(62, 164, 155);   */
     background: linear-gradient(
         to bottom, 
-        rgba(52, 154, 145,1)    0%,
-        rgba(62, 164, 155,1)    25%, 
-        rgba(72, 174, 165,1)    50%, 
-        rgba(79, 179, 169,1)    75%, 
-        rgba(84, 184, 174,1)   100%
+        rgba(15, 15, 15, 0.85)    0%,
+        rgba(15, 15, 15, 0.83)    25%, 
+        rgba(15, 15, 15, 0.81)    50%, 
+        rgba(15, 15, 15, 0.79)    75%, 
+        rgba(15, 15, 15, 0.77)   100%
     );
-    color: aliceblue;
+
     height: 46px;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .w3-bar-item.w3-button{
     text-decoration: none !important;
+    background: none;
+    color: white;
     height: 46px;
+    margin-left: 4.5%;
 }
 
 .w3-bar-item.w3-button:hover{
-    background: rgba(220, 220, 220, 0.5) !important;   
-    transition: linear 0.2s;
+    background: none !important;
+    color: #aaa !important;
+    transition: 0.3s;
 }
 
 .w3-bar-item.w3-button.active{
-    border-bottom: 3px inset rgba(255, 255, 255, 0.85) !important;
+    color: #aaa;
+/*    border-bottom: 3px inset rgba(255, 255, 255, 0.85) !important;*/
 }
 
 .w3-button.textUser{
@@ -54,7 +60,6 @@
 }
 
 .w3-button.textUser:hover{
-    background: rgb(62, 164, 155) !important;   
-    color: white !important;
+    color: #aaa;
 }
 
