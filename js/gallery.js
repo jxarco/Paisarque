@@ -1,14 +1,5 @@
 var conditional = true;
 
-//hide tutorial messages
-setTimeout(function(){
-    $(".tutorial").fadeOut();
-}, 5000)
-
-$(".tutorial").click(function(){
-     $(this).fadeOut();
-});
-
 $(document).keyup(function(e){
     if(e.keyCode == 27)
         openMiniGallery(true);
@@ -23,7 +14,7 @@ function openMiniGallery(flag)
     
     if(!conditional){
         $("#img-content").css("margin-left", "0");
-        $("#img-content").css("height", "175px");
+        $("#img-content").css("height", "200px");
         $("#img-content").css("margin-bottom", "10px");
     }
         

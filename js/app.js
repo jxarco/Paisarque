@@ -14,11 +14,15 @@ var showing = {
 }
 
 var APP = {
-    // variables of APP
+    // rotation mode
     rotation: false,
+    // visibility of anotations
     anot_visible: true,
+    // qnt of rotation of the slider
     value: 0,
+    // model is in orbit route
     orbiting: false,
+    // result of collisions
     result: vec3.create(),
 
     // methods of APP
@@ -45,17 +49,17 @@ var APP = {
         APP.init(meshURL, textURL);
     },
 
-    init: function(meshURL, textureURL)
+    init: function( meshURL, textureURL )
     {
         //create the rendering context
-        context = GL.create({width: window.innerWidth, height:window.innerHeight, alpha:true});
-        renderer = new RD.Renderer(context, {shaders_file: "data/shaders/shaders.glsl"});
+        context = GL.create({width: window.innerWidth, height: window.innerHeight, alpha: true});
+        renderer = new RD.Renderer(context, {
+            shaders_file: "data/shaders/shaders.glsl",
+            autoload_assets: false
+        });
         placer = document.getElementById("myCanvas");
         placer.appendChild(renderer.canvas); //attach
 
-        //disable autoload
-        renderer.autoload_assets = false;
-        
         // instanciate global scene
         scene = new RD.Scene();
         

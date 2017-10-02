@@ -3,11 +3,13 @@
 * @class Annotation
 */
 
-function Annotation()
+function Annotation(id, camera, position, text)
 {
 	if(this.constructor !== Annotation)
 		throw("You must use new to create a new annotation");
 	this._ctor();
+    if(id !== null)
+        this.set(id, camera, position, text);
 }
 
 Annotation.prototype._ctor = function()
@@ -20,25 +22,29 @@ Annotation.prototype._ctor = function()
     
     this._position = vec3.create();
     
-    this._status = "status by default";
+    this._text = "anot text";
 }
 
-Annotation.prototype.set = function(id, camera, position, status)
+Annotation.prototype.set = function(id, camera, position, text)
 {
     this._id = id;
     
-	this._camera_position = vec3.copy();
-    this._camera_target = vec3.create();
-    this._camera_up = vec3.create();
+    for(var i in camera.position)
+	   this._camera_position[i] = camera.position[i];
+    for(var i in camera.target)
+	   this._camera_target[i] = camera.target[i];
+    for(var i in camera.up)
+	   this._camera_up[i] = camera.up[i];
     
-    this._position = vec3.create();
+     for(var i in position)
+	   this._position[i] = position[i];
     
-    this._status = "status by default";
+    this._text = text;
 }
 
 /*
 *  @class Annotation
-*  @prototype FROM_JSON
+*  @method FROM_JSON
 *  - data: information about the annotation in JSON
 */
 Annotation.prototype.FROM_JSON = function( data )
@@ -53,22 +59,22 @@ Annotation.prototype.FROM_JSON = function( data )
     
     this._position = data.position;
     
-    this._status = data.text;
+    this._text = data.text;
 }
 
 /*
 *  @class Annotation
-*  @prototype TO_JSON
-*  - result: object to fill
+*  @method TO_JSON
+*  return {object}
 */
-Annotation.prototype.TO_JSON = function( result )
+Annotation.prototype.TO_JSON = function()
 {
-     result = {
+     return {
         "id": this._id,
         "camera_position": this._camera_position,
         "camera_target": this._camera_target,
         "camera_up": this._camera_up,
-        "text": this._status,
+        "text": this._text,
         "position": {
             "0": this._position[0],
             "1": this._position[1],

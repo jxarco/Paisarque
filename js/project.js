@@ -108,28 +108,12 @@ Project.prototype.deleteExtra = function( selector, type )
 *   @param position {vec3} x y z of the anotation
 *   @param status {string} text of the anotation
 */
-Project.prototype.insertAnotation = function( id, camera, position, status )
+Project.prototype.insertAnotation = function( id, camera, position, text )
 {
-    this._anotations.push({
-        "id": id,
-        "camera_position": camera.position,
-        "camera_target": camera.target,
-        "camera_up": camera.up,
-        "text": status,
-        "position": {
-            "0": position[0],
-            "1": position[1],
-            "2": position[2],
-        }
-    });
+    var a = new Annotation(id, camera, position, text);
+    this._anotations.push(a.TO_JSON());
     
-    // fixing some bugs
-    var c_position = vec3.fromValues(camera.position[0], camera.position[1], camera.position[2]);
-    var c_target = vec3.fromValues(camera.target[0], camera.target[1], camera.target[2]);
-    var c_up = vec3.fromValues(camera.up[0], camera.up[1], camera.up[2]);
-    
-    // se pone en el documento html y ademas que cuando se apreta a la anotacion se cambia a la camara con la que estaba
-    var totalString = '<tr a id="' + id + '" draggable="true" ondragstart="drag(event)" onclick="lookAtAnot( camera, [' + c_position  + "], [" + c_target + "], [" + c_up + '], ' + id + ')">'+ "<td>" + id + "</td>" + "<td>" + status + "</td>"
+    var totalString = '<tr a id="' + id + '" draggable="true" ondragstart="drag(event)" onclick="lookAtAnot( camera, [' + a._camera_position  + "], [" + a._camera_target + "], [" + a._camera_up + '], ' + id + ')">'+ "<td>" + id + "</td>" + "<td>" + text + "</td>"
     +"</tr>";
     
     $("#anotacion_tabla").append(totalString);
@@ -584,7 +568,7 @@ Project.prototype.FROMJSON = function( data )
     this._extra = data.extra;
     
     // anotations
-    var len = data.anotaciones.length || 0;
+    var len = data.anotaciones.length? data.anotaciones.length : 0;
     
     for(var i = 0; i < len; i++)
     {
@@ -593,9 +577,7 @@ Project.prototype.FROMJSON = function( data )
             "target": data.anotaciones[i].camera_target,
             "up": data.anotaciones[i].camera_up
         };
-        
-        this.insertAnotation( data.anotaciones[i].id,
-                             camera,
+        this.insertAnotation( data.anotaciones[i].id, camera,
                              data.anotaciones[i].position,
                              data.anotaciones[i].text );
     }

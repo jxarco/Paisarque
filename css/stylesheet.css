@@ -37,6 +37,9 @@ body{
 content{
     margin: 0 auto;
 }
+/*
+* header nav
+*/
 #navDemo{
     background-color: rgba(155, 155, 155, 0.6) !important;   
     color: aliceblue !important;
@@ -56,10 +59,10 @@ content{
 .w3-bar{
     background: linear-gradient(
         to bottom, 
-        rgba(15, 15, 15, 0.85)    0%,
-        rgba(15, 15, 15, 0.83)    25%, 
-        rgba(15, 15, 15, 0.81)    50%, 
-        rgba(15, 15, 15, 0.79)    75%, 
+        rgba(15, 15, 15, 0.91)    0%,
+        rgba(15, 15, 15, 0.89)    25%, 
+        rgba(15, 15, 15, 0.86)    50%, 
+        rgba(15, 15, 15, 0.82)    75%, 
         rgba(15, 15, 15, 0.77)   100%
     );
     height: 46px;
@@ -179,6 +182,7 @@ h1, h2, h3, h4, h5, h6{
 }
 .project-preview{
     height: 100%;
+    width: 160px;
 }
 .form-control.index{
     width: 50%;
@@ -381,16 +385,18 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
     box-sizing: border-box;
 }
 .responsive div img {
-    width: 100%;
+    padding: 2px;
+    width: 95%;
     height: auto;
     cursor: pointer;
+    margin: 2.5%;
 }
 .responsive div img:hover {
-    border: 2px solid #777;
+    border: 1px solid #0070c9;
 }
 .responsive {
     float: left;
-    width: 49.99999%;
+    width: 24.99999%;
     margin: 6px 0;
 }
 #pr-options{
@@ -472,7 +478,7 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
     padding:0;
     margin-top: 46px;
     height: calc(100vh - 46px);
-    width: calc(100% - 375px);
+    width: calc(100% - 325px);
     float: left;
     overflow-y: hidden;
 }
@@ -491,21 +497,23 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
     padding: 0;
     float: right;
     height: calc(100vh - 46px);
-    width: 375px;
+    width: 325px;
     margin-top: 46px;
     right: 0;
     position: relative;
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5); 
+    box-shadow: -5px 0px 15px rgba(0, 0, 0, 0.32); 
 }
 .tab-content-large{
         overflow: hidden !important;
 }
 #myCanvas {
+    margin: 0;
+    padding: 0;
     background-position: center;
     overflow: hidden;
     visibility: hidden;
     z-index: 0 !important;
-    width: 99.75%;
+    width: 100%;
 }
 #cont-msg{
     position: absolute;
@@ -1168,6 +1176,7 @@ a:hover{
     -o-transition: all 0.2s ease-in-out;
     -webkit-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;
+    outline: none;
 }
 .tabs label:hover {
     color: #0070c9;
