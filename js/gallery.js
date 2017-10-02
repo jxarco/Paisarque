@@ -170,7 +170,3 @@ var SlickJS = {
     
     }
 };
-
-$(window).load(function() {
-    
-});

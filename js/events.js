@@ -1,11 +1,69 @@
 var extraCounter = null;
 var input_files = [];
 
-$("#tools-tab .btn.tool-btn").click(function(){
+/*
+* General stuff
+*/
+// FORMS; ENTER -> SUBMIT
+$('.form-signin').each(function() {
+        
+    $(this).find('input').keyup(function(e) {
+            // Enter pressed?
+             if(e.keyCode == 13) {
+               $("#signin-btn").click();
+            }
+    });
+});
+
+/******************************************************************************************/
+
+/*
+* Inicio.php stuff
+*/ 
+//Enable deleting a project at the main page
+$("#delete-project").click(function() {
     
+    delete_project_active = true;
+    alert("Selecciona proyecto a eliminar:");
+});
+
+/*
+* Proyecto TAB
+*/ 
+// slide hidden tabs in information
+$(".slide-tab").click(function(){
+    var target_id = $(this).data("target");
+    var target = $(target_id);
+    
+    if(target.css("display") == "none")
+        target.slideDown('slow'); 
+    else
+        target.slideUp('slow'); 
+});
+/* 
+* get the input values to modify the project 
+* coordinates location
+*/
+$('#coord-btn').click(function(e) 
+{
+    var lat = parseFloat($("#lat").val());
+    var lng = parseFloat($("#lon").val());
+    project._coordinates.lat = lat;
+    project._coordinates.lng = lng;
+    initMap(lat, lng);
+    putCanvasMessage("Recuerda guardar...", 3000);
+});
+
+$("#lat").keypress(onlyNumbers);
+$("#lon").keypress(onlyNumbers);
+
+/*
+* Herramientas TAB
+*/ 
+// add active class to button in tools 
+$("#tools-tab .btn.tool-btn").click(function(){
     var e = $(this);
     var all = $("#tools-tab .btn.tool-btn");
-    
    if(!e.hasClass("pressed")){
         // clear previous
         all.removeClass("pressed");
@@ -14,66 +72,180 @@ $("#tools-tab .btn.tool-btn").click(function(){
     }
 });
 
-$(".slide-tab").click(function(){
+$(".save").click(function(){
     
-    var target_id = $(this).data("target");
-    var target = $(target_id);
-    
-    if(target.css("display") == "none")
-        target.slideDown('slow'); 
+    if(copy === null)
+        project.save(); 
     else
-        target.slideUp('slow'); 
+    {
+        // save copy of the project
+        copy.save();
+        
+        // update the project copy in session storage
+        // to avoid getting a not updated version in next
+        // fills
+        sessionStorage.setItem("project", JSON.stringify(copy));
+    }
+    
+});
+
+/*
+*   Button: Show/Hide the distances measured table
+*/
+$("#show_dt").click(function() 
+{
+    APP.disableAllFeatures({no_msg: true});
+    showing["t1"] = !showing["t1"];
+    
+    var table = $('#distances-table');
+    var btn = $('#measure-btn');
+    revealDOMElements([table, btn], showing["t1"]);
+});
+
+/*
+*   Button: Show/Hide the segments distances measured table
+*/
+$("#show_dst").click(function() 
+{
+    APP.disableAllFeatures({no_msg: true});
+    showing["t2"] = !showing["t2"];
+    
+    var table = $('#segment-distances-table');
+    var btn = $('#measure-s-btn');
+    revealDOMElements([table, btn], showing["t2"]);
+});
+
+/*
+*   Button: Show/Hide the area measured table
+*/
+$("#show_areat").click(function() 
+{
+    APP.disableAllFeatures({no_msg: true});
+    showing["t3"] = !showing["t3"];
+    
+    var table = $('#areas-table');
+    var btn = $('#measure-opt-btn');
+    revealDOMElements([table, btn], showing["t3"]);
+});
+
+/* 
+* interface changing when click
+*/
+$("#measure-opt-btn").click(function(){
    
+    if($(".sub-btns").css("display") == "none")
+    {
+        $(this).find("i").html("remove_circle_outline");
+        $(".sub-btns").show(); 
+    }
+    else 
+    {
+        $(this).find("i").html("add_circle_outline");
+        $(".sub-btns").hide(); 
+    }
 });
 
-/* EXPORT STUFF */
-
-$(".export-pdf").click(function(){
+/*
+* holds the action of taking a snapshot of the canvas
+*/
+$("#capture-scene").click(function(){
+   
+    // clear capturing box
+    APP.disableAllFeatures({no_msg: true});
+    putCanvasMessage("Capturando...", 1500);
     
-    var user = current_user;
-    var project_name = current_project.split("/")[1];
-    var type = $(this).attr("class").split(" ")[1];
+    // get final canvas
+    var canvas = gl.snapshot(0, 0, renderer.canvas.width, renderer.canvas.height);
     
-    var options = {
-            title: project_name,
-            user: user,
-            extype: type
-        }
+    function on_complete( img_blob )
+		{
+            var src = canvas.toDataURL();
+			var url = URL.createObjectURL( img_blob );
+			var img = new Image();
+			img.src = src;
+            img.className = "download-image";
+            $("#capturing").append("<a href='"+url+"' download='screenshot.png' class='btn table-btn'>Descargar captura</a>");
+            $("#capturing").append("<a data-url='"+src+"' onclick='uploadBLOB($(this))' class='btn table-btn'>Añadir al proyecto</a>");
+			$("#capturing").append( img );
+            $("#capturing").append("<a onclick='APP.disableAllFeatures()' class='btn table-btn'>Cancelar</a>").fadeIn();
+            putCanvasMessage("¡Capturado! Ahora puedes guardar la imagen o añadirla al proyecto.", 5000);
+		}
     
-    jsToPDF(options);
+    canvas.toBlob( on_complete, "image/png");
 });
 
-$(".export-json").click(function(){
-    
-    var project_name = current_project.split("/")[1];
-    var type = $(this).attr("class").split(" ")[1];
-    
-    var csv = JSON.stringify(copy[type], null, 2);
-    
-    var options = {
-        file: "export_" + project_name + type + ".json",
-        csv: csv
+/*
+* Anotations TAB
+*/
+//Insert annotation to project
+$("#saveTextButton").click(function(e)
+{
+    var id = project.getAnnotations().length + 1;
+    var ind = new SceneIndication();
+    ind = ind.ball(null, APP.result, {id: id, color: [1,0,0,1]});
+    ind.active = false;
+    ind.time = 0.0;
+
+    ind.update = function(dt)
+    {
+        this.time += dt;
+        if(!this.active)
+            this.color = [1,0,0,1];
+        else
+            this.color = [1, 0.3 + Math.sin(this.time*5), 0.3 + Math.sin(this.time*5), 1];
     }
     
-    jsToJSON(this, options);
+    setParent(obj, ind);
+
+    // se anade a la lista de anotaciones del proyecto
+    project.insertAnotation(id, camera, APP.result, $("#message-text").val());
+    $("#message-text").val("")
 });
 
-$(".export-xls").click(function(){
+//Enter triggers click
+$('#message-text').keyup(function(e) 
+{
+    e.preventDefault();
+    if(e.keyCode == 13)
+        $("#saveTextButton").click();    
+});
+
+/*
+*   Delete all annotations in project
+*/
+$("#delete-anot-btn").click(function() {
     
-    var project_name = current_project.split("/")[1];
-    var type = $(this).attr("class").split(" ")[1];
-    
-    var csv = convertToCSV(copy[type]);
-    
-    var options = {
-        file: "export_" + project_name + type + ".csv",
-        csv: csv
+    if(!project.getAnnotations().length)
+    {
+        putCanvasMessage("No hay anotaciones", 3000, {type: "error"});
+        return;
     }
     
-    jsToCSV(this, options);
+    else if(confirm("¿Estas seguro?")){
+        project.deleteAllAnotations( obj );
+        putCanvasMessage("¡Borrado!", 3000);
+    }
+        
 });
 
-/* EXTRA STUFF */
+/*
+*   Button: Change visibility of the annotations
+*   in canvas
+*/
+$(".viz_on").click(function() 
+{
+    APP.anot_visible = !APP.anot_visible;
+    APP.showElements(obj.children, APP.anot_visible);
+    
+    var extra = APP.anot_visible === false ? "" : "_off";
+    var tooltip = APP.anot_visible === false ? "Mostrar" : "Esconder";
+    $(this).html( "<i class='material-icons'>visibility" + extra + "</i>" +
+                "<p class='info_hover_box'>" + tooltip + "</p>");
+});
+
+/*
+* EXTRA STUFF
+*/
 
 /* 
 * Adding any type of extra to the list of _extra in the project
@@ -177,205 +349,53 @@ $("#formAddImage").on('submit', function(e)
     }
 });
 
-// *******************************************************************************
+/*
+* EXPORT STUFF
+*/
 
-// FORMS; ENTER -> SUBMIT
-$('.form-signin').each(function() {
-        
-    $(this).find('input').keyup(function(e) {
-            // Enter pressed?
-             if(e.keyCode == 13) {
-               $("#signin-btn").click();
-            }
-    });
+$(".export-pdf").click(function(){
+    
+    var user = current_user;
+    var project_name = current_project.split("/")[1];
+    var type = $(this).attr("class").split(" ")[1];
+    
+    var options = {
+            title: project_name,
+            user: user,
+            extype: type
+        }
+    
+    jsToPDF(options);
 });
 
-/*
-*   Insert annotation to project
-*/
-$("#saveTextButton").click(function(e)
-{
-    var id = project.getAnnotations().length + 1;
-    var ind = new SceneIndication();
-    ind = ind.ball(null, APP.result, {id: id, color: [1,0,0,1]});
-    ind.active = false;
-    ind.time = 0.0;
-
-    ind.update = function(dt)
-    {
-        this.time += dt;
-        if(!this.active)
-            this.color = [1,0,0,1];
-        else
-            this.color = [1, 0.3 + Math.sin(this.time*5), 0.3 + Math.sin(this.time*5), 1];
+$(".export-json").click(function(){
+    
+    var project_name = current_project.split("/")[1];
+    var type = $(this).attr("class").split(" ")[1];
+    
+    var csv = JSON.stringify(copy[type], null, 2);
+    
+    var options = {
+        file: "export_" + project_name + type + ".json",
+        csv: csv
     }
     
-    setParent(obj, ind);
-
-    // se anade a la lista de anotaciones del proyecto
-    project.insertAnotation(id, camera, APP.result, $("#message-text").val());
-    $("#message-text").val("")
+    jsToJSON(this, options);
 });
 
-/*
-*   Enter trigger clicks
-*/
-$('#message-text').keyup(function(e) 
-{
-    e.preventDefault();
-    if(e.keyCode == 13)
-        $("#saveTextButton").click();    
-});
-
-// save the project description
-$('.pro-info').keyup(function(e) 
-{
-    e.preventDefault();
-    project._description = $(this).val();
-});
-
-/* 
-* get the input values to modify the project 
-* coordinates location
-*/
-$('#coord-btn').click(function(e) 
-{
-    var lat = parseFloat($("#lat").val());
-    var lng = parseFloat($("#lon").val());
-    project._coordinates.lat = lat;
-    project._coordinates.lng = lng;
-    initMap(lat, lng);
-    putCanvasMessage("Recuerda guardar...", 3000);
-});
-
-$("#lat").keypress(onlyNumbers);
-$("#lon").keypress(onlyNumbers);
-
-/*
-*   Delete all annotations in project
-*/
-$("#delete-anot-btn").click(function() {
+$(".export-xls").click(function(){
     
-    if(!project.getAnnotations().length)
-    {
-        putCanvasMessage("No hay anotaciones", 3000, {type: "error"});
-        return;
+    var project_name = current_project.split("/")[1];
+    var type = $(this).attr("class").split(" ")[1];
+    
+    var csv = convertToCSV(copy[type]);
+    
+    var options = {
+        file: "export_" + project_name + type + ".csv",
+        csv: csv
     }
     
-    else if(confirm("¿Estas seguro?")){
-        project.deleteAllAnotations( obj );
-        putCanvasMessage("¡Borrado!", 3000);
-    }
-        
-});
-
-/*
-*   Enable deleting a project at the main page
-*/
-$("#delete-project").click(function() {
-    
-    delete_project_active = true;
-    alert("Selecciona proyecto a eliminar:");
-});
-
-/*
-*   Button: Change visibility of the annotations
-*   in canvas
-*/
-$(".viz_on").click(function() 
-{
-    APP.anot_visible = !APP.anot_visible;
-    APP.showElements(obj.children, APP.anot_visible);
-    
-    var extra = APP.anot_visible === false ? "" : "_off";
-    var tooltip = APP.anot_visible === false ? "Mostrar" : "Esconder";
-    $(this).html( "<i class='material-icons'>visibility" + extra + "</i>" +
-                "<p class='info_hover_box'>" + tooltip + "</p>");
-});
-
-/*
-*   Button: Show/Hide the distances measured table
-*/
-$("#show_dt").click(function() 
-{
-    APP.disableAllFeatures({no_msg: true});
-    showing["t1"] = !showing["t1"];
-    
-    var table = $('#distances-table');
-    var btn = $('#measure-btn');
-    revealDOMElements([table, btn], showing["t1"]);
-});
-
-/*
-*   Button: Show/Hide the segments distances measured table
-*/
-$("#show_dst").click(function() 
-{
-    APP.disableAllFeatures({no_msg: true});
-    showing["t2"] = !showing["t2"];
-    
-    var table = $('#segment-distances-table');
-    var btn = $('#measure-s-btn');
-    revealDOMElements([table, btn], showing["t2"]);
-});
-
-/*
-*   Button: Show/Hide the area measured table
-*/
-$("#show_areat").click(function() 
-{
-    APP.disableAllFeatures({no_msg: true});
-    showing["t3"] = !showing["t3"];
-    
-    var table = $('#areas-table');
-    var btn = $('#measure-opt-btn');
-    revealDOMElements([table, btn], showing["t3"]);
-});
-
-/* 
-* interface changing when click
-*/
-$("#measure-opt-btn").click(function(){
-   
-    if($(".sub-btns").css("display") == "none")
-    {
-        $(this).find("i").html("remove_circle_outline");
-        $(".sub-btns").show(); 
-    }
-    else 
-    {
-        $(this).find("i").html("add_circle_outline");
-        $(".sub-btns").hide(); 
-    }
-});
-
-/*
-* holds the action of taking a snapshot of the canvas
-*/
-$("#capture-scene").click(function(){
-   
-    // clear capturing box
-    APP.disableAllFeatures({no_msg: true});
-    putCanvasMessage("Capturando...", 1500);
-    
-    // get final canvas
-    var canvas = gl.snapshot(0, 0, renderer.canvas.width, renderer.canvas.height);
-    
-    function on_complete( img_blob )
-		{
-            var src = canvas.toDataURL();
-			var url = URL.createObjectURL( img_blob );
-			var img = new Image();
-			img.src = src;
-            img.className = "download-image";
-            $("#capturing").append("<a href='"+url+"' download='screenshot.png' class='btn table-btn'>Descargar captura</a>");
-            $("#capturing").append("<a data-url='"+src+"' onclick='uploadBLOB($(this))' class='btn table-btn'>Añadir al proyecto</a>");
-			$("#capturing").append( img );
-            $("#capturing").append("<a onclick='APP.disableAllFeatures()' class='btn table-btn'>Cancelar</a>").fadeIn();
-            putCanvasMessage("¡Capturado! Ahora puedes guardar la imagen o añadirla al proyecto.", 5000);
-		}
-    
-    canvas.toBlob( on_complete, "image/png");
+    jsToCSV(this, options);
 });
 
 /*
@@ -453,7 +473,7 @@ $("#formUploadProject").on('submit', function(e)
     };
     
     var on_complete = function(){
-//        location = location;
+        location = location;
         console.log("upload completed");
     }
     
@@ -499,23 +519,9 @@ $("#formUploadProject").on('submit', function(e)
     
 });
 
-$(".save").click(function(){
-    
-    if(copy === null)
-        project.save(); 
-    else
-    {
-        // save copy of the project
-        copy.save();
-        
-        // update the project copy in session storage
-        // to avoid getting a not updated version in next
-        // fills
-        sessionStorage.setItem("project", JSON.stringify(copy));
-    }
-    
-});
-
+/*
+*  Util stuff for handling file events
+*/
 
 function handleFileSelect(evt) {
         var files = evt.target.files;

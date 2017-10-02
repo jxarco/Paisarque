@@ -967,6 +967,7 @@ var APP = {
 
         //remove active classes
         $(".on-point").removeClass("on-point");
+        $("#tools-tab .btn.tool-btn").removeClass("pressed");
         
         // clear capturing box
         $("#capturing").fadeOut().empty();

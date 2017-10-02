@@ -31,6 +31,13 @@ Project.prototype._ctor = function( data )
 //    this._max_measures_size = 20;
     
 	this.FROMJSON( data );
+    
+    // save the project description when typing
+    $('.pro-info').keyup(function(e) 
+    {
+        e.preventDefault();
+        project._description = $(this).val();
+    });
 }
 
 /*
