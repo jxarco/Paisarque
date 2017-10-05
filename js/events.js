@@ -387,6 +387,13 @@ $(".export-xls").click(function(){
 *   PROJECT STUFF
 */
 
+$(function() {
+    $('#idProyecto').on('keypress', function(e) {
+        if (e.which == 32)
+            return false;
+    });
+});
+
 $("#formUploadProject").on('submit', function(e)
 {
     console.log("preparing to upload project...");

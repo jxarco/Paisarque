@@ -75,6 +75,9 @@ content{
     height: 46px;
     margin-left: 4.5%;
 }
+.w3-bar-item.w3-button.language{
+    margin-left: 0px;
+}
 .w3-bar-item.w3-button:hover{
     background: none !important;
     color: #aaa !important;

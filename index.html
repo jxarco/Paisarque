@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         
-        <title>PaisArque (ES)</title>
+        <title></title>
         <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
         <link rel="stylesheet" href="css/responsive-design.css"> <!-- responsive web design -->
         <link href="css/stylesheet.css" rel="stylesheet">
@@ -22,20 +22,21 @@
         <div class="w3-top">
           <div class="w3-bar w3-card-2">
             <a id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
+            <a onclick="location.href='index.html?lang=it'" class="w3-bar-item w3-button w3-right w3-padding-large language">IT</a>
+            <a onclick="location.href='index.html?lang=en'" class="w3-bar-item w3-button w3-right w3-padding-large language">EN</a>
+            <a onclick="location.href='index.html?lang=es'" class="w3-bar-item w3-button w3-right w3-padding-large language">ES</a>
           </div>
         </div>
         
         <content class="container">
             <div class="row" style="margin-top: 50px;">
-                
                 <div class="col-md-3 col-md-offset-0">
-                    
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">PaisArque</h3>
                         </div>
                         <div class="panel-body">
-                            <p style="text-align: justify;">Proyecto realizado por grupos pertenecientes a la Universidad Pompeu Fabra con la financiación de la <a href="https://www.fbbva.es/">Fundación BBVA.</a></p><br>
+                            <p style="text-align: justify;" id="body1"></p><br>
                             <a href="https://www.upf.edu/web/paisarque"><img src="data/assets/upf.png" class="img-responsive" style="width: 160px;"></a>        
                         </div>
                     </div>
@@ -70,7 +71,7 @@
                         
                     </div>
                     
-                    <p style="margin-left: calc(50% - 50px);">Financiado por</p>
+                    <p style="margin-left: calc(50% - 50px);" id="bbva_mark"></p>
                     <img src="data/assets/bbva.png" class="img-responsive" style="margin-left: calc(50% - 50px); width: 100px;">
                     <br>
                 </div>
@@ -79,14 +80,10 @@
                     
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Resumen</h3>
+                            <h3 class="panel-title" id="body2_title"></h3>
                         </div>
                         <div class="panel-body">
-                            <p style="text-align: justify;">PaisArque se propone desarrollar una aplicación de fácil utilizo y acceso, basada en la web, a través de la cual los usuarios puedan generar modelos 3D de monumentos y/o objetos a partir de fotografías digitales.
-                                <br>
-                                <br>
-                            Tecnológicamente, el proyecto opta por una visión integrada 3D en web debido a la creciente importancia de la participación colectiva en la ciencia, tanto por parte de los profesionales, como de los usuarios, de forma que las apps para la experiencia y visualización del patrimonio arqueológico sean multiplataforma.
-                            </p>
+                            <p style="text-align: justify;" id="body2"></p>
                         </div>
                     </div>
                 </div>
@@ -119,8 +116,34 @@
         <script type="text/javascript" src="js/extra/rendeer.js"></script>
         <script type="text/javascript" src="litefile/litefileserver.js"></script>
         <script type="text/javascript" src="litefile/js/codeLite.js"></script>
+        <script type="text/javascript" src="data/data.js"></script>
         <script type="text/javascript" src="js/utils.js"></script>
         <script type="text/javascript" src="js/events.js"></script>
-    
+        <script type="text/javascript" src="js/extra/jquery.csv.min.js"></script>
+        <script type="text/javascript">
+        
+            var lang = getQueryVariable("lang") || "es";
+            var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCYVW9A1Rap8RQ2hua3BekD-C_VNUYFg-bLe51fwZ6QVUqyu1fm-Aq0mRvp2qTUwb4usE2Pzg2_KKc/pub?gid=0&single=true&output=csv';
+            var src = url || "data/lang.csv";
+            
+            $.ajax(src, {
+                success: function(data) {
+                    var result = $.csv.toObjects(data);
+                    console.log(result);
+                    
+                    for(var i in result)
+                    {
+                        var sel = result[i].selector;
+                        var content = result[i][lang];
+                        if(result[i].target == "index")
+                            $(sel).html(content);
+                    }
+                },
+                error: function(err) {
+                    console.error(err);
+                }
+            });
+            
+        </script>
     
 </html>

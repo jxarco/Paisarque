@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-        <title>PaisArque - Proyectos (ES)</title>
+        <title></title>
         <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -14,16 +14,40 @@
         <link rel="stylesheet" href="css/responsive-design.css"> <!-- responsive web design -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script type="text/javascript">
+            // Used to toggle the menu on small screens when clicking on the menu button
+            function showNavbar() {
+                var x = document.getElementById("navDemo");
+                if (x.className.indexOf("w3-show") == -1) {
+                    x.className += " w3-show";
+                } else { 
+                    x.className = x.className.replace(" w3-show", "");
+                }
+            }
+        </script>
     </head>
     <body>
         
         <!-- Navbar -->
         <div class="w3-top">
           <div class="w3-bar w3-card-2">
+            <!--   TOOGLE NAVIGATION           -->
+            <a class="w3-bar-item w3-button w3-padding-large w3-hide-large w3-right" onclick="showNavbar()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
             <a id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
+            <a onclick="location.href='inicio.php?lang=it'" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">IT</a>
+            <a onclick="location.href='index.html?lang=en'" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">EN</a>
+            <a onclick="location.href='index.html?lang=es'" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">ES</a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large textUser">username</a>
           </div>
+        </div>
+        
+        <!-- Navbar on small screens -->
+        <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-top" style="margin-top:46px">
+            <a onclick="location.href='index.html?lang=es'" class="w3-bar-item w3-button w3-padding-large">ES</a>
+            <a onclick="location.href='index.html?lang=en'" class="w3-bar-item w3-button w3-padding-large">EN</a>
+            <a onclick="location.href='index.html?lang=it'" class="w3-bar-item w3-button w3-padding-large">IT</a>
         </div>
         
         <content class="container" id="all">
@@ -33,7 +57,7 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             
-                            <button id="addProject" class="submit-button btn btn-lg btn-block inicio" data-style="slide-up" data-color="green" type="submit" data-toggle="modal" data-target="#GSCCModal"><span class="ladda-label">Crear nuevo proyecto</span><span class="ladda-spinner"></span></button>
+                            <button id="addProject" class="submit-button btn btn-lg btn-block inicio" data-style="slide-up" data-color="green" type="submit" data-toggle="modal" data-target="#GSCCModal"><span class="ladda-label"></span><span class="ladda-spinner"></span></button>
 <!--
                             <button id="delete-project" class="submit-button btn  btn-lg btn-block ladda-button inicio" data-style="slide-up" data-color="green" type="submit"><span class="ladda-label">Eliminar proyecto existente</span><span class="ladda-spinner"></span></button>
                             
@@ -229,15 +253,31 @@
             PAS.recover(); // load paisarque session
         </script>
         <script src="js/events.js"></script>
+        <script type="text/javascript" src="js/extra/jquery.csv.min.js"></script>
         <script type="text/javascript">
         
-        $(function() {
-            $('#idProyecto').on('keypress', function(e) {
-                if (e.which == 32)
-                    return false;
+             var lang = getQueryVariable("lang") || "es";
+            var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCYVW9A1Rap8RQ2hua3BekD-C_VNUYFg-bLe51fwZ6QVUqyu1fm-Aq0mRvp2qTUwb4usE2Pzg2_KKc/pub?gid=0&single=true&output=csv';
+            var src = url || "data/lang.csv";
+            
+            $.ajax(src, {
+                success: function(data) {
+                    var result = $.csv.toObjects(data);
+                    console.log(result);
+                    
+                    for(var i in result)
+                    {
+                        var sel = result[i].selector;
+                        var content = result[i][lang];
+                        if(result[i].target == "inicio")
+                            $(sel).html(content);
+                    }
+                },
+                error: function(err) {
+                    console.error(err);
+                }
             });
-        });
-        
+            
         </script>
     
 </html>
