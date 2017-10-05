@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-        <title></title>
+        <title>PaisArque - Proyectos (ES)</title>
         <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -57,11 +57,22 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             
-                            <button id="addProject" class="submit-button btn btn-lg btn-block inicio" data-style="slide-up" data-color="green" type="submit" data-toggle="modal" data-target="#GSCCModal"><span class="ladda-label"></span><span class="ladda-spinner"></span></button>
+                            
+                            <button id="addProject" class="submit-button btn btn-lg btn-block inicio" data-type="submit" data-toggle="modal" data-target="#GSCCModal">Crear nuevo proyecto</button>
 <!--
                             <button id="delete-project" class="submit-button btn  btn-lg btn-block ladda-button inicio" data-style="slide-up" data-color="green" type="submit"><span class="ladda-label">Eliminar proyecto existente</span><span class="ladda-spinner"></span></button>
-                            
+
 -->
+                            <div style="display: flex;">
+                                <input class="cerca" id="search-bar" placeholder="Buscador...">
+                                <input class="cerca" id="filters-bar" list="filters" placeholder="Filtros(por defecto: nombre)">
+                                <datalist id="filters">
+                                    <option value="Nombre">
+                                    <option value="Autor">
+                                    <option value="Lugar">
+                                  </datalist>
+                            </div>
+                            
                             <!-- Listamos los ficheros que hay en el servidor/carpeta y sus propiedades -->
                             <table id="projects-tb" class="table">
                                 <thead>
@@ -73,54 +84,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tableInicio">
-                                    <!-- Esto es necesario para saber cuantos JSON hay y hacer una lista de ellos para luego acceder al modelo -->
-                                    <?php                                         
-                                        $directory = "litefile/files/" . $_GET['user'] ."/projects/";
-
-                                        $filecount = 0;
-                                        $files = glob($directory . "*.{json}",GLOB_BRACE);
-
-                                        if ($files){
-                                            $filecount = count($files);
-                                        }
                                     
-                                        for ($i = 0; $i < $filecount; $i = $i+1) {
-
-                                            $username = $_GET['user'];
-                                            $hoops = strlen("litefile/files/") + strlen($username) + strlen("/projects/");
-                                            $project = substr(substr($files[$i], $hoops),0, -5); // -5(.json)
-                                            $folder = $username . "/" . $project;
-                                            $src_preview = "litefile/files/" . $_GET['user'] ."/projects/" . $project . "/preview.png"; 
-                                            
-                                            $exists = file_exists($src_preview);
-                                            if(!$exists)
-                                                 $src_preview = "litefile/files/project-preview.png"; 
-                                            
-                                            print_r( '<tr class="pointer" id="' . $project . '" onclick' . '=' . '"loadContent(' . "'modelo.html','");
-                                            print_r( $folder );
-                                            print_r( "')" . '"' . ">" );
-                                            print_r( "<td>" . "<img class='project-preview ' src='" . $src_preview . "' title='Vista previa de " . $project . "'>" . "</td>" );
-                                            print_r( "<td>" . ucfirst($project)  . "</td>");
-                                            
-                                            print_r("<td class='w3-hide-small'>");
-                                            $string = file_get_contents($files[$i]);
-                                            $json_a = json_decode($string, true);
-
-                                            foreach ($json_a as $k => $v) {
-                                                if ($k == "autor")
-                                                     print_r($v);
-                                            }
-
-                                            print_r("</td><td class='w3-hide-small w3-hide-medium'><div>");
-
-                                            foreach ($json_a as $k => $v) {
-                                                if ($k == "lugar")
-                                                    print_r($v);
-                                            }
-
-                                            print_r("</div></td></tr><br>");
-                                        }
-                                    ?>
                                 </tbody>
                             </table> 
                             
@@ -128,7 +92,6 @@
                     </div>
                     
                     <img src="data/assets/bbva.png" class="img-responsive" style="margin-left: calc(50% - 75px); width: 150px;">
-                        
                 </div>
 	       </div>
             
@@ -255,8 +218,13 @@
         <script src="js/events.js"></script>
         <script type="text/javascript" src="js/extra/jquery.csv.min.js"></script>
         <script type="text/javascript">
-        
-             var lang = getQueryVariable("lang") || "es";
+            
+            $( document ).ready(function() {
+                loadProjectsTable(); 
+            });
+            
+            /* 
+            var lang = getQueryVariable("lang") || "es";
             var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCYVW9A1Rap8RQ2hua3BekD-C_VNUYFg-bLe51fwZ6QVUqyu1fm-Aq0mRvp2qTUwb4usE2Pzg2_KKc/pub?gid=0&single=true&output=csv';
             var src = url || "data/lang.csv";
             
@@ -276,7 +244,7 @@
                 error: function(err) {
                     console.error(err);
                 }
-            });
+            });*/
             
         </script>
     

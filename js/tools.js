@@ -125,6 +125,67 @@ function parseDATA(active, options)
     //
 }
 
+function loadProjectsTable(filters)
+{
+    filters = filters || {};
+    var perpage = 5;
+    
+    $.ajax({
+        type: "POST",
+        url: 'server/php/projects.php',
+        data: {
+            'user' : current_user,
+            },
+        success: function(data){
+            data = JSON.parse(data);
+            console.log(data);
+            console.log(filters);
+            // do stuff
+            var container = $("#tableInicio");
+            // clean cont
+            container.empty();
+            // apply pagination or nothing if few projects
+            var len = data.length >= perpage ? perpage : data.length;
+            
+            for(var i = 0; i < len; i++)
+            {
+                var file = data[i];
+                var user            = file[0];
+                var project         = file[1];
+                var preview_exists  = file[2];
+                var author          = file[3];
+                var place           = file[4];
+                
+                // apply filters
+                
+                if(filters){
+                    if(filters.nombre && !project.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").includes(filters.nombre))
+                        continue;    
+                    if(filters.autor && !author.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").includes(filters.autor))
+                        continue;    
+                    if(filters.lugar && !place.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").includes(filters.lugar))
+                        continue;    
+                }
+
+                var folder = user + "/" + project;
+                var src = preview_exists ? 
+                    "litefile/files/" + user + "/projects/" + project + "/preview.png" :
+                    "litefile/files/project-preview.png";
+                
+                container.append("<tr id='" + project + "' onclick='loadContent(" + '"modelo.html"' + ", " + '"' + folder + '"' + ")'>");
+                var row = $("#" + project);
+                row.append("<td><img class='project-preview ' src='" + src + "' title='Vista previa de " +                    project + "'></td>");
+                row.append("<td>" + capitalizeFirstLetter(project) + "</td>");
+                row.append("<td class='w3-hide-small'>" + author + "</td>");
+                row.append("<td class='w3-hide-small w3-hide-medium'><div>" + place + "</div></td>");
+                container.append("</tr>");
+            }
+        },
+        error: function(err){
+            console.error(err);
+        }
+    });
+}
 
 function deleteProject(user, project)
 {

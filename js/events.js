@@ -20,6 +20,33 @@ $('.form-signin').each(function() {
 /*
 * Inicio.php stuff
 */ 
+// project search tool
+$('#search-bar').keyup(function(e) 
+{
+    e.preventDefault();
+//    if(e.keyCode != 13)
+//        return;
+        
+    // pressing enter
+    var params = {};
+    // by default filter
+    params["nombre"] = $(this).val().toLowerCase();
+    
+    // load optionsl filter
+    var filter = $("#filters-bar").val().toLowerCase();
+    if(filter != ""){
+        delete params["nombre"];
+        params[filter] = $(this).val().toLowerCase();
+    }
+    
+    loadProjectsTable(params);
+});
+
+//$('#filters-bar').keydown(function(e){
+//    e.preventDefault();
+//    return false;
+//});
+
 //Enable deleting a project at the main page
 $("#delete-project").click(function() {
     

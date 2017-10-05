@@ -80,6 +80,7 @@ var APP = {
         {
             renderer.meshes[obj.mesh] = mesh;  
             $("#placeholder").css("background-image", "none");
+            $("#placeholder").css("cursor", "default");
             $('#myCanvas').css({"opacity": 0, "visibility": "visible"}).animate({"opacity": 1.0}, 1500);
             putCanvasMessage("Puedes cancelar cualquier acción con la tecla ESC", 3500);
             if(!rotaciones.length)
@@ -92,6 +93,8 @@ var APP = {
         obj.position = [0,0,0];
         obj.scale([5,5,5]);
         obj.mesh = wBinURL;
+        
+        $("#placeholder").css("cursor", "wait");
         
         mesh = GL.Mesh.fromURL( obj.mesh, function (response) {
             
