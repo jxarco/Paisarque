@@ -27,7 +27,6 @@ LiteFileServer.setup("", function(status, resp) {
             var last_session = JSON.parse(localStorage.session);
             window.location.href = "inicio.php?user=" + last_session.user.username;
         }
-            
     }
     else
     {
@@ -43,6 +42,7 @@ LiteFileServer.setup("", function(status, resp) {
 //LOGOUT
 $(".logout-button").click( function(e) {
 
+    session.logout();
     localStorage.clear();
     window.location.href = "index.html";
 });
@@ -118,6 +118,16 @@ function systemReady()
             {
                 window.alert("Usuario creado");
                 
+                // login as admin to change user space
+//                LiteFileServer.login( "admin", "", function(session, result){
+//                    if( session.status == LiteFileServer.LOGGED ) {
+                
+//                    }
+//                    else
+//                        throw("error login in (admin)");
+//                    
+//                    session.logout();
+//                });
                 
                 LiteFileServer.login( values["username"], values["password"], function(session, result){
             
@@ -126,6 +136,8 @@ function systemReady()
                         onLoggedIn(session);
                         console.log(session);
                         localStorage.setItem('session', JSON.stringify(session));
+                        
+//                        session.
                         
                         var fullpath = session.user.username;
                         session.createFolder(fullpath);

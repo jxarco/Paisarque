@@ -713,6 +713,10 @@ Project.prototype.config = function()
     if(this._description !== "nodesc")
         $(".pro-info").val(this._description);
     
+    // data
+    $("#mod_author").val(this._author);
+    $("#mod_location").val(this._location);
+    
     // coordinates
     $("#lat").val(this._coordinates.lat);
     $("#lon").val(this._coordinates.lng);
@@ -777,4 +781,35 @@ $("#auto-save-btn").click(function(){
         project.save();
     }
     
+});
+
+/* 
+* get the input values to modify the project 
+* coordinates location
+*/
+$('#coord-btn').click(function(e) 
+{
+    var lat = parseFloat($("#lat").val());
+    var lng = parseFloat($("#lon").val());
+    project._coordinates.lat = lat;
+    project._coordinates.lng = lng;
+    initMap(lat, lng);
+    
+    if(project._auto_save)
+        project.save();
+    else
+        putCanvasMessage("Recuerda guardar", 3000);
+});
+
+
+$("#data-btn").click(function(){
+    var author = $("#mod_author").val();
+    var loc = $("#mod_location").val();
+    project._author = author;
+    project._location = loc;
+    
+    if(project._auto_save)
+        project.save();
+    else
+        putCanvasMessage("Recuerda guardar", 3000);
 });

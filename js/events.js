@@ -40,23 +40,8 @@ $(".slide-tab").click(function(){
     else
         target.slideUp('slow'); 
 });
-/* 
-* get the input values to modify the project 
-* coordinates location
-*/
-$('#coord-btn').click(function(e) 
-{
-    var lat = parseFloat($("#lat").val());
-    var lng = parseFloat($("#lon").val());
-    project._coordinates.lat = lat;
-    project._coordinates.lng = lng;
-    initMap(lat, lng);
-    putCanvasMessage("Recuerda guardar...", 3000);
-});
-
 $("#lat").keypress(onlyNumbers);
 $("#lon").keypress(onlyNumbers);
-
 /*
 * Herramientas TAB
 */ 
@@ -473,8 +458,7 @@ $("#formUploadProject").on('submit', function(e)
     };
     
     var on_complete = function(){
-        location = location;
-        console.log("upload completed");
+        console.log("upload/folder completed");
     }
     
     var on_error = function(err){
@@ -489,8 +473,10 @@ $("#formUploadProject").on('submit', function(e)
     
     $('#loadingModal').modal('show');  
 
-    var path = current_user + "/projects/" + project_id + "/";
+    path = current_user + "/projects/" + project_id + "/";
     session.createFolder(path, on_complete, on_error);
+    
+    var n_files = input_files.length;
     
     for(var i = 0, f; f = input_files[i]; i++)
     {
@@ -505,7 +491,8 @@ $("#formUploadProject").on('submit', function(e)
                     
                     session.uploadFile( fullpath, arrayBuffer, 0, function(){
                         $('#loadingModal').modal('hide');     
-                        location = location;
+                        if(i == (n_files - 1))
+                            location = location;
                     }, on_error );
                 };
               })(f);

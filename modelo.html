@@ -92,17 +92,28 @@
                              aria-hidden="false">
                             
                             <label style="display: flex;"><p>Auto-guardado</p><i title="Activar/desactivar" id="auto-save-btn" class="material-icons show">fiber_manual_record</i></label>         
+                            
+                            <label style="display: flex;" class="slide-tab" data-target='#mods'><p>Datos</p><i class="material-icons">keyboard_arrow_down</i></label>
+                            <div id="mods" style="display: none;">
+                                <input id="mod_author" placeholder="Autor">
+                                <input id="mod_location" placeholder="Ubicación">
+                                <button title="Aplicar cambios" class="newdata btn" id="data-btn"><i class="material-icons">repeat</i></button>
+                            </div>
+                            
                             <label style="display: flex;" for="comment" class="slide-tab" data-target='#comment'><p>Descripción</p><i class="material-icons">keyboard_arrow_down</i></label>
-                            <textarea class="form-control pro-info" rows="5" id="comment"></textarea>
+                            <textarea style="display: none;" class="form-control pro-info" id="comment"></textarea>
+                            
                             <label style="display: flex;" class="slide-tab" data-target='#map'><p>Ubicación</p><i class="material-icons">keyboard_arrow_down</i></label>
                             <div id="map"></div>
                             <div style="display: flex;">
-                                <textarea id="lat" placeholder="LAT" class="form-control newcoord"></textarea>
-                                <textarea id="lon" placeholder="LON" class="form-control newcoord"></textarea>
-                                <button title="Aplicar nuevas coordenadas" class="newcoord btn" id="coord-btn"><i class="material-icons">repeat</i></button>
+                                <textarea id="lat" placeholder="LAT" class="newdata"></textarea>
+                                <textarea id="lon" placeholder="LON" class="newdata"></textarea>
+                                <button title="Aplicar nuevas coordenadas" class="newdata btn" id="coord-btn"><i class="material-icons">repeat</i></button>
                             </div>
+                            
                             <label style="display: flex;" class="slide-tab" data-target='#cubemaps'><p>Fondos</p><i class="material-icons">keyboard_arrow_down</i></label>
                             <div id="cubemaps" style="display: none;">
+                                <button onclick="APP.setCubeMap()" title="Quitar cubemap" class="newdata btn"><i class="material-icons">not_interested</i></button>
                                 <div id="cubemaps-in">
                                     
                                 </div>

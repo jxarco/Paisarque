@@ -169,6 +169,7 @@ var APP = {
         });
         
         skybox.name = "skybox";
+        skybox.flags.visible = false;
         skybox.flags.depth_test = false;
         skybox.flags.flip_normals = true;
         skybox.render_priority = 100;
@@ -364,6 +365,11 @@ var APP = {
     
     setCubeMap: function( url )
     {
+        if(!url){
+            scene.root.getNodeByName("skybox").flags.visible = false;    
+            return;
+        }
+        scene.root.getNodeByName("skybox").flags.visible = true;    
         var cubeMaptexture = GL.Texture.cubemapFromURL(url,{is_cross: 1, minFilter: gl.LINEAR_MIPMAP_LINEAR });
         cubeMaptexture.bind(0);
         renderer.textures["skybox"] = cubeMaptexture;  
