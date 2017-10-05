@@ -72,7 +72,7 @@
                     </div>
                     
                     <p style="margin-left: calc(50% - 50px);" id="bbva_mark"></p>
-                    <img src="data/assets/bbva.png" class="img-responsive" style="margin-left: calc(50% - 50px); width: 100px;">
+                    <img src="data/assets/bbva.png" class="img-responsive" style="margin-left: calc(50% - 75px); width: 150px;">
                     <br>
                 </div>
                 
@@ -129,8 +129,6 @@
             $.ajax(src, {
                 success: function(data) {
                     var result = $.csv.toObjects(data);
-                    console.log(result);
-                    
                     for(var i in result)
                     {
                         var sel = result[i].selector;

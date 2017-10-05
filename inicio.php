@@ -127,7 +127,7 @@
                         </div>
                     </div>
                     
-                    <img src="data/assets/bbva.png" class="img-responsive" style="margin-left: calc(50% - 50px); width: 100px;">
+                    <img src="data/assets/bbva.png" class="img-responsive" style="margin-left: calc(50% - 75px); width: 150px;">
                         
                 </div>
 	       </div>
