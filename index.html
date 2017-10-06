@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         
-        <title></title>
+        <title>PaisArque (ES)</title>
         <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
         <link rel="stylesheet" href="css/responsive-design.css"> <!-- responsive web design -->
         <link href="css/stylesheet.css" rel="stylesheet">
@@ -22,9 +22,9 @@
         <div class="w3-top">
           <div class="w3-bar w3-card-2">
             <a id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
-            <a onclick="location.href='index.html?lang=it'" class="w3-bar-item w3-button w3-right w3-padding-large language">IT</a>
-            <a onclick="location.href='index.html?lang=en'" class="w3-bar-item w3-button w3-right w3-padding-large language">EN</a>
-            <a onclick="location.href='index.html?lang=es'" class="w3-bar-item w3-button w3-right w3-padding-large language">ES</a>
+            <a onclick="setLanguage('en')" class="w3-bar-item w3-button w3-right w3-padding-large language">EN</a>
+            <a onclick="setLanguage('cat')" class="w3-bar-item w3-button w3-right w3-padding-large language">CAT</a>
+            <a onclick="setLanguage('es')" class="w3-bar-item w3-button w3-right w3-padding-large language">ES</a>
           </div>
         </div>
         
@@ -36,7 +36,7 @@
                             <h3 class="panel-title">PaisArque</h3>
                         </div>
                         <div class="panel-body">
-                            <p style="text-align: justify;" id="body1"></p><br>
+                            <p style="text-align: justify;" id="body1">Proyecto realizado por grupos pertenecientes a la Universidad Pompeu Fabra con la financiación de la <a href="https://www.fbbva.es/">Fundación BBVA.</a></p><br>
                             <a href="https://www.upf.edu/web/paisarque"><img src="data/assets/upf.png" class="img-responsive" style="width: 160px;"></a>        
                         </div>
                     </div>
@@ -45,8 +45,6 @@
                 <div class="col-md-6 col-md-offset-0">
                     
                     <div class="center-block startup-dialog" style="display:none">
-                        <h2 class="form-signin-heading">Checking LFSystem</h2>
-                        <h3 class="form-signin-heading">Please wait</h3>
                         <div class="progress">
                             <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
                                 <span class="sr-only"></span>
@@ -55,13 +53,11 @@
                     </div>
                     <div class="panel panel-default" id="loginForm">
                         <div class="panel-heading">
-                            <h3 class="panel-title">¿Tienes cuenta?</h3>
+                            <h3 class="panel-title" id="have_account">¿Tienes cuenta?</h3>
                         </div>
                         <div class="panel-body">
                             <form class="form-signin">
-                                <label for="inputEmail" class="sr-only">Username</label>
                                 <input name="username" type="text" id="inputEmail" class="form-control index" placeholder="Usuario" value="" required autofocus>
-                                <label for="inputPassword" class="sr-only">Password</label>
                                 <input name="password" type="password" id="inputPassword" class="form-control index" placeholder="Contraseña" value="" required>
                                 <br>
                                 <button id="signin-btn" class="submit-button btn inicio btn-lg btn-block ladda-button" data-style="slide-up" data-color="green" type="submit"><span class="ladda-label">Iniciar sesión</span><span class="ladda-spinner"></span></button>
@@ -71,7 +67,7 @@
                         
                     </div>
                     
-                    <p style="margin-left: calc(50% - 50px);" id="bbva_mark"></p>
+                    <p style="margin-left: calc(50% - 50px);" id="bbva_mark">Financiado por</p>
                     <img src="data/assets/bbva.png" class="img-responsive" style="margin-left: calc(50% - 75px); width: 150px;">
                     <br>
                 </div>
@@ -80,10 +76,10 @@
                     
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title" id="body2_title"></h3>
+                            <h3 class="panel-title" id="body2_title">Resumen</h3>
                         </div>
                         <div class="panel-body">
-                            <p style="text-align: justify;" id="body2"></p>
+                            <p style="text-align: justify;" id="body2">PaisArque se propone desarrollar una aplicación de fácil utilizo y acceso, basada en la web, a través de la cual los usuarios puedan generar modelos 3D de monumentos y/o objetos a partir de fotografías digitales.<br><br>Tecnológicamente, el proyecto opta por una visión integrada 3D en web debido a la creciente importancia de la participación colectiva en la ciencia, tanto por parte de los profesionales, como de los usuarios, de forma que las apps para la experiencia y visualización del patrimonio arqueológico sean multiplataforma.</p>
                         </div>
                     </div>
                 </div>
@@ -122,23 +118,57 @@
         <script type="text/javascript" src="js/extra/jquery.csv.min.js"></script>
         <script type="text/javascript">
         
-            var lang = getQueryVariable("lang") || "es";
+            var lang = localStorage.getItem("lang") || "es";
             var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCYVW9A1Rap8RQ2hua3BekD-C_VNUYFg-bLe51fwZ6QVUqyu1fm-Aq0mRvp2qTUwb4usE2Pzg2_KKc/pub?gid=0&single=true&output=csv';
-            var src = url || "data/lang.csv";
+            var src = "data/lang.csv";
             
-            $.ajax(src, {
+            $.ajax(url, {
                 success: function(data) {
                     var result = $.csv.toObjects(data);
                     for(var i in result)
                     {
+                        if(result[i].target != "index")
+                            continue;
+                        
                         var sel = result[i].selector;
                         var content = result[i][lang];
-                        if(result[i].target == "index")
-                            $(sel).html(content);
+                        var attr = result[i].attr;
+                        
+                        if(attr){
+                            $(sel).attr(attr, content);
+                            continue;
+                        }
+                        
+                        $(sel).html(content);
                     }
                 },
                 error: function(err) {
                     console.error(err);
+                    // do with local file in case of error in url
+                    $.ajax(src, {
+                        success: function(data) {
+                            var result = $.csv.toObjects(data);
+                            for(var i in result)
+                            {
+                                if(result[i].target != "index")
+                                    continue;
+
+                                var sel = result[i].selector;
+                                var content = result[i][lang];
+                                var attr = result[i].attr;
+
+                                if(attr){
+                                    $(sel).attr(attr, content);
+                                    continue;
+                                }
+
+                                $(sel).html(content);
+                            }
+                        },
+                        error: function(err) {
+                            console.error(err);
+                        }
+                    });
                 }
             });
             

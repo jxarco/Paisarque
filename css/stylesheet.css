@@ -155,7 +155,7 @@ h1, h2, h3, h4, h5, h6{
     background-color: rgb(20, 120, 120);
 }
 /*
-* inicio.php
+* inicio.html
 */
 .cerca{
     width: 100%;
@@ -169,7 +169,19 @@ h1, h2, h3, h4, h5, h6{
     outline: none;
     resize: none;
 }
-
+.pagination{
+    width: 30px;
+    font-size: 24px !important;
+    -webkit-transition: 0.3s ease-in-out;
+    transition: 0.3s ease-in-out;
+}
+.pagination.l{
+    margin-left: calc(50% - 30px);
+}
+.pagination:hover{
+    color: #0070c9;
+    cursor: pointer;
+}
 #tableInicio{
     -webkit-transition: 0.5s ease-in-out;
     transition: 0.5s ease-in-out;

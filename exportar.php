@@ -36,11 +36,14 @@
         <div class="w3-top">
           <div class="w3-bar w3-card-2">
             <a class="w3-bar-item w3-button w3-padding-large w3-hide-large w3-right" onclick="showNavbar()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
-            <a onclick="loadContent('inicio.php')" id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
+            <a onclick="loadContent('inicio.html')" id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
             <a onclick="loadContent('modelo.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">3D</a>
-            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">APORTACIONES</a>
-            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium active">EXPORTAR</a>
-            <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">AYUDA</a>
+            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium extra-nav">APORTACIONES</a>
+            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium export-nav active">EXPORTAR</a>
+            <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium help-nav">AYUDA</a>
+            <a onclick="setLanguage('en')" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">EN</a>
+            <a onclick="setLanguage('cat')" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">CAT</a>
+            <a onclick="setLanguage('es')" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">ES</a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium textUser">username</a>
           </div>
@@ -50,9 +53,12 @@
         <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-top" style="margin-top:46px">
             <a class="w3-bar-item w3-button w3-padding-large textUser">username</a>
             <a onclick="loadContent('modelo.html')" class="w3-bar-item w3-button w3-padding-large">3D</a>
-            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large">APORTACIONES</a>
-            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large">EXPORTAR</a>
-            <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large">AYUDA</a>
+            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large extra-nav">APORTACIONES</a>
+            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large export-nav">EXPORTAR</a>
+            <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large help-nav">AYUDA</a>
+            <a onclick="setLanguage('es')" class="w3-bar-item w3-button w3-padding-large">ES</a>
+            <a onclick="setLanguage('cat')" class="w3-bar-item w3-button w3-padding-large">CAT</a>
+            <a onclick="setLanguage('en')" class="w3-bar-item w3-button w3-padding-large">EN</a>
         </div>
         
         <content class="row"><div class="col-lg-12" style="margin-top:46px">
@@ -65,7 +71,7 @@
                     <ul>
                         <li>
                           <div class="top">
-                            <h3>MODELO</h3>
+                            <h3 id="h3-model">MODELO</h3>
                             <div class="circle blue">3D</div>
                           </div>
                           <div class="bottom">
@@ -78,11 +84,11 @@
                               
                                 $path = "litefile/files/" . $user . "/projects/" . $project;
                               
-                                echo '<a href="';
+                                echo '<a id="down-mesh" href="';
                                 echo $path . '/mesh.obj"';
                                 echo 'download="" title="Descargar mesh">Mesh</a><br><br>';
                              
-                                echo '<a href="';
+                                echo '<a id="down-text" href="';
                                 echo $path . '/tex_0.jpg"';
                                 echo 'download="" title="Descargar textura">Textura</a><br><br>';
                              ?>
@@ -91,7 +97,7 @@
 
                         <li>
                           <div class="top">
-                            <h3>PROYECTO</h3>
+                            <h3 id="h3-project">PROYECTO</h3>
                             <div class="circle pink">PDF</div>
                           </div>
                             <div class="bottom">
@@ -104,7 +110,7 @@
 
                         <li>
                           <div class="top">
-                            <h3>TABLAS</h3>
+                            <h3 id="h3-tables">TABLAS</h3>
                             <div class="circle green">CSV</div>
                           </div>
                             <div class="bottom">
@@ -116,7 +122,7 @@
 
                         <li>
                           <div class="top">
-                            <h3>OBJETO</h3>
+                            <h3 id="h3-object">OBJETO</h3>
                             <div class="circle">JSON</div>
                           </div>
                             <div class="bottom">
@@ -132,7 +138,7 @@
 
                                     $path = "litefile/files/" . $user . "/projects/" . $project;
                                 
-                                    echo '<a href="';
+                                    echo '<a class="conf-php" href="';
                                     echo $path . '.json"';
                                     echo 'download="" title="Descargar configuración en JSON">Configuración</a><br><br>';
                                  ?>
@@ -178,10 +184,66 @@
         <script type="text/javascript">
             PAS.recover(); // load paisarque session
         </script>
-        
         <script src="js/events.js"></script>
         <script>
             LOADER.loadProject();
+        </script>
+        <script type="text/javascript" src="js/extra/jquery.csv.min.js"></script>
+        <script type="text/javascript">
+            var lang = localStorage.getItem("lang") || "es";
+            var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCYVW9A1Rap8RQ2hua3BekD-C_VNUYFg-bLe51fwZ6QVUqyu1fm-Aq0mRvp2qTUwb4usE2Pzg2_KKc/pub?gid=0&single=true&output=csv';
+            var src = "data/lang.csv";
+            
+            $.ajax(url, {
+                success: function(data) {
+                    var result = $.csv.toObjects(data);
+                    for(var i in result)
+                    {
+                        if(result[i].target != "exportar")
+                            continue;
+                        
+                        var sel = result[i].selector;
+                        var content = result[i][lang];
+                        var attr = result[i].attr;
+                        
+                        if(attr){
+                            $(sel).attr(attr, content);
+                            continue;
+                        }
+                        
+                        $(sel).html(content);
+                    }
+                },
+                error: function(err) {
+                    console.error(err);
+                    // do with local file in case of error in url
+                    $.ajax(src, {
+                        success: function(data) {
+                            var result = $.csv.toObjects(data);
+                            for(var i in result)
+                            {
+                                if(result[i].target != "exportar")
+                                    continue;
+
+                                var sel = result[i].selector;
+                                var content = result[i][lang];
+                                var attr = result[i].attr;
+
+                                if(attr){
+                                    $(sel).attr(attr, content);
+                                    continue;
+                                }
+
+                                $(sel).html(content);
+                            }
+                        },
+                        error: function(err) {
+                            console.error(err);
+                        }
+                    });
+                }
+            });
+            
         </script>
     </body>
     

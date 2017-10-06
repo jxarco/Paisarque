@@ -5,6 +5,19 @@ var KEY_SPACE = 32, KEY_ESC = 27, KEY_ENTER = 13;
 var separator = "__________________________________________________\n";
 var PLANTA = 0, ALZADO = 1;
 
+function setLanguage(lang, queryString)
+{
+    // query string option
+    if(queryString){
+        location.href='index.html?lang=' + lang;
+        return 0;
+    }
+    
+    // local storage option
+    localStorage.setItem("lang", lang);
+    location = location;
+}
+
 /*
 * Return query variable from the url
 */

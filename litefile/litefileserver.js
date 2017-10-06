@@ -39,7 +39,7 @@ var LiteFileServer = {
 
 		//fetch info
 		return this.request(this.server_url, { action:"user/login", loginkey: userpass}, function(resp){
-			console.log(resp);
+//			console.log(resp);
 			session.last_resp = resp;
 			session.user = resp.user;
 			session.status = resp.status > 0 ? LiteFileServer.LOGGED : LiteFileServer.NOT_LOGGED;

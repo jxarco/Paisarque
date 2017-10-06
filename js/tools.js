@@ -128,7 +128,7 @@ function parseDATA(active, options)
 function loadProjectsTable(filters)
 {
     filters = filters || {};
-    var perpage = 5;
+    var per_page = 3;
     
     $.ajax({
         type: "POST",
@@ -138,17 +138,37 @@ function loadProjectsTable(filters)
             },
         success: function(data){
             data = JSON.parse(data);
-            console.log(data);
-            console.log(filters);
+//            console.log(data);
+//            console.log(filters);
             // do stuff
             var container = $("#tableInicio");
             // clean cont
             container.empty();
             // apply pagination or nothing if few projects
-            var len = data.length >= perpage ? perpage : data.length;
+            var len = null;
+            var index = 0;
             
-            for(var i = 0; i < len; i++)
+            if(data.length <= per_page){
+                var page = parseInt(getQueryVariable("pag")) || 0;
+                if(page >= (data.length / per_page))
+                    return;
+                len = data.length;
+            }
+            else{
+                var page = parseInt(getQueryVariable("pag")) || 0;
+                index = page * per_page;
+                len = per_page + index;
+                
+                // prevent passing of pages
+                if(page >= (data.length / per_page))
+                    return;
+            }
+            
+            for(var i = index; i < len; i++)
             {
+                if(!data[i])
+                    continue;
+                
                 var file = data[i];
                 var user            = file[0];
                 var project         = file[1];
@@ -159,11 +179,11 @@ function loadProjectsTable(filters)
                 // apply filters
                 
                 if(filters){
-                    if(filters.nombre && !project.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").includes(filters.nombre))
+                    if(filters.name && !project.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").includes(filters.name))
                         continue;    
-                    if(filters.autor && !author.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").includes(filters.autor))
+                    if(filters.author && !author.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").includes(filters.author))
                         continue;    
-                    if(filters.lugar && !place.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").includes(filters.lugar))
+                    if(filters.place && !place.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").includes(filters.place))
                         continue;    
                 }
 
@@ -174,7 +194,7 @@ function loadProjectsTable(filters)
                 
                 container.append("<tr id='" + project + "' onclick='loadContent(" + '"modelo.html"' + ", " + '"' + folder + '"' + ")'>");
                 var row = $("#" + project);
-                row.append("<td><img class='project-preview ' src='" + src + "' title='Vista previa de " +                    project + "'></td>");
+                row.append("<td><img class='project-preview ' src='" + src + "' title='Vista previa de " + project + "'></td>");
                 row.append("<td>" + capitalizeFirstLetter(project) + "</td>");
                 row.append("<td class='w3-hide-small'>" + author + "</td>");
                 row.append("<td class='w3-hide-small w3-hide-medium'><div>" + place + "</div></td>");
@@ -210,7 +230,7 @@ function deleteProject(user, project)
             'folder': project_to_delete[1],
             },
       success: function (response) {
-          document.location.href = 'inicio.php?user=' + user;
+          document.location.href = 'inicio.html?user=' + user;
           delete_project_active = false;
       }
     });
@@ -228,7 +248,7 @@ function loadContent(url, id)
     // load content 
     console.log("loading content " + url);
         
-    if(url === 'inicio.php'){
+    if(url === 'inicio.html'){
         document.location.href = url+"?user=" + current_user;
     }
 

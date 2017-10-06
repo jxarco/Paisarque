@@ -18,34 +18,54 @@ $('.form-signin').each(function() {
 /******************************************************************************************/
 
 /*
-* Inicio.php stuff
+* inicio.html stuff
 */ 
 // project search tool
 $('#search-bar').keyup(function(e) 
 {
     e.preventDefault();
-//    if(e.keyCode != 13)
-//        return;
-        
+    
     // pressing enter
     var params = {};
     // by default filter
-    params["nombre"] = $(this).val().toLowerCase();
+    params["name"] = $(this).val().toLowerCase();
     
     // load optionsl filter
-    var filter = $("#filters-bar").val().toLowerCase();
+    var filter = $("#filters-bar").find(":selected").val().toLowerCase();
     if(filter != ""){
-        delete params["nombre"];
+        delete params["name"];
         params[filter] = $(this).val().toLowerCase();
     }
     
     loadProjectsTable(params);
 });
 
-//$('#filters-bar').keydown(function(e){
-//    e.preventDefault();
-//    return false;
-//});
+$(".pagination").click(function(){
+   
+    var current_page = parseInt(getQueryVariable("pag")) || 0;
+    var next_page = current_page + 1;
+    var previous_page = current_page - 1;
+    
+    // click left
+    if($(this).hasClass("l")){
+        if(!current_page)
+            return;
+        else{
+            var href = "inicio.html?user=" + current_user;
+            if(previous_page)
+                href += "&pag=" + previous_page;
+            
+            window.location.href = href;
+        }
+    }
+    //click right
+    if($(this).hasClass("r")){
+        if(!current_page)
+            window.location.href += "&pag=1";
+        else
+            window.location.href = "inicio.html?user=" + current_user + "&pag=" + next_page; 
+    }
+});
 
 //Enable deleting a project at the main page
 $("#delete-project").click(function() {
