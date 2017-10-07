@@ -23,10 +23,10 @@
                           <span class="icon-bar"></span>
                           <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="index.html">PaisArque</a>
+                        <a class="navbar-brand" href="index">PaisArque</a>
                     </div>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"><ul class="nav navbar-nav">
-                        <li> <a onclick="location.href='index.html'">   Login </a> </li>
+                        <li> <a onclick="location.href='index'">   Login </a> </li>
                         <li> <a onclick="location.href='form.php'"> Form</a> </li>
                     </ul></div>
                 </div></nav>

@@ -51,7 +51,7 @@ $(".pagination").click(function(){
         if(!current_page)
             return;
         else{
-            var href = "inicio.html?user=" + current_user;
+            var href = "inicio?user=" + current_user;
             if(previous_page)
                 href += "&pag=" + previous_page;
             
@@ -63,7 +63,7 @@ $(".pagination").click(function(){
         if(!current_page)
             window.location.href += "&pag=1";
         else
-            window.location.href = "inicio.html?user=" + current_user + "&pag=" + next_page; 
+            window.location.href = "inicio?user=" + current_user + "&pag=" + next_page; 
     }
 });
 

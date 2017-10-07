@@ -9,7 +9,7 @@ function setLanguage(lang, queryString)
 {
     // query string option
     if(queryString){
-        location.href='index.html?lang=' + lang;
+        location.href='index?lang=' + lang;
         return 0;
     }
     

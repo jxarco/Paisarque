@@ -192,7 +192,7 @@ function loadProjectsTable(filters)
                     "litefile/files/" + user + "/projects/" + project + "/preview.png" :
                     "litefile/files/project-preview.png";
                 
-                container.append("<tr id='" + project + "' onclick='loadContent(" + '"modelo.html"' + ", " + '"' + folder + '"' + ")'>");
+                container.append("<tr id='" + project + "' onclick='loadContent(" + '"modelo"' + ", " + '"' + folder + '"' + ")'>");
                 var row = $("#" + project);
                 row.append("<td><img class='project-preview ' src='" + src + "' title='Vista previa de " + project + "'></td>");
                 row.append("<td>" + capitalizeFirstLetter(project) + "</td>");
@@ -230,7 +230,7 @@ function deleteProject(user, project)
             'folder': project_to_delete[1],
             },
       success: function (response) {
-          document.location.href = 'inicio.html?user=' + user;
+          document.location.href = 'inicio?user=' + user;
           delete_project_active = false;
       }
     });
@@ -248,16 +248,16 @@ function loadContent(url, id)
     // load content 
     console.log("loading content " + url);
         
-    if(url === 'inicio.html'){
+    if(url === 'inicio'){
         document.location.href = url+"?user=" + current_user;
     }
 
     else {
         // pass project information to reload it later
         var preurl = document.location.pathname;
-        if(preurl.includes("/modelo.html"))
+        if(preurl.includes("/modelo"))
             sessionStorage.setItem("project", JSON.stringify(project));     
-        if(preurl.includes("/infoextra.html"))
+        if(preurl.includes("/infoextra"))
             sessionStorage.setItem("project", JSON.stringify(copy));     
 
         document.location.href = url+"?r="+(id || current_project).toString();        

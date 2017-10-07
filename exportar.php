@@ -36,11 +36,11 @@
         <div class="w3-top">
           <div class="w3-bar w3-card-2">
             <a class="w3-bar-item w3-button w3-padding-large w3-hide-large w3-right" onclick="showNavbar()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
-            <a onclick="loadContent('inicio.html')" id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
-            <a onclick="loadContent('modelo.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">3D</a>
-            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium extra-nav">APORTACIONES</a>
+            <a onclick="loadContent('inicio')" id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
+            <a onclick="loadContent('modelo')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">3D</a>
+            <a onclick="loadContent('infoextra')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium extra-nav">APORTACIONES</a>
             <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium export-nav active">EXPORTAR</a>
-            <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium help-nav">AYUDA</a>
+            <a onclick="loadContent('ayuda')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium help-nav">AYUDA</a>
             <a onclick="setLanguage('en')" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">EN</a>
             <a onclick="setLanguage('cat')" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">CAT</a>
             <a onclick="setLanguage('es')" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">ES</a>
@@ -52,10 +52,10 @@
         <!-- Navbar on small screens -->
         <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-top" style="margin-top:46px">
             <a class="w3-bar-item w3-button w3-padding-large textUser">username</a>
-            <a onclick="loadContent('modelo.html')" class="w3-bar-item w3-button w3-padding-large">3D</a>
-            <a onclick="loadContent('infoextra.html')" class="w3-bar-item w3-button w3-padding-large extra-nav">APORTACIONES</a>
-            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large export-nav">EXPORTAR</a>
-            <a onclick="loadContent('ayuda.html')" class="w3-bar-item w3-button w3-padding-large help-nav">AYUDA</a>
+            <a onclick="loadContent('modelo')" class="w3-bar-item w3-button w3-padding-large">3D</a>
+            <a onclick="loadContent('infoextra')" class="w3-bar-item w3-button w3-padding-large extra-nav">APORTACIONES</a>
+            <a onclick="loadContent('exportar')" class="w3-bar-item w3-button w3-padding-large export-nav">EXPORTAR</a>
+            <a onclick="loadContent('ayuda')" class="w3-bar-item w3-button w3-padding-large help-nav">AYUDA</a>
             <a onclick="setLanguage('es')" class="w3-bar-item w3-button w3-padding-large">ES</a>
             <a onclick="setLanguage('cat')" class="w3-bar-item w3-button w3-padding-large">CAT</a>
             <a onclick="setLanguage('en')" class="w3-bar-item w3-button w3-padding-large">EN</a>
