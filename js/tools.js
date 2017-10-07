@@ -1,9 +1,11 @@
 var default_project         = null;
-var delete_project_active   = false;
-var current_project = getQueryVariable("r");
+var default_user            = "guest";
+var current_user            = null;
+var current_project         = localStorage.getItem("current_project") || null;
 
+
+var delete_project_active   = false;
 var copy = null; // copy of the project
-var current_user = "guest"; // default user
 var session = null;
 
 /*
@@ -22,8 +24,9 @@ var PAS = {
             
             current_user = session.user.username;   
         }else{
+            // use 
             console.warn("no session involved");
-            current_user = getQueryVariable('user') || getQueryVariable('r').split("/")[0];
+            current_user = default_user;
         }
     }
 }
@@ -247,21 +250,21 @@ function loadContent(url, id)
     
     // load content 
     console.log("loading content " + url);
-        
-    if(url === 'inicio'){
-        document.location.href = url+"?user=" + current_user;
-    }
-
-    else {
+    
+    if(url !== 'inicio'){
         // pass project information to reload it later
         var preurl = document.location.pathname;
         if(preurl.includes("/modelo"))
             sessionStorage.setItem("project", JSON.stringify(project));     
         if(preurl.includes("/infoextra"))
             sessionStorage.setItem("project", JSON.stringify(copy));     
-
-        document.location.href = url+"?r="+(id || current_project).toString();        
+        
+        // set selected project
+        localStorage.setItem("current_project", id || current_project);
     }
+
+    // go new location
+    document.location.href = url;        
 }
 
 function loadMapsAPI()

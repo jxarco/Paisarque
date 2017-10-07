@@ -51,9 +51,9 @@ $(".pagination").click(function(){
         if(!current_page)
             return;
         else{
-            var href = "inicio?user=" + current_user;
+            var href = "inicio";
             if(previous_page)
-                href += "&pag=" + previous_page;
+                href += "?pag=" + previous_page;
             
             window.location.href = href;
         }
@@ -61,9 +61,9 @@ $(".pagination").click(function(){
     //click right
     if($(this).hasClass("r")){
         if(!current_page)
-            window.location.href += "&pag=1";
+            window.location.href += "?pag=1";
         else
-            window.location.href = "inicio?user=" + current_user + "&pag=" + next_page; 
+            window.location.href = "inicio?pag=" + next_page; 
     }
 });
 
@@ -329,11 +329,11 @@ $("#formAddImage").on('submit', function(e)
     var project_id = current_project;
 
     var formData = new FormData(this);
-    var user = getQueryVariable("user") || "guest";
+    var user = current_user;
     formData.append("user", user);
     formData.append("id", project_id);
     
-    var urlImage = "litefile/files/" + current_user + "/projects/" + copy._id + "/";
+    var urlImage = "litefile/files/" + user + "/projects/" + copy._id + "/";
     
     $(':file').each(function() {
         var input = $(this);
@@ -462,7 +462,7 @@ $("#formUploadProject").on('submit', function(e)
     
     var project_id = values["idProyecto"].toLowerCase();
     
-    var user = getQueryVariable("user");
+    var user = current_user;
     formData.append("user", user);
     
     var urlMesh = project_id + "/"; 

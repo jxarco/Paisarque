@@ -25,7 +25,7 @@ LiteFileServer.setup("", function(status, resp) {
         if(localStorage.session && session === null)
         {
             var last_session_opened = JSON.parse(localStorage.session);
-            window.location.href = "inicio?user=" + last_session_opened.user.username;
+            window.location.href = "inicio";
         }
     }
     else
@@ -70,7 +70,7 @@ function systemReady()
 				onLoggedIn(session);
                 console.log(session);
                 localStorage.setItem('session', JSON.stringify(session));
-                window.location.href = "inicio?user=" + session.user.username;
+                window.location.href = "inicio";
             }
 			else
 				throw("error login in");
@@ -145,7 +145,7 @@ function systemReady()
                         fullpath += "/projects/";
                         session.createFolder(fullpath);
                         
-                        window.location.href = "inicio?user=" + session.user.username;
+                        window.location.href = "inicio";
                     }
                     else
                         throw("error login in");
