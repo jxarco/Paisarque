@@ -169,6 +169,7 @@
          <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script type="text/javascript" src="js/extra/jquery.csv.min.js"></script>
         <script type="text/javascript" src="js/extra/jspdf.min.js"></script>
         <script type="text/javascript" src="js/extra/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/extra/custom.js"></script>
@@ -187,63 +188,7 @@
         <script src="js/events.js"></script>
         <script>
             LOADER.loadProject();
-        </script>
-        <script type="text/javascript" src="js/extra/jquery.csv.min.js"></script>
-        <script type="text/javascript">
-            var lang = localStorage.getItem("lang") || "es";
-            var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCYVW9A1Rap8RQ2hua3BekD-C_VNUYFg-bLe51fwZ6QVUqyu1fm-Aq0mRvp2qTUwb4usE2Pzg2_KKc/pub?gid=0&single=true&output=csv';
-            var src = "data/lang.csv";
-            
-            $.ajax(url, {
-                success: function(data) {
-                    var result = $.csv.toObjects(data);
-                    for(var i in result)
-                    {
-                        if(result[i].target != "exportar")
-                            continue;
-                        
-                        var sel = result[i].selector;
-                        var content = result[i][lang];
-                        var attr = result[i].attr;
-                        
-                        if(attr){
-                            $(sel).attr(attr, content);
-                            continue;
-                        }
-                        
-                        $(sel).html(content);
-                    }
-                },
-                error: function(err) {
-                    console.error(err);
-                    // do with local file in case of error in url
-                    $.ajax(src, {
-                        success: function(data) {
-                            var result = $.csv.toObjects(data);
-                            for(var i in result)
-                            {
-                                if(result[i].target != "exportar")
-                                    continue;
-
-                                var sel = result[i].selector;
-                                var content = result[i][lang];
-                                var attr = result[i].attr;
-
-                                if(attr){
-                                    $(sel).attr(attr, content);
-                                    continue;
-                                }
-
-                                $(sel).html(content);
-                            }
-                        },
-                        error: function(err) {
-                            console.error(err);
-                        }
-                    });
-                }
-            });
-            
+            applyLanguage("index");
         </script>
     </body>
     

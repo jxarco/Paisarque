@@ -168,11 +168,10 @@ var APP = {
         var skybox = new RD.SceneNode({
             mesh: "cube",
             texture: "skybox",
-            shader: "skybox"
+            shader: "basic"
         });
         
         skybox.name = "skybox";
-        skybox.flags.visible = false;
         skybox.flags.depth_test = false;
         skybox.flags.flip_normals = true;
         skybox.render_priority = 100;
@@ -294,7 +293,7 @@ var APP = {
 //                download(renderer.meshes[obj.mesh], "wbin");
             
             if(e.keyCode === KEY_S)
-                renderer.loadShaders("data/shaders.glsl");
+                renderer.loadShaders("data/shaders/shaders.glsl");
         }
 
         context.captureMouse(true);
@@ -369,10 +368,10 @@ var APP = {
     setCubeMap: function( url )
     {
         if(!url){
-            scene.root.getNodeByName("skybox").flags.visible = false;    
+            scene.root.getNodeByName("skybox").shader = "basic"; 
             return;
         }
-        scene.root.getNodeByName("skybox").flags.visible = true;    
+        scene.root.getNodeByName("skybox").shader = "skybox"; 
         var cubeMaptexture = GL.Texture.cubemapFromURL(url,{is_cross: 1, minFilter: gl.LINEAR_MIPMAP_LINEAR });
         cubeMaptexture.bind(0);
         renderer.textures["skybox"] = cubeMaptexture;  
@@ -386,9 +385,7 @@ var APP = {
         }
 
         // clear first
-        APP.destroyElements(scene.root.children, "config");
-        APP.fadeAllTables(showing);
-        $(".draggable").remove();
+        APP.disableAllFeatures();
         
         testDialog({scale: true, hidelower: true}); // open dialog
         putCanvasMessage("Selecciona dos puntos, la linea recta que los une corresponderá a la escala indicada (por defecto 1 metro). " +

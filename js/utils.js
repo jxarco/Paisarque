@@ -5,6 +5,9 @@ var KEY_SPACE = 32, KEY_ESC = 27, KEY_ENTER = 13;
 var separator = "__________________________________________________\n";
 var PLANTA = 0, ALZADO = 1;
 
+/*
+* Sets a specific lang to local storage
+*/
 function setLanguage(lang, queryString)
 {
     // query string option
@@ -19,7 +22,68 @@ function setLanguage(lang, queryString)
 }
 
 /*
-* Return query variable from the url
+* Apply lang to html page based on
+* local storage
+*/
+function applyLanguage(target)
+{
+    var lang = localStorage.getItem("lang") || "es";
+    var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCYVW9A1Rap8RQ2hua3BekD-C_VNUYFg-bLe51fwZ6QVUqyu1fm-Aq0mRvp2qTUwb4usE2Pzg2_KKc/pub?gid=0&single=true&output=csv';
+    var src = "data/lang.csv";
+
+    $.ajax(url, {
+        success: function(data) {
+            var result = $.csv.toObjects(data);
+            for(var i in result)
+            {
+                if(result[i].target != target)
+                    continue;
+
+                var sel = result[i].selector;
+                var content = result[i][lang];
+                var attr = result[i].attr;
+
+                if(attr){
+                    $(sel).attr(attr, content);
+                    continue;
+                }
+
+                $(sel).html(content);
+            }
+        },
+        error: function(err) {
+            console.error(err);
+            // do with local file in case of error in url
+            $.ajax(src, {
+                success: function(data) {
+                    var result = $.csv.toObjects(data);
+                    for(var i in result)
+                    {
+                        if(result[i].target != target)
+                            continue;
+
+                        var sel = result[i].selector;
+                        var content = result[i][lang];
+                        var attr = result[i].attr;
+
+                        if(attr){
+                            $(sel).attr(attr, content);
+                            continue;
+                        }
+
+                        $(sel).html(content);
+                    }
+                },
+                error: function(err) {
+                    console.error(err);
+                }
+            });
+        }
+    });
+}
+
+/*
+* Return query variable value from the url
 */
 
 function getQueryVariable(variable)

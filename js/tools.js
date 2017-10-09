@@ -156,11 +156,14 @@ function loadProjectsTable(filters)
                 if(page >= (data.length / per_page))
                     return;
                 len = data.length;
+                $("#index-pag").html(1 + "/" + 1);
             }
             else{
                 var page = parseInt(getQueryVariable("pag")) || 0;
                 index = page * per_page;
                 len = per_page + index;
+                
+                $("#index-pag").html(page + "/" + ((data.length / per_page)-1));
                 
                 // prevent passing of pages
                 if(page >= (data.length / per_page))
@@ -588,20 +591,20 @@ function testDialog(options)
 //                  "width: 30%; " +
                   "margin-top: 265px;" +
                   "text-align: center;'>" +
-                  "<button title='Cancelar' id='close-dialog' class='btn dialog-btn info'><i class='material-icons'>close</i></button>" +
+                  "<button title='Cancelar' id='close-dialog' class='dialog-btn info'><i class='material-icons'>close</i></button>" +
                   "<div class='dialog-option'>" +
-                    "<button id='add-dialog' class='btn dialog-btn'>" + upperbtn + "</button>" +
+                    "<button id='add-dialog' class='dialog-btn'>" + upperbtn + "</button>" +
                     "</div>" +
                   "<div class='dialog-option'>" +
-                    "<button id='camera-mode' class='btn dialog-btn'>Mover cámara</button>" +
+                    "<button id='camera-mode' class='dialog-btn'>Mover cámara</button>" +
                     "</div>" +
                   "<div class='dialog-option'>" +
-                    "<button id='end-dialog' class='btn dialog-btn'>" + lowerbtn + "</button>" +
+                    "<button id='end-dialog' class='dialog-btn'>" + lowerbtn + "</button>" +
                     "</div>";
     
     if(options.scale)
         html +=   "<div class='dialog-option'>" +
-                    "<input id='scale-input' placeholder='Escala (metros)'></input><button id='help-dialog' class='btn dialog-btn info'><i class='material-icons'>info_outline</i></button>" +
+                    "<input id='scale-input' placeholder='Escala (metros)'></input><button id='help-dialog' class='dialog-btn info'><i class='material-icons'>info_outline</i></button>" +
                     "</div>" + 
                   "<div class='dialog-option help'>" +
                     "<p>Escribe en el cuadro de texto la escala con la que vas a medir el modelo 3D. Por ejemplo, si introduces 0.1, la distancia total entre los puntos que selecciones será igual a 0.1 metros. Por defecto, la distancia será 1 metro.</p>" +

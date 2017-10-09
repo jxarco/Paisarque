@@ -74,6 +74,10 @@
                             
                             <i class="material-icons pagination l" title="Anterior página">keyboard_arrow_left</i>
                             <i class="material-icons pagination r" title="Siguiente página">keyboard_arrow_right</i>
+                            <div id="index-pag" style="width: 50px; text-align: center; margin-left: calc(50% - 25px);">
+                                /
+                            </div>
+                            
                             
                             <!-- Listamos los ficheros que hay en el servidor/carpeta y sus propiedades -->
                             <table id="projects-tb" class="table">
@@ -220,65 +224,10 @@
         <script src="js/events.js"></script>
         <script type="text/javascript" src="js/extra/jquery.csv.min.js"></script>
         <script type="text/javascript">
-            
             $( document ).ready(function() {
-                loadProjectsTable(); 
+                loadProjectsTable();
+                applyLanguage("index");
             });
-            
-            var lang = localStorage.getItem("lang") || "es";
-            var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCYVW9A1Rap8RQ2hua3BekD-C_VNUYFg-bLe51fwZ6QVUqyu1fm-Aq0mRvp2qTUwb4usE2Pzg2_KKc/pub?gid=0&single=true&output=csv';
-            var src = "data/lang.csv";
-            
-            $.ajax(url, {
-                success: function(data) {
-                    var result = $.csv.toObjects(data);
-                    for(var i in result)
-                    {
-                        if(result[i].target != "inicio")
-                            continue;
-                        
-                        var sel = result[i].selector;
-                        var content = result[i][lang];
-                        var attr = result[i].attr;
-                        
-                        if(attr){
-                            $(sel).attr(attr, content);
-                            continue;
-                        }
-                        
-                        $(sel).html(content);
-                    }
-                },
-                error: function(err) {
-                    console.error(err);
-                    // do with local file in case of error in url
-                    $.ajax(src, {
-                        success: function(data) {
-                            var result = $.csv.toObjects(data);
-                            for(var i in result)
-                            {
-                                if(result[i].target != "inicio")
-                                    continue;
-
-                                var sel = result[i].selector;
-                                var content = result[i][lang];
-                                var attr = result[i].attr;
-
-                                if(attr){
-                                    $(sel).attr(attr, content);
-                                    continue;
-                                }
-
-                                $(sel).html(content);
-                            }
-                        },
-                        error: function(err) {
-                            console.error(err);
-                        }
-                    });
-                }
-            });
-            
         </script>
     
 </html>

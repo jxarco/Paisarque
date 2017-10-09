@@ -43,9 +43,12 @@
             <!--   END TOOGLE NAVIGATION           -->
             <a onclick="loadContent('inicio')" id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
             <a onclick="loadContent('modelo')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">3D</a>
-            <a onclick="loadContent('infoextra')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium active">APORTACIONES</a>
-            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">EXPORTAR</a>
-            <a onclick="loadContent('ayuda')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">AYUDA</a>
+            <a onclick="loadContent('infoextra')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium extra-nav active">APORTACIONES</a>
+            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium export-nav">EXPORTAR</a>
+            <a onclick="loadContent('ayuda')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium help-nav">AYUDA</a>
+            <a onclick="setLanguage('en')" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">EN</a>
+            <a onclick="setLanguage('cat')" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">CAT</a>
+            <a onclick="setLanguage('es')" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">ES</a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium textUser">username</a>
               
@@ -56,9 +59,9 @@
         <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-top" style="margin-top:46px">
             <a class="w3-bar-item w3-button w3-padding-large textUser">username</a>
             <a onclick="loadContent('modelo')" class="w3-bar-item w3-button w3-padding-large">3D</a>
-            <a onclick="loadContent('infoextra')" class="w3-bar-item w3-button w3-padding-large">APORTACIONES</a>
-            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large">EXPORTAR</a>
-            <a onclick="loadContent('ayuda')" class="w3-bar-item w3-button w3-padding-large">AYUDA</a>
+            <a onclick="loadContent('infoextra')" class="w3-bar-item w3-button w3-padding-large extra-nav">APORTACIONES</a>
+            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large export-nav">EXPORTAR</a>
+            <a onclick="loadContent('ayuda')" class="w3-bar-item w3-button w3-padding-large help-nav">AYUDA</a>
         </div>
           
         <content class="row"><div class="col-lg-12" style="margin-top:46px">
@@ -70,6 +73,7 @@
                     <li>
                         <input type="radio" name="tabs" id="tab1" checked/>
                         <label for="tab1" 
+                               id="label-tab1"
                                role="tab" 
                                aria-selected="true" 
                                aria-controls="panel1" 
@@ -103,6 +107,7 @@
                     <li>
                         <input type="radio" name="tabs" id="tab2"/>
                         <label for="tab2"
+                               id="label-tab2"
                                role="tab" 
                                aria-selected="false" 
                                aria-controls="panel2" 
@@ -138,6 +143,7 @@
                     <li>
                         <input type="radio" name="tabs" id="tab3"/>
                         <label for="tab3" 
+                               id="label-tab3"
                                role="tab" 
                                aria-selected="false" 
                                aria-controls="panel3" 
@@ -166,6 +172,7 @@
                     <li>
                         <input type="radio" name="tabs" id="tab4"/>
                         <label for="tab4" 
+                               id="label-tab4"
                                role="tab" 
                                aria-selected="false" 
                                aria-controls="panel4" 
@@ -204,7 +211,6 @@
                       <form class="form-horizontal" id="formAddImage" method="POST" role="form" enctype="multipart/form-data">
                         <fieldset id="fieldset">
                             <div class="form-group">
-                                <label for="image" class="col-lg-2 control-label">Imagen</label>
                                 <div class="col-lg-10">
                                     <input required type="file" class="form-control" id="image" name="image">
                                 </div>
@@ -213,8 +219,8 @@
                         <div class="modal-footer">
                             <div class="form-group">
                                 <div class="col-lg-10 col-lg-offset-2">
-                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                    <button type="submit" name="submit" value="send" class="btn btn-primary" >Submit</button>
+                                     <button type="button" class="btn btn-default cancel-btn" data-dismiss="modal">Cancel</button>
+                                    <button type="submit" name="submit" value="send" class="btn btn-primary submit-btn" >Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -242,7 +248,7 @@
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script type="text/javascript" src="js/extra/jquery.csv.min.js"></script>
         <script src="js/extra/bootstrap.min.js"></script>
         <script src="js/extra/custom.js"></script>
         <script src="js/extra/slick.min.js"></script>
@@ -261,9 +267,9 @@
         <script src="js/app.js"></script>
         <script src="js/events.js"></script>
         <script src="js/gallery.js"></script>
-    
-        <script>
+       <script>
             LOADER.loadExtra();
+            applyLanguage("infoextra");
         </script>
         
     </body>

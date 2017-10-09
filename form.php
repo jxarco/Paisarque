@@ -6,32 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PaisArque Application</title>
 
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/stylesheet.css" rel="stylesheet">
-        
+    <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
+        <link rel="stylesheet" href="css/responsive-design.css"> <!-- responsive web design -->
+        <link href="css/stylesheet.css" rel="stylesheet">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
+    
     <body class="container">
         
-        <header class="row"><div class="col-lg-12">
-            
-                <nav class="navbar navbar-default"><div class="container-fluid">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                          <span class="sr-only">Toggle navigation</span>
-                          <span class="icon-bar"></span>
-                          <span class="icon-bar"></span>
-                          <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="index">PaisArque</a>
-                    </div>
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"><ul class="nav navbar-nav">
-                        <li> <a onclick="location.href='index'">   Login </a> </li>
-                        <li> <a onclick="location.href='form.php'"> Form</a> </li>
-                    </ul></div>
-                </div></nav>
-            
-        </div></header><!--   header end-->
+        <!-- Navbar -->
+        <div class="w3-top">
+          <div class="w3-bar w3-card-2">
+            <a id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
+            <a onclick="setLanguage('en')" class="w3-bar-item w3-button w3-right w3-padding-large language">EN</a>
+            <a onclick="setLanguage('cat')" class="w3-bar-item w3-button w3-right w3-padding-large language">CAT</a>
+            <a onclick="setLanguage('es')" class="w3-bar-item w3-button w3-right w3-padding-large language">ES</a>
+          </div>
+        </div>
         
         
         <!--Formulario para el registro-->
@@ -117,8 +112,16 @@
         </content> 
         
         <footer>
-        
-        </footer> 
+            <p>Proyecto PaisArque - <a href="https://www.upf.edu/web/paisarque">upf.edu/web/paisarque</a></p>
+            <p>CaSES: Complexity and Socio-Ecological Dynamics - Edificio Mercè Rodoreda (Campus de la Ciutadella)
+                Ramon Trias Fargas, 25-27
+                08005 Barcelona
+                cases@upf.edu - <a href="https://www.upf.edu/web/cases">upf.edu/web/cases</a></p>
+            <p>Interactive Technologies Group - Edificio Tànger (Campus de la Comunicació-Poblenou)
+                    Tànger, 122-140 
+                    08018 Barcelona - <a href="http://gti.upf.edu/">gti.upf.edu</a></p>
+            <img height="20px;" src="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
+        </footer><!--   footer end--> 
             
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

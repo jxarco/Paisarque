@@ -1,6 +1,7 @@
 \shaders
 
 skybox basic.vs skybox.fs
+basic basic.vs basic.fs
 
 \basic.vs 
 
@@ -25,6 +26,33 @@ skybox basic.vs skybox.fs
 
 		gl_Position = u_viewprojection * vec4( v_wPosition, 1.0 );
 		gl_PointSize = 2.0;
+	}
+
+\basic.fs
+
+	precision highp float;
+
+	varying vec3 v_wPosition;
+	varying vec3 v_wNormal;
+	varying vec2 v_coord;
+
+	uniform vec3 u_camera_position;
+	uniform vec4 u_background_color;
+	uniform vec4 u_color;
+
+	void main() {
+    
+        vec3 E = v_wPosition - u_camera_position;
+        E = normalize(E);
+        
+        vec3 color = vec3(0.7, 0.7, 0.7);
+        
+        //if(E.y > 0.3)
+        //    color = vec3(0.84, 0.84, 0.84);
+        if(E.y > 0.0)
+            color = vec3(0.83, 0.83, 0.95);
+        
+		gl_FragColor = vec4( color, 1.0 );
 	}
 
 \skybox.fs
