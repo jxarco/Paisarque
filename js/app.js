@@ -174,7 +174,10 @@ var APP = {
         skybox.name = "skybox";
         skybox.flags.depth_test = false;
         skybox.flags.flip_normals = true;
-        skybox.render_priority = 100;
+        skybox.render_priority = RD.PRIORITY_BACKGROUND;
+        
+//        obj.flags.depth_test = false;
+//        obj.render_priority = RD.PRIORITY_ALPHA;
         
         // order is important
         scene.root.addChild( skybox );
@@ -585,7 +588,7 @@ var APP = {
                     linea.mesh = "line";
                     linea.color = [0.9,0.7,0.7,1];
                     linea.flags.depth_test = false;
-                    linea.render_priority = 1;
+                    linea.render_priority = RD.PRIORITY_HUD;
                     scene.root.addChild(linea);        
                 }
             }
@@ -687,89 +690,91 @@ var APP = {
                 var ray = camera.getRay( e.canvasx, e.canvasy );
                 var node = null;
 
-                if(tmp.length){
+                if(tmp.length)
+                {
                     result = camera.getRayPlaneCollision( e.canvasx, e.canvasy, tmp[0], normal);
                     node = true;
                 }
                 else
                     node = scene.testRay( ray, result, undefined, 0x1, true );
 
-                if (node) {
+                if(!node)
+                    return;
 
-                    if(tmp.length > 1)
-                    {
-                        var newPoint = vec3.create();
-                        newPoint[0] = Math.abs(tmp[0][0] - result[0]);
-                        newPoint[1] = Math.abs(tmp[0][1] - result[1]);
-                        newPoint[2] = Math.abs(tmp[0][2] - result[2]);
-
-                        var units = vec3.length(newPoint);
-                        if(units < 1.5)
-                            result = tmp[0];            
-                    }
-
-                    tmp.push(result);
-
-                    if(tmp.length == 1)
-                    {
-                        var plane = new RD.SceneNode({
-                            mesh: "planeXZ",
-                            position: tmp[0],
-                            scaling: 500,
-                            blend_mode: RD.BLEND_ALPHA,
-                            opacity: 0.35,
-                            name: "area-plane"
-                        });
-                        
-                        plane.description = "config";
-                        plane.flags.two_sided = true;
-                        
-                        if(area_type === ALZADO)
-                            plane.rotate(90 * DEG2RAD, RD.FRONT);
-                        scene.root.addChild(plane);
-                        
-                        var grid_mesh = GL.Mesh.grid({size:10});
-                        renderer.meshes["grid"] = grid_mesh;
-                        
-                        var grid = new RD.SceneNode({
-                            mesh: "grid",
-                            position: tmp[0],
-                            color: [0.5, 0.5, 0.5]
-                        });
-                        
-                        grid.description = "config";
-                        grid.primitive =gl.LINES;
-                        grid.scale([50, 50, 50]);    
-                        
-                        if(area_type === ALZADO)
-                            grid.rotate(90 * DEG2RAD, RD.FRONT);
-                        scene.root.addChild(grid);
-
-                        var ind = new SceneIndication();
-                        ind = ind.ball(scene, result, {depth_test: false});
-                    }
-                }
-
+                // adjust to same point if first point is too close
                 if(tmp.length > 1)
                 {
+                    var newPoint = vec3.create();
+                    newPoint[0] = Math.abs(tmp[0][0] - result[0]);
+                    newPoint[1] = Math.abs(tmp[0][1] - result[1]);
+                    newPoint[2] = Math.abs(tmp[0][2] - result[2]);
+
+                    var units = vec3.length(newPoint);
+                    if(units < 1.5)
+                        result = tmp[0];            
+                }
+
+                tmp.push(result);
+                console.log(tmp);
+
+                if(tmp.length == 1)
+                {
+                    console.log("creating plane");
+                    
+                    var plane = new RD.SceneNode({
+                        mesh: "planeXZ",
+                        position: tmp[0],
+                        scaling: 500,
+                        opacity: 0.35,
+                        name: "area-plane"
+                    });
+
+                    plane.description = "config";
+                    plane.blend_mode = RD.BLEND_ALPHA;
+                    plane.flags.two_sided = true;
+
+                    if(area_type === ALZADO)
+                        plane.rotate(90 * DEG2RAD, RD.FRONT);
+                    scene.root.addChild(plane);
+
+                    var grid_mesh = GL.Mesh.grid({size:10});
+                    renderer.meshes["grid"] = grid_mesh;
+
+                    var grid = new RD.SceneNode({
+                        mesh: "grid",
+                        position: tmp[0],
+                        color: [0.5, 0.5, 0.5]
+                    });
+
+                    grid.description = "config";
+                    grid.primitive =gl.LINES;
+                    grid.scale([50, 50, 50]);    
+
+                    if(area_type === ALZADO)
+                        grid.rotate(90 * DEG2RAD, RD.FRONT);
+                    scene.root.addChild(grid);
+
+                    var ind = new SceneIndication();
+                    ind = ind.ball(scene, result, {depth_test: false});
+                }
+
+                // only when more than one to make the line between them
+                else if(tmp.length > 1)
+                {
+                
+                    console.log("creating rest");
+
                     var vertices = [];
                     APP.destroyElements(scene.root.children, "config-tmp");
-                    
+
                     var ind = new SceneIndication();
-                    ind = ind.ball(scene, result);
+                    ind = ind.ball(scene, result, {depth_test: false});
 
-                    for(var i = 0; i < tmp.length; ++i)
+                   /* for(var i = 0; i < tmp.length; ++i)
                     {
-                        vertices.push(tmp[i][0]);
-                        vertices.push(tmp[i][1]);
-                        vertices.push(tmp[i][2]);
-
-                            if(i)
-                            {
-                                vertices.push(tmp[i][0]);
-                                vertices.push(tmp[i][1]);
-                                vertices.push(tmp[i][2]);
-                            }
+                        vertices.push(tmp[i][0],tmp[i][1],tmp[i][2]);
+                        if(i)
+                            vertices.push(tmp[i][0],tmp[i][1],tmp[i][2]);
                     }
 
                     var mesh = GL.Mesh.load({ vertices: vertices }); 
@@ -782,7 +787,7 @@ var APP = {
                     linea.color = [0.9,0.7,0.7,1];
                     linea.flags.depth_test = false;
 
-                    scene.root.addChild(linea);        
+                    scene.root.addChild(linea);    */   
                 }
             }
         });
@@ -796,16 +801,9 @@ var APP = {
 
             for(var i = 0; i < tmp.length; ++i)
             {
-                vertices.push(tmp[i][0]);
-                vertices.push(tmp[i][1]);
-                vertices.push(tmp[i][2]);
-
+                vertices.push(tmp[i][0],tmp[i][1],tmp[i][2]);
                     if(i)
-                    {
-                        vertices.push(tmp[i][0]);
-                        vertices.push(tmp[i][1]);
-                        vertices.push(tmp[i][2]);
-                    }
+                        vertices.push(tmp[i][0],tmp[i][1],tmp[i][2]);
             }
 
             APP.destroyElements(scene.root.children, "config-tmp");
@@ -922,7 +920,7 @@ var APP = {
         linea.description = "config";
         linea.color = [0.258, 0.525, 0.956];
         linea.flags.depth_test = false;
-        linea.render_priority = 1;
+        linea.render_priority = RD.PRIORITY_HUD;
         scene.root.addChild(linea);
 
         // change global camera
