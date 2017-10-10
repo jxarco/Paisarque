@@ -45,12 +45,12 @@ basic basic.vs basic.fs
         vec3 E = v_wPosition - u_camera_position;
         E = normalize(E);
         
-        vec3 color = vec3(0.7, 0.7, 0.7);
+        vec3 color = vec3(0.9, 0.9, 0.9);
         
         //if(E.y > 0.3)
         //    color = vec3(0.84, 0.84, 0.84);
         if(E.y > 0.0)
-            color = vec3(0.83, 0.83, 0.95);
+            color = vec3(1.0, 1.0, 1.0);
         
 		gl_FragColor = vec4( color, 1.0 );
 	}

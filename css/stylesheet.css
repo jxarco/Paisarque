@@ -155,6 +155,9 @@ h1, h2, h3, h4, h5, h6{
     color: aliceblue !important;
     background-color: rgb(20, 120, 120);
 }
+.image-box{
+    box-shadow: 0 3px 10px rgba(40, 40, 40, 0.3);
+}
 /*
 * inicio.html
 */
@@ -218,13 +221,14 @@ h1, h2, h3, h4, h5, h6{
     outline: none;
     background: none;
     font-size: 16px !important;
-    line-height: 18px;
 }
 .btn.inicio:hover{
     outline: none;
     background: none;
     transition: 0.3s;
-    font-size: 18px !important;
+}
+.btn.inicio:active, .btn.inicio:focus{
+    outline: none !important;
 }
 .project-preview{
     height: 100%;
@@ -854,7 +858,7 @@ text css (information)
 * export css
 */
 .wrap {
-    width: 90%;
+    width: 97.5%;
     margin: 0 auto;
     text-align:left;
     background: none;
@@ -867,7 +871,7 @@ text css (information)
 }
 ul li {
     float:left;
-    width: 25%;
+    width: 20%;
     text-align:center;
     list-style-type: none;
     height: 350px;
@@ -879,7 +883,6 @@ a:hover{
 .top {
   background-color: #ddd;
   height:75px;
-  
 }
 .top h3 {
     padding-top:10px;
@@ -908,7 +911,9 @@ a:hover{
 .pink {
   background-color:#BC9B94;
 }
-
+.yellow {
+  background-color:#BBBB94;
+}
 .green {
   background-color:#94BB94;
 }

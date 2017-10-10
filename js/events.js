@@ -384,6 +384,21 @@ $("#formAddImage").on('submit', function(e)
 /*
 * EXPORT STUFF
 */
+$(".export-file").click(function(){
+    
+    var user = current_user;
+    var project_name = current_project.split("/")[1];
+    var type = $(this).attr("class").split(" ")[1];
+    
+    var params = {
+            title: project_name,
+            user: user,
+            extype: type,
+            element: $(this),
+        }
+    
+    fileToBLOB(params);
+});
 
 $(".export-pdf").click(function(){
     
@@ -391,13 +406,13 @@ $(".export-pdf").click(function(){
     var project_name = current_project.split("/")[1];
     var type = $(this).attr("class").split(" ")[1];
     
-    var options = {
+    var params = {
             title: project_name,
             user: user,
             extype: type
         }
     
-    jsToPDF(options);
+    jsToPDF(params);
 });
 
 $(".export-json").click(function(){

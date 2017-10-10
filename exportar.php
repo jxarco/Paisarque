@@ -65,7 +65,7 @@
             
             <h3 class="w3-xlarge"><b>EXPORTAR</b></h3>
             <br>            
-            
+
             <div class="wrap">
                 <div class="css-table">
                     <ul>
@@ -105,6 +105,18 @@
                             <a class="export-pdf detailed" title="Exportar en PDF" href="">Detalle</a><br><br>
                             <a class="export-pdf config" title="Exportar en PDF" href="">Configuración</a><br><br>
                             <a class="export-pdf aport" title="Exportar en PDF" href="">Aportaciones</a><br><br>
+                          </div>
+                        </li>
+                        
+                        <li>
+                          <div class="top">
+                            <h3 id="h3-files">ARCHIVOS</h3>
+                            <div class="circle yellow">ZIP</div>
+                          </div>
+                          <div class="bottom">
+                             <a class="export-file images" title="Descargar ZIP de imágenes">Imágenes</a><br><br>
+                             <a class="export-file pdf" title="Descargar ZIP de PDF's">PDF'S</a><br><br>
+                             <a class="export-file text" title="Descargar ZIP de texto">Texto</a><br><br>
                           </div>
                         </li>
 
@@ -171,6 +183,7 @@
         <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script type="text/javascript" src="js/extra/jquery.csv.min.js"></script>
         <script type="text/javascript" src="js/extra/jspdf.min.js"></script>
+        <script type="text/javascript" src="js/extra/jszip.min.js"></script>
         <script type="text/javascript" src="js/extra/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/extra/custom.js"></script>
         <script type="text/javascript" src="js/extra/gl-matrix-min.js"></script>
@@ -188,7 +201,7 @@
         <script src="js/events.js"></script>
         <script>
             LOADER.loadProject();
-            applyLanguage("index");
+            applyLanguage("exportar");
         </script>
     </body>
     

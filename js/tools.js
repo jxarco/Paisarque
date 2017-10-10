@@ -668,6 +668,54 @@ var init_sliders = function() {
     
 };
 
+/* 
+* FILE EXPORTING
+*/
+
+function fileToBLOB(params)
+{
+    var user = params.user;
+    var project_name = params.title;
+    var type = params.extype;
+    var element = params.element;
+    
+    var zip = new JSZip();
+    
+    switch(type)
+    {
+        case 'images':
+            break;
+        case 'text':
+            for(var i = 0, info; info = copy._extra[i]; i++){
+            
+                if(info.type !== "text")
+                     continue;
+                
+                var filename = "Extra_" + i + ".txt";
+                 
+                zip.file(filename, info.data);
+                break;
+            }
+            break;
+        case 'pdf':
+            break;
+    }
+
+    if(!Object.keys(zip.files).length)
+        return;
+    
+    zip.generateAsync({type:"blob"}).then(function(content) {
+        
+        var blob = new Blob( [content] );
+        var url = URL.createObjectURL( blob );
+        
+        element.attr("href", url);
+        element.css("border", "1px solid #0070c9");
+        element.css("padding", "5px");
+        element.attr("target", "_blank");
+        element.attr("download", project_name + "_" + type + "_files.zip");
+    });
+}
 
 /* 
 * PDF EXPORTING
@@ -921,9 +969,9 @@ function jsToPDF(options)
 */
 function jsToJSON(element, options)
 {
-    var csvData = 'data:application/json;charset=utf-8,' + encodeURIComponent(options.csv);
+    var data = 'data:application/json;charset=utf-8,' + encodeURIComponent(options.csv);
     
-    element.href = csvData;
+    element.href = data;
     element.target = '_blank';
     element.download = options.file;
 }
