@@ -176,9 +176,6 @@ var APP = {
         skybox.flags.flip_normals = true;
         skybox.render_priority = RD.PRIORITY_BACKGROUND;
         
-//        obj.flags.depth_test = false;
-//        obj.render_priority = RD.PRIORITY_ALPHA;
-        
         // order is important
         scene.root.addChild( skybox );
         scene.root.addChild( obj );
@@ -229,10 +226,10 @@ var APP = {
             if(APP.orbiting)
                 camera.orbit(0.1 * dt, RD.UP);
             
-            if(keys[KEY_LEFT])
-                camera.orbit_direction(-DEG2RAD, RD.UP);
-            if(keys[KEY_RIGHT])
-                camera.orbit_direction(DEG2RAD, RD.UP);
+//            if(keys[KEY_LEFT])
+//                camera.orbit_direction(-DEG2RAD, RD.UP);
+//            if(keys[KEY_RIGHT])
+//                camera.orbit_direction(DEG2RAD, RD.UP);
             
             //smoothing camera
             if(camera.smooth){
@@ -292,9 +289,6 @@ var APP = {
             if(e.keyCode === KEY_ESC)
                 APP.disableAllFeatures();
             
-//           if(e.keyCode === KEY_D)
-//                download(renderer.meshes[obj.mesh], "wbin");
-            
             if(e.keyCode === KEY_S)
                 renderer.loadShaders("data/shaders/shaders.glsl");
         }
@@ -335,11 +329,11 @@ var APP = {
 
     },
     
-    showElements: function (list, showing)
+    showElements: function (elements, flag)
     {
         // obj.children
-        for(var i = 0; i < list.length; i++)
-            list[i].flags.visible = showing;
+        for(var i = 0; i < elements.length; i++)
+            elements[i].flags.visible = flag;
     },
     
     destroyElements: function (elements, description)
@@ -348,7 +342,6 @@ var APP = {
         {
             if(elements[i] === null)
                 return;
-
             if(!description)    
                 elements[i].destroy();
             else if(description == elements[i].description)
@@ -383,20 +376,16 @@ var APP = {
     setScale: function ()
     {
         if(project._meter !== -1)
-        {
-            putCanvasMessage("La configuración de la escala ya ha sido realizada en este proyecto. Si lo haces, perderás la medición anterior.", 8000, {type: "alert"});    
-        }
+            putCanvasMessage("La configuración de la escala ya ha sido realizada en este proyecto.", 5000, {type: "alert"});    
 
         // clear first
         APP.disableAllFeatures();
-        
         testDialog({scale: true, hidelower: true}); // open dialog
-        putCanvasMessage("Selecciona dos puntos, la linea recta que los une corresponderá a la escala indicada (por defecto 1 metro). " +
-                         "Esta acción utiliza autoguardado. Para cancelar pulsa ESC.", 8000);
+        putCanvasMessage("Selecciona dos puntos, la linea recta que los une corresponderá a la escala indicada (por defecto 1 metro).", 5000);
         window.tmp = [];
 
-        $("#add-dialog").click(function(){
-
+        $("#add-dialog").click(function()
+        {
             selectDialogOption($(this));
             $("#myCanvas").css("cursor", "crosshair");
 
@@ -416,28 +405,12 @@ var APP = {
             }
         });
 
-        $("#end-dialog").click(function(){
-
-            var newPoint = vec3.create();
-            var cur = tmp[0];
-            var next = tmp[1];
-            newPoint[0] = Math.abs(cur[0] - next[0]);
-            newPoint[1] = Math.abs(cur[1] - next[1]);
-            newPoint[2] = Math.abs(cur[2] - next[2]);
-
+        $("#end-dialog").click(function()
+        {
             var scale = parseFloat($("#scale-input").val()) || 1;
-            var relation = vec3.length(newPoint) / scale;
+            var relation = vec3.dist(tmp[0], tmp[1]) / scale;
             project.update_meter(relation);
-            putCanvasMessage("Guardando...", 2000);
-            $(".draggable").remove();
-            $(".measures-btns").css('opacity', '1');
-            
-            context.onmousedown = function(e) {}
-            $("#myCanvas").css("cursor", "default");
-
-            setTimeout(function(){
-                APP.destroyElements(scene.root.children, "config");
-            }, 500);
+            APP.disableAllFeatures();
         });
         
         $("#help-dialog").click(function(){
@@ -467,11 +440,10 @@ var APP = {
 
         APP.rotation = true;
         scene.root.getNodeByName("grid").flags.visible = true;
-
-        putCanvasMessage("Usa los sliders o bien mantén pulsadas las teclas A, S y D mientras arrastras para rotar en cada eje.", 5000, {type: "help"});
-
         $("#cardinal-axis").fadeIn();
         $('.sliders').fadeIn();
+
+        putCanvasMessage("Usa los sliders o bien mantén pulsadas las teclas A, S y D mientras arrastras para rotar en cada eje.", 5000, {type: "help"});
 
         context.onmousemove = function(e)
         {
@@ -483,13 +455,11 @@ var APP = {
                     obj.rotate(-e.deltax * 0.1 * _dt, RD.FRONT);
                 else if(keys[KEY_D])
                     obj.rotate(-e.deltax * 0.1 * _dt, RD.LEFT);
-                else
-                    {
+                else{
                         camera.orbit(-e.deltax * 0.1 * _dt, RD.UP,  camera._target);
                         camera.orbit(-e.deltay * 0.1 * _dt, camera._right, camera._target );
                     }
         }
-
     },
     
     applyRotation: function()
@@ -501,7 +471,7 @@ var APP = {
             
             project.setRotations(obj._rotation);
             project.save();
-            putCanvasMessage("¡Guardado!", 2000);
+            putCanvasMessage("¡Guardado! Actualizando miniatura del proyecto...", 4000);
             
              // upload project preview
             var canvas = gl.snapshot(0, 0, renderer.canvas.width, renderer.canvas.height);
@@ -534,17 +504,15 @@ var APP = {
             putCanvasMessage("Primero configura la escala.", 3000, {type: "error"});
             return;
         }
-
-        // clear first
+        // clear first and open dialog
         APP.disableAllFeatures();
-
-        // open dialog
         testDialog();
-        putCanvasMessage("Usa el panel de herramientas para medir", 2500);
+        
+        // save points
         window.tmp = [];
 
-        $("#add-dialog").click(function(){
-
+        $("#add-dialog").click(function()
+        {
             selectDialogOption($(this));
             $("#myCanvas").css("cursor", "crosshair");
 
@@ -554,104 +522,35 @@ var APP = {
                 var ray = camera.getRay( e.canvasx, e.canvasy );
                 var node = scene.testRay( ray, result, undefined, 0x1, true );
 
+                // set scene node if collision
                 if (node) {
                     var ind = new SceneIndication();
                     ind = ind.ball(scene, result);
                     tmp.push(result);
                 }
-
+                // create line between points when possible
                 if(tmp.length > 1)
-                {
-                    var vertices = [];
-                    APP.destroyElements(scene.root.children, "config-tmp");
-
-                    for(var i = 0; i < tmp.length; ++i)
-                    {
-                        vertices.push(tmp[i][0]);
-                        vertices.push(tmp[i][1]);
-                        vertices.push(tmp[i][2]);
-
-                            if(i)
-                            {
-                                vertices.push(tmp[i][0]);
-                                vertices.push(tmp[i][1]);
-                                vertices.push(tmp[i][2]);
-                            }
-                    }
-
-                    var mesh = GL.Mesh.load({ vertices: vertices }); 
-                    renderer.meshes["line"] = mesh;
-                    var linea = new RD.SceneNode();
-                    linea.description = "config-tmp";
-//                    linea.flags.ignore_collisions = true;
-                    linea.primitive = gl.LINES;
-                    linea.mesh = "line";
-                    linea.color = [0.9,0.7,0.7,1];
-                    linea.flags.depth_test = false;
-                    linea.render_priority = RD.PRIORITY_HUD;
-                    scene.root.addChild(linea);        
-                }
+                    APP.addLine(tmp);
             }
         });
 
         $("#end-dialog").click(function(){
 
-            if(tmp.length < 2)
+            if(tmp.length < 2) 
                 return;
 
-            var units = 0;
-
+            APP.disableAllFeatures(); //clear all
+            
+            var distance = 0; // add all distances
             for(var i = 0; i < tmp.length - 1; ++i)
-            {
-                var newPoint = vec3.create();
-                var cur = tmp[i];
-                var next = tmp[i+1];
-                newPoint[0] = Math.abs(cur[0] - next[0]);
-                newPoint[1] = Math.abs(cur[1] - next[1]);
-                newPoint[2] = Math.abs(cur[2] - next[2]);
-
-                units += vec3.length(newPoint);
-            }
-
-            var distance = units / project._meter;
-            var vertices = [];
-
-            for(var i = 0; i < tmp.length; ++i)
-            {
-                vertices.push(tmp[i][0]);
-                vertices.push(tmp[i][1]);
-                vertices.push(tmp[i][2]);
-
-                    if(i)
-                    {
-                        vertices.push(tmp[i][0]);
-                        vertices.push(tmp[i][1]);
-                        vertices.push(tmp[i][2]);
-                    }
-            }
-
-            context.onmousedown = function(e) {}
-            $("#myCanvas").css("cursor", "default");
-
-            var mesh = GL.Mesh.load({ vertices: vertices }); 
-            renderer.meshes["line"] = mesh;
-            var linea = new RD.SceneNode();
-            linea.description = "config";
-            linea.flags.ignore_collisions = true;
-            linea.primitive = gl.LINES;
-            linea.mesh = "line";
-            linea.color = [0.3,0.8,0.1,1];
-            linea.flags.depth_test = false;
-            scene.root.addChild(linea);
-
+                distance += vec3.dist(tmp[i], tmp[i+1]);
+            
+            distance /= project._meter;
+            
             if(tmp.length == 2)
                 project.insertMeasure(camera, tmp, distance, "nueva_dist", {display: true, push: true});
             else 
                 project.insertSegmentMeasure(camera, tmp, distance, "nuevo_segs", {display: true, push: true});
-            
-            //clear all
-            APP.disableAllFeatures();
-
         });
         
         // begin with an option selected
@@ -665,13 +564,11 @@ var APP = {
             return;
         }
 
-        // clear first
+        // clear first and open dialog
         APP.disableAllFeatures();
-
-        // open dialog
         testDialog();
 
-        putCanvasMessage("Añade puntos sobre el plano de planta.", 3000);
+        putCanvasMessage("Añade puntos sobre el plano.", 4000);
         putCanvasMessage("El último punto debe coincidir con el primero.", 5000, {type: "alert"});
 
         window.tmp = [];
@@ -704,90 +601,24 @@ var APP = {
                 // adjust to same point if first point is too close
                 if(tmp.length > 1)
                 {
-                    var newPoint = vec3.create();
-                    newPoint[0] = Math.abs(tmp[0][0] - result[0]);
-                    newPoint[1] = Math.abs(tmp[0][1] - result[1]);
-                    newPoint[2] = Math.abs(tmp[0][2] - result[2]);
-
-                    var units = vec3.length(newPoint);
+                    var units = vec3.dist(tmp[0], result);
                     if(units < 1.5)
                         result = tmp[0];            
                 }
-
                 tmp.push(result);
-                console.log(tmp);
-
+                
                 if(tmp.length == 1)
                 {
-                    console.log("creating plane");
-                    
-                    var plane = new RD.SceneNode({
-                        mesh: "planeXZ",
-                        position: tmp[0],
-                        scaling: 500,
-                        opacity: 0.35,
-                        name: "area-plane"
-                    });
-
-                    plane.description = "config";
-                    plane.blend_mode = RD.BLEND_ALPHA;
-                    plane.flags.two_sided = true;
-
-                    if(area_type === ALZADO)
-                        plane.rotate(90 * DEG2RAD, RD.FRONT);
-                    scene.root.addChild(plane);
-
-                    var grid_mesh = GL.Mesh.grid({size:10});
-                    renderer.meshes["grid"] = grid_mesh;
-
-                    var grid = new RD.SceneNode({
-                        mesh: "grid",
-                        position: tmp[0],
-                        color: [0.5, 0.5, 0.5]
-                    });
-
-                    grid.description = "config";
-                    grid.primitive =gl.LINES;
-                    grid.scale([50, 50, 50]);    
-
-                    if(area_type === ALZADO)
-                        grid.rotate(90 * DEG2RAD, RD.FRONT);
-                    scene.root.addChild(grid);
-
                     var ind = new SceneIndication();
                     ind = ind.ball(scene, result, {depth_test: false});
+                    APP.addAreaBase(tmp[0], area_type); // create plane with first point only
                 }
-
                 // only when more than one to make the line between them
                 else if(tmp.length > 1)
                 {
-                
-                    console.log("creating rest");
-
-                    var vertices = [];
-                    APP.destroyElements(scene.root.children, "config-tmp");
-
                     var ind = new SceneIndication();
                     ind = ind.ball(scene, result, {depth_test: false});
-
-                   /* for(var i = 0; i < tmp.length; ++i)
-                    {
-                        vertices.push(tmp[i][0],tmp[i][1],tmp[i][2]);
-                        if(i)
-                            vertices.push(tmp[i][0],tmp[i][1],tmp[i][2]);
-                    }
-
-                    var mesh = GL.Mesh.load({ vertices: vertices }); 
-                    renderer.meshes["line"] = mesh;
-                    var linea = new RD.SceneNode();
-                    linea.description = "config-tmp";
-                    linea.flags.ignore_collisions = true;
-                    linea.primitive = gl.LINES;
-                    linea.mesh = "line";
-                    linea.color = [0.9,0.7,0.7,1];
-                    linea.flags.depth_test = false;
-
-                    scene.root.addChild(linea);    */   
+                    APP.addLine(tmp);
                 }
             }
         });
@@ -797,36 +628,16 @@ var APP = {
             if(tmp.length < 2)
                 return;
 
-            var vertices = [];
-
-            for(var i = 0; i < tmp.length; ++i)
-            {
-                vertices.push(tmp[i][0],tmp[i][1],tmp[i][2]);
-                    if(i)
-                        vertices.push(tmp[i][0],tmp[i][1],tmp[i][2]);
-            }
-
-            APP.destroyElements(scene.root.children, "config-tmp");
-
-            var mesh = GL.Mesh.load({ vertices: vertices }); 
-            renderer.meshes["line"] = mesh;
-            var linea = new RD.SceneNode();
-            linea.description = "config";
-            linea.flags.ignore_collisions = true;
-            linea.primitive = gl.LINES;
-            linea.mesh = "line";
-            linea.color = [0.3,0.8,0.1,1];
-            linea.flags.depth_test = false;
-            scene.root.addChild(linea);
-
             var points2D = [];
             var p2D = null;
             var points = tmp;
+            
+            APP.addLine(points);
 
             for(var i = 0; i < points.length; ++i)
             {
-                // planta > index = 1
-                // alzado > index = 2
+                // planta --> index = 1
+                // alzado --> index = 2
                 p2D = index == 1 ? vec2.fromValues(points[i][0], points[i][2]) : vec2.fromValues(points[i][1], points[i][2]);
                 points2D.push(p2D);
             }
@@ -838,7 +649,6 @@ var APP = {
             {
                 var current = points2D[i];
                 var next = points2D[i+1];
-
                 adds += current[0] * next[1];
                 subs += current[1] * next[0];
             }
@@ -847,7 +657,6 @@ var APP = {
             area /= Math.pow(project._meter, 2);
             var msg = "AREA: " + area;
             putCanvasMessage(msg, 5000, {type: "response"});
-            putCanvasMessage("Recuerda guardar...", 2000);
 
             // passing 3d points list
             project.insertArea(points, area, index, "nueva_area", {display: true, push: true});
@@ -860,10 +669,76 @@ var APP = {
         $("#add-dialog").click();
     },
     
+    addLine: function(points, options)
+    {
+        options = options || {};
+        var vertices = [];
+        APP.destroyElements(scene.root.children, "config-tmp"); // clear last line
+        for(var i = 0; i < points.length; ++i)
+        {
+            vertices.push(points[i][0], points[i][1], points[i][2]);
+            if(i)
+                vertices.push(points[i][0], points[i][1], points[i][2]);
+        }
+        
+        var mesh = GL.Mesh.load({ vertices: vertices }); 
+        renderer.meshes["line"] = mesh;
+        var linea = new RD.SceneNode();
+        linea.name = "line";
+        linea.description = "config-tmp";
+        linea.flags.ignore_collisions = true;
+        linea.primitive = gl.LINES;
+        linea.mesh = "line";
+        linea.color = [0.9,0.7,0.7,1];
+        linea.flags.depth_test = false;
+        linea.render_priority = RD.PRIORITY_HUD;
+        
+        if(options && options.desc)
+            linea.description = options.desc;
+        
+        scene.root.addChild(linea);        
+    },
+    
+    addAreaBase: function(basePoint, areaType)
+    {
+        var plane = new RD.SceneNode({
+                mesh: "planeXZ",
+                position: basePoint,
+                scaling: 500,
+                opacity: 0.35,
+                name: "area-plane"
+        });
+
+        plane.description = "config";
+        plane.render_priority = RD.PRIORITY_ALPHA;
+        plane.blend_mode = RD.BLEND_ALPHA;
+        plane.flags.two_sided = true;
+
+        if(area_type === ALZADO)
+            plane.rotate(90 * DEG2RAD, RD.FRONT);
+        scene.root.addChild(plane);
+
+        var grid_mesh = GL.Mesh.grid({size:10});
+        renderer.meshes["grid"] = grid_mesh;
+
+        var grid = new RD.SceneNode({
+            mesh: "grid",
+            position: basePoint,
+            color: [0.5, 0.5, 0.5]
+        });
+
+        grid.description = "config";
+        grid.primitive =gl.LINES;
+        grid.scale([50, 50, 50]);    
+
+        if(areaType === ALZADO)
+            grid.rotate(90 * DEG2RAD, RD.FRONT);
+        scene.root.addChild(grid);  
+    },
+    
     renderMeasure: function(o)
     {
         o = o || {};
-
     	var id = o.id;
     	var type = o.type;
     	var msr = null;
@@ -883,7 +758,6 @@ var APP = {
 
         // points stuff
         var points = [];
-        
         for(var i = 0; i < msr.points.length; ++i){
             var list = [];
             list.push(msr.points[i][0]);
@@ -896,32 +770,7 @@ var APP = {
             ind = ind.ball(scene, points[i], {depth_test: false, type: "view"});    
         }    
         
-        // lines stuff
-        var vertices = [];
-        for(var i = 0; i < points.length; ++i)
-        {
-            vertices.push(points[i][0]);
-            vertices.push(points[i][1]);
-            vertices.push(points[i][2]);
-
-                if(i)
-                {
-                    vertices.push(points[i][0]);
-                    vertices.push(points[i][1]);
-                    vertices.push(points[i][2]);
-                }
-        }
-        
-        var mesh = GL.Mesh.load({ vertices: vertices }); 
-        renderer.meshes["line"] = mesh;
-        var linea = new RD.SceneNode();
-        linea.primitive = gl.LINES;
-        linea.mesh = "line";
-        linea.description = "config";
-        linea.color = [0.258, 0.525, 0.956];
-        linea.flags.depth_test = false;
-        linea.render_priority = RD.PRIORITY_HUD;
-        scene.root.addChild(linea);
+        APP.addLine(points, {desc: "config"});
 
         // change global camera
         // to look at with smooth efect
@@ -959,13 +808,13 @@ var APP = {
         context.onmousedown = function(e) {};
         
         APP.fadeAllTables(showing);
-        scene.root.getNodeByName("grid").flags.visible = false;
         APP.rotation = false;
+        scene.root.getNodeByName("grid").flags.visible = false;
         revealDOMElements([$("#cardinal-axis"), $('.sliders'), $(".sub-btns")], false);
         APP.destroyElements(scene.root.children, "config");
         APP.destroyElements(scene.root.children, "config-tmp");
-        $("#myCanvas").css("cursor", "default");
         $("#measure-opt-btn").find("i").html("add_circle_outline");
+        $("#myCanvas").css("cursor", "default");
         $(".draggable").remove();
         $("#cont-msg").empty();
 

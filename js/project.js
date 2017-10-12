@@ -407,7 +407,11 @@ Project.prototype.update_meter = function(relation)
 Project.prototype.insertMeasure = function( camera, points, distance, name, options )
 {   
     if(!distance)
+    {
+        console.error("distance 0");
         return;
+    }
+        
     
     options = options || {};
     
