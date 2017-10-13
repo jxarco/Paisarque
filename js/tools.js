@@ -76,18 +76,10 @@ function loadJSON()
         {
             if(APP.parseJSON)
             {
+                // GET PROJECT DATA
                 APP.parseJSON(data);
                 // LOAD ALWAYS AFTER GETTING DATA
                 loadMapsAPI();
-                
-                // clear tmp files
-                $.ajax({
-                  url: 'server/php/emptyFolder.php',
-                  data: {
-                    'folder': "../../data/uploadedfiles/files",
-                    }
-                });
-                    
                 // get data from DATA variable and fill any gap
                 parseDATA(0, null);
             }
@@ -678,6 +670,7 @@ function fileToBLOB(params)
     var project_name = params.title;
     var type = params.extype;
     var element = params.element;
+    var filename = project_name + "_" + type + "_files.zip"
     
     var zip = new JSZip();
     
@@ -686,14 +679,13 @@ function fileToBLOB(params)
         case 'images':
             break;
         case 'text':
-            for(var i = 0, info; info = copy._extra[i]; i++){
-            
+            for(var i = 0, info; info = copy._extra[i]; i++)
+            {
                 if(info.type !== "text")
                      continue;
                 
-                var filename = "Extra_" + i + ".txt";
-                 
-                zip.file(filename, info.data);
+                var new_file = "Extra_" + i + ".txt";
+                zip.file(new_file, info.data);
                 break;
             }
             break;
@@ -705,15 +697,7 @@ function fileToBLOB(params)
         return;
     
     zip.generateAsync({type:"blob"}).then(function(content) {
-        
-        var blob = new Blob( [content] );
-        var url = URL.createObjectURL( blob );
-        
-        element.attr("href", url);
-        element.css("border", "1px solid #0070c9");
-        element.css("padding", "5px");
-        element.attr("target", "_blank");
-        element.attr("download", project_name + "_" + type + "_files.zip");
+        LiteGUI.downloadFile( filename, content );
     });
 }
 
@@ -965,32 +949,6 @@ function jsToPDF(options)
 }
 
 /* 
-* JSON EXPORTING
-*/
-function jsToJSON(element, options)
-{
-    var data = 'data:application/json;charset=utf-8,' + encodeURIComponent(options.csv);
-    
-    element.href = data;
-    element.target = '_blank';
-    element.download = options.file;
-}
-
-
-/* 
-* CSV EXPORTING
-*/
-
-function jsToCSV(element, options)
-{
-    var csvData = 'data:text/csv;charset=utf-8,' + encodeURIComponent(options.csv);
-    
-    element.href = csvData;
-    element.target = '_blank';
-    element.download = options.file;
-}
-
-/* 
 * Tries to convert the object list format to csv format
 */
  function convertToCSV(list) {
@@ -1005,11 +963,13 @@ function jsToCSV(element, options)
          
         for(var j = 0; j < keys.length; ++j)
         {
-            header += keys[j];
-            if(j == keys.length - 1)
-                header += "\n";
-            else
-                header += ",";
+            if(i == 0){
+                header += keys[j];
+                if(j == keys.length - 1)
+                    header += "\n";
+                else
+                    header += ",";    
+            }
             
             if(typeof array[keys[j]] !== 'object')
                 str += array[keys[j]];

@@ -41,9 +41,12 @@
             <!--   END TOOGLE NAVIGATION           -->
             <a onclick="loadContent('inicio')" id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
             <a onclick="loadContent('modelo')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium active">3D</a>
-            <a onclick="loadContent('infoextra')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">APORTACIONES</a>
-            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">EXPORTAR</a>
-            <a onclick="loadContent('ayuda')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">AYUDA</a>
+            <a onclick="loadContent('infoextra')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium extra-nav">APORTACIONES</a>
+            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium export-nav">EXPORTAR</a>
+            <a onclick="loadContent('ayuda')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium help-nav">AYUDA</a>
+            <a onclick="setLanguage('en')" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">EN</a>
+            <a onclick="setLanguage('cat')" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">CAT</a>
+            <a onclick="setLanguage('es')" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">ES</a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium textUser">username</a>
           </div>
@@ -53,9 +56,12 @@
         <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-top" style="margin-top:46px">
             <a class="w3-bar-item w3-button w3-padding-large textUser">username</a>
             <a onclick="loadContent('modelo')" class="w3-bar-item w3-button w3-padding-large">3D</a>
-            <a onclick="loadContent('infoextra')" class="w3-bar-item w3-button w3-padding-large">APORTACIONES</a>
-            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large">EXPORTAR</a>
-            <a onclick="loadContent('ayuda')" class="w3-bar-item w3-button w3-padding-large">AYUDA</a>
+            <a onclick="loadContent('infoextra')" class="w3-bar-item w3-button w3-padding-large extra-nav">APORTACIONES</a>
+            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large export-nav">EXPORTAR</a>
+            <a onclick="loadContent('ayuda')" class="w3-bar-item w3-button w3-padding-large help-nav">AYUDA</a>
+            <a onclick="setLanguage('es')" class="w3-bar-item w3-button w3-padding-large">ES</a>
+            <a onclick="setLanguage('cat')" class="w3-bar-item w3-button w3-padding-large">CAT</a>
+            <a onclick="setLanguage('en')" class="w3-bar-item w3-button w3-padding-large">EN</a>
         </div>
       
         <div class="w3-row">
@@ -82,6 +88,7 @@
                         <input type="radio" name="tabs-large" id="tab1-large" checked/>
                         <label for="tab1-large" 
                                role="tab" 
+                               id="label-proyecto-tab"
                                aria-selected="true" 
                                aria-controls="panel1-large" 
                                tabindex="0">Proyecto</label>
@@ -91,19 +98,19 @@
                              aria-labelledby="informacion" 
                              aria-hidden="false">
                             
-                            <label style="display: flex;"><p>Auto-guardado</p><i title="Activar/desactivar" id="auto-save-btn" class="material-icons show">fiber_manual_record</i></label>         
+                            <label style="display: flex;"><p id="auto-save-label">Auto-guardado</p><i title="Activar/desactivar" id="auto-save-btn" class="material-icons show">fiber_manual_record</i></label>         
                             
-                            <label style="display: flex;" class="slide-tab" data-target='#mods'><p>Datos</p><i class="material-icons">keyboard_arrow_down</i></label>
+                            <label style="display: flex;" class="slide-tab" data-target='#mods'><p id="data-label">Datos</p><i class="material-icons">keyboard_arrow_down</i></label>
                             <div id="mods" style="display: none;">
                                 <input id="mod_author" placeholder="Autor">
                                 <input id="mod_location" placeholder="Ubicación">
                                 <button title="Aplicar cambios" class="newdata btn" id="data-btn"><i class="material-icons">repeat</i></button>
                             </div>
                             
-                            <label style="display: flex;" for="comment" class="slide-tab" data-target='#comment'><p>Descripción</p><i class="material-icons">keyboard_arrow_down</i></label>
+                            <label style="display: flex;" for="comment" class="slide-tab" data-target='#comment'><p id="desc-label">Descripción</p><i class="material-icons">keyboard_arrow_down</i></label>
                             <textarea style="display: none;" class="form-control pro-info" id="comment"></textarea>
                             
-                            <label style="display: flex;" class="slide-tab" data-target='#map'><p>Ubicación</p><i class="material-icons">keyboard_arrow_down</i></label>
+                            <label style="display: flex;" class="slide-tab" data-target='#map'><p id="location-label">Ubicación</p><i class="material-icons">keyboard_arrow_down</i></label>
                             <div id="map"></div>
                             <div style="display: flex;">
                                 <textarea id="lat" placeholder="LAT" class="newdata"></textarea>
@@ -111,9 +118,9 @@
                                 <button title="Aplicar nuevas coordenadas" class="newdata btn" id="coord-btn"><i class="material-icons">repeat</i></button>
                             </div>
                             
-                            <label style="display: flex;" class="slide-tab" data-target='#cubemaps'><p>Fondos</p><i class="material-icons">keyboard_arrow_down</i></label>
+                            <label style="display: flex;" class="slide-tab" data-target='#cubemaps'><p id="backgrounds-label">Fondos</p><i class="material-icons">keyboard_arrow_down</i></label>
                             <div id="cubemaps" style="display: none;">
-                                <button onclick="APP.setCubeMap()" title="Quitar cubemap" class="newdata btn"><i class="material-icons">not_interested</i></button>
+                                <button id="remove-cubemap-btn" onclick="APP.setCubeMap()" title="Quitar fondo" class="newdata btn"><i class="material-icons">not_interested</i></button>
                                 <div id="cubemaps-in">
                                     
                                 </div>
@@ -126,6 +133,7 @@
                         <input type="radio" name="tabs-large" id="tab2-large"/>
                         <label for="tab2-large"
                                role="tab" 
+                               id="label-tools-tab"
                                aria-selected="false" 
                                aria-controls="panel2-large" 
                                tabindex="0">Herramientas</label>
@@ -285,6 +293,8 @@
                         <input type="radio" name="tabs-large" id="tab3-large" />
                         <label for="tab3-large" 
                                role="tab" 
+                               id="label-anot-tab"
+                               aria-selected="false" 
                                aria-selected="false" 
                                aria-controls="panel3-large" 
                                tabindex="0">Anotaciones</label>
@@ -372,15 +382,9 @@
         
         </body>
         
-        
-    
-        <input id="fileupload" type="file" name="files[]" data-url="data/uploadedfiles/" style="display: none;" multiple>
-    
         <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-        <script src="js/fileupload/jquery.fileupload.js"></script>
-        <script src="js/fileupload/jquery.ui.widget.js"></script>
-        <script src="js/fileupload/jquery.iframe-transport.js"></script>
+        <script type="text/javascript" src="js/extra/jquery.csv.min.js"></script>
         <script type="text/javascript" src="http://www.tamats.com/projects/litegl/external/wbin.js"></script>
         <script type="text/javascript" src="js/extra/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/extra/custom.js"></script>
@@ -390,7 +394,6 @@
         <script type="text/javascript" src="js/extra/rendeer.js"></script>
         <script type="text/javascript" src="litefile/litefileserver.js"></script>
         <script type="text/javascript" src="litefile/js/codeLite.js"></script>
-        <script type="text/javascript" src="js/annotation.js"></script>
         <script type="text/javascript" src="js/project.js"></script>
         <script type="text/javascript" src="js/indication.js"></script>
         <script type="text/javascript" src="js/utils.js"></script>
@@ -401,23 +404,9 @@
         </script>
         <script type="text/javascript" src="js/app.js"></script>
         <script type="text/javascript" src="js/events.js"></script> 
-        
         <script>
-            $(function () {
-                $('#fileupload').fileupload({
-                    dataType: 'json',
-                    done: function (e, data) {
-                        if(data.result.files.length)
-                        {
-                            var url = "data/uploadedfiles/files/" + data.result.files[0].name;
-                            APP.setCubeMap(url);
-                        }
-                    }
-                });
-            });
-        </script>
-        <script>
-            console.log("loading APP");
+            console.log("Loading APP...");
             LOADER.load();
+            applyLanguage("modelo");
         </script>
 </html>

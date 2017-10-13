@@ -7,12 +7,6 @@ var renderer        = null;
 var camera          = null;
 var _dt             = 0.0;
 
-var showing = {
-    t1: false, // distances
-    t2: false, // segments
-    t3: false, // areas
-}
-
 var APP = {
     // rotation mode
     rotation: false,
@@ -24,6 +18,12 @@ var APP = {
     orbiting: false,
     // result of collisions
     result: vec3.create(),
+    // visibility of tables (measures)
+    showing: {
+        t1: false, // distances
+        t2: false, // segments
+        t3: false, // areas
+    },
 
     // methods of APP
     parseJSON: function(json)
@@ -46,7 +46,7 @@ var APP = {
         var meshURL = root + renderData.mesh;
         var textURL = root + renderData.texture;
         
-        APP.init(meshURL, textURL);
+        this.init(meshURL, textURL);
     },
 
     init: function( meshURL, textureURL )
@@ -59,7 +59,7 @@ var APP = {
         });
         placer = document.getElementById("myCanvas");
         placer.appendChild(renderer.canvas); //attach
-
+        
         // instanciate global scene
         scene = new RD.Scene();
         
@@ -83,7 +83,7 @@ var APP = {
             $("#placeholder").css("cursor", "default");
             $('#myCanvas').css({"opacity": 0, "visibility": "visible"}).animate({"opacity": 1.0}, 1500);
             putCanvasMessage("Puedes cancelar cualquier acción con la tecla ESC", 3500);
-            if(!rotaciones.length)
+            if(rotaciones && !rotaciones.length)
                 putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "error"}); 
         }
         
@@ -807,7 +807,7 @@ var APP = {
         options = options || {};
         context.onmousedown = function(e) {};
         
-        APP.fadeAllTables(showing);
+        APP.fadeAllTables(this.showing);
         APP.rotation = false;
         scene.root.getNodeByName("grid").flags.visible = false;
         revealDOMElements([$("#cardinal-axis"), $('.sliders'), $(".sub-btns")], false);

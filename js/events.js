@@ -127,11 +127,11 @@ $(".save").click(function(){
 $("#show_dt").click(function() 
 {
     APP.disableAllFeatures({no_msg: true});
-    showing["t1"] = !showing["t1"];
+    APP.showing["t1"] = !APP.showing["t1"];
     
     var table = $('#distances-table');
     var btn = $('#measure-btn');
-    revealDOMElements([table, btn], showing["t1"]);
+    revealDOMElements([table, btn], APP.showing["t1"]);
 });
 
 /*
@@ -140,11 +140,11 @@ $("#show_dt").click(function()
 $("#show_dst").click(function() 
 {
     APP.disableAllFeatures({no_msg: true});
-    showing["t2"] = !showing["t2"];
+    APP.showing["t2"] = !APP.showing["t2"];
     
     var table = $('#segment-distances-table');
     var btn = $('#measure-s-btn');
-    revealDOMElements([table, btn], showing["t2"]);
+    revealDOMElements([table, btn], APP.showing["t2"]);
 });
 
 /*
@@ -153,11 +153,11 @@ $("#show_dst").click(function()
 $("#show_areat").click(function() 
 {
     APP.disableAllFeatures({no_msg: true});
-    showing["t3"] = !showing["t3"];
+    APP.showing["t3"] = !APP.showing["t3"];
     
     var table = $('#areas-table');
     var btn = $('#measure-opt-btn');
-    revealDOMElements([table, btn], showing["t3"]);
+    revealDOMElements([table, btn], APP.showing["t3"]);
 });
 
 /* 
@@ -384,8 +384,9 @@ $("#formAddImage").on('submit', function(e)
 /*
 * EXPORT STUFF
 */
-$(".export-file").click(function(){
-    
+$(".export-file").click(function(e)
+{
+//    e.preventDefault();
     var user = current_user;
     var project_name = current_project.split("/")[1];
     var type = $(this).attr("class").split(" ")[1];
@@ -394,7 +395,7 @@ $(".export-file").click(function(){
             title: project_name,
             user: user,
             extype: type,
-            element: $(this),
+            element: this,
         }
     
     fileToBLOB(params);
@@ -420,14 +421,10 @@ $(".export-json").click(function(){
     var project_name = current_project.split("/")[1];
     var type = $(this).attr("class").split(" ")[1];
     
-    var csv = JSON.stringify(copy[type], null, 2);
+    var content = JSON.stringify(copy[type], null, 2);
+    var filename = "export_" + project_name + type + ".json";
     
-    var options = {
-        file: "export_" + project_name + type + ".json",
-        csv: csv
-    }
-    
-    jsToJSON(this, options);
+    LiteGUI.downloadFile( filename, content );
 });
 
 $(".export-xls").click(function(){
@@ -436,13 +433,9 @@ $(".export-xls").click(function(){
     var type = $(this).attr("class").split(" ")[1];
     
     var csv = convertToCSV(copy[type]);
+    var filename = "export_" + project_name + type + ".csv";
     
-    var options = {
-        file: "export_" + project_name + type + ".csv",
-        csv: csv
-    }
-    
-    jsToCSV(this, options);
+    LiteGUI.downloadFile( filename, csv );
 });
 
 /*

@@ -114,9 +114,9 @@
                             <div class="circle yellow">ZIP</div>
                           </div>
                           <div class="bottom">
-                             <a class="export-file images" title="Descargar ZIP de imágenes">Imágenes</a><br><br>
-                             <a class="export-file pdf" title="Descargar ZIP de PDF's">PDF'S</a><br><br>
-                             <a class="export-file text" title="Descargar ZIP de texto">Texto</a><br><br>
+<!--                             <a class="export-file images" title="Descargar ZIP de imágenes" href="">Imágenes</a><br><br>-->
+<!--                             <a class="export-file pdf" title="Descargar ZIP de PDF's" href="">PDF'S</a><br><br>-->
+                             <a class="export-file text" title="Descargar ZIP de texto" href="">Notas de texto</a><br><br>
                           </div>
                         </li>
 
@@ -181,6 +181,7 @@
          <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script type="text/javascript" src="js/extra/litegui.min.js"></script>
         <script type="text/javascript" src="js/extra/jquery.csv.min.js"></script>
         <script type="text/javascript" src="js/extra/jspdf.min.js"></script>
         <script type="text/javascript" src="js/extra/jszip.min.js"></script>

@@ -40,9 +40,12 @@
             <!--   END TOOGLE NAVIGATION           -->
             <a onclick="loadContent('inicio')" id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
             <a onclick="loadContent('modelo')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">3D</a>
-            <a onclick="loadContent('infoextra')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">APORTACIONES</a>
-            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium">EXPORTAR</a>
-            <a onclick="loadContent('ayuda')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium active">AYUDA</a>
+            <a onclick="loadContent('infoextra')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium extra-nav">APORTACIONES</a>
+            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium export-nav">EXPORTAR</a>
+            <a onclick="loadContent('ayuda')" class="w3-bar-item w3-button w3-padding-large w3-hide-small w3-hide-medium help-nav active">AYUDA</a>
+            <a onclick="setLanguage('en')" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">EN</a>
+            <a onclick="setLanguage('cat')" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">CAT</a>
+            <a onclick="setLanguage('es')" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">ES</a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large logout-button"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
             <a class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium textUser">username</a>
               
@@ -53,9 +56,12 @@
         <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-top" style="margin-top:46px">
             <a class="w3-bar-item w3-button w3-padding-large textUser">username</a>
             <a onclick="loadContent('modelo')" class="w3-bar-item w3-button w3-padding-large">3D</a>
-            <a onclick="loadContent('infoextra')" class="w3-bar-item w3-button w3-padding-large">APORTACIONES</a>
-            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large">EXPORTAR</a>
-            <a onclick="loadContent('ayuda')" class="w3-bar-item w3-button w3-padding-large">AYUDA</a>
+            <a onclick="loadContent('infoextra')" class="w3-bar-item w3-button w3-padding-large extra-nav">APORTACIONES</a>
+            <a onclick="loadContent('exportar.php')" class="w3-bar-item w3-button w3-padding-large export-nav">EXPORTAR</a>
+            <a onclick="loadContent('ayuda')" class="w3-bar-item w3-button w3-padding-large help-nav">AYUDA</a>
+            <a onclick="setLanguage('es')" class="w3-bar-item w3-button w3-padding-large">ES</a>
+            <a onclick="setLanguage('cat')" class="w3-bar-item w3-button w3-padding-large">CAT</a>
+            <a onclick="setLanguage('en')" class="w3-bar-item w3-button w3-padding-large">EN</a>
         </div>
         
         <content class="row"><div class="col-lg-12" style="margin-top: 46px; position: absolute;">
@@ -68,6 +74,7 @@
                         <input type="radio" name="tabs" id="tab1" checked/>
                         <label for="tab1" 
                                role="tab" 
+                               id="label-tab-photo"
                                aria-selected="true" 
                                aria-controls="panel1" 
                                tabindex="0">Tomar las fotografías</label>
@@ -78,7 +85,7 @@
                              aria-hidden="false">
                             
                             <div class="contacto-panel">
-                                <p>La fotogrametría es un proceso de toma de fotos para la modelación de un objeto real al mundo 3D. A continuación podrás ver un tutorial en el que aprenderás a tomar unas buenas fotografías para, más adelante, reconstruir la escena en un archivo OBJ y poder visualizarlo en nuestra página.</p>
+                                <p id="fotogrametria-p">La fotogrametría es un proceso de toma de fotos para la modelación de un objeto real al mundo 3D. A continuación podrás ver un tutorial en el que aprenderás a tomar unas buenas fotografías para, más adelante, reconstruir la escena en un archivo OBJ y poder visualizarlo en nuestra página.</p>
                             </div>
 
                             <br/>
@@ -93,6 +100,7 @@
                         <input type="radio" name="tabs" id="tab2"/>
                         <label for="tab2"
                                role="tab" 
+                               id="label-tab-model"
                                aria-selected="false" 
                                aria-controls="panel2" 
                                tabindex="0">Crear el modelo 3D</label>
@@ -103,7 +111,7 @@
                              aria-hidden="true">
                             
                             <div class="contacto-panel">
-                                <p>¿Dices que tienes unas buenas fotografías para crear un objeto pero no sabes como reconstruirlo? Aquí tienes un tutorial sobre cómo modelar tu objeto a partir de las fotografías tomadas anteriormente. Asegúrate de haber tomado las medidas necesarias y haber realizado el proceso de fotogrametría correctamente.</p>
+                                <p id="modelo3d-p">Un vez tengas las fotos, podrás construir un modelo 3D a partir de ellas. Aquí tienes un tutorial sobre cómo modelar tu objeto a partir de las fotografías tomadas anteriormente. Asegúrate de haber tomado las medidas necesarias y haber realizado el proceso de fotogrametría correctamente.</p>
                             </div>
                             <br/>
                             <div align="center" class="embed-responsive embed-responsive-16by9" style="margin-bottom: 55px;">
@@ -117,6 +125,7 @@
                         <input type="radio" name="tabs" id="tab3"/>
                         <label for="tab3" 
                                role="tab" 
+                               id="label-tab-app"
                                aria-selected="false" 
                                aria-controls="panel3" 
                                tabindex="0">Aplicación</label>
@@ -133,7 +142,7 @@
                                     </dt>
                                       <dd class="accordion-content accordionItem is-collapsed" id="accordion1" aria-hidden="true">
 
-                                          <h4>Información general</h4>
+                                          <h4>Sobre el proyecto</h4>
                                           <div class="info-panel">
                                                 <p class="kawaii">Usa el cuadro de texto para añadir una breve descripción sobre el proyecto. El mapa indica la posición real de tu modelo 3D.</p>
                                                 <p class="kawaii">Para modificar las coordenadas, introduce los nuevos valores de las coordenadas y pulsa el <a class="src">botón.</a></p>
@@ -167,8 +176,8 @@
                                             </a>
                                             <div class="info-panel">
                                                 <p class="kawaii">Utiliza esta herramienta para guardar todos los cambios aplicados al proyecto.</p> 
-                                                <p class="kawaii">Si quieres olvidarte de guardar, asegúrate de permitir el auto-guardado al empezar.</p> 
                                                 <p class="kawaii error">Si no se usa al acabar, tendrás que volver a realizar todos los cambios.</p>
+                                                <p class="kawaii">Si quieres olvidarte de guardar, asegúrate de permitir el auto-guardado al empezar.</p> 
                                             </div><br>
 
                                             <h6>Configurar la escala</h6>
@@ -246,7 +255,7 @@
                                             </div>
                                       </dd>
                                       <dt>
-                                        <a href="#accordion2" aria-expanded="false" aria-controls="accordion2" class="accordion-title accordionTitle js-accordionTrigger">Aportaciones</a>
+                                        <a id="accordion2-title" href="#accordion2" aria-expanded="false" aria-controls="accordion2" class="accordion-title accordionTitle js-accordionTrigger">Aportaciones</a>
                                       </dt>
                                       <dd class="accordion-content accordionItem is-collapsed" id="accordion2" aria-hidden="true">
                                             En construcción
@@ -265,7 +274,7 @@
 
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script type="text/javascript" src="js/extra/jquery.csv.min.js"></script>
         <script src="js/extra/bootstrap.min.js"></script>
         <script src="js/extra/custom.js"></script>
         <script type="text/javascript" src="js/extra/gl-matrix-min.js"></script>
@@ -279,6 +288,7 @@
         <script src="js/tools.js"></script>
         <script type="text/javascript">
             PAS.recover(); // load paisarque session
+            applyLanguage("ayuda");
         </script>
         <script src="js/events.js"></script>
     

@@ -831,6 +831,7 @@ text css (information)
 .info-panel, .contacto-panel{
     display: flex;
     margin: 5px;
+    font-size: 13px !important;
 }
 .kawaii{
     color: rgb(15, 15, 15);
@@ -1091,6 +1092,9 @@ a:hover{
   max-width: 100%;
   margin: 0 auto;
   padding: 0em 0 0em 0;
+}
+.tabs.help{
+    font-size: 13px !important;
 }
 .accordionTitle,
 .accordion__Heading {
