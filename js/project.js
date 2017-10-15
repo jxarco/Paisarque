@@ -120,7 +120,7 @@ Project.prototype.insertAnotation = function( id, camera, position, text )
     var a = new Annotation(id, camera, position, text);
     this._anotations.push(a.TO_JSON());
     
-    var totalString = '<tr a id="' + id + '" draggable="true" ondragstart="drag(event)" onclick="lookAtAnot( camera, [' + a._camera_position  + "], [" + a._camera_target + "], [" + a._camera_up + '], ' + id + ')">'+ "<td>" + id + "</td>" + "<td>" + text + "</td>"
+    var totalString = '<tr a id="' + id + '" draggable="true" ondragstart="drag(event)" onclick="lookAtAnot( GFX.camera, [' + a._camera_position  + "], [" + a._camera_target + "], [" + a._camera_up + '], ' + id + ')">'+ "<td>" + id + "</td>" + "<td>" + text + "</td>"
     +"</tr>";
     
     $("#anotacion_tabla").append(totalString);
@@ -181,12 +181,12 @@ Project.prototype.deleteAnotation = function( id )
     this._anotations.splice(index, 1);
     
     // scene
-    for(var i = 0; i < obj.children.length; ++i)
-    if(obj.children[i].id == id)
-    {
-        obj.children[i].destroy();
-        return;
-    }
+    for(var i = 0, child; child = GFX.model.children[i]; ++i)
+        if(child.id == id)
+        {
+            child.destroy();
+            return;
+        }
     
     if(this._auto_save)
         this.save();
@@ -198,14 +198,14 @@ Project.prototype.deleteAnotation = function( id )
 *   @param obj {sceneNode} current global mesh of the project
 */
 
-Project.prototype.deleteAllAnotations = function( obj )
+Project.prototype.deleteAllAnotations = function( model )
 {
 	// list
     this._anotations = [];
     // html
     $('#anotacion_tabla').empty();
     // scene
-    obj.children.splice(0, obj.children.length);
+    model.children.splice(0, model.children.length);
     
     if(this._auto_save)
         this.save();
@@ -323,34 +323,30 @@ Project.prototype.restoreDistances = function( )
     $('#segment-distances-table').find("tbody").empty();
     $('#areas-table').find("tbody").empty();
     
-    var length = this._measures.length;
-    
-    for(var i = 0; i < length; i++)
+    for(var i = 0, msr; msr = this._measures[i]; i++)
     {
-        var msr = this._measures[i];
-        
         var camera = {
             "position": msr.camera_position,
             "target": msr.camera_target,
             "up": msr.camera_up
         };
-        
-        var distance = msr.distance;
-        this.insertMeasure(camera, msr.points, distance, {display: false, push: false, id: msr.id});
+        this.insertMeasure(camera, msr.points, msr.distance, msr.name, {display: false, push: false, id: msr.id});
     }
+
+    for(var i = 0, msr; msr = this._segments[i]; i++)
+    {
+        var camera = {
+            "position": msr.camera_position,
+            "target": msr.camera_target,
+            "up": msr.camera_up
+        };        
+        this.insertSegmentMeasure( camera, msr.points, msr.distance, msr.name, {display: false, push: false, id: msr.id} );
+    }
+        
     
-    length = this._segments.length;
-    
-    for(var i = 0; i < length; i++)
-        this.insertSegmentMeasure( this._segments[i].points, this._segments[i].distance, {display: false, push: false, id: this._segments[i].id} );
-    
-    length = this._areas.length;
-    
-    for(var i = 0; i < length; i++)
+    for(var i = 0, msr; msr = this._areas[i]; i++)
     {
         var points = [];
-        var msr = this._areas[i];
-        
         for(var j = 0; j < msr.points.length; j++)
         {
             var obj = msr.points[j];

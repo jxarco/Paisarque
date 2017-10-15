@@ -1,20 +1,24 @@
 var GFX = {
-    
+    /*
+    * init graphic stuff
+    */
     init: function( meshURL, textureURL )
     {
+        var that = this;
+        
         //create the rendering context
         this.context = GL.create({width: window.innerWidth, height: window.innerHeight, alpha: true});
-        this.renderer = new RD.Renderer(context, {
+        this.renderer = new RD.Renderer(this.context, {
             shaders_file: "data/shaders/shaders.glsl",
             autoload_assets: false
         });
         this.placer = document.getElementById("myCanvas");
-        this.placer.appendChild(renderer.canvas); //attach
+        this.placer.appendChild(this.renderer.canvas); //attach
 
         // instanciate global scene
         this.scene = new RD.Scene();
         this.scene.root.getNodeByName = function(name){ 
-            for(var n in scene.root.children) if(scene.root.children[n].name == name) return scene.root.children[n];
+            for(var n in that.scene.root.children) if(that.scene.root.children[n].name == name) return that.scene.root.children[n];
         }
         
         //create camera
@@ -22,13 +26,22 @@ var GFX = {
         this.camera.perspective( 45, gl.canvas.width / gl.canvas.height, 0.1, 10000 );
         this.camera.lookAt( [150,60,150],[0,0,0],[0,1,0] );
         this.camera.direction = [150,60,150];
-        this.camera.previous = vec3.clone(camera._position);
+        this.camera.previous = vec3.clone(this.camera._position);
         
         var wBinURL = meshURL.split(".")[0] + ".wbin";
         
+        //create an obj in the scene
+        var model = new RD.SceneNode();
+        model.name = "mesh 3d";
+        model.position = [0,0,0];
+        model.scale([5,5,5]);
+        model.mesh = wBinURL;
+        
+        this.model = model;
+        
         var on_load = function()
         {
-            this.renderer.meshes[obj.mesh] = mesh;  
+            that.renderer.meshes[that.model.mesh] = mesh;  
             $("#placeholder").css("background-image", "none");
             $("#placeholder").css("cursor", "default");
             $('#myCanvas').css({"opacity": 0, "visibility": "visible"}).animate({"opacity": 1.0}, 1500);
@@ -37,26 +50,17 @@ var GFX = {
                 putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "error"}); 
         }
         
-        //create an obj in the scene
-        var obj = new RD.SceneNode();
-        obj.name = "mesh 3d";
-        obj.position = [0,0,0];
-        obj.scale([5,5,5]);
-        obj.mesh = wBinURL;
-        
-        this.obj = obj;
-        
         $("#placeholder").css("cursor", "wait");
         
-        mesh = GL.Mesh.fromURL( obj.mesh, function (response) {
+        mesh = GL.Mesh.fromURL( that.model.mesh, function (response) {
             
             if(response === null){
-                console.warn("no binary mesh found", obj.mesh);
+                console.warn("no binary mesh found", that.model.mesh);
                 // load obj
-                obj.mesh = meshURL;
-                mesh = GL.Mesh.fromURL( obj.mesh, function (response) {
+                that.model.mesh = meshURL;
+                mesh = GL.Mesh.fromURL( that.model.mesh, function (response) {
                     if(response === null){
-                        console.warn("no mesh found", obj.mesh);
+                        console.warn("no mesh found", that.model.mesh);
                     }
                     else// upload binary mesh for next use
                     {
@@ -80,42 +84,32 @@ var GFX = {
                         on_load();
                     }
                 }); //load from URL
-                
             }
-                
             else
                 on_load();
-        }); //load from URL
+        });
         
         // *************************************
         
         // one texture
         if (!isArray(textureURL)) {
-            obj.texture = textureURL;
+            that.model.texture = textureURL;
         }
         
-        var obj_texture = renderer.loadTexture(obj.texture, renderer.default_texture_settings);
+        var obj_texture = this.renderer.loadTexture(that.model.texture, that.renderer.default_texture_settings);
         
         // Hacer las rotaciones pendientes
         var rotaciones = project.getRotations();
-
-        if(!rotaciones.length)
-            console.error("No default rotations");
-        else
-        {
+        if(rotaciones.length){
             for(var r in rotaciones)
-                obj._rotation[r] = rotaciones[r];
-            obj.updateMatrices();
+                that.model._rotation[r] = rotaciones[r];
+            that.model.updateMatrices();
         }
 
-        //GRID
-        var rot_grid = new SceneIndication();
-        rot_grid = rot_grid.grid(5, {visible: false});
-        
         //  skybox texture
         var cubeMaptexture = GL.Texture.cubemapFromURL("data/cubemaps/skybox.png",{is_cross: 1, minFilter: gl.LINEAR_MIPMAP_LINEAR });
         cubeMaptexture.bind(0);
-        renderer.textures["skybox"] = cubeMaptexture;
+        this.renderer.textures["skybox"] = cubeMaptexture;
         
         var skybox = new RD.SceneNode({
             mesh: "cube",
@@ -128,27 +122,28 @@ var GFX = {
         skybox.flags.flip_normals = true;
         skybox.render_priority = RD.PRIORITY_BACKGROUND;
         
+        this.skybox = skybox;
+        
         // order is important
-        scene.root.addChild( skybox );
-        scene.root.addChild( obj );
-        scene.root.addChild( rot_grid );
+        this.scene.root.addChild( this.skybox );
+        this.scene.root.addChild( this.model );
 
         var anotaciones = project.getAnnotations();
-        if(!anotaciones.length)
-            console.log("no anotations");
-
         for (var i = 0; i < anotaciones.length; i++) {
 
             var position = [ anotaciones[i].position[0], anotaciones[i].position[1], anotaciones[i].position[2]];
-            var ind = new SceneIndication();
-            ind = ind.ball(null, position, {id: anotaciones[i].id, color: [1,0,0,1]});
-            ind.active = false;
-            ind.time = 0.0;
+            
+            var ind = new SceneIndication({
+                position: position,
+                id: anotaciones[i].id,
+                active: false,
+                time: 0.0
+            });
 
             // set ball parent
-            setParent(obj, ind);
+            setParent(that.model, ind.node);
 
-            ind.update = function(dt)
+            ind.node.update = function(dt)
             {
                 this.time += dt;
                 if(!this.active)
@@ -168,79 +163,134 @@ var GFX = {
         function animate() {
             requestAnimationFrame( animate );
             
-            APP.lookAt(camera);
+            APP.lookAt(that.camera);
             
             last = now;
             now = getTime();
             var dt = (now - last) * 0.001;
-            renderer.clear(bg_color);
+            that.renderer.clear(bg_color);
 
             if(APP.orbiting)
-                camera.orbit(0.1 * dt, RD.UP);
+                that.camera.orbit(0.1 * dt, RD.UP);
             
             //smoothing camera
-            if(camera.smooth){
-                vec3.scale(camera.position, camera.position, 0.05);
-                vec3.scale(camera.previous, camera.previous, 0.95);
-                vec3.add(camera.position, camera.position, camera.previous);
+            if(that.camera.smooth){
+                vec3.scale(that.camera.position, that.camera.position, 0.05);
+                vec3.scale(that.camera.previous, that.camera.previous, 0.95);
+                vec3.add(that.camera.position, that.camera.position, that.camera.previous);
             }
             
-            skybox.position = camera.position;
-            renderer.render(scene, camera);
-            scene.update(dt);
+            that.skybox.position = that.camera.position;
+            that.renderer.render(that.scene, that.camera);
+            that.scene.update(dt);
             
             //get old camera
-            camera.previous = vec3.clone(camera._position);
+            that.camera.previous = vec3.clone(that.camera._position);
         }
 
-        APP.resize();
-        context.animate(); //launch loop
+        window.onresize = this.resize;
+        this.resize();
+        this.context.animate(); //launch loop
 
-        context.onupdate = function(dt) {
+        this.context.onupdate = function(dt) {
             _dt = dt;
         }
 
-        context.onmousemove = function(e)
+        this.context.onmousemove = function(e)
         {
             mouse = [e.canvasx, gl.canvas.height - e.canvasy];
 
             if (e.dragging && e.leftButton) {
-                camera.orbit(-e.deltax * 0.5 * _dt, RD.UP);
-                camera.orbit(-e.deltay * 0.5 * _dt, camera._right);
+                that.camera.orbit(-e.deltax * 0.5 * _dt, RD.UP);
+                that.camera.orbit(-e.deltay * 0.5 * _dt, that.camera._right);
             }
             if (e.dragging && e.rightButton) {
-                camera.moveLocal([-e.deltax * 0.5 * _dt, e.deltay * 0.5 * _dt, 0]);
+                that.camera.moveLocal([-e.deltax * 0.5 * _dt, e.deltay * 0.5 * _dt, 0]);
             }
         }
 
-        context.onmousewheel = function(e)
+        this.context.onmousewheel = function(e)
         {
             if(!e.wheel)
                 return;
 
-            camera.position = vec3.scale( camera.position, camera.position, e.wheel < 0 ? 1.05 : 0.95 );
+            that.camera.position = vec3.scale( that.camera.position, that.camera.position, e.wheel < 0 ? 1.05 : 0.95 );
         }
 
-        context.onkeydown = function(e)
+        this.context.onkeydown = function(e)
         {
             keys[e.keyCode] = true;      
         }
         
-        context.onkeyup = function(e)
+        this.context.onkeyup = function(e)
         {   
             keys[e.keyCode] = false;        
 
             if(e.keyCode === KEY_ENTER) // Enter
-                APP.applyRotation(obj._rotation);
+                APP.applyRotation(that.model._rotation);
 
             if(e.keyCode === KEY_ESC)
                 APP.disableAllFeatures();
             
             if(e.keyCode === KEY_S)
-                renderer.loadShaders("data/shaders/shaders.glsl");
+                that.renderer.loadShaders("data/shaders/shaders.glsl");
         }
 
-        context.captureMouse(true);
-        context.captureKeys();
+        this.context.captureMouse(true);
+        this.context.captureKeys();
+    },
+    /*
+    * destroy elements by description attr
+    */
+    destroyElements: function (elements, description)
+    {
+        for(var i = 0; i < elements.length; ++i)
+        {
+            if(elements[i] === null)
+                return;
+            if(!description)    
+                elements[i].destroy();
+            else if(description == elements[i].description)
+                elements[i].destroy();
+        }
+    },
+    /*
+    * load new texture for cubemap and set as skybox texture
+    * in the renderer
+    */
+    setCubeMap: function( url )
+    {
+        if(!url){
+            this.scene.root.getNodeByName("skybox").shader = "basic"; 
+            return;
+        }
+        this.scene.root.getNodeByName("skybox").shader = "skybox"; 
+        var cubeMaptexture = GL.Texture.cubemapFromURL(url,{is_cross: 1, minFilter: gl.LINEAR_MIPMAP_LINEAR });
+        cubeMaptexture.bind(0);
+        this.renderer.textures["skybox"] = cubeMaptexture;  
+    },
+    /*
+    * resize method for canvas
+    */
+    resize: function() 
+    {
+        var that = GFX;
+        
+        that.context.canvas.width   = that.placer.clientWidth;
+        that.context.canvas.height  = that.placer.clientHeight;
+        that.context.viewport(0, 0, that.context.canvas.width, that.context.canvas.height);
+
+        if(that.camera)
+            that.camera.perspective(that.camera.fov, that.placer.clientWidth / that.placer.clientHeight, that.camera.near, that.camera.far);
+    },
+    /*
+    * transform canvas to full screen
+    */
+    goFullscreen: function()
+    {
+        if(this.renderer.gl.fullscreen)
+            this.renderer.gl.fullscreen();
+        else
+            console.error("fullscreen not supported");
     }
 }

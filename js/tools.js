@@ -3,7 +3,6 @@ var default_user            = "guest";
 var current_user            = null;
 var current_project         = localStorage.getItem("current_project") || null;
 
-
 var delete_project_active   = false;
 var copy = null; // copy of the project
 var session = null;
@@ -36,7 +35,6 @@ var LOADER = {
     load: function(){
         if(current_project !== null)
             loadJSON();
-        window.onresize = APP.resize;
         init_sliders(); // canvas rotations
     },
     // info extra tab
@@ -79,14 +77,15 @@ function loadJSON()
                 // GET PROJECT DATA
                 APP.parseJSON(data);
                 // LOAD ALWAYS AFTER GETTING DATA
-                loadMapsAPI();
+                if(loadMapsAPI)
+                    loadMapsAPI();
                 // get data from DATA variable and fill any gap
-                parseDATA(0, null);
+                if(parseDATA)
+                    parseDATA(0, null);
             }
         }
     });
 }
-// FINISH GETTING DATA FROM JSONS
 
 function parseDATA(active, options)
 {
@@ -110,7 +109,7 @@ function parseDATA(active, options)
 
         $(".cubemap-img").click(function(){
            var url = $(this).data("src");
-            APP.setCubeMap(url);
+            GFX.setCubeMap(url);
         });
     }
     
@@ -396,8 +395,7 @@ function show(e)
     }
     else{
         e.removeClass("on-point");
-        APP.destroyElements(scene.root.children, "config");
-        //APP.disableAllFeatures();
+        GFX.destroyElements(GFX.scene.root.children, "config");
     }
 }
 
@@ -405,7 +403,6 @@ function parseExtraJSON(json, flags)
 {
     flags = flags || {};
     
-//    console.log(json);
     if(!json){
         console.error("empty");
         return;
@@ -516,13 +513,12 @@ function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id)
     camera.direction = position_camera;
     camera.smooth = true;
     
-    for(var i = 0; i < obj.children.length; i++)
+    for(var i = 0, child; child = GFX.model.children[i]; i++)
     {
-        var current = obj.children[i];
-        if(current.id === anot_id)
-            current.active = true;
+        if(child.id === anot_id)
+            child.active = true;
         else
-            current.active = false;
+            child.active = false;
     }
 }
 
@@ -574,13 +570,11 @@ function testDialog(options)
     
     var upperbtn = options.upperbtn || "Añadir puntos";
     var lowerbtn = options.lower || "Finalizar";
-    
     var location = $("#tab-content2-large");
     
     var html = "<div " +
                     "class='draggable ui-widget-content' " +
                   "style='" +
-//                  "width: 30%; " +
                   "margin-top: 265px;" +
                   "text-align: center;'>" +
                   "<button title='Cancelar' id='close-dialog' class='dialog-btn info'><i class='material-icons'>close</i></button>" +
@@ -605,7 +599,6 @@ function testDialog(options)
     html += "</div>";
     
     location.append(html);
-//    $( ".draggable" ).draggable();
     
     if(options.hideupper)
         $("#add-dialog").hide();
@@ -615,14 +608,13 @@ function testDialog(options)
     
     $("#camera-mode").click(function(){
         selectDialogOption($(this));
-        context.onmousedown = function(e) {}
+        GFX.context.onmousedown = function(e) {}
         $("#myCanvas").css("cursor", "default");  
     });
     
     $("#close-dialog").click(function(){
         APP.disableAllFeatures();  
     });
-        
 }
 
 /*

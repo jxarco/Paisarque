@@ -1,10 +1,4 @@
 var project         = null;
-var obj             = null;
-var placer          = null;
-var context         = null;
-var scene           = null;
-var renderer        = null;
-var camera          = null;
 var _dt             = 0.0;
 
 var APP = {
@@ -46,255 +40,7 @@ var APP = {
         var meshURL = root + renderData.mesh;
         var textURL = root + renderData.texture;
         
-        this.init(meshURL, textURL);
-    },
-
-    init: function( meshURL, textureURL )
-    {
-        //create the rendering context
-        context = GL.create({width: window.innerWidth, height: window.innerHeight, alpha: true});
-        renderer = new RD.Renderer(context, {
-            shaders_file: "data/shaders/shaders.glsl",
-            autoload_assets: false
-        });
-        placer = document.getElementById("myCanvas");
-        placer.appendChild(renderer.canvas); //attach
-        
-        // instanciate global scene
-        scene = new RD.Scene();
-        
-        scene.root.getNodeByName = function(name){ 
-            for(var n in scene.root.children) if(scene.root.children[n].name == name) return scene.root.children[n];
-        }
-        
-        //create camera
-        camera = new RD.Camera();
-        camera.perspective( 45, gl.canvas.width / gl.canvas.height, 0.1, 10000 );
-        camera.lookAt( [150,60,150],[0,0,0],[0,1,0] );
-        camera.direction = [150,60,150];
-        camera.previous = vec3.clone(camera._position);
-        
-        var wBinURL = meshURL.split(".")[0] + ".wbin";
-        
-        var on_load = function()
-        {
-            renderer.meshes[obj.mesh] = mesh;  
-            $("#placeholder").css("background-image", "none");
-            $("#placeholder").css("cursor", "default");
-            $('#myCanvas').css({"opacity": 0, "visibility": "visible"}).animate({"opacity": 1.0}, 1500);
-            putCanvasMessage("Puedes cancelar cualquier acción con la tecla ESC", 3500);
-            if(rotaciones && !rotaciones.length)
-                putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "error"}); 
-        }
-        
-        //create an obj in the scene
-        obj = new RD.SceneNode();
-        obj.name = "mesh 3d";
-        obj.position = [0,0,0];
-        obj.scale([5,5,5]);
-        obj.mesh = wBinURL;
-        
-        $("#placeholder").css("cursor", "wait");
-        
-        mesh = GL.Mesh.fromURL( obj.mesh, function (response) {
-            
-            if(response === null){
-                console.warn("no binary mesh found", obj.mesh);
-                // load obj
-                obj.mesh = meshURL;
-                mesh = GL.Mesh.fromURL( obj.mesh, function (response) {
-                    if(response === null){
-                        console.warn("no mesh found", obj.mesh);
-                    }
-                    else// upload binary mesh for next use
-                    {
-                        var file = mesh.encode("wbin");
-                        if(file)
-                        {
-                            var fileReader = new FileReader();
-                            fileReader.onload = function() {
-                                    var arrayBuffer = this.result;
-                                    var fullpath = current_user + "/projects/" + project._id + "/mesh.wbin";
-                                    session.uploadFile( fullpath, arrayBuffer, 0, function(){
-                                        console.log("binary uploaded");
-                                    }, function(err){
-                                        console.error(err);
-                                    });
-                            };
-                            fileReader.readAsArrayBuffer( new Blob([file]) );
-                        }else
-                            console.error("encoding error");
-                        
-                        on_load();
-                    }
-                }); //load from URL
-                
-            }
-                
-            else
-                on_load();
-        }); //load from URL
-        
-        // *************************************
-        
-        // one texture
-        if (!isArray(textureURL)) {
-            obj.texture = textureURL;
-        }
-        
-        var obj_texture = renderer.loadTexture(obj.texture, renderer.default_texture_settings);
-        
-        // Hacer las rotaciones pendientes
-        var rotaciones = project.getRotations();
-
-        if(!rotaciones.length)
-            console.error("No default rotations");
-        else
-        {
-            for(var r in rotaciones)
-                obj._rotation[r] = rotaciones[r];
-            obj.updateMatrices();
-        }
-
-        //GRID
-        var rot_grid = new SceneIndication();
-        rot_grid = rot_grid.grid(5, {visible: false});
-        
-        //  skybox texture
-        var cubeMaptexture = GL.Texture.cubemapFromURL("data/cubemaps/skybox.png",{is_cross: 1, minFilter: gl.LINEAR_MIPMAP_LINEAR });
-        cubeMaptexture.bind(0);
-        renderer.textures["skybox"] = cubeMaptexture;
-        
-        var skybox = new RD.SceneNode({
-            mesh: "cube",
-            texture: "skybox",
-            shader: "basic"
-        });
-        
-        skybox.name = "skybox";
-        skybox.flags.depth_test = false;
-        skybox.flags.flip_normals = true;
-        skybox.render_priority = RD.PRIORITY_BACKGROUND;
-        
-        // order is important
-        scene.root.addChild( skybox );
-        scene.root.addChild( obj );
-        scene.root.addChild( rot_grid );
-
-        var anotaciones = project.getAnnotations();
-        if(!anotaciones.length)
-            console.log("no anotations");
-
-        for (var i = 0; i < anotaciones.length; i++) {
-
-            var position = [ anotaciones[i].position[0], anotaciones[i].position[1], anotaciones[i].position[2]];
-            var ind = new SceneIndication();
-            ind = ind.ball(null, position, {id: anotaciones[i].id, color: [1,0,0,1]});
-            ind.active = false;
-            ind.time = 0.0;
-
-            // set ball parent
-            setParent(obj, ind);
-
-            ind.update = function(dt)
-            {
-                this.time += dt;
-                if(!this.active)
-                    this.color = [1,0,0,1];
-                else
-                    this.color = [1, 0.3 + Math.sin(this.time*5), 0.3 + Math.sin(this.time*5), 1];
-            }
-        }
-
-        //global settings
-        var bg_color = vec4.fromValues(0.937, 0.937, 0.937, 1);
-
-        //main render loop
-        var last = now = getTime();
-        requestAnimationFrame(animate);
-        
-        function animate() {
-            requestAnimationFrame( animate );
-            
-            APP.lookAt(camera);
-            
-            last = now;
-            now = getTime();
-            var dt = (now - last) * 0.001;
-            renderer.clear(bg_color);
-
-            if(APP.orbiting)
-                camera.orbit(0.1 * dt, RD.UP);
-            
-//            if(keys[KEY_LEFT])
-//                camera.orbit_direction(-DEG2RAD, RD.UP);
-//            if(keys[KEY_RIGHT])
-//                camera.orbit_direction(DEG2RAD, RD.UP);
-            
-            //smoothing camera
-            if(camera.smooth){
-                vec3.scale(camera.position, camera.position, 0.05);
-                vec3.scale(camera.previous, camera.previous, 0.95);
-                vec3.add(camera.position, camera.position, camera.previous);
-            }
-            
-            skybox.position = camera.position;
-            renderer.render(scene, camera);
-            scene.update(dt);
-            
-            //get old camera
-            camera.previous = vec3.clone(camera._position);
-        }
-
-        APP.resize();
-        context.animate(); //launch loop
-
-        context.onupdate = function(dt) {
-            _dt = dt;
-        }
-
-        context.onmousemove = function(e)
-        {
-            mouse = [e.canvasx, gl.canvas.height - e.canvasy];
-
-            if (e.dragging && e.leftButton) {
-                camera.orbit(-e.deltax * 0.5 * _dt, RD.UP);
-                camera.orbit(-e.deltay * 0.5 * _dt, camera._right);
-            }
-            if (e.dragging && e.rightButton) {
-                camera.moveLocal([-e.deltax * 0.5 * _dt, e.deltay * 0.5 * _dt, 0]);
-            }
-        }
-
-        context.onmousewheel = function(e)
-        {
-            if(!e.wheel)
-                return;
-
-            camera.position = vec3.scale( camera.position, camera.position, e.wheel < 0 ? 1.05 : 0.95 );
-        }
-
-        context.onkeydown = function(e)
-        {
-            keys[e.keyCode] = true;      
-        }
-        
-        context.onkeyup = function(e)
-        {   
-            keys[e.keyCode] = false;        
-
-            if(e.keyCode === KEY_ENTER) // Enter
-                APP.applyRotation(obj._rotation);
-
-            if(e.keyCode === KEY_ESC)
-                APP.disableAllFeatures();
-            
-            if(e.keyCode === KEY_S)
-                renderer.loadShaders("data/shaders/shaders.glsl");
-        }
-
-        context.captureMouse(true);
-        context.captureKeys();
+        GFX.init(meshURL, textURL);
     },
     
     lookAt: function(camera)
@@ -311,10 +57,10 @@ var APP = {
             $("#desAnot").css('opacity', '1');
             $("#actAnot").css('opacity', '0.2');
 
-            context.onmousedown = function(e) 
+            GFX.context.onmousedown = function(e) 
             {
-                var ray = camera.getRay( e.canvasx, e.canvasy );
-                var node = scene.testRay( ray, APP.result, undefined, 0x1, true );
+                var ray = GFX.camera.getRay( e.canvasx, e.canvasy );
+                var node = GFX.scene.testRay( ray, APP.result, undefined, 0x1, true );
 
                 // Si ha habido colision, se crea un punto y se abre una ventana de texto para escribir la anotacion
                 if (node)
@@ -324,62 +70,37 @@ var APP = {
         } else if (!modoAnotacion) {
             $("#desAnot").css('opacity', '0.2');
             $("#actAnot").css('opacity', '1');
-            context.onmousedown = function(e) {}
+            GFX.context.onmousedown = function(e) {}
         }
 
     },
     
     showElements: function (elements, flag)
     {
-        // obj.children
         for(var i = 0; i < elements.length; i++)
             elements[i].flags.visible = flag;
     },
     
-    destroyElements: function (elements, description)
+    go_orbit: function(element)
     {
-        for(var i = 0; i < elements.length; ++i)
-        {
-            if(elements[i] === null)
-                return;
-            if(!description)    
-                elements[i].destroy();
-            else if(description == elements[i].description)
-                elements[i].destroy();
-        }
-    },
-    
-    orbit: function(e)
-    {
-        APP.orbiting = !APP.orbiting;
+        this.orbiting = !this.orbiting;
 
-        if(APP.orbiting)
-            e.find("i").html("pause_circle_outline");
+        if(this.orbiting)
+            element.find("i").html("pause_circle_outline");
         else{
-            e.find("i").html("play_circle_outline");
-            e.removeClass("pressed");
+            element.find("i").html("play_circle_outline");
+            element.removeClass("pressed");
         }
-    },
-    
-    setCubeMap: function( url )
-    {
-        if(!url){
-            scene.root.getNodeByName("skybox").shader = "basic"; 
-            return;
-        }
-        scene.root.getNodeByName("skybox").shader = "skybox"; 
-        var cubeMaptexture = GL.Texture.cubemapFromURL(url,{is_cross: 1, minFilter: gl.LINEAR_MIPMAP_LINEAR });
-        cubeMaptexture.bind(0);
-        renderer.textures["skybox"] = cubeMaptexture;  
     },
 
     setScale: function ()
     {
-        if(project._meter !== -1)
+        // clear first
+        APP.disableAllFeatures({no_msg: true});
+        
+        if(project._meter != -1)
             putCanvasMessage("La configuración de la escala ya ha sido realizada en este proyecto.", 5000, {type: "alert"});    
 
-        // clear first
-        APP.disableAllFeatures();
         testDialog({scale: true, hidelower: true}); // open dialog
         putCanvasMessage("Selecciona dos puntos, la linea recta que los une corresponderá a la escala indicada (por defecto 1 metro).", 5000);
         window.tmp = [];
@@ -389,15 +110,17 @@ var APP = {
             selectDialogOption($(this));
             $("#myCanvas").css("cursor", "crosshair");
 
-            context.onmousedown = function(e) 
+            GFX.context.onmousedown = function(e) 
             {
                 var result = vec3.create();
-                var ray = camera.getRay( e.canvasx, e.canvasy );
-                var node = scene.testRay( ray, result, undefined, 0x1, true );
-
+                var ray = GFX.camera.getRay( e.canvasx, e.canvasy );
+                var node = GFX.scene.testRay( ray, result, undefined, 0x1, true );
                 if (node) {
-                    var ind = new SceneIndication();
-                    ind = ind.ball(scene, result);
+                    var ind = new SceneIndication({
+                        scene: true,
+                        position: result,
+                        color: [0.3,0.8,0.1,1]
+                    });
                     tmp.push(result);
                     if(tmp.length == 2)
                         $("#end-dialog").click();
@@ -439,26 +162,30 @@ var APP = {
         $("#areas-table").find("tbody").empty();
 
         APP.rotation = true;
-        scene.root.getNodeByName("grid").flags.visible = true;
         $("#cardinal-axis").fadeIn();
         $('.sliders').fadeIn();
+        
+        // create grid
+        var rot_grid = new SceneIndication();
+        rot_grid = rot_grid.grid(5);
+        GFX.scene.root.addChild( rot_grid );
 
         putCanvasMessage("Usa los sliders o bien mantén pulsadas las teclas A, S y D mientras arrastras para rotar en cada eje.", 5000, {type: "help"});
 
-        context.onmousemove = function(e)
+        GFX.context.onmousemove = function(e)
         {
             mouse = [e.canvasx, gl.canvas.height - e.canvasy];
             if (e.dragging && e.leftButton)
                 if(keys[KEY_A])
-                    obj.rotate(-e.deltax * 0.1 * _dt, RD.UP);
+                    GFX.model.rotate(-e.deltax * 0.1 * _dt, RD.UP);
                 else if(keys[KEY_S])
-                    obj.rotate(-e.deltax * 0.1 * _dt, RD.FRONT);
+                    GFX.model.rotate(-e.deltax * 0.1 * _dt, RD.FRONT);
                 else if(keys[KEY_D])
-                    obj.rotate(-e.deltax * 0.1 * _dt, RD.LEFT);
+                    GFX.model.rotate(-e.deltax * 0.1 * _dt, RD.LEFT);
                 else{
-                        camera.orbit(-e.deltax * 0.1 * _dt, RD.UP,  camera._target);
-                        camera.orbit(-e.deltay * 0.1 * _dt, camera._right, camera._target );
-                    }
+                    GFX.camera.orbit(-e.deltax * 0.1 * _dt, RD.UP);
+                    GFX.camera.orbit(-e.deltay * 0.1 * _dt, GFX.camera._right);
+                }
         }
     },
     
@@ -466,15 +193,15 @@ var APP = {
     {
         if(APP.rotation){
             APP.rotation = false;
-            scene.root.getNodeByName("grid").flags.visible = false;
+            GFX.scene.root.getNodeByName("grid").delete(); // remove help grid
             revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
             
-            project.setRotations(obj._rotation);
+            project.setRotations(GFX.model._rotation);
             project.save();
             putCanvasMessage("¡Guardado! Actualizando miniatura del proyecto...", 4000);
             
              // upload project preview
-            var canvas = gl.snapshot(0, 0, renderer.canvas.width, renderer.canvas.height);
+            var canvas = gl.snapshot(0, 0, GFX.renderer.canvas.width, GFX.renderer.canvas.height);
 
             function on_complete( img_blob )
                 {
@@ -507,7 +234,6 @@ var APP = {
         // clear first and open dialog
         APP.disableAllFeatures();
         testDialog();
-        
         // save points
         window.tmp = [];
 
@@ -515,17 +241,19 @@ var APP = {
         {
             selectDialogOption($(this));
             $("#myCanvas").css("cursor", "crosshair");
-
-            context.onmousedown = function(e) 
+            GFX.context.onmousedown = function(e) 
             {
                 var result = vec3.create();
-                var ray = camera.getRay( e.canvasx, e.canvasy );
-                var node = scene.testRay( ray, result, undefined, 0x1, true );
+                var ray = GFX.camera.getRay( e.canvasx, e.canvasy );
+                var node = GFX.scene.testRay( ray, result, undefined, 0x1, true );
 
                 // set scene node if collision
                 if (node) {
-                    var ind = new SceneIndication();
-                    ind = ind.ball(scene, result);
+                    var ind = new SceneIndication({
+                        scene: true,
+                        position: result,
+                        color: [0.3,0.8,0.1,1]
+                    });
                     tmp.push(result);
                 }
                 // create line between points when possible
@@ -548,9 +276,9 @@ var APP = {
             distance /= project._meter;
             
             if(tmp.length == 2)
-                project.insertMeasure(camera, tmp, distance, "nueva_dist", {display: true, push: true});
+                project.insertMeasure(GFX.camera, tmp, distance, "nueva_dist", {display: true, push: true});
             else 
-                project.insertSegmentMeasure(camera, tmp, distance, "nuevo_segs", {display: true, push: true});
+                project.insertSegmentMeasure(GFX.camera, tmp, distance, "nuevo_segs", {display: true, push: true});
         });
         
         // begin with an option selected
@@ -579,21 +307,21 @@ var APP = {
             selectDialogOption($(this));
             $("#myCanvas").css("cursor", "crosshair");
 
-            context.onmousedown = function(e) 
+            GFX.context.onmousedown = function(e) 
             {
                 var result = vec3.create();
                 // normal depending on the type of area
                 var normal = area_type === PLANTA ? vec3.fromValues(0, 1, 0) : vec3.fromValues(1, 0, 0);
-                var ray = camera.getRay( e.canvasx, e.canvasy );
+                var ray = GFX.camera.getRay( e.canvasx, e.canvasy );
                 var node = null;
 
                 if(tmp.length)
                 {
-                    result = camera.getRayPlaneCollision( e.canvasx, e.canvasy, tmp[0], normal);
+                    result = GFX.camera.getRayPlaneCollision( e.canvasx, e.canvasy, tmp[0], normal);
                     node = true;
                 }
                 else
-                    node = scene.testRay( ray, result, undefined, 0x1, true );
+                    node = GFX.scene.testRay( ray, result, undefined, 0x1, true );
 
                 if(!node)
                     return;
@@ -607,19 +335,17 @@ var APP = {
                 }
                 tmp.push(result);
                 
-                if(tmp.length == 1)
-                {
-                    var ind = new SceneIndication();
-                    ind = ind.ball(scene, result, {depth_test: false});
-                    APP.addAreaBase(tmp[0], area_type); // create plane with first point only
-                }
-                // only when more than one to make the line between them
-                else if(tmp.length > 1)
-                {
-                    var ind = new SceneIndication();
-                    ind = ind.ball(scene, result, {depth_test: false});
+                if(tmp.length == 1) // create plane with first point only
+                    APP.addAreaBase(tmp[0], area_type);
+                else if(tmp.length > 1) // only when more than one to make the line between them
                     APP.addLine(tmp);
-                }
+                
+                var ind = new SceneIndication({
+                    scene: true,
+                    position: result,
+                    color: [0.3,0.8,0.1,1],
+//                        depth_test: false
+                });
             }
         });
 
@@ -631,6 +357,8 @@ var APP = {
             var points2D = [];
             var p2D = null;
             var points = tmp;
+            var adds = 0;
+            var subs = 0;
             
             APP.addLine(points);
 
@@ -641,9 +369,6 @@ var APP = {
                 p2D = index == 1 ? vec2.fromValues(points[i][0], points[i][2]) : vec2.fromValues(points[i][1], points[i][2]);
                 points2D.push(p2D);
             }
-
-            var adds = 0;
-            var subs = 0;
 
             for(var i = 0; i < points2D.length - 1; ++i)
             {
@@ -673,7 +398,7 @@ var APP = {
     {
         options = options || {};
         var vertices = [];
-        APP.destroyElements(scene.root.children, "config-tmp"); // clear last line
+        GFX.destroyElements(GFX.scene.root.children, "config-tmp"); // clear last line
         for(var i = 0; i < points.length; ++i)
         {
             vertices.push(points[i][0], points[i][1], points[i][2]);
@@ -682,7 +407,7 @@ var APP = {
         }
         
         var mesh = GL.Mesh.load({ vertices: vertices }); 
-        renderer.meshes["line"] = mesh;
+        GFX.renderer.meshes["line"] = mesh;
         var linea = new RD.SceneNode();
         linea.name = "line";
         linea.description = "config-tmp";
@@ -696,7 +421,7 @@ var APP = {
         if(options && options.desc)
             linea.description = options.desc;
         
-        scene.root.addChild(linea);        
+        GFX.scene.root.addChild(linea);        
     },
     
     addAreaBase: function(basePoint, areaType)
@@ -714,12 +439,12 @@ var APP = {
         plane.blend_mode = RD.BLEND_ALPHA;
         plane.flags.two_sided = true;
 
-        if(area_type === ALZADO)
+        if(areaType === ALZADO)
             plane.rotate(90 * DEG2RAD, RD.FRONT);
-        scene.root.addChild(plane);
+        GFX.scene.root.addChild(plane);
 
         var grid_mesh = GL.Mesh.grid({size:10});
-        renderer.meshes["grid"] = grid_mesh;
+        GFX.renderer.meshes["grid"] = grid_mesh;
 
         var grid = new RD.SceneNode({
             mesh: "grid",
@@ -733,7 +458,7 @@ var APP = {
 
         if(areaType === ALZADO)
             grid.rotate(90 * DEG2RAD, RD.FRONT);
-        scene.root.addChild(grid);  
+        GFX.scene.root.addChild(grid);  
     },
     
     renderMeasure: function(o)
@@ -744,7 +469,7 @@ var APP = {
     	var msr = null;
 
         // clear first
-        APP.destroyElements(scene.root.children, "config");// clear first
+        GFX.destroyElements(GFX.scene.root.children, "config");// clear first
         
         //get from project
         if(type == 'm')
@@ -767,7 +492,7 @@ var APP = {
             
             // ball render representation
             var ind = new SceneIndication();
-            ind = ind.ball(scene, points[i], {depth_test: false, type: "view"});    
+            ind = ind.ball(GFX.scene, points[i], {depth_test: false, type: "view"});    
         }    
         
         APP.addLine(points, {desc: "config"});
@@ -776,8 +501,8 @@ var APP = {
         // to look at with smooth efect
         if(msr.camera_position)
         {
-            camera.direction = msr.camera_position;
-            camera.smooth = true;    
+            GFX.camera.direction = msr.camera_position;
+            GFX.camera.smooth = true;    
         }
     },
 
@@ -798,25 +523,29 @@ var APP = {
         if(slider.id === "s3")
                 axis = RD.FRONT;
 
-        obj.rotate(to_rotate, axis);
+        GFX.model.rotate(to_rotate, axis);
         APP.value = slider.value;
     },
 
     disableAllFeatures: function (options)
     {
         options = options || {};
-        context.onmousedown = function(e) {};
+        GFX.context.onmousedown = function(e) {};
         
         APP.fadeAllTables(this.showing);
         APP.rotation = false;
-        scene.root.getNodeByName("grid").flags.visible = false;
         revealDOMElements([$("#cardinal-axis"), $('.sliders'), $(".sub-btns")], false);
-        APP.destroyElements(scene.root.children, "config");
-        APP.destroyElements(scene.root.children, "config-tmp");
+        GFX.destroyElements(GFX.scene.root.children, "config");
+        GFX.destroyElements(GFX.scene.root.children, "config-tmp");
         $("#measure-opt-btn").find("i").html("add_circle_outline");
         $("#myCanvas").css("cursor", "default");
         $(".draggable").remove();
         $("#cont-msg").empty();
+        
+        // remove helping grid
+        var grid = GFX.scene.root.getNodeByName("grid");
+        if(grid)
+            grid.destroy();
 
         //remove active classes
         $(".on-point").removeClass("on-point");
@@ -849,22 +578,5 @@ var APP = {
         list.push($('#measure-opt-btn'));
 
         revealDOMElements(list, false, {e: ""});
-    },
-    
-    goFullscreen: function()
-    {
-        renderer.gl.fullscreen()
-    },
-    
-    resize: function() 
-    {
-        context.canvas.width   = placer.clientWidth;
-        context.canvas.height  = placer.clientHeight;
-        context.viewport(0, 0, context.canvas.width, context.canvas.height);
-
-        if(camera)
-            camera.perspective(camera.fov, placer.clientWidth / placer.clientHeight, camera.near, camera.far);
-
-        console.log('Resize');
     }
 }

@@ -187,7 +187,7 @@ $("#capture-scene").click(function(){
     putCanvasMessage("Capturando...", 1500);
     
     // get final canvas
-    var canvas = gl.snapshot(0, 0, renderer.canvas.width, renderer.canvas.height);
+    var canvas = gl.snapshot(0, 0, GFX.renderer.canvas.width, GFX.renderer.canvas.height);
     
     function on_complete( img_blob )
 		{
@@ -227,10 +227,10 @@ $("#saveTextButton").click(function(e)
             this.color = [1, 0.3 + Math.sin(this.time*5), 0.3 + Math.sin(this.time*5), 1];
     }
     
-    setParent(obj, ind);
+    setParent(GFX.model, ind);
 
     // se anade a la lista de anotaciones del proyecto
-    project.insertAnotation(id, camera, APP.result, $("#message-text").val());
+    project.insertAnotation(id, GFX.camera, APP.result, $("#message-text").val());
     $("#message-text").val("")
 });
 
@@ -254,7 +254,7 @@ $("#delete-anot-btn").click(function() {
     }
     
     else if(confirm("¿Estas seguro?")){
-        project.deleteAllAnotations( obj );
+        project.deleteAllAnotations( GFX.model );
         putCanvasMessage("¡Borrado!", 3000);
     }
         
@@ -267,7 +267,7 @@ $("#delete-anot-btn").click(function() {
 $(".viz_on").click(function() 
 {
     APP.anot_visible = !APP.anot_visible;
-    APP.showElements(obj.children, APP.anot_visible);
+    APP.showElements(GFX.model.children, APP.anot_visible);
     
     var extra = APP.anot_visible === false ? "" : "_off";
     var tooltip = APP.anot_visible === false ? "Mostrar" : "Esconder";
