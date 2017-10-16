@@ -107,8 +107,9 @@ var GFX = {
         }
 
         //  skybox texture
-        var cubeMaptexture = GL.Texture.cubemapFromURL("data/cubemaps/skybox.png",{is_cross: 1, minFilter: gl.LINEAR_MIPMAP_LINEAR });
-        cubeMaptexture.bind(0);
+        this.renderer.default_cubemaptexture_settings = this.renderer.default_texture_settings;
+        this.renderer.default_cubemaptexture_settings.is_cross = 1;
+        var cubeMaptexture = GL.Texture.cubemapFromURL("data/cubemaps/skybox.png", this.renderer.default_cubemaptexture_settings);
         this.renderer.textures["skybox"] = cubeMaptexture;
         
         var skybox = new RD.SceneNode({
@@ -261,13 +262,13 @@ var GFX = {
     setCubeMap: function( url )
     {
         if(!url){
-            this.scene.root.getNodeByName("skybox").shader = "basic"; 
+            this.skybox.shader = "basic"; 
             return;
         }
-        this.scene.root.getNodeByName("skybox").shader = "skybox"; 
+        this.skybox.shader = "skybox"; 
         var cubeMaptexture = GL.Texture.cubemapFromURL(url,{is_cross: 1, minFilter: gl.LINEAR_MIPMAP_LINEAR });
-        cubeMaptexture.bind(0);
         this.renderer.textures["skybox"] = cubeMaptexture;  
+        cubeMaptexture.bind(0);
     },
     /*
     * resize method for canvas
@@ -275,6 +276,7 @@ var GFX = {
     resize: function() 
     {
         var that = GFX;
+        console.warn("resize");
         
         that.context.canvas.width   = that.placer.clientWidth;
         that.context.canvas.height  = that.placer.clientHeight;

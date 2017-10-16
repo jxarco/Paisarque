@@ -167,8 +167,8 @@ var APP = {
         
         // create grid
         var rot_grid = new SceneIndication();
-        rot_grid = rot_grid.grid(5);
-        GFX.scene.root.addChild( rot_grid );
+        rot_grid.grid(5);
+        GFX.scene.root.addChild( rot_grid.node );
 
         putCanvasMessage("Usa los sliders o bien mantén pulsadas las teclas A, S y D mientras arrastras para rotar en cada eje.", 5000, {type: "help"});
 

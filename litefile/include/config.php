@@ -2,7 +2,7 @@
 
 //Site info *************************
 define('HOST_URL','paisarque.upf.edu');
-define('MAIL_ADDRESS','melanie.torres@upf.com');
+define('MAIL_ADDRESS','paisarque@upf.edu');
 
 // SQL database *********************
 define('DB_NAME', 'paisarque'); //your database name

@@ -32,7 +32,7 @@
         </script>
     </head>
 
-    <body style="padding-bottom: 200px !important;">
+    <body style="padding-bottom: 180px !important;">
         <!-- Navbar -->
         <div class="w3-top">
           <div class="w3-bar w3-card-2">
@@ -146,11 +146,11 @@
                             <div class="w3-col m2 w3-center">
                                 <a class="btn tool-btn save" title="Guardar proyecto">
                                     <i class="material-icons">save</i>
-                                    <p class="info_hover_box">Guardar</p>
+                                    <p id="label-save-btn" class="info_hover_box">Guardar</p>
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
-                                <a onclick="GFX.goFullscreen();" class="btn tool-btn" title="Pantalla completa">
+                                <a onclick="GFX.goFullscreen();" class="btn tool-btn" title="Pantalla completa" id="fullscreen-btn">
                                     <i class="material-icons">fullscreen</i>
                                     <p class="info_hover_box" >100%</p>
                                 </a>
@@ -158,44 +158,43 @@
                             <div class="w3-col m2 w3-center">
                                 <a id="capture-scene" class="btn tool-btn" title="Captura de escena">
                                     <i class="material-icons">photo_camera</i>
-                                    <p class="info_hover_box">Capturar</p>
+                                    <p id="label-capture-btn" class="info_hover_box">Capturar</p>
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
-                                <a onclick="APP.go_orbit($(this));" class="btn tool-btn" title="Movimiento de cámara">
+                                <a onclick="APP.go_orbit($(this));" class="btn tool-btn" title="Movimiento de cámara" id="orbit-btn">
                                     <i class="material-icons">play_circle_outline</i>
-                                    <p class="info_hover_box">Orbitar</p>
+                                    <p id="label-orbit-btn" class="info_hover_box">Orbitar</p>
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
-                                <a onclick="APP.setRotation()" class="btn tool-btn" title="Aplicar rotaciones por defecto">
+                                <a onclick="APP.setRotation()" class="btn tool-btn" title="Aplicar rotaciones por defecto" id="rotations-btn">
                                     <i class="material-icons">3d_rotation</i>
-                                    <br>
-                                    <p class="info_hover_box">Rotaciones</p>
+                                    <p id="label-rot-btn" class="info_hover_box">Rotaciones</p>
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
-                                <a onclick="APP.setScale()" class="btn tool-btn" title="Configurar escala">
+                                <a onclick="APP.setScale()" class="btn tool-btn" title="Configurar escala" id="scale-btn">
                                     <i class="material-icons">tune</i>
-                                    <p class="info_hover_box">Escala</p>
+                                    <p id="label-scale-btn" class="info_hover_box">Escala</p>
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
                                 <a id="show_dt" class="btn tool-btn" title="Tabla de distancias">
                                     <i class="material-icons">remove</i>
-                                    <p class="info_hover_box">Distancias</p>
+                                    <p id="label-t1" class="info_hover_box">Distancias</p>
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
                                 <a id="show_dst" class="btn tool-btn" title="Tabla de distancias por segmentos">
                                     <i class="material-icons">linear_scale</i>
-                                    <p class="info_hover_box">Segmentos</p>
+                                    <p id="label-t2" class="info_hover_box">Segmentos</p>
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
                                 <a id="show_areat" class="btn tool-btn" title="Tabla de areas">
                                     <i class="material-icons">photo_size_select_small</i>
-                                    <p class="info_hover_box">Áreas</p>
+                                    <p id="label-t3" class="info_hover_box">Áreas</p>
                                 </a>
                             </div>
                             
@@ -207,8 +206,8 @@
                                  <thead>
                                     <tr>
                                         <th></th>
-                                        <th>Descripción</th>
-                                        <th>Distancia (m)</th>
+                                        <th class="table-th-description">Descripción</th>
+                                        <th>Dist. (m)</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -224,7 +223,7 @@
                                  <thead>
                                     <tr>
                                         <th></th>
-                                        <th>Descripción</th>
+                                        <th class="table-th-description">Descripción</th>
                                         <th>#S</th>
                                         <th>Dist. (m)</th>
                                         <th></th>
@@ -242,8 +241,8 @@
                                  <thead>
                                     <tr>
                                         <th></th>
-                                        <th>Descripción</th>
-                                        <th>Vista</th>
+                                        <th class="table-th-description">Descripción</th>
+                                        <th class="table-th-view">Vista</th>
                                         <th>m²</th>
                                         <th></th>
                                     </tr>
@@ -266,7 +265,7 @@
                             </div>
                             
                             <div class="sliders">
-                                <button title='Cancelar' style="margin-left: 40% !important;" onclick="APP.disableAllFeatures()" class='dialog-btn info'><i class='material-icons'>close</i></button>
+                                <button id="cancel-rotation-btn" title='Cancelar' onclick="APP.disableAllFeatures()" class='dialog-btn info'><i class='material-icons'>close</i></button>
                                 <div class="slider">
                                     <p style="color:black;">X </p>
                                     <input id="s1" type="range" value="0" step="0.01" min="-6.5" max="6.5">
@@ -280,7 +279,7 @@
                                     <input id="s3" type="range" value="0" step="0.01" min="-6.5" max="6.5">
                                 </div>
                                 
-                                <a title="Aplicar cambios" onclick="APP.applyRotation()" class="table-btn">
+                                <a title="Aplicar cambios" onclick="APP.applyRotation()" class="table-btn" id="apply-rotation-btn">
                                     Aplicar
                                 </a>
                             </div>
@@ -326,15 +325,15 @@
                             
                             <a class="btn tool-btn anot viz_on">
                                 <i class="material-icons">visibility_off</i>
-                                <p class="info_hover_box">Esconder</p>
+                                <p id="label-vis-anot" class="info_hover_box">Esconder</p>
                             </a>
                             <a onclick="APP.anotate(true)" class="btn tool-btn anot" id="actAnot">
                                 <i class="material-icons">create</i>
-                                <p class="info_hover_box">Crear</p>
+                                <p id="label-create-anot" class="info_hover_box">Crear</p>
                             </a>
                             <a onclick="APP.anotate(false)" id="desAnot" class="btn tool-btn anot nodisplay">
                                 <i class="material-icons">remove_circle</i>
-                                <p class="info_hover_box">No crear</p>
+                                <p id="label-nocreate-anot" class="info_hover_box">No crear</p>
                             </a>
                             
                             <div id="entire-anot-table">
@@ -342,7 +341,7 @@
                                     <thead>
                                         <tr>
                                         <th>#</th>
-                                        <th>Comentario</th>
+                                        <th class="table-th-description">Descripción</th>
                                         </tr>
                                     </thead>
                                     <tbody id="anotacion_tabla"></tbody>
@@ -352,11 +351,11 @@
                             <div id="deleting-div">
                                 <a class="btn tool-btn anot" id="delete-anot-btn">
                                     <i class="material-icons">delete</i>
-                                    <p class="info_hover_box">Todo</p>
+                                    <p id="label-deleteall-anot" class="info_hover_box">Todo</p>
                                 </a>
 
                                 <div id="drag-cont" ondrop="drop(event)" ondragleave="disallowDrop()" ondragover="allowDrop(event)">
-                                    Arrastra aquí: eliminar anotación
+                                    Arrastra aquí para eliminar anotación
                                 </div>
                             </div>
                             
