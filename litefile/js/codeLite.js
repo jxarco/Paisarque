@@ -78,6 +78,70 @@ function systemReady()
 		});
 	});
     
+    //FORGOT PASSWORD
+	var forgotpassword_button = Ladda.create( $(".form-forgot .forgotpasswordsend-button")[0] );
+	$(".form-forgot").submit( function(e) {
+		$(this).css("opacity",0.5);
+		forgotpassword_button.start();
+		var values = getFormValues(this);
+		e.preventDefault();
+        
+        var that = this;
+
+		//ask to send email
+		LiteFileServer.forgotPassword( values["username"], function( v, result ){
+			forgotpassword_button.stop();
+			$(".form-forgot").css("opacity",1);
+			bootbox.alert(result.msg);
+            
+            $(".modal-backdrop").css("z-index", "-1");
+            $(".modal-dialog").css("z-index", "10");
+            
+            $(that).trigger("reset");
+            
+		} , window.location.origin + window.location.pathname );
+	});
+
+	//RESET PASSWORD
+	var confirm_resetnewpassword_button = Ladda.create( $("#resetpassword-dialog .confirm-resetnewpassword-button")[0] );
+	$(".form-resetpass").submit( function(e) {
+
+		if(!session)
+			return;
+
+		$(this).css("opacity",0.5);
+		confirm_resetnewpassword_button.start();
+		var values = getFormValues(this);
+		console.log(values);
+		e.preventDefault();
+
+		session.setPassword( values["old_password"], values["new_password"], function( v, result ){
+			confirm_resetnewpassword_button.stop();
+			$(".form-forgot").css("opacity",1);
+			bootbox.alert(result.msg);
+		});
+	});
+
+	//CHANGE PASS
+	var confirm_changepassword_button = Ladda.create( $("#changepassword-dialog .confirm-changepassword-button")[0] );
+	$(".form-changepass").submit( function(e) {
+
+		if(!session)
+			return;
+
+		$(this).css("opacity",0.5);
+		confirm_changepassword_button.start();
+		var values = getFormValues(this);
+		console.log(values);
+		e.preventDefault();
+
+		session.setPassword( values["old_password"], values["new_password"], function( v, result ){
+			confirm_changepassword_button.stop();
+			$(".form-forgot").css("opacity",1);
+			bootbox.alert(result.msg);
+		});
+	});
+    
     
     if(session)
     {

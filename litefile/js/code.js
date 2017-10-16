@@ -1,35 +1,35 @@
-//var session = null;
-//var system_info = {};
-//var filesview_mode = "thumbnails";
-//var units = {};
-//var current_unit = "";
-//var current_folder = "";
-//var current_file_item = null;;
-//
-//
-////start up
-//$(".startup-dialog").show();
-//
-//
-//LiteFileServer.setup("", function(status, resp) {
-//	console.log("server checked");
-//	$(".startup-dialog").hide();
-//	if(status == 1)
-//	{
-//		system_info = resp.info;
-//		console.log("Server ready");
-//		systemReady();
-//	}
-//	else
-//	{
-//		console.warn("Server not ready");
-//		if(status == -10)
-//			$(".warning-dialog .content").html("LiteFileServer config file not configured, please, check the <strong>config.sample.php</strong> file in includes and after configure it change the name to <strong>config.php</strong>.");
-//		else
-//			$(".warning-dialog .content").html("LiteFileServer database not found, please run the <a href='install.php'>install.php</a>.");
-//		$(".warning-dialog").show();
-//	}
-//});
+var session = null;
+var system_info = {};
+var filesview_mode = "thumbnails";
+var units = {};
+var current_unit = "";
+var current_folder = "";
+var current_file_item = null;;
+
+
+//start up
+$(".startup-dialog").show();
+
+
+LiteFileServer.setup("", function(status, resp) {
+	console.log("server checked");
+	$(".startup-dialog").hide();
+	if(status == 1)
+	{
+		system_info = resp.info;
+		console.log("Server ready");
+		systemReady();
+	}
+	else
+	{
+		console.warn("Server not ready");
+		if(status == -10)
+			$(".warning-dialog .content").html("LiteFileServer config file not configured, please, check the <strong>config.sample.php</strong> file in includes and after configure it change the name to <strong>config.php</strong>.");
+		else
+			$(".warning-dialog .content").html("LiteFileServer database not found, please run the <a href='install.php'>install.php</a>.");
+		$(".warning-dialog").show();
+	}
+});
 
 function systemReady()
 {
