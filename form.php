@@ -21,7 +21,7 @@
         <!-- Navbar -->
         <div class="w3-top">
           <div class="w3-bar w3-card-2">
-            <a id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
+            <a onclick="loadContent('inicio')" id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
             <a onclick="setLanguage('en')" class="w3-bar-item w3-button w3-right w3-padding-large language">EN</a>
             <a onclick="setLanguage('cat')" class="w3-bar-item w3-button w3-right w3-padding-large language">CAT</a>
             <a onclick="setLanguage('es')" class="w3-bar-item w3-button w3-right w3-padding-large language">ES</a>
@@ -133,6 +133,7 @@
         <script type="text/javascript" src="js/extra/gl-matrix-min.js"></script>
         <script type="text/javascript" src="js/extra/litegl.js"></script>
         <script type="text/javascript" src="js/extra/rendeer.js"></script>
+        <script src="litefile/js/extra/ladda.min.js"></script>
         <script src="js/utils.js"></script>
         <script src="js/tools.js"></script>
         <script src="litefile/litefileserver.js"></script>

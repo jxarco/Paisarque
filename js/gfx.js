@@ -45,9 +45,22 @@ var GFX = {
             $("#placeholder").css("background-image", "none");
             $("#placeholder").css("cursor", "default");
             $('#myCanvas').css({"opacity": 0, "visibility": "visible"}).animate({"opacity": 1.0}, 1500);
-            putCanvasMessage("Puedes cancelar cualquier acción con la tecla ESC", 3500);
+            var msg = {
+                es: "Cancela cualquier acción con la tecla ESC",
+                cat: "Surt de qualsevol acció amb la tecla ESC",
+                en: "Cancel any action with ESC key"
+            }
+            putCanvasMessage(msg, 3500);
             if(rotaciones && !rotaciones.length)
-                putCanvasMessage("No hay rotaciones por defecto: créalas en Herramientas", 2500, {type: "error"}); 
+            {
+                var msg = {
+                    es: "No hay rotaciones por defecto",
+                    cat: "No hay rotacions per defecte",
+                    en: "No rotations by default"
+                }
+                putCanvasMessage(msg, 2500, {type: "error"}); 
+            }
+                
         }
         
         $("#placeholder").css("cursor", "wait");

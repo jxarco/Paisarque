@@ -656,16 +656,13 @@ Project.prototype.FROMJSON = function( data )
 */
 Project.prototype.save = function( overwrite, extra )
 {
-//    overwrite = overwrite || true;
-//    extra = extra || "";
-//    
-//    var project = this._user + "/" + this._id;
-//    
-//    if(!overwrite)
-//        project += extra;
+    var project_name = this._id;
+    
+    if(overwrite && extra.length)
+        project_name += extra;
     
     var o = {
-        "id": this._id,
+        "id": project_name,
         "descripcion": this._description,
         "autor": this._author,
         "lugar": this._location,
@@ -682,8 +679,6 @@ Project.prototype.save = function( overwrite, extra )
         }
     };
     
-//    console.log(JSON.stringify(o));
-    
     var on_complete = function(){
         console.log("saved");
     }
@@ -695,10 +690,9 @@ Project.prototype.save = function( overwrite, extra )
     /* 
     *   Upload configuration file as JSON
     */
-    var path = current_user + "/projects/" + this._id + ".json";
+    var path = current_user + "/projects/" + project_name + ".json";
     session.uploadFile( path, JSON.stringify(o), 0, on_complete, on_error);
 }
-
 
 /*  
 *   @method config
@@ -797,8 +791,6 @@ $('#coord-btn').click(function(e)
     
     if(project._auto_save)
         project.save();
-    else
-        putCanvasMessage("Recuerda guardar", 3000);
 });
 
 
@@ -810,8 +802,6 @@ $("#data-btn").click(function(){
     
     if(project._auto_save)
         project.save();
-    else
-        putCanvasMessage("Recuerda guardar", 3000);
 });
 
 

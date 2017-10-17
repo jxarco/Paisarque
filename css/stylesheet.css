@@ -38,6 +38,14 @@ body{
 content{
     margin: 0 auto;
 }
+.ladda-button{
+    width: 40% !important;
+    margin: 0 auto;
+}
+.form-control{
+    margin: 0 auto !important;
+    margin-top: 3px !important;
+}
 /*
 * header nav
 */

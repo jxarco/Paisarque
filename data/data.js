@@ -5,5 +5,8 @@ var DATA = {
         {src: "skybox2.png",    preview: "skybox2_preview.png"},
         {src: "skybox3.png",    preview: "skybox3_preview.png"},
         {src: "skybox4.png",    preview: "skybox4_preview.png"}
+    ],
+    scripts: [
+        'https://maps.googleapis.com/maps/api/js?key=AIzaSyDrcNsufDO4FEmzoCO9X63ru59CUvCe2YI&callback=initMap'
     ]
 };

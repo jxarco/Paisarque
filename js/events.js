@@ -184,7 +184,12 @@ $("#capture-scene").click(function(){
    
     // clear capturing box
     APP.disableAllFeatures({no_msg: true});
-    putCanvasMessage("Capturando...", 1500);
+    var msg = {
+        es: "Capturando escena...",
+        cat: "Capturant escena...",
+        en: "Taking snapshot..."
+    }
+    putCanvasMessage(msg, 1500);
     
     // get final canvas
     var canvas = gl.snapshot(0, 0, GFX.renderer.canvas.width, GFX.renderer.canvas.height);
@@ -196,11 +201,10 @@ $("#capture-scene").click(function(){
 			var img = new Image();
 			img.src = src;
             img.className = "download-image";
-            $("#capturing").append("<a href='"+url+"' download='screenshot.png' class='btn table-btn'>Descargar captura</a>");
-            $("#capturing").append("<a data-url='"+src+"' onclick='uploadBLOB($(this))' class='btn table-btn'>Añadir al proyecto</a>");
+            $("#capturing").append("<a href='"+url+"' download='screenshot.png' class='btn table-btn'>Download</a>");
+            $("#capturing").append("<a data-url='"+src+"' onclick='uploadBLOB($(this))' class='btn table-btn'>Add to project</a>");
 			$("#capturing").append( img );
-            $("#capturing").append("<a onclick='APP.disableAllFeatures()' class='btn table-btn'>Cancelar</a>").fadeIn();
-            putCanvasMessage("¡Capturado! Ahora puedes guardar la imagen o añadirla al proyecto.", 5000);
+            $("#capturing").append("<a onclick='APP.disableAllFeatures()' class='btn table-btn'>Cancel</a>").fadeIn();
 		}
     
     canvas.toBlob( on_complete, "image/png");
@@ -249,15 +253,17 @@ $("#delete-anot-btn").click(function() {
     
     if(!project.getAnnotations().length)
     {
-        putCanvasMessage("No hay anotaciones", 3000, {type: "error"});
+        var msg = {
+            es: "No hay anotaciones",
+            cat: "No hi ha cap anotació",
+            en: "No annotations to delete"
+        }
+        putCanvasMessage(msg, 3000, {type: "error"});
         return;
     }
     
-    else if(confirm("¿Estas seguro?")){
+    else if(confirm("¿Estas seguro?"))
         project.deleteAllAnotations( GFX.model );
-        putCanvasMessage("¡Borrado!", 3000);
-    }
-        
 });
 
 /*
@@ -269,8 +275,14 @@ $(".viz_on").click(function()
     APP.anot_visible = !APP.anot_visible;
     APP.showElements(GFX.model.children, APP.anot_visible);
     
+    var lang = localStorage.getItem("lang");
+    var options = {
+        _show: {es: "Mostrar", cat: "Mostrar", en: "Show"},
+        _hide: {es: "Esconder", cat: "Amagar", en: "Hide"},
+    }
+    
     var extra = APP.anot_visible === false ? "" : "_off";
-    var tooltip = APP.anot_visible === false ? "Mostrar" : "Esconder";
+    var tooltip = APP.anot_visible === false ? options["_show"][lang] : options["_hide"][lang];
     $(this).html( "<i class='material-icons'>visibility" + extra + "</i>" +
                 "<p class='info_hover_box'>" + tooltip + "</p>");
 });

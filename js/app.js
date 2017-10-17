@@ -99,42 +99,24 @@ var APP = {
         APP.disableAllFeatures({no_msg: true});
         
         if(project._meter != -1)
-            putCanvasMessage("La configuración de la escala ya ha sido realizada en este proyecto.", 5000, {type: "alert"});    
+        {
+            var msg = {
+                es: "La cofiguración de la escala ya se ha realizado antes",
+                cat: "L'escala ja ha sigut configurada abans",
+                en: "Scale set up before"
+            }
+            putCanvasMessage(msg, 5000, {type: "alert"});    
+        }
 
         testDialog({scale: true, hidelower: true}); // open dialog
-        putCanvasMessage("Selecciona dos puntos, la linea recta que los une corresponderá a la escala indicada (por defecto 1 metro).", 5000);
         window.tmp = [];
-
-        $("#add-dialog").click(function()
-        {
+        
+        $("#add-dialog").click(function(){
             selectDialogOption($(this));
-            $("#myCanvas").css("cursor", "crosshair");
-
-            GFX.context.onmousedown = function(e) 
-            {
-                var result = vec3.create();
-                var ray = GFX.camera.getRay( e.canvasx, e.canvasy );
-                var node = GFX.scene.testRay( ray, result, undefined, 0x1, true );
-                if (node) {
-                    var ind = new SceneIndication({
-                        scene: true,
-                        position: result,
-                        color: [0.3,0.8,0.1,1]
-                    });
-                    tmp.push(result);
-                    if(tmp.length == 2)
-                        $("#end-dialog").click();
-                }
-            }
-        });
-
-        $("#end-dialog").click(function()
-        {
-            var scale = parseFloat($("#scale-input").val()) || 1;
-            var relation = vec3.dist(tmp[0], tmp[1]) / scale;
-            project.update_meter(relation);
-            APP.disableAllFeatures();
-        });
+            APP.set3DPoint();
+            if(tmp.length == 2)
+                 applyScale(tmp);
+        }); 
         
         $("#help-dialog").click(function(){
             if($(".dialog-option.help").css("display") == "none")
@@ -144,6 +126,34 @@ var APP = {
         });
         
         $("#add-dialog").click();
+    },
+    
+    set3DPoint: function()
+    {
+        $("#myCanvas").css("cursor", "crosshair");
+
+        GFX.context.onmousedown = function(e) 
+        {
+            var result = vec3.create();
+            var ray = GFX.camera.getRay( e.canvasx, e.canvasy );
+            var node = GFX.scene.testRay( ray, result, undefined, 0x1, true );
+            if (node) {
+                var ind = new SceneIndication({
+                    scene: true,
+                    position: result,
+                    color: [0.3,0.8,0.1,1]
+                });
+                tmp.push(result);
+            }
+        }  
+    },
+    
+    applyScale: function(point_list)
+    {
+        var scale = parseFloat($("#scale-input").val()) || 1;
+        var relation = vec3.dist(point_list[0], point_list[1]) / scale;
+        project.update_meter(relation);
+        APP.disableAllFeatures();  // disabling here the mousedown event
     },
     
     setRotation: function ()
@@ -170,7 +180,12 @@ var APP = {
         rot_grid.grid(5);
         GFX.scene.root.addChild( rot_grid.node );
 
-        putCanvasMessage("Usa los sliders o bien mantén pulsadas las teclas A, S y D mientras arrastras para rotar en cada eje.", 5000, {type: "help"});
+        var msg = {
+            es: "Usa los sliders o las teclas A, S, D",
+            cat: "Utilitza els sliders o les tecles A, S, D",
+            en: "Use the sliders or A, S, D keys"
+        }
+        putCanvasMessage(msg, 5000, {type: "help"});
 
         GFX.context.onmousemove = function(e)
         {
@@ -198,7 +213,12 @@ var APP = {
             
             project.setRotations(GFX.model._rotation);
             project.save();
-            putCanvasMessage("¡Guardado! Actualizando miniatura del proyecto...", 4000);
+            var msg = {
+                es: "¡Guardado!",
+                cat: "Desat!",
+                en: "Saved!"
+            }
+            putCanvasMessage(msg, 4000, {type: "response"});
             
              // upload project preview
             var canvas = gl.snapshot(0, 0, GFX.renderer.canvas.width, GFX.renderer.canvas.height);
@@ -228,7 +248,12 @@ var APP = {
     calcDistance: function ()
     {
         if(project._meter == -1){
-            putCanvasMessage("Primero configura la escala.", 3000, {type: "error"});
+            var msg = {
+                es: "Falta configurar la escala",
+                cat: "Primer has de configurar l'escala",
+                en: "Set up the scale first"
+            }
+            putCanvasMessage(msg, 3000, {type: "error"});
             return;
         }
         // clear first and open dialog
@@ -288,7 +313,12 @@ var APP = {
     calcArea: function (area_type)
     {
         if(project._meter == -1){
-            putCanvasMessage("Primero configura la escala.", 3000, {type: "error"});
+            var msg = {
+                es: "Falta configurar la escala",
+                cat: "Primer has de configurar l'escala",
+                en: "Set up the scale first"
+            }
+            putCanvasMessage(msg, 3000, {type: "error"});
             return;
         }
 
@@ -296,9 +326,12 @@ var APP = {
         APP.disableAllFeatures();
         testDialog();
 
-        putCanvasMessage("Añade puntos sobre el plano.", 4000);
-        putCanvasMessage("El último punto debe coincidir con el primero.", 5000, {type: "alert"});
-
+        var msg = {
+            es: "Añade puntos sobre el plano - El último debe coincidir el primero",
+            cat: "Afegeix punts sobre el plà - El primer ha de coincidir amb l'últim",
+            en: "Add points over the plane - First has to be same as last"
+        }
+        putCanvasMessage(msg, 4000);
         window.tmp = [];
         var index = area_type === PLANTA ? 1 : 2;
 
@@ -380,12 +413,9 @@ var APP = {
 
             var area = Math.abs(0.5 * (adds - subs));
             area /= Math.pow(project._meter, 2);
-            var msg = "AREA: " + area;
-            putCanvasMessage(msg, 5000, {type: "response"});
 
             // passing 3d points list
             project.insertArea(points, area, index, "nueva_area", {display: true, push: true});
-
             //clear all
             APP.disableAllFeatures();
         });
@@ -557,7 +587,11 @@ var APP = {
         if(options.no_msg)
             return;
         
-        var msg = options.msg || "Hecho";
+        var msg = options.msg || {
+            es: "Hecho",
+            cat: "Fet",
+            en: "Done"
+        };
         var ms = options.ms || 1250;
         putCanvasMessage(msg, ms);
     },

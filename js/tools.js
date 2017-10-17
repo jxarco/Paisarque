@@ -76,21 +76,25 @@ function loadJSON()
             {
                 // GET PROJECT DATA
                 APP.parseJSON(data);
-                // LOAD ALWAYS AFTER GETTING DATA
-                if(loadMapsAPI)
-                    loadMapsAPI();
                 // get data from DATA variable and fill any gap
                 if(parseDATA)
-                    parseDATA(0, null);
+                    parseDATA(null);
             }
         }
     });
 }
 
-function parseDATA(active, options)
+function parseDATA(options)
 {
-    if(!DATA || active)
+    if(!DATA)
         return 0;
+    
+    // load scripts
+    for(var i in DATA.scripts)
+    {
+        var o = DATA.scripts[i];
+        addScript(o);
+    }
     
     // load by default cubemaps   
     for(var i in DATA.cubemaps)
@@ -112,11 +116,6 @@ function parseDATA(active, options)
             GFX.setCubeMap(url);
         });
     }
-    
-    if(!options)
-        return 0;
-    
-    //
 }
 
 function loadProjectsTable(filters)
@@ -132,8 +131,6 @@ function loadProjectsTable(filters)
             },
         success: function(data){
             data = JSON.parse(data);
-//            console.log(data);
-//            console.log(filters);
             // do stuff
             var container = $("#tableInicio");
             // clean cont
@@ -206,31 +203,7 @@ function loadProjectsTable(filters)
 
 function deleteProject(user, project)
 {
-    if(!project.length)
-        return;
     
-    var r = confirm("Are you sure you want to delete this project?");
-    if(!r)
-    {
-        delete_project_active = false;  
-        return;
-    }
-        
-    var project_to_delete = [
-        "../../data/" + user + "/" + project + ".json",
-        "../../data/" + user + "/" + project,
-    ]
-    
-    $.ajax({
-      url: 'server/php/deleteFile.php',
-      data: {'file' : project_to_delete[0],
-            'folder': project_to_delete[1],
-            },
-      success: function (response) {
-          document.location.href = 'inicio?user=' + user;
-          delete_project_active = false;
-      }
-    });
 };
 
 function loadContent(url, id)
@@ -259,11 +232,6 @@ function loadContent(url, id)
 
     // go new location
     document.location.href = url;        
-}
-
-function loadMapsAPI()
-{
-    addScript( 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDrcNsufDO4FEmzoCO9X63ru59CUvCe2YI&callback=initMap' );
 }
 
 function initMap(lat, lng) 
@@ -528,14 +496,15 @@ function lookAtAnot(camera, position_camera, target_camera, up_camera, anot_id)
 * @param options {object} color, background-color, font-size 
 */
 var last_message_id = 999;
-function putCanvasMessage(text, ms, options)
+function putCanvasMessage(msg, ms, options)
 {
     var options = options || {};
-    
     last_message_id++;
+    var lang = localStorage.getItem("lang");
+        
     $("#cont-msg").append(
     "<div class='messages' id='" + (last_message_id) + "'>" + 
-        text + 
+        msg[lang] + 
     "</div>"
         );
     
