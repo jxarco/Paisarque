@@ -35,7 +35,7 @@
             <a onclick="setLanguage('es')" class="w3-bar-item w3-button w3-right w3-padding-large language">ES</a>
           </div>
         </div>
-        
+        <br>
         <content class="container">
             <div class="row" style="margin-top: 50px;">
                 <div class="col-md-3 col-md-offset-1">
@@ -68,26 +68,24 @@
                                 <input name="username" type="text" id="inputEmail" class="form-control index" placeholder="Usuario" value="" required autofocus>
                                 <input name="password" type="password" id="inputPassword" class="form-control index" placeholder="Contraseña" value="" required>
                                 <br>
-                                <button id="signin-btn" class="submit-button btn btn-lg btn-primary btn-block ladda-button" data-style="slide-up" data-color="green" type="submit"><span class="ladda-label">Sign in</span><span class="ladda-spinner"></span></button>
-                                
+                                <button id="signin-btn" class="submit-button btn btn-lg btn-primary btn-block ladda-button" data-style="slide-up" data-color="green" type="submit"><span class="ladda-label">Iniciar sesión</span><span class="ladda-spinner"></span></button>
+                                <button class="btn btn-lg btn-primary btn-block ladda-button new-account" data-style="slide-up" data-color="purple" onclick="location.href='form.php'"><span class="ladda-label">Registrarse</span><span class="ladda-spinner"></span></button>
                             </form><br>         
                             
-                            <button class="btn btn-lg btn-primary btn-block ladda-button new-account" data-style="slide-up" data-color="purple" onclick="location.href='form.php'"><span class="ladda-label">Registrarse</span><span class="ladda-spinner"></span></button>
-                            
-                            <button class="btn inicio btn-block slide-tab" data-target='#forgotpassword-dialog'><span class="ladda-label">Tengo problemas para iniciar sesión</span><span class="ladda-spinner"></span></button>
+                            <button id="have-problem-login" class="btn inicio btn-block slide-tab" data-target='#forgotpassword-dialog'><span class="ladda-label">Tengo problemas para iniciar sesión</span><span class="ladda-spinner"></span></button>
                             
                             <div id="forgotpassword-dialog" style="border: 1px solid rgb(200, 200, 200); padding: 20px; border-radius: 2px; display: none;">
                                   <form class="form-forgot">
-                                    <h5 class="form-forgot-heading">¿Has olvidado la contraseña?</h5>
+                                    <p class="form-forgot-heading">¿Has olvidado la contraseña?</p>
                                     <input name="username" type="text" id="inputEmailPassword" class="form-control" placeholder="Email" value="" required autofocus>
-                                    <button class="forgotpasswordsend-button btn inicio btn-block" type="submit"><span class="ladda-label">Enviar reset mail</span></button>
+                                    <br>
+                                    <button class="forgotpasswordsend-button btn btn-lg btn-primary btn-block ladda-button" data-style="slide-up" data-color="blue" type="submit"><span class="ladda-label">Enviar mail de reset</span><span class="ladda-spinner"></span></button>
                                   </form>
                             </div>
                         </div>
-                        
                     </div>
                     
-                    <p style="margin-left: calc(50% - 50px);" id="bbva_mark">Financiado por</p>
+                    <p id="bbva_mark">Financiado por</p>
                     <img src="data/assets/bbva.png" class="img-responsive" style="margin-left: calc(50% - 75px); width: 150px;">
                     <br>
                 </div>

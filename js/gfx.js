@@ -293,7 +293,7 @@ var GFX = {
     resize: function() 
     {
         var that = GFX;
-        console.warn("resize");
+        console.log("resize");
         
         that.context.canvas.width   = that.placer.clientWidth;
         that.context.canvas.height  = that.placer.clientHeight;

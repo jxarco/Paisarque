@@ -14,12 +14,12 @@ $(".startup-dialog").show();
 $("#loginForm").hide();
 
 LiteFileServer.setup("", function(status, resp) {
-    console.warn("Server checked");
+//    console.log("Server checked");
     $(".startup-dialog").hide();
     if(status == 1)
     {
         system_info = resp.info;
-        console.warn("Server ready");
+        console.log("Server ready");
         systemReady();
 
         if(localStorage.session && session === null)

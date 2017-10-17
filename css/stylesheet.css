@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300');
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans|Pavanam');
 @import url('https://fonts.googleapis.com/css?family=Titillium+Web');
+@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono');
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 @import url('https://fonts.googleapis.com/css?family=Dosis');
 @import url("https://fonts.googleapis.com/css?family=Lato");
@@ -166,6 +167,9 @@ h1, h2, h3, h4, h5, h6{
 .image-box{
     box-shadow: 0 3px 10px rgba(40, 40, 40, 0.3);
 }
+#bbva_mark{
+    margin-left: calc(50% - 50px);
+}
 /*
 * inicio.html
 */
@@ -173,7 +177,7 @@ h1, h2, h3, h4, h5, h6{
     width: 100%;
     padding: 5px;
     margin: 5px;
-    background: grey;
+    background: rgb(170, 170, 170);
     color: white !important;
     border-radius: 5px;
     border: none;
@@ -500,7 +504,7 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
     margin-top: 4px;
     margin-right: 4px;
     padding: 5px;
-    background: grey;
+    background: rgb(170, 170, 170);
     color: white !important;
     border-radius: 5px;
     border: none;
@@ -549,7 +553,7 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
     height: auto;
     width: 100%;
     padding: 5px;
-    background: grey;
+    background: rgb(170, 170, 170);
     color: white !important;
     border-radius: 5px;
     border: none;
@@ -560,7 +564,7 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 #mod_location, #mod_author{
     width: 100%;
     padding: 5px;
-    background: grey;
+    background: rgb(170, 170, 170);
     color: white !important;
     border-radius: 5px;
     border: none;
@@ -991,7 +995,7 @@ a:hover{
     width: 40%;  
     min-width: 205px;  
     padding: 5px;
-    background: grey;
+    background: rgb(170, 170, 170);
     color: white !important;
     border-radius: 5px;
     border: none;
@@ -1008,12 +1012,22 @@ a:hover{
     margin-top: 10px;
 }
 .note {
+    width: calc(25% - 12px);
+    overflow-y: scroll;
+    height: 150px;
     position: relative;
     padding: 1em 1.5em;
+    margin-left: 4px;
     color: #333;
     background: #fff;
-    overflow: hidden;
+    overflow: scroll;
     border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+    font-size: 15px;
+    font-family: 'Ubuntu Mono', monospace;
+    text-align: left;
+}
+.note::-webkit-scrollbar {
+    display: none;
 }
 .note:before {
   content: "";
