@@ -87,6 +87,8 @@ function systemReady()
 		e.preventDefault();
         
         var that = this;
+        
+        var redirect_url = window.location.pathname.replace("index", "forgot_pass");
 
 		//ask to send email
 		LiteFileServer.forgotPassword( values["username"], function( v, result ){
@@ -99,7 +101,7 @@ function systemReady()
             
             $(that).trigger("reset");
             
-		} , window.location.origin + window.location.pathname );
+		}, redirect_url );
 	});
 
 	//RESET PASSWORD

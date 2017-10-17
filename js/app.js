@@ -163,7 +163,7 @@ var APP = {
                 return;
 
         // clear first
-        APP.disableAllFeatures();
+        APP.disableAllFeatures({no_msg: true});
         project._measures = [];
         project._segments = [];
         project._areas = [];
@@ -172,8 +172,12 @@ var APP = {
         $("#areas-table").find("tbody").empty();
 
         APP.rotation = true;
-        $("#cardinal-axis").fadeIn();
-        $('.sliders').fadeIn();
+        revealDOMElements([$("#cardinal-axis"), $('.sliders')], true)
+        
+        // create grid
+        var rot_grid = new SceneIndication();
+        rot_grid.grid(5);
+        GFX.scene.root.addChild( rot_grid.node );
         
         // create grid
         var rot_grid = new SceneIndication();
@@ -208,7 +212,8 @@ var APP = {
     {
         if(APP.rotation){
             APP.rotation = false;
-            GFX.scene.root.getNodeByName("grid").delete(); // remove help grid
+            for(var i = 0, node; node = GFX.scene.root.getNodesByName("grid")[i]; i++)
+                node.delete(); // remove help grid
             revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
             
             project.setRotations(GFX.model._rotation);
@@ -222,25 +227,23 @@ var APP = {
             
              // upload project preview
             var canvas = gl.snapshot(0, 0, GFX.renderer.canvas.width, GFX.renderer.canvas.height);
-
             function on_complete( img_blob )
-                {
-                    var url = canvas.toDataURL();
-                    var path = "../../litefile/files/" + current_user + "/projects/" + project._id + "/" + "preview.png";
+            {
+                var url = canvas.toDataURL();
+                var path = "../../litefile/files/" + current_user + "/projects/" + project._id + "/" + "preview.png";
 
-                    $.ajax({
-                        type: "POST",
-                        url: 'server/php/uploadURL.php',
-                        data: {
-                            'url' : url,
-                            'path' : path
-                            },
-                        success: on_success = function(){
-                            console.log("done");
-                        }
-                    });
-                }
-
+                $.ajax({
+                    type: "POST",
+                    url: 'server/php/uploadURL.php',
+                    data: {
+                        'url' : url,
+                        'path' : path
+                        },
+                    success: on_success = function(){
+                        console.log("done");
+                    }
+                });
+            }
             canvas.toBlob( on_complete, "image/png");
         }
     },

@@ -461,6 +461,25 @@ $(function() {
     });
 });
 
+$("#formForgotPassword").on('submit', function(e)
+{
+    e.preventDefault();
+    var values = getFormValues(this);
+    
+    LiteFileServer.login( QueryString["email"], QueryString["pass"], function(session, result){
+        if( session.status == LiteFileServer.LOGGED )
+        {
+            onLoggedIn(session);
+            session.setPassword(QueryString["pass"], values["password"], function(){
+                $("#tools-forgot-password").hide();
+                $("#content").append("<h3>Password changed</h3>")
+            });
+        }
+        else
+            bootbox.alert(result.msg);
+    });	
+});
+
 $("#formUploadProject").on('submit', function(e)
 {
     console.log("preparing to upload project...");
