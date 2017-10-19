@@ -501,6 +501,7 @@ function putCanvasMessage(msg, ms, options)
     var options = options || {};
     last_message_id++;
     var lang = localStorage.getItem("lang");
+    var text = msg[lang] ? msg[lang] : msg["es"];
         
     $("#cont-msg").append(
     "<div class='messages' id='" + (last_message_id) + "'>" + 

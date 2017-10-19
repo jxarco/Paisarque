@@ -72,7 +72,6 @@ var APP = {
             $("#actAnot").css('opacity', '1');
             GFX.context.onmousedown = function(e) {}
         }
-
     },
     
     showElements: function (elements, flag)
@@ -91,69 +90,6 @@ var APP = {
             element.find("i").html("play_circle_outline");
             element.removeClass("pressed");
         }
-    },
-
-    setScale: function ()
-    {
-        // clear first
-        APP.disableAllFeatures({no_msg: true});
-        
-        if(project._meter != -1)
-        {
-            var msg = {
-                es: "La cofiguración de la escala ya se ha realizado antes",
-                cat: "L'escala ja ha sigut configurada abans",
-                en: "Scale set up before"
-            }
-            putCanvasMessage(msg, 5000, {type: "alert"});    
-        }
-
-        testDialog({scale: true, hidelower: true}); // open dialog
-        window.tmp = [];
-        
-        $("#add-dialog").click(function(){
-            selectDialogOption($(this));
-            APP.set3DPoint();
-            if(tmp.length == 2)
-                 applyScale(tmp);
-        }); 
-        
-        $("#help-dialog").click(function(){
-            if($(".dialog-option.help").css("display") == "none")
-                $(".dialog-option.help").fadeIn();
-            else
-                $(".dialog-option.help").fadeOut();
-        });
-        
-        $("#add-dialog").click();
-    },
-    
-    set3DPoint: function()
-    {
-        $("#myCanvas").css("cursor", "crosshair");
-
-        GFX.context.onmousedown = function(e) 
-        {
-            var result = vec3.create();
-            var ray = GFX.camera.getRay( e.canvasx, e.canvasy );
-            var node = GFX.scene.testRay( ray, result, undefined, 0x1, true );
-            if (node) {
-                var ind = new SceneIndication({
-                    scene: true,
-                    position: result,
-                    color: [0.3,0.8,0.1,1]
-                });
-                tmp.push(result);
-            }
-        }  
-    },
-    
-    applyScale: function(point_list)
-    {
-        var scale = parseFloat($("#scale-input").val()) || 1;
-        var relation = vec3.dist(point_list[0], point_list[1]) / scale;
-        project.update_meter(relation);
-        APP.disableAllFeatures();  // disabling here the mousedown event
     },
     
     setRotation: function ()
@@ -247,9 +183,213 @@ var APP = {
             canvas.toBlob( on_complete, "image/png");
         }
     },
+
+    setScale: function ()
+    {
+        // clear first
+        APP.disableAllFeatures({no_msg: true});
+        
+        if(project._meter != -1)
+        {
+            var msg = {
+                es: "La cofiguración de la escala ya se ha realizado antes",
+                cat: "L'escala ja ha sigut configurada abans",
+                en: "Scale set up before"
+            }
+            putCanvasMessage(msg, 5000, {type: "alert"});    
+        }
+
+        testDialog({scale: true, hidelower: true}); // open dialog
+        window.tmp = [];
+        
+        $("#add-dialog").click(function(){
+            selectDialogOption($(this));
+            var on_complete = function(){
+                if(tmp.length == 2)
+                    applyScale(tmp);
+            };
+            APP.set3DPoint(on_complete);
+        }); 
+        $("#help-dialog").click(function(){
+            if($(".dialog-option.help").css("display") == "none")
+                $(".dialog-option.help").fadeIn();
+            else
+                $(".dialog-option.help").fadeOut();
+        });
+        $("#add-dialog").click();
+    },
+    
+    applyScale: function( point_list )
+    {
+        var scale = parseFloat($("#scale-input").val()) || 1;
+        var relation = vec3.dist(point_list[0], point_list[1]) / scale;
+        project.update_meter(relation);
+        APP.disableAllFeatures();  // disabling here the mousedown event
+    },
+    
+    set3DPoint: function( on_complete )
+    {
+        $("#myCanvas").css("cursor", "crosshair");
+
+        GFX.context.onmousedown = function(e) 
+        {
+            var result = vec3.create();
+            var ray = GFX.camera.getRay( e.canvasx, e.canvasy );
+            var node = GFX.scene.testRay( ray, result, undefined, 0x1, true );
+            if (node) {
+                var ind = new SceneIndication({
+                    scene: true,
+                    position: result,
+                    color: [0.3,0.8,0.1,1]
+                });
+                tmp.push(result);
+            }
+            
+            if(on_complete)
+                on_complete();
+        }  
+    },
+    
+    set3DArea: function( area_type, on_complete )
+    {
+        $("#myCanvas").css("cursor", "crosshair");
+        
+        GFX.context.onmousedown = function(e) 
+        {
+            // normal depending on the type of area
+            var normal_top = vec3.fromValues(0, 1, 0);
+            var normal_front = vec3.fromValues(0, 1, 0);
+            var ray = GFX.camera.getRay( e.canvasx, e.canvasy );
+            var result = vec3.create();
+
+            if(tmp.length)
+            {
+                var normal = area_type ? normal_front : normal_top;
+                result = GFX.camera.getRayPlaneCollision( e.canvasx, e.canvasy, tmp[0], normal);
+                // adjust to same point if first point is too close
+                if(!result)
+                    return;
+                // here, result is something good
+                if(vec3.dist(tmp[0], result) < 2)
+                    result = tmp[0];            
+            }
+            else
+                if(!GFX.scene.testRay( ray, result, undefined, 0x1, true ))
+                    return;
+                
+            tmp.push(result);
+
+            if(tmp.length == 1) // create plane with first point only
+                APP.addAreaBase(tmp[0], area_type);
+            else if(tmp.length > 1) // only when more than one to make the line between them
+                APP.addLine(tmp);
+
+            var ind = new SceneIndication({
+                position: result,
+                color: [0.3,0.8,0.1,1],
+            });
+
+            var plane = GFX.scene.root.getNodeByName("area-plane");
+            setParent(plane, ind.node);
+            
+            if(on_complete)
+                on_complete();
+        }  
+    },
+    
+    createDistance: function(point_list, on_complete)
+    {
+        if(point_list.length < 2) 
+            return;
+
+        APP.disableAllFeatures(); //clear all
+
+        var distance = 0; // add all distances
+        for(var i = 0; i < point_list.length - 1; ++i)
+            distance += vec3.dist(point_list[i], point_list[i+1]);
+
+        distance /= project._meter;
+
+        if(point_list.length == 2)
+            project.insertMeasure(GFX.camera, point_list, distance, "nueva_dist", project._default_measure_options);
+        else 
+            project.insertSegmentMeasure(GFX.camera, point_list, distance, "nuevo_segs", project._default_measure_options);  
+    },
+    
+    createArea: function(point_list, index)
+    {
+        var points2D = [];
+        var p2D = null;
+        var adds = 0, subs = 0;
+
+        APP.addLine(point_list);
+
+        for(var i = 0; i < point_list.length; ++i)
+        {
+            // planta --> index = 1
+            // alzado --> index = 2
+            p2D = index == 1 ? vec2.fromValues(point_list[i][0], point_list[i][2]) : vec2.fromValues(point_list[i][1], point_list[i][2]);
+            points2D.push(p2D);
+        }
+
+        for(var i = 0; i < points2D.length - 1; ++i)
+        {
+            var current = points2D[i];
+            var next = points2D[i+1];
+            adds += current[0] * next[1];
+            subs += current[1] * next[0];
+        }
+
+        var area = Math.abs(0.5 * (adds - subs));
+        area /= Math.pow(project._meter, 2);
+
+        // passing 3d points list
+        project.insertArea(point_list, area, index, "nueva_area", project._default_measure_options);
+        //clear all
+        APP.disableAllFeatures();  
+    },
+    
+    CREATE_THIS_AREA: function(point_list)
+    {
+        var aux_list = [];
+        
+        // rotate plane to easy calculation
+        var plane = GFX.scene.root.getNodeByName("area-plane");
+        plane._rotation = [0, 0, 0, 1];
+        plane.updateMatrices();
+        // get points in world space
+        // child_local = 1 / parent * child_world
+        // child_world = parent * child_local
+        for(var i = 0, node; node = plane.children[i], ++i){
+            mat4.multiply( node._global_matrix, node._global_matrix, plane._global_matrix );
+            aux_list.push(node._position);
+        }
+            
+        var left = 0, right = 0, points2D = [];
+
+        for(var i = 0; i < aux_list.length; ++i)
+            points2D.push(vec2.fromValues(aux_list[i][0], aux_list[i][2]));
+
+        for(var i = 0; i < points2D.length - 1; ++i)
+        {
+            var current = points2D[i];
+            var next = points2D[i+1];
+            left += current[0] * next[1];
+            right += current[1] * next[0];
+        }
+
+        var area = Math.abs(0.5 * (left - right));
+        area /= Math.pow(project._meter, 2);
+
+        // passing 3d points list
+        project.insertArea(point_list, area, index, "nueva_area", project._default_measure_options);
+    },
     
     calcDistance: function ()
     {
+        // clear first
+        APP.disableAllFeatures({no_msg: true}); 
+        
         if(project._meter == -1){
             var msg = {
                 es: "Falta configurar la escala",
@@ -259,62 +399,32 @@ var APP = {
             putCanvasMessage(msg, 3000, {type: "error"});
             return;
         }
-        // clear first and open dialog
-        APP.disableAllFeatures();
-        testDialog();
-        // save points
-        window.tmp = [];
+        
+        testDialog();       // open tools panel
+        window.tmp = [];    // save points
 
         $("#add-dialog").click(function()
         {
             selectDialogOption($(this));
-            $("#myCanvas").css("cursor", "crosshair");
-            GFX.context.onmousedown = function(e) 
-            {
-                var result = vec3.create();
-                var ray = GFX.camera.getRay( e.canvasx, e.canvasy );
-                var node = GFX.scene.testRay( ray, result, undefined, 0x1, true );
-
-                // set scene node if collision
-                if (node) {
-                    var ind = new SceneIndication({
-                        scene: true,
-                        position: result,
-                        color: [0.3,0.8,0.1,1]
-                    });
-                    tmp.push(result);
-                }
+            var on_complete = function(){
                 // create line between points when possible
                 if(tmp.length > 1)
                     APP.addLine(tmp);
-            }
+            };
+            APP.set3DPoint(on_complete);
         });
-
         $("#end-dialog").click(function(){
-
-            if(tmp.length < 2) 
-                return;
-
-            APP.disableAllFeatures(); //clear all
-            
-            var distance = 0; // add all distances
-            for(var i = 0; i < tmp.length - 1; ++i)
-                distance += vec3.dist(tmp[i], tmp[i+1]);
-            
-            distance /= project._meter;
-            
-            if(tmp.length == 2)
-                project.insertMeasure(GFX.camera, tmp, distance, "nueva_dist", {display: true, push: true});
-            else 
-                project.insertSegmentMeasure(GFX.camera, tmp, distance, "nuevo_segs", {display: true, push: true});
+            APP.createDistance(tmp);
         });
-        
         // begin with an option selected
         $("#add-dialog").click();
     },
 
-    calcArea: function (area_type)
+    calcArea: function ( area_type )
     {
+        // clear first
+        APP.disableAllFeatures({no_msg: true}); 
+
         if(project._meter == -1){
             var msg = {
                 es: "Falta configurar la escala",
@@ -324,11 +434,8 @@ var APP = {
             putCanvasMessage(msg, 3000, {type: "error"});
             return;
         }
-
-        // clear first and open dialog
-        APP.disableAllFeatures();
+        
         testDialog();
-
         var msg = {
             es: "Añade puntos sobre el plano - El último debe coincidir el primero",
             cat: "Afegeix punts sobre el plà - El primer ha de coincidir amb l'últim",
@@ -380,49 +487,51 @@ var APP = {
                     scene: true,
                     position: result,
                     color: [0.3,0.8,0.1,1],
-//                        depth_test: false
                 });
             }
         });
 
-        $("#end-dialog").click(function(){
-
-            if(tmp.length < 2)
-                return;
-
-            var points2D = [];
-            var p2D = null;
-            var points = tmp;
-            var adds = 0;
-            var subs = 0;
-            
-            APP.addLine(points);
-
-            for(var i = 0; i < points.length; ++i)
-            {
-                // planta --> index = 1
-                // alzado --> index = 2
-                p2D = index == 1 ? vec2.fromValues(points[i][0], points[i][2]) : vec2.fromValues(points[i][1], points[i][2]);
-                points2D.push(p2D);
+        $("#end-dialog").click(function()
+       {
+            if(tmp.length > 2){
+                APP.createArea(tmp, index);
+                APP.addLine(tmp);
             }
-
-            for(var i = 0; i < points2D.length - 1; ++i)
-            {
-                var current = points2D[i];
-                var next = points2D[i+1];
-                adds += current[0] * next[1];
-                subs += current[1] * next[0];
-            }
-
-            var area = Math.abs(0.5 * (adds - subs));
-            area /= Math.pow(project._meter, 2);
-
-            // passing 3d points list
-            project.insertArea(points, area, index, "nueva_area", {display: true, push: true});
-            //clear all
-            APP.disableAllFeatures();
         });
         
+        // begin with an option selected
+        $("#add-dialog").click();
+    },
+    
+    DO_THIS_AREA: function ( area_type )
+    {
+        // clear first
+        APP.disableAllFeatures({no_msg: true}); 
+
+        if(project._meter == -1){
+            var msg = {
+                es: "Falta configurar la escala",
+                cat: "Primer has de configurar l'escala",
+                en: "Set up the scale first"
+            }
+            putCanvasMessage(msg, 3000, {type: "error"});
+            return;
+        }
+        
+        //open dialog tools
+        testDialog();
+        window.tmp = [];
+
+        $("#add-dialog").click(function()
+        { 
+            selectDialogOption($(this));
+            APP.set3DArea(area_type);
+        });
+        $("#end-dialog").click(function()
+        {
+            if(tmp.length > 2)
+                APP.CREATE_THIS_AREA(tmp);
+        });
         // begin with an option selected
         $("#add-dialog").click();
     },
@@ -463,10 +572,10 @@ var APP = {
                 mesh: "planeXZ",
                 position: basePoint,
                 scaling: 500,
-                opacity: 0.35,
-                name: "area-plane"
+                opacity: 0.35
         });
 
+        plane.name = "area-plane";
         plane.description = "config";
         plane.render_priority = RD.PRIORITY_ALPHA;
         plane.blend_mode = RD.BLEND_ALPHA;
@@ -502,7 +611,7 @@ var APP = {
     	var msr = null;
 
         // clear first
-        GFX.destroyElements(GFX.scene.root.children, "config");// clear first
+        GFX.destroyElements(GFX.scene.root.children, "config");
         
         //get from project
         if(type == 'm')
@@ -518,11 +627,8 @@ var APP = {
         var points = [];
         for(var i = 0; i < msr.points.length; ++i){
             var list = [];
-            list.push(msr.points[i][0]);
-            list.push(msr.points[i][1]);
-            list.push(msr.points[i][2]);
+            list.push(msr.points[i][0], msr.points[i][1], msr.points[i][2]);
             points.push(list);
-            
             // ball render representation
             var ind = new SceneIndication();
             ind = ind.ball(GFX.scene, points[i], {depth_test: false, type: "view"});    
@@ -530,8 +636,7 @@ var APP = {
         
         APP.addLine(points, {desc: "config"});
 
-        // change global camera
-        // to look at with smooth efect
+        // change global camera to look at with smooth efect
         if(msr.camera_position)
         {
             GFX.camera.direction = msr.camera_position;
@@ -606,14 +711,8 @@ var APP = {
             o[i] = false;
         
         var list = [];
-        
-        list.push($('#distances-table'));
-        list.push($('#measure-btn'));
-        list.push($('#segment-distances-table'));
-        list.push($('#measure-s-btn'));
-        list.push($('#areas-table'));
-        list.push($('#measure-opt-btn'));
-
+        list.push($('#distances-table'), $('#measure-btn'), $('#segment-distances-table'));
+        list.push($('#measure-s-btn'), $('#areas-table'), $('#measure-opt-btn'));
         revealDOMElements(list, false, {e: ""});
     }
 }

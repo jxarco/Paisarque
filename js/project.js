@@ -10,6 +10,10 @@ function Project( data, user, flags )
     if(!flags.no_construct)
 	   this._ctor( data );
     this._user = user;
+    this._default_measure_options = {
+        display: true,
+        push: true
+    }
 }
 
 Project.prototype._ctor = function( data )
