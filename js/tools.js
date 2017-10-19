@@ -296,17 +296,18 @@ function setInput(id, type)
 {
     var full_id = "#"+type+"-name"+id;
     var old_name = $(full_id).find("p").html();
+    var string_old = '<p onclick="setInput(' + id + ', ' + '\'' + type + '\'' + ')"> ' + old_name + '</p>';
     
     $(full_id).html("<textarea id='s_input' placeholder='Nombre'></textarea>");
     $("#s_input").focus();
     $("#s_input").keyup(function(e)
     {
         if(e.keyCode == 13){
-            
             var value = $(this).val();
+            var new_string = '<p onclick="setInput(' + id + ', ' + '\'' + type + '\'' + ')"> ' + value + '</p>';
             
             if(value == "")
-                $(full_id).html("<p onclick='setInput(" + id + ", " + type + ")'>" + old_name + "</p>");
+                $(full_id).html(string_old);
             else
             {
                 if(type == "area")
@@ -316,15 +317,14 @@ function setInput(id, type)
                 if(type == "seg")
                     project.getSegmentMeasure(id).name = value;
                 
-                
-                $(full_id).html("<p onclick='setInput(" + id + ", " + type + ")'>" + value + "</p>");
+                $(full_id).html(new_string);
                 if(project._auto_save)
                     project.save();
             }
         }
         
         if(e.keyCode == 27)
-            $(full_id).html("<p onclick='setInput(" + id + ", " + type + ")'>" + old_name + "</p>");
+            $(full_id).html(string_old);
     });
 }
 
@@ -500,8 +500,10 @@ function putCanvasMessage(msg, ms, options)
 {
     var options = options || {};
     last_message_id++;
-    var lang = localStorage.getItem("lang");
-    var text = msg[lang] ? msg[lang] : msg["es"];
+    var lang = "es", session_lang;
+    if(session_lang = localStorage.getItem("lang"))
+        lang = session_lang;
+    var text = msg[lang];
         
     $("#cont-msg").append(
     "<div class='messages' id='" + (last_message_id) + "'>" + 

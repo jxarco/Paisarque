@@ -111,14 +111,15 @@ var APP = {
         revealDOMElements([$("#cardinal-axis"), $('.sliders')], true)
         
         // create grid
-        var rot_grid = new SceneIndication();
-        rot_grid.grid(5);
-        GFX.scene.root.addChild( rot_grid.node );
-        
-        // create grid
-        var rot_grid = new SceneIndication();
-        rot_grid.grid(5);
-        GFX.scene.root.addChild( rot_grid.node );
+        var rot_grid_x = new SceneIndication();
+        rot_grid_x.grid(4);
+        GFX.scene.root.addChild( rot_grid_x.node );
+        var rot_grid_y = new SceneIndication();
+        rot_grid_y.grid(4, {rotations: [{angle: 90 * DEG2RAD, axis: RD.FRONT}]});
+        GFX.scene.root.addChild( rot_grid_y.node );
+        var rot_grid_z = new SceneIndication();
+        rot_grid_z.grid(4, {rotations: [{angle: 90 * DEG2RAD, axis: RD.FRONT}, {angle: 90 * DEG2RAD, axis: RD.LEFT}]});
+        GFX.scene.root.addChild( rot_grid_z.node );
 
         var msg = {
             es: "Usa los sliders o las teclas A, S, D",
@@ -256,41 +257,39 @@ var APP = {
         
         GFX.context.onmousedown = function(e) 
         {
-            // normal depending on the type of area
-            var normal_top = vec3.fromValues(0, 1, 0);
-            var normal_front = vec3.fromValues(1, 0, 0);
             var ray = GFX.camera.getRay( e.canvasx, e.canvasy );
             var result = vec3.create();
 
-            if(tmp.length)
+            if(window.base_added)
             {
-                var normal = area_type ? normal_front : normal_top;
-                result = GFX.camera.getRayPlaneCollision( e.canvasx, e.canvasy, tmp[0], normal);
-                // adjust to same point if first point is too close
-                if(!result)
+                var node = GFX.scene.testRay( ray, result, undefined, 0x1, true );
+                if(!node)
                     return;
-                // here, result is something good
+                tmp.push(result);
+                // adjust to same point if first point is too close
                 if(vec3.dist(tmp[0], result) < 2)
-                    result = tmp[0];            
+                    result = tmp[0];         
+
+                if(tmp.length > 1) // only when more than one to make the line between them
+                    APP.addLine(tmp);
+
+                var ind = new SceneIndication({
+                    position: result,
+                    color: [0.3,0.8,0.1,1],
+                });
+
+                var plane = GFX.scene.root.getNodeByName("area-plane");
+                setParent(plane, ind.node);
             }
             else
                 if(!GFX.scene.testRay( ray, result, undefined, 0x1, true ))
-                    return;
-                
-            tmp.push(result);
-
-            if(tmp.length == 1) // create plane with first point only
-                APP.addAreaBase(tmp[0], area_type);
-            else if(tmp.length > 1) // only when more than one to make the line between them
-                APP.addLine(tmp);
-
-            var ind = new SceneIndication({
-                position: result,
-                color: [0.3,0.8,0.1,1],
-            });
-
-            var plane = GFX.scene.root.getNodeByName("area-plane");
-            setParent(plane, ind.node);
+                    return false;
+                else{
+                    GFX.model.flags.ignore_collisions = true;// points are now stuff for plane
+                    APP.addAreaBase(result, area_type);
+                    window.base_added = true;
+                    return true;
+                }
             
             if(on_complete)
                 on_complete();
@@ -314,6 +313,41 @@ var APP = {
             project.insertMeasure(GFX.camera, point_list, distance, "nueva_dist", project._default_measure_options);
         else 
             project.insertSegmentMeasure(GFX.camera, point_list, distance, "nuevo_segs", project._default_measure_options);  
+    },
+    
+    calcDistance: function ()
+    {
+        // clear first
+        APP.disableAllFeatures({no_msg: true}); 
+        
+        if(project._meter == -1){
+            var msg = {
+                es: "Falta configurar la escala",
+                cat: "Primer has de configurar l'escala",
+                en: "Set up the scale first"
+            }
+            putCanvasMessage(msg, 3000, {type: "error"});
+            return;
+        }
+        
+        testDialog();       // open tools panel
+        window.tmp = [];    // save points
+
+        $("#add-dialog").click(function()
+        {
+            selectDialogOption($(this));
+            var on_complete = function(){
+                // create line between points when possible
+                if(tmp.length > 1)
+                    APP.addLine(tmp);
+            };
+            APP.set3DPoint(on_complete);
+        });
+        $("#end-dialog").click(function(){
+            APP.createDistance(tmp);
+        });
+        // begin with an option selected
+        $("#add-dialog").click();
     },
     
     createArea: function(point_list, index)
@@ -385,41 +419,6 @@ var APP = {
         APP.disableAllFeatures();
         // passing 3d points list to render measure
         project.insertArea(point_list, area, index, "nueva_area", project._default_measure_options);
-    },
-    
-    calcDistance: function ()
-    {
-        // clear first
-        APP.disableAllFeatures({no_msg: true}); 
-        
-        if(project._meter == -1){
-            var msg = {
-                es: "Falta configurar la escala",
-                cat: "Primer has de configurar l'escala",
-                en: "Set up the scale first"
-            }
-            putCanvasMessage(msg, 3000, {type: "error"});
-            return;
-        }
-        
-        testDialog();       // open tools panel
-        window.tmp = [];    // save points
-
-        $("#add-dialog").click(function()
-        {
-            selectDialogOption($(this));
-            var on_complete = function(){
-                // create line between points when possible
-                if(tmp.length > 1)
-                    APP.addLine(tmp);
-            };
-            APP.set3DPoint(on_complete);
-        });
-        $("#end-dialog").click(function(){
-            APP.createDistance(tmp);
-        });
-        // begin with an option selected
-        $("#add-dialog").click();
     },
 
     calcArea: function ( area_type )
@@ -508,7 +507,7 @@ var APP = {
     DO_THIS_AREA: function ( area_type )
     {
         // clear first
-        APP.disableAllFeatures({no_msg: true}); 
+        APP.disableAllFeatures({no_msg: true});
 
         if(project._meter == -1){
             var msg = {
@@ -523,6 +522,7 @@ var APP = {
         //open dialog tools
         testDialog();
         window.tmp = [];
+        window.base_added = false;
 
         $("#add-dialog").click(function()
         { 
@@ -573,37 +573,40 @@ var APP = {
         var plane = new RD.SceneNode({
                 mesh: "planeXZ",
                 position: basePoint,
-                scaling: 500,
-                opacity: 0.35
+                scaling: 300,
+                opacity: 0.55,
+                color: [0.9, 0.2, 0.2]
         });
-
         plane.name = "area-plane";
         plane.description = "config";
         plane.render_priority = RD.PRIORITY_ALPHA;
         plane.blend_mode = RD.BLEND_ALPHA;
-        plane.flags.two_sided = true;
-
         if(areaType === ALZADO)
-            plane.rotate(75 * DEG2RAD, RD.FRONT);
-            //plane.rotate(90 * DEG2RAD, RD.FRONT);
-        GFX.scene.root.addChild(plane);
+            plane.rotate(90 * DEG2RAD, RD.FRONT);
+        GFX.scene.root.addChild(plane); 
+        
+        // add buttons to move plane
+        APP._plane_rotation_ = [0, 0];
+        APP.inspector = new LiteGUI.Inspector();
+        APP.inspector.addVector2(null, APP._plane_rotation_, {callback: function(v){
+            if(tmp.lenght)
+                return;
 
-        var grid_mesh = GL.Mesh.grid({size:10});
-        GFX.renderer.meshes["grid"] = grid_mesh;
+            if(v[0] < APP._plane_rotation_[0])
+                plane.rotate(-v[0] * DEG2RAD, RD.FRONT);
+            if(v[0] > APP._plane_rotation_[0])
+                plane.rotate(v[0] * DEG2RAD, RD.FRONT);
 
-        var grid = new RD.SceneNode({
-            mesh: "grid",
-            position: basePoint,
-            color: [0.5, 0.5, 0.5]
-        });
+            if(v[1] < APP._plane_rotation_[1])
+                plane.rotate(-v[1] * DEG2RAD, RD.LEFT);
+            if(v[1] > APP._plane_rotation_[1])
+                plane.rotate(v[1] * DEG2RAD, RD.LEFT);
 
-        grid.description = "config";
-        grid.primitive =gl.LINES;
-        grid.scale([50, 50, 50]);    
-
-        if(areaType === ALZADO)
-            grid.rotate(90 * DEG2RAD, RD.FRONT);
-        GFX.scene.root.addChild(grid);  
+            plane.updateMatrices();
+            APP._plane_rotation_ = v;
+        }, step: 0.01});
+        
+        $(".draggable").append(APP.inspector.root);
     },
     
     renderMeasure: function(o)
@@ -678,6 +681,7 @@ var APP = {
         revealDOMElements([$("#cardinal-axis"), $('.sliders'), $(".sub-btns")], false);
         GFX.destroyElements(GFX.scene.root.children, "config");
         GFX.destroyElements(GFX.scene.root.children, "config-tmp");
+        GFX.model.flags.ignore_collisions = false;
         $("#measure-opt-btn").find("i").html("add_circle_outline");
         $("#myCanvas").css("cursor", "default");
         $(".draggable").remove();

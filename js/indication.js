@@ -108,11 +108,23 @@ SceneIndication.prototype.grid = function(size, options)
     var grid_mesh = GL.Mesh.grid({size:size});
     GFX.renderer.meshes["grid"] = grid_mesh;
     grid.flags.visible = options.visible;
+    grid.flags.ignore_collisions = true;
     grid.name = "grid";
     grid.mesh = "grid";
     grid.primitive = gl.LINES;
-    grid.color = [0.5, 0.5, 0.5, 1];
+    grid.color = [0.6, 0.6, 0.6, 1];
     grid.scale([50, 50, 50]);
     
+    if(options.position)
+        grid.position = options.position;
+    
+    if(options.rotations){
+        for(var i in options.rotations){
+            console.log("rotation");
+            grid.rotate(options.rotations[i].angle, options.rotations[i].axis);
+        }
+        grid.updateMatrices();
+    }
+        
     this.node = grid;
 }
