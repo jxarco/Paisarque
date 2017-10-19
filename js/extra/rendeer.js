@@ -113,6 +113,12 @@ SceneNode.prototype._ctor = function()
 	this._global_matrix = mat4.create(); //in global space
 	this._must_update_matrix = false;
 
+	//watchers
+	//TO DO: use Proxy
+
+	//bounding
+	this._bounding_box = null; //use updateBoundingBox to update it
+
 	//rendering priority (order)
 	this.render_priority = RD.PRIORITY_OPAQUE;
 
@@ -122,6 +128,7 @@ SceneNode.prototype._ctor = function()
 	this._color = vec4.fromValues(1,1,1,1);
 	this._uniforms = { u_color: this._color, u_color_texture: 0 };
 	this.primitive = GL.TRIANGLES;
+	this.draw_range = null;
 
 	//overwrite callbacks
 	this.onRender = null;
@@ -308,7 +315,7 @@ Object.defineProperty(SceneNode.prototype, 'color', {
 });
 
 /**
-* This number is the 4Âº component of color but can be accessed directly 
+* This number is the 4º component of color but can be accessed directly 
 * @property opacity {number}
 */
 Object.defineProperty(SceneNode.prototype, 'opacity', {
@@ -985,7 +992,7 @@ SceneNode.prototype.propagate = function(method, params)
 	for(var i = 0, l = this.children.length; i < l; i++)
 	{
 		var node = this.children[i];
-		if(!node) //Â¿?
+		if(!node) //¿?
 			continue;
 		//has method
 		if(node[method])
@@ -1010,19 +1017,68 @@ SceneNode.prototype.loadTextConfig = function(url, callback)
 /**
 * calls to be removed from the scene
 * @method destroy
+* @param { Boolean } force [optional] force to destroy the resource now instead of deferring it till the update ends
 */
-SceneNode.prototype.destroy = function()
+SceneNode.prototype.destroy = function( force )
 {
-	if(!this.scene)
+	//in case this node doesnt belong to a scene, we just remove it from its parent
+	if(!this.scene || force)
 	{
 		if(this._parent)
 			this._parent.removeChild(this);
 		return;
 	}
 
+	//deferred: otherwise we put it pending to destroy
 	this.scene._to_destroy.push(this);
 }
 
+/**
+* Updates the bounding box in this node, taking into account the mesh bounding box and its children
+* @method updateBoundingBox
+* @param { Boolean } force [optional] force to destroy the resource now instead of deferring it till the update ends
+*/
+SceneNode.prototype.updateBoundingBox = function( ignore_children )
+{
+	var model = this._global_matrix;
+	var mesh = gl.meshes[ this.mesh ];
+
+	var bb = null;
+	if( mesh ) 
+	{
+		var mesh_bb = mesh.getBoundingBox();
+		if(!this.bounding_box)
+			this.bounding_box = BBox.create();
+		bb = BBox.transformMat4( this.bounding_box, mesh_bb, model );
+	}
+
+	if(ignore_children || !this.children || this.children.length == 0)
+		return bb;
+
+	for(var i = 0; i < this.children.length; ++i)
+	{
+		var child = this.children[i];
+		var child_bb = child.updateBoundingBox();
+		if(!child_bb)
+			continue;
+		if(!bb)
+			bb = this.bounding_box = BBox.create();
+		BBox.merge( bb, bb, child_bb );
+	}
+
+	return bb;
+}
+
+/**
+* Tests if the ray collides with this node mesh or the childrens
+* @method testRay
+* @param { GL.Ray } ray the object containing origin and direction of the ray
+* @param { vec3 } result where to store the collision point
+* @param { Number } max_dist the max distance of the ray
+* @param { Number } layers the layers where you want to test
+* @param { Boolean } test_against_mesh if true it will test collision with mesh, otherwise only boundings
+* @return { RD.SceneNode } the node where it collided
+*/
 SceneNode.prototype.testRay = (function(){ 
 
 	var collision_point = vec3.create();
@@ -1082,7 +1138,17 @@ SceneNode.prototype.testRay = (function(){
 	}
 })();
 
-//returns if there was a collision with the inner mesh
+
+/**
+* Tests if the ray collides with the mesh in this node
+* @method testRayWithMesh
+* @param { GL.Ray } ray the object containing origin and direction of the ray
+* @param { vec3 } result where to store the collision point
+* @param { Number } max_dist the max distance of the ray
+* @param { Number } layers the layers where you want to test
+* @param { Boolean } test_against_mesh if true it will test collision with mesh, otherwise only bounding
+* @return { Boolean } true if it collided
+*/
 SceneNode.prototype.testRayWithMesh = (function(){ 
 	var temp = vec3.create();
 	var origin = vec3.create();
@@ -1105,7 +1171,7 @@ SceneNode.prototype.testRayWithMesh = (function(){
 		if(!bb) //mesh has no vertices
 			return false;
 
-		//to local
+		//ray to local
 		var model = this._global_matrix;
 		mat4.invert( inv, model );
 		vec3.transformMat4( origin, ray.origin, inv );
@@ -1114,51 +1180,67 @@ SceneNode.prototype.testRayWithMesh = (function(){
 		vec3.sub( direction, end, origin );
 		vec3.normalize( direction, direction );
 
-		//test against box
+		//test against object oriented bounding box
 		var r = geo.testRayBBox( origin, direction, bb, null, temp );
 		if(!r) //collided with OOBB
 			return false;
 
 		vec3.transformMat4( result, temp, model );
 		var distance = vec3.distance( ray.origin, result );
+
+		//there was a collision but too far
 		if( distance > max_dist )
-			return false; //there was a collision but too far
+			return false; 
 		
 		//test agains mesh
 		if( !test_against_mesh )
 			return true;
 
+		//create mesh octree
 		if(!mesh.octree)
 			mesh.octree = new GL.Octree( mesh );
-		var hit_test = mesh.octree.testRay( origin, direction, 0, max_dist );
-		if( !hit_test ) //collided the OOBB but not the mesh, so its a not
+
+		//ray test agains octree
+		var hit_test = mesh.octree.testRay( origin, direction, 0, max_dist, this.flags.two_sided );
+
+		//collided the OOBB but not the mesh, so its a not
+		if( !hit_test ) 
 			return false;
 
+		//compute global hit point
 		result.set( hit_test.hit );
 		vec3.transformMat4( result, result, model );
 		var distance = vec3.distance( ray.origin, result );
+
+		//there was a collision but too far
 		if( distance > max_dist )
-			return false; //there was a collision but too far
+			return false; 
 		return true;
 	}
 })();
 
 /**
-* adjust the rendering range so it renders one specific submesh
+* adjust the rendering range so it renders one specific submesh of the mesh
 * @method setRangeFromSubmesh
 * @param {String} submesh_id could be the index or the string with the name
 */
 SceneNode.prototype.setRangeFromSubmesh = function( submesh_id )
 {
 	if(submesh_id === undefined || !this.mesh)
-		return false;
+	{
+		this.draw_range = null;
+		return;
+	}
 		
 	var mesh = gl.meshes[ this.mesh ];
 	if(!mesh || !mesh.info || !mesh.info.groups)
-		return false;
+	{
+		console.warn("you cannot set the submesh_id while the mesh is not yet loaded");
+		return;
+	}
 
 	//allows to search by string or index
-	if(submesh_id.constructor === String)
+	if( submesh_id.constructor === String )
 	{
 		for(var i = 0; i < mesh.info.groups.length; ++i)
 		{
@@ -1176,7 +1258,7 @@ SceneNode.prototype.setRangeFromSubmesh = function( submesh_id )
 
 	var submesh = mesh.info.groups[ submesh_id ];
 	if(!submesh)
-		return false;
+		return;
 
 	this.draw_range[0] = submesh.start;
 	this.draw_range[1] = submesh.length;
@@ -1199,7 +1281,7 @@ Sprite.prototype._ctor = function()
 	SceneNode.prototype._ctor.call(this);
 
 	this.mesh = "plane";
-	this.size = vec2.fromValues(-1,-1);
+	this.size = vec2.fromValues(1,1);
 	this.blend_mode = RD.BLEND_ALPHA;
 	this.flags.two_sided = true;
 	this.flags.depth_test = false;
@@ -1398,16 +1480,20 @@ Scene.prototype.update = function(dt)
 {
 	this.time += dt;
 	this._root.propagate("update",[dt]);
+	this.destroyPendingNodes();
+}
 
+Scene.prototype.destroyPendingNodes = function(dt)
+{
 	//destroy entities marked
-	if(this._to_destroy.length)
+	if(!this._to_destroy.length)
+		return;
+
+	var n = null;
+	while( n = this._to_destroy.pop() )
 	{
-		var n = null;
-		while( n = this._to_destroy.pop() )
-		{
-			if(n._parent)
-				n._parent.removeChild(n);
-		}
+		if(n._parent)
+			n._parent.removeChild(n);
 	}
 }
 
@@ -1435,6 +1521,8 @@ Scene.prototype.testRay = function( ray, result, max_dist, layers, test_against_
 {
 	layers = layers === undefined ? 0xFF : layers;
 	Scene._ray_tested_objects = 0;
+	if(!result)
+		result = temp_vec3;
 
 	//TODO
 	//broad phase
@@ -2053,8 +2141,27 @@ Renderer.prototype.compileShadersFromAtlas = function(files, extra_macros)
 		var vs = files[ t[1] ];
 		var fs = files[ t[2] ];
 		var macros = null;
-		if(t.length > 2)
-			macros = t.slice(3).join(" ");
+		var flags = {};
+
+		//parse extras
+		if(t.length > 3)
+		{
+			for(var j = 3; j < t.length; ++j)
+			{
+				if(t[j][0] == "#")
+					flags[t[j].substr(1)] = true;
+				else
+				{
+					macros = t.slice(j).join(" ");
+					break;
+				}
+			}
+		}
+
+		if(flags.WEBGL1 && gl.webgl_version != 1)
+			continue;
+		if(flags.WEBGL2 && gl.webgl_version != 2)
+			continue;
 		
 		if(t[1] && t[1][0] == '@')
 		{
@@ -2092,6 +2199,8 @@ Renderer.prototype.compileShadersFromAtlas = function(files, extra_macros)
 		}
 		else if(extra_macros)
 			macros = extra_macros;
+
+		//console.log("compiling: ",name,macros);
 
 		try
 		{
@@ -2613,7 +2722,7 @@ Camera.prototype.rotateLocal = function(angle, axis)
 
 /**
 * rotate around its target position
-* @method orbit
+* @method rotate
 * @param {number} angle in radians
 * @param {vec3} axis
 * @param {vec3} [center=null] if another center is provided it rotates around it
@@ -2630,29 +2739,6 @@ Camera.prototype.orbit = function(angle, axis, center, axis_in_local)
 	var front = vec3.subtract( temp_vec3, this._position, this._target );
 	vec3.transformQuat(front, front, R );
 	vec3.add(this._position, center, front);
-	this._must_update_matrix = true;
-}
-
-/**
-* rotate around its target position and saves it to the direction
-* @method rotate
-* @param {number} angle in radians
-* @param {vec3} axis
-* @param {vec3} [center=null] if another center is provided it rotates around it
-*/
-Camera.prototype.orbit_direction = function(angle, axis, center, axis_in_local)
-{
-	if(!axis)
-		throw("RD: orbit axis missing");
-
-	center = center || this._target;
-	if(axis_in_local)
-		axis = mat4.rotateVec3(temp_vec3b, this._model_matrix, axis);
-	var R = quat.setAxisAngle( temp_quat, axis, angle );
-	var front = vec3.subtract( temp_vec3, this._position, this._target );
-	vec3.transformQuat(front, front, R );
-    vec3.add(this.direction, center, front);
-    this.smooth = true;
 	this._must_update_matrix = true;
 }
 
@@ -2956,7 +3042,7 @@ RD.Factory = function Factory( name, parent, extra_options )
 	if(tpl)
 		node.configure( tpl );
 	if(parent)
-		( parent.cosntructor === RD.Scene ? parent.root : parent ).addChild( node );
+		( parent.constructor === RD.Scene ? parent.root : parent ).addChild( node );
 	if(extra_options)
 		node.configure(extra_options);
 	return node;

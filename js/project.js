@@ -513,7 +513,7 @@ Project.prototype.insertArea = function( points, area, index, name, options )
     var table = $('#areas-table');
     var bodyTable = table.find('tbody');
     var id = options.id ? options.id : this._last_area_measure_id++;
-    var style = index === 1 ? "Planta" : "Alzado";
+    var style = index === 1 ? "Planta" : "Otra";
     
     var aux = "area-name" + id;
     

@@ -274,18 +274,27 @@ var APP = {
                     APP.addLine(tmp);
 
                 var ind = new SceneIndication({
+                    scene: true,
                     position: result,
                     color: [0.3,0.8,0.1,1],
                 });
 
                 var plane = GFX.scene.root.getNodeByName("area-plane");
-                setParent(plane, ind.node);
+//                setParent(plane, ind.node);
+                var son = ind.node;
+                var parent = plane;
+                var sonGlobal = son.getGlobalMatrix();
+                var parentInverse = mat4.create();
+                mat4.invert(parentInverse, parent.getGlobalMatrix());
+                GFX.scene.root.removeChild(son);
+                parent.addChild(son);
+                son._local_matrix = mat4.multiply(son._local_matrix, parentInverse, sonGlobal);
             }
             else
                 if(!GFX.scene.testRay( ray, result, undefined, 0x1, true ))
                     return false;
                 else{
-                    GFX.model.flags.ignore_collisions = true;// points are now stuff for plane
+                    GFX.model.flags.ignore_collisions = true; // points are now stuff for plane
                     APP.addAreaBase(result, area_type);
                     window.base_added = true;
                     return true;
@@ -385,19 +394,29 @@ var APP = {
     
     CREATE_THIS_AREA: function(index, point_list)
     {
-        var aux_list = [];
-        
+        console.log("DEBUG PRELIST", point_list);
         // rotate plane to easy calculation
         var plane = GFX.scene.root.getNodeByName("area-plane");
+        var aux_list = [], nodes = [].concat(plane.children);
+        
         plane._rotation = [0, 0, 0, 1];
         plane.updateMatrices();
-        // get points in world space
-        // child_local = 1 / parent * child_world
-        // child_world = parent * child_local
-        for(var i = 0, node; node = plane.children[i]; ++i){
-            mat4.multiply( node._global_matrix, node._global_matrix, plane._global_matrix );
+        
+        for(var it in nodes){
+            var node = nodes[it];
+            if(node.parentNode != plane)
+                continue;
+            // transform to world space
+            var root = GFX.scene.root;
+            var node_matrix = node._local_matrix;
+            plane.removeChild(node);
+            root.addChild(node);
+            node._global_matrix = node_matrix;
+            // add position in world space
             aux_list.push(node._position);
         }
+        
+        console.log("DEBUG AUX", aux_list);
             
         var left = 0, right = 0, points2D = [];
 
@@ -406,8 +425,7 @@ var APP = {
 
         for(var i = 0; i < points2D.length - 1; ++i)
         {
-            var current = points2D[i];
-            var next = points2D[i+1];
+            var current = points2D[i], next = points2D[i+1];
             left += current[0] * next[1];
             right += current[1] * next[0];
         }
@@ -420,90 +438,7 @@ var APP = {
         // passing 3d points list to render measure
         project.insertArea(point_list, area, index, "nueva_area", project._default_measure_options);
     },
-
-    calcArea: function ( area_type )
-    {
-        // clear first
-        APP.disableAllFeatures({no_msg: true}); 
-
-        if(project._meter == -1){
-            var msg = {
-                es: "Falta configurar la escala",
-                cat: "Primer has de configurar l'escala",
-                en: "Set up the scale first"
-            }
-            putCanvasMessage(msg, 3000, {type: "error"});
-            return;
-        }
-        
-        testDialog();
-        var msg = {
-            es: "Añade puntos sobre el plano - El último debe coincidir el primero",
-            cat: "Afegeix punts sobre el plà - El primer ha de coincidir amb l'últim",
-            en: "Add points over the plane - First has to be same as last"
-        }
-        putCanvasMessage(msg, 4000);
-        window.tmp = [];
-        var index = area_type === PLANTA ? 1 : 2;
-
-        $("#add-dialog").click(function(){ 
-
-            selectDialogOption($(this));
-            $("#myCanvas").css("cursor", "crosshair");
-
-            GFX.context.onmousedown = function(e) 
-            {
-                var result = vec3.create();
-                // normal depending on the type of area
-                var normal = area_type === PLANTA ? vec3.fromValues(0, 1, 0) : vec3.fromValues(1, 0, 0);
-                var ray = GFX.camera.getRay( e.canvasx, e.canvasy );
-                var node = null;
-
-                if(tmp.length)
-                {
-                    result = GFX.camera.getRayPlaneCollision( e.canvasx, e.canvasy, tmp[0], normal);
-                    node = true;
-                }
-                else
-                    node = GFX.scene.testRay( ray, result, undefined, 0x1, true );
-
-                if(!node)
-                    return;
-
-                // adjust to same point if first point is too close
-                if(tmp.length > 1)
-                {
-                    var units = vec3.dist(tmp[0], result);
-                    if(units < 1.5)
-                        result = tmp[0];            
-                }
-                tmp.push(result);
-                
-                if(tmp.length == 1) // create plane with first point only
-                    APP.addAreaBase(tmp[0], area_type);
-                else if(tmp.length > 1) // only when more than one to make the line between them
-                    APP.addLine(tmp);
-                
-                var ind = new SceneIndication({
-                    scene: true,
-                    position: result,
-                    color: [0.3,0.8,0.1,1],
-                });
-            }
-        });
-
-        $("#end-dialog").click(function()
-       {
-            if(tmp.length > 2){
-                APP.createArea(tmp, index);
-                APP.addLine(tmp);
-            }
-        });
-        
-        // begin with an option selected
-        $("#add-dialog").click();
-    },
-    
+      
     DO_THIS_AREA: function ( area_type )
     {
         // clear first
@@ -581,30 +516,40 @@ var APP = {
         plane.description = "config";
         plane.render_priority = RD.PRIORITY_ALPHA;
         plane.blend_mode = RD.BLEND_ALPHA;
-        if(areaType === ALZADO)
+        plane.flags.two_sided = true;
+        
+        if(areaType !== TOP_AREA)
             plane.rotate(90 * DEG2RAD, RD.FRONT);
         GFX.scene.root.addChild(plane); 
         
         // add buttons to move plane
         APP._plane_rotation_ = [0, 0];
         APP.inspector = new LiteGUI.Inspector();
-        APP.inspector.addVector2(null, APP._plane_rotation_, {callback: function(v){
-            if(tmp.lenght)
+        var string = {
+            es: "Ajustar",
+            cat: "Adjustar",
+            en: "Adjust"
+        }
+        var lang = "es", session_lang;
+        if(session_lang = localStorage.getItem("lang"))
+            lang = session_lang;
+        APP.inspector.addVector2(string[lang], null, {callback: function(v){
+            if(tmp.lenght) // no moving if one point is selected
                 return;
-
+            
+            if(v[0] > APP._plane_rotation_[0])
+                plane.rotate(v[0] * DEG2RAD, RD.FRONT);    
             if(v[0] < APP._plane_rotation_[0])
                 plane.rotate(-v[0] * DEG2RAD, RD.FRONT);
-            if(v[0] > APP._plane_rotation_[0])
-                plane.rotate(v[0] * DEG2RAD, RD.FRONT);
 
-            if(v[1] < APP._plane_rotation_[1])
-                plane.rotate(-v[1] * DEG2RAD, RD.LEFT);
             if(v[1] > APP._plane_rotation_[1])
                 plane.rotate(v[1] * DEG2RAD, RD.LEFT);
+            if(v[1] < APP._plane_rotation_[1])
+                plane.rotate(-v[1] * DEG2RAD, RD.LEFT);
 
             plane.updateMatrices();
             APP._plane_rotation_ = v;
-        }, step: 0.01});
+        }, step: 0.005, min: 0});
         
         $(".draggable").append(APP.inspector.root);
     },
@@ -685,7 +630,7 @@ var APP = {
         $("#measure-opt-btn").find("i").html("add_circle_outline");
         $("#myCanvas").css("cursor", "default");
         $(".draggable").remove();
-        $("#cont-msg").empty();
+//        $("#cont-msg").empty();
         
         // remove helping grid
         var grid = GFX.scene.root.getNodeByName("grid");
