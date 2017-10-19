@@ -206,7 +206,7 @@ var APP = {
             selectDialogOption($(this));
             var on_complete = function(){
                 if(tmp.length == 2)
-                    applyScale(tmp);
+                    APP.applyScale(tmp);
             };
             APP.set3DPoint(on_complete);
         }); 
@@ -258,7 +258,7 @@ var APP = {
         {
             // normal depending on the type of area
             var normal_top = vec3.fromValues(0, 1, 0);
-            var normal_front = vec3.fromValues(0, 1, 0);
+            var normal_front = vec3.fromValues(1, 0, 0);
             var ray = GFX.camera.getRay( e.canvasx, e.canvasy );
             var result = vec3.create();
 
@@ -349,7 +349,7 @@ var APP = {
         APP.disableAllFeatures();  
     },
     
-    CREATE_THIS_AREA: function(point_list)
+    CREATE_THIS_AREA: function(index, point_list)
     {
         var aux_list = [];
         
@@ -360,7 +360,7 @@ var APP = {
         // get points in world space
         // child_local = 1 / parent * child_world
         // child_world = parent * child_local
-        for(var i = 0, node; node = plane.children[i], ++i){
+        for(var i = 0, node; node = plane.children[i]; ++i){
             mat4.multiply( node._global_matrix, node._global_matrix, plane._global_matrix );
             aux_list.push(node._position);
         }
@@ -381,7 +381,9 @@ var APP = {
         var area = Math.abs(0.5 * (left - right));
         area /= Math.pow(project._meter, 2);
 
-        // passing 3d points list
+        // clear
+        APP.disableAllFeatures();
+        // passing 3d points list to render measure
         project.insertArea(point_list, area, index, "nueva_area", project._default_measure_options);
     },
     
@@ -530,7 +532,7 @@ var APP = {
         $("#end-dialog").click(function()
         {
             if(tmp.length > 2)
-                APP.CREATE_THIS_AREA(tmp);
+                APP.CREATE_THIS_AREA((area_type+1), tmp);
         });
         // begin with an option selected
         $("#add-dialog").click();
@@ -582,7 +584,8 @@ var APP = {
         plane.flags.two_sided = true;
 
         if(areaType === ALZADO)
-            plane.rotate(90 * DEG2RAD, RD.FRONT);
+            plane.rotate(75 * DEG2RAD, RD.FRONT);
+            //plane.rotate(90 * DEG2RAD, RD.FRONT);
         GFX.scene.root.addChild(plane);
 
         var grid_mesh = GL.Mesh.grid({size:10});
