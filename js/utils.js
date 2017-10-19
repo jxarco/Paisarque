@@ -245,6 +245,27 @@ var download = function( mesh, format )
     element.click();
     document.body.removeChild(element);
 }
+
+function TO_BASE64(src, extension)
+{
+    var img = new Image();
+    img.src = src;
+
+    var canvas = document.createElement('CANVAS');
+    canvas.height = img.height;
+    canvas.width = img.width;
+    var ctx = canvas.getContext('2d');
+
+    ctx.drawImage(img, 0, 0);
+
+    extension = extension.slice(1);
+    var type = "image/" + extension;
+    console.log(type);
+    var dataURL = canvas.toDataURL(type);
+    var index = dataURL.indexOf(",");
+    dataURL = dataURL.slice(index+1);
+    return dataURL;
+}
  
 function readImage (file, callback) {
     var reader = new FileReader();

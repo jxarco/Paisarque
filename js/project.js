@@ -683,8 +683,14 @@ Project.prototype.save = function( overwrite, extra )
         }
     };
     
+    var that = this;
+    
     var on_complete = function(){
         console.log("saved");
+        // update the project copy in session storage
+        // to avoid getting a not updated version in next
+        // fills
+        sessionStorage.setItem("project", JSON.stringify(that));     
     }
     
     var on_error = function(err){
@@ -732,11 +738,16 @@ Project.prototype.config = function()
 */
 Project.prototype.fill = function( data )
 {
-//    console.log(data);
     var copy = JSON.parse(data);
+    this._json = copy._json;
     
-//    this._json = copy._json;
+    this._last_project_id = copy._last_project_id;
+    this._last_measure_id = copy._last_measure_id;
+    this._last_seg_measure_id = copy._last_seg_measure_id;
+    this._last_area_measure_id = copy._last_area_measure_id;
+    
     this._id = copy._id;
+    this._user = copy._user;
     this._uid = copy._uid;
     this._description = copy._description;
     this._author = copy._author;
@@ -778,7 +789,6 @@ $("#auto-save-btn").click(function(){
         project._auto_save = false;
         project.save();
     }
-    
 });
 
 /* 

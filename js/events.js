@@ -104,21 +104,12 @@ $("#tools-tab .btn.tool-btn").click(function(){
     }
 });
 
-$(".save").click(function(){
-    
+$(".save").click(function()
+ {
     if(copy === null)
         project.save(); 
     else
-    {
-        // save copy of the project
-        copy.save();
-        
-        // update the project copy in session storage
-        // to avoid getting a not updated version in next
-        // fills
-        sessionStorage.setItem("project", JSON.stringify(copy));
-    }
-    
+        copy.save();// save copy of the project for extra
 });
 
 /*

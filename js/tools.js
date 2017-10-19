@@ -208,13 +208,12 @@ function deleteProject(user, project)
 
 function loadContent(url, id)
 {
-    if(delete_project_active)
-    {
-        var dproject = id.split('/')[1];
-        deleteProject(current_user, dproject);
-        return;
-    }
-    
+//    if(delete_project_active)
+//    {
+//        var dproject = id.split('/')[1];
+//        deleteProject(current_user, dproject);
+//        return;
+//    }
     // load content 
     console.log("loading content " + url);
     
@@ -641,6 +640,67 @@ function fileToBLOB(params)
     switch(type)
     {
         case 'images':
+            var images = [];
+            for(var i = 0, info; info = copy._extra[i]; i++)
+                if(info.type == "image") 
+                    images.push(info);
+            
+            var exportar = function(){
+                zip.generateAsync({type:"blob"}).then(function(content) {
+                        LiteGUI.downloadFile( filename, content );
+                    });
+            };
+            
+            var src = info.data;
+            var extension = src.slice(src.lastIndexOf("."));
+            var new_file = "Extra_" + i + extension;
+
+            var xhr = new XMLHttpRequest();
+
+            xhttp.onreadystatechange = (function(images) {
+                return function() {
+                    if (this.readyState == 4 && this.status == 200){
+                        zip.file(new_file, this.response);
+                        console.log("added to zip", this.response);
+                        
+                        
+                        var src = info.data;
+                        var extension = src.slice(src.lastIndexOf("."));
+                        var new_file = "Extra_" + i + extension;
+                        
+                        
+                        
+                        
+                    }
+                    
+                    
+                }
+            })(images);
+
+
+
+
+
+            xhr.onreadystatechange = function(){
+                
+            }
+            console.log(i);
+
+            if(i == images.length - 1){
+                xhr.onreadystatechange = function(){
+                    if (this.readyState == 4 && this.status == 200){
+                        zip.file(new_file, this.response);
+                        console.log("added to zip (last)", this.response);
+                        console.log(zip.files);
+                        exportar();
+                    }
+                }
+            }else{
+                console.log("no the last");
+            }
+            xhr.open('GET', src);
+            xhr.responseType = 'blob';
+            xhr.send();   
             break;
         case 'text':
             for(var i = 0, info; info = copy._extra[i]; i++)
@@ -650,19 +710,14 @@ function fileToBLOB(params)
                 
                 var new_file = "Extra_" + i + ".txt";
                 zip.file(new_file, info.data);
-                break;
             }
+            zip.generateAsync({type:"blob"}).then(function(content) {
+                LiteGUI.downloadFile( filename, content );
+            });
             break;
         case 'pdf':
             break;
     }
-
-    if(!Object.keys(zip.files).length)
-        return;
-    
-    zip.generateAsync({type:"blob"}).then(function(content) {
-        LiteGUI.downloadFile( filename, content );
-    });
 }
 
 /* 

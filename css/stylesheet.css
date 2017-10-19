@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css?family=Julius+Sans+One|Lobster+Two|Satisfy');
-@import url('https://fonts.googleapis.com/css?family=Julius+Sans+One|Lobster+Two|Satisfy');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300');
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans|Pavanam');
 @import url('https://fonts.googleapis.com/css?family=Titillium+Web');
@@ -1012,9 +1011,9 @@ a:hover{
     margin-top: 10px;
 }
 .note {
-    width: calc(25% - 12px);
-    overflow-y: scroll;
-    height: 150px;
+    min-width: 350px;
+    overflow-y: scroll !important;
+    height: 200px;
     position: relative;
     padding: 1em 1.5em;
     margin-left: 4px;
