@@ -455,22 +455,42 @@ function build(sampleObj, options)
 }
 
 /*
-* @param parent {sceneNode} node to add child to it
-* @param son {sceneNode} node to transform 
-* @return {object} with two nodes
+* @method hasParent adds a child to a parent mantaining its position
+* @param parent {sceneNode} new future parent
+* @param node {sceneNode} child node to add a parent 
+* @param has_parent {bool} child to add has already a parent
+* @return {object} with both scene nodes
 */
-function setParent(parent, son)
+function setParent(parent, node, has_parent)
 {
-    var parentInverse = mat4.create();
-    var sonGlobal = mat4.create();
-    mat4.invert(parentInverse, parent.getGlobalMatrix());
-    sonGlobal = son.getGlobalMatrix();
-    parent.addChild(son);
-    mat4.multiply(son._local_matrix, parentInverse, sonGlobal);
-    
+    var parent_global = mat4.create();
+    var node_global = mat4.create();
+    var parent_inverse = mat4.create();
+    var mult_result = mat4.create();
+
+    // global del padre
+    parent_global = mat4.clone( parent.getGlobalMatrix() );
+    // global del hijo
+    node_global = mat4.clone( node.getGlobalMatrix() );
+    //inversa del padre
+    mat4.invert( parent_inverse, parent_global );
+
+    // quitar al futuro hijo de la escena
+    if(has_parent)
+        node.parentNode.removeChild(node);
+    // ponerlo en el padre
+    parent.addChild(node);
+
+    // obtener futura local de inversa padre x global del hijo
+    mat4.multiply( mult_result, parent_inverse, node_global );
+    // asignar resultado a local del hijo
+    node._local_matrix = mat4.clone( mult_result );
+    // actualizar propiedades del nodo desde la matriz local actualizada
+    node.fromMatrix( node._local_matrix );
+
     return {
         "parent": parent,
-        "son": son
+        "son": node
     }
 }
 

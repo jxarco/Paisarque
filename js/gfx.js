@@ -141,29 +141,36 @@ var GFX = {
         this.scene.root.addChild( this.model );
 
         var anotaciones = project.getAnnotations();
-        for (var i = 0; i < anotaciones.length; i++) {
-
-            var position = [ anotaciones[i].position[0], anotaciones[i].position[1], anotaciones[i].position[2]];
+        for (var i = 0, anot; anot = anotaciones[i]; i++)
+        {
+            var position = [ anot.position[0], anot.position[1], anot.position[2]];
             
             var ind = new SceneIndication({
                 position: position,
                 id: anotaciones[i].id,
                 active: false,
-                time: 0.0
+                time: 0.0,
+                onupdate: "blink"
             });
 
             // set ball parent
             setParent(that.model, ind.node);
-
-            ind.node.update = function(dt)
-            {
-                this.time += dt;
-                if(!this.active)
-                    this.color = [1,0,0,1];
-                else
-                    this.color = [1, 0.3 + Math.sin(this.time*5), 0.3 + Math.sin(this.time*5), 1];
-            }
         }
+        
+//        this.capturer = new CCapture( { 
+//                name: "video",
+//				verbose: true, 
+//				framerate: 60,
+//				motionBlurFrames: 16,
+//				quality: 90,
+//				format: 'webm',
+//                format: 'gif',
+//				workersPath: 'js/extra/',
+//				onProgress: function( p ) { 
+//                    console.warn(p * 100);
+//                }
+//			} );
+
 
         //global settings
         var bg_color = vec4.fromValues(0.937, 0.937, 0.937, 1);
@@ -182,8 +189,8 @@ var GFX = {
             var dt = (now - last) * 0.001;
             that.renderer.clear(bg_color);
 
-            if(APP.orbiting)
-                that.camera.orbit(0.1 * dt, RD.UP);
+            // orbit depending on orbit speed
+            that.camera.orbit(that.orbit_speed * dt, RD.UP);
             
             //smoothing camera
             if(that.camera.smooth){
@@ -195,6 +202,9 @@ var GFX = {
             that.skybox.position = that.camera.position;
             that.renderer.render(that.scene, that.camera);
             that.scene.update(dt);
+            
+            if(that.capturer)
+                that.capturer.capture( that.renderer.canvas );
             
             //get old camera
             that.camera.previous = vec3.clone(that.camera._position);
@@ -217,7 +227,7 @@ var GFX = {
                 that.camera.orbit(-e.deltay * 0.5 * _dt, that.camera._right);
             }
             if (e.dragging && e.rightButton) {
-                that.camera.moveLocal([-e.deltax * 0.5 * _dt, e.deltay * 0.5 * _dt, 0]);
+                that.camera.moveLocal([-e.deltax * _dt, e.deltay * _dt, 0]);
             }
         }
 
@@ -246,6 +256,15 @@ var GFX = {
             
             if(e.keyCode === KEY_S)
                 that.renderer.loadShaders("data/shaders/shaders.glsl");
+            
+            if(e.keyCode === KEY_Z)
+                that.capturer.start();
+            
+            if(e.keyCode === KEY_X)
+                that.capturer.stop();
+            
+            if(e.keyCode === KEY_C)
+                that.capturer.save();
         }
 
         this.context.captureMouse(true);
@@ -280,6 +299,56 @@ var GFX = {
         var cubeMaptexture = GL.Texture.cubemapFromURL(url,{is_cross: 1, minFilter: gl.LINEAR_MIPMAP_LINEAR });
         this.renderer.textures["skybox"] = cubeMaptexture;  
         cubeMaptexture.bind(0);
+    },
+    /*
+    * orbit camera at specific speed
+    */
+    go_orbit: function(element, speed)
+    {
+        if(!speed){
+            this.orbit_speed = 0.1;
+            if(!speed)
+                element.find("i").html("pause_circle_outline");
+            else{
+                element.find("i").html("play_circle_outline");
+                element.removeClass("pressed");
+            }
+            return;
+        }
+        
+        this.orbit_speed = speed;
+    },
+    /*
+    * takes a photo of the renderer canvas
+    */
+    takeSnapshot: function()
+    {
+        // clear capturing box
+        APP.disableAllFeatures({no_msg: true});
+        putCanvasMessage({
+            es: "Capturando escena...",
+            cat: "Capturant escena...",
+            en: "Taking snapshot..."
+        }, 10000);
+
+        // get final canvas
+        var canvas = gl.snapshot(0, 0, GFX.renderer.canvas.width, GFX.renderer.canvas.height);
+
+        function on_complete( img_blob )
+            {
+                $("#cont-msg").empty();
+                var src = canvas.toDataURL();
+                var url = URL.createObjectURL( img_blob );
+                var img = new Image();
+                img.src = src;
+                img.className = "download-image";
+                $("#capturing").append("<a href='"+url+"' download='screenshot.png' class='btn table-btn'>Download</a>");
+                $("#capturing").append("<a data-url='"+src+"' onclick='uploadBLOB($(this))' class='btn table-btn'>Add to project</a>");
+                $("#capturing").append( img );
+                $("#capturing").append("<a onclick='APP.disableAllFeatures()' class='btn table-btn'>Cancel</a>").fadeIn();
+            }
+
+        canvas.toBlob( on_complete, "image/png");  
     },
     /*
     * resize method for canvas

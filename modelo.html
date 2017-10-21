@@ -7,18 +7,17 @@
         
         <title>Modelo 3D PaisArque</title>
         <link rel="icon" href="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
-        
-        <!--    CSS    -->
+        <!--    STYLE   -->
+        <link href="css/litegui.css" rel="stylesheet">
         <link href="css/stylesheet.css" rel="stylesheet">
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-         <link href="css/litegui.css" rel="stylesheet">
         <link rel="stylesheet" href="css/responsive-design.css"> <!-- responsive web design -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <!--    FONTS    -->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" >
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <!--   END CSS    -->
         
         <script type="text/javascript">
             // Used to toggle the menu on small screens when clicking on the menu button
@@ -163,7 +162,7 @@
                                 </a>
                             </div>
                             <div class="w3-col m2 w3-center">
-                                <a onclick="APP.go_orbit($(this));" class="btn tool-btn" title="Movimiento de cámara" id="orbit-btn">
+                                <a onclick="GFX.go_orbit($(this));" class="btn tool-btn" title="Movimiento de cámara" id="orbit-btn">
                                     <i class="material-icons">play_circle_outline</i>
                                     <p id="label-orbit-btn" class="info_hover_box">Orbitar</p>
                                 </a>
@@ -257,10 +256,10 @@
                             </a>
 
                             <div class="sub-btns">
-                                    <a id="measure-areas-btn" onclick="APP.DO_THIS_AREA(0)" class="table-btn nodisplay measures-btns">
+                                    <a id="measure-areas-btn" onclick="APP.calcArea(0)" class="table-btn nodisplay measures-btns">
                                         Área de planta
                                     </a>
-                                    <a id="measure-areas2-btn" onclick="APP.DO_THIS_AREA(1)" class="table-btn nodisplay measures-btns">
+                                    <a id="measure-areas2-btn" onclick="APP.calcArea(1)" class="table-btn nodisplay measures-btns">
                                         Área de alzado
                                     </a>
                             </div>
@@ -385,6 +384,7 @@
         <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <script type="text/javascript" src="js/extra/jquery.csv.min.js"></script>
+        <script type="text/javascript" src="js/extra/CCapture.all.min.js"></script>
         <script type="text/javascript" src="js/extra/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/extra/custom.js"></script>
         <script type="text/javascript" src="js/extra/gl-matrix-min.js"></script>

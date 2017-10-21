@@ -8,8 +8,6 @@ var APP = {
     anot_visible: true,
     // qnt of rotation of the slider
     value: 0,
-    // model is in orbit route
-    orbiting: false,
     // result of collisions
     result: vec3.create(),
     // visibility of tables (measures)
@@ -40,7 +38,38 @@ var APP = {
         var meshURL = root + renderData.mesh;
         var textURL = root + renderData.texture;
         
-        GFX.init(meshURL, textURL);
+        APP.init( meshURL, textURL );
+    },
+    
+    init: function(meshURL, textURL)
+    {
+//        APP.info_inspector = new LiteGUI.Inspector();
+//        APP.info_inspector.addCheckbox("Auto-save", project._auto_save, { callback: function(v) { 
+//            if(project._auto_save != v){
+//                project._auto_save = v;
+//                project.save();    
+//            }
+//        }});
+//        $("#tab-content1-large").append(APP.info_inspector.root);
+        
+        APP.tools_inspector = new LiteGUI.Inspector("tools_inspector");
+        APP.tools_inspector.addButton(null,"Guardar", { width: "100%",  callback: function(){
+            project.save();
+        }});
+        APP.tools_inspector.addButton(null,"Pantalla completa", { width: "100%",  callback: function(){
+            GFX.goFullscreen();
+        }});
+        APP.tools_inspector.addButton(null,"Capturar", { width: "100%",  callback: function(){
+            GFX.takeSnapshot();
+        }});
+        APP.tools_inspector.addNumber("Orbitar", 0, { width: "100%",  callback: function(v){
+            GFX.go_orbit(null, v);
+        }, min: -1, max: 1});
+        
+        $("#tab-content2-large").append(APP.tools_inspector.root);
+        
+        // finish and run GFX stuff
+        GFX.init( meshURL, textURL );  
     },
     
     lookAt: function(camera)
@@ -78,18 +107,6 @@ var APP = {
     {
         for(var i = 0; i < elements.length; i++)
             elements[i].flags.visible = flag;
-    },
-    
-    go_orbit: function(element)
-    {
-        this.orbiting = !this.orbiting;
-
-        if(this.orbiting)
-            element.find("i").html("pause_circle_outline");
-        else{
-            element.find("i").html("play_circle_outline");
-            element.removeClass("pressed");
-        }
     },
     
     setRotation: function ()
@@ -251,10 +268,8 @@ var APP = {
         }  
     },
     
-    set3DArea: function( area_type, on_complete )
-    {
-        $("#myCanvas").css("cursor", "crosshair");
-        
+    set3DAreaPoint: function( area_type )
+    {   
         GFX.context.onmousedown = function(e) 
         {
             var ray = GFX.camera.getRay( e.canvasx, e.canvasy );
@@ -262,46 +277,43 @@ var APP = {
 
             if(window.base_added)
             {
-                var node = GFX.scene.testRay( ray, result, undefined, 0x1, true );
-                if(!node)
+                if(!GFX.scene.testRay( ray, result, undefined, 0x1, true ))
                     return;
-                tmp.push(result);
-                // adjust to same point if first point is too close
-                if(vec3.dist(tmp[0], result) < 2)
-                    result = tmp[0];         
-
-                if(tmp.length > 1) // only when more than one to make the line between them
-                    APP.addLine(tmp);
-
+                
+                if(nodes_used.length){
+                    // remove blink from other points
+                    nodes_used[nodes_used.length - 1].active = false;
+                    // adjust to same point if first point is too close
+                    var pos_first = vec3.create();
+                    pos_first = vec3.clone( nodes_used[0].getGlobalPosition() );
+                    if(vec3.dist(pos_first, result) < 2)
+                        result = pos_first;
+                    
+                    if(nodes_used.length > 1) // only when more than one to make the line between them
+                        APP.addLine(nodes_used, {node_list: true});
+                }
+                
+                var world_coord = vec3.clone( result );
+                
                 var ind = new SceneIndication({
                     scene: true,
-                    position: result,
+                    position: world_coord,
                     color: [0.3,0.8,0.1,1],
+                    time: 0.0,
+                    active: true,
+                    onupdate: "blink"
                 });
-
+                
                 var plane = GFX.scene.root.getNodeByName("area-plane");
-//                setParent(plane, ind.node);
-                var son = ind.node;
-                var parent = plane;
-                var sonGlobal = son.getGlobalMatrix();
-                var parentInverse = mat4.create();
-                mat4.invert(parentInverse, parent.getGlobalMatrix());
-                GFX.scene.root.removeChild(son);
-                parent.addChild(son);
-                son._local_matrix = mat4.multiply(son._local_matrix, parentInverse, sonGlobal);
+                setParent(plane, ind.node, true);
+                nodes_used.push( ind.node );
             }
             else
-                if(!GFX.scene.testRay( ray, result, undefined, 0x1, true ))
-                    return false;
-                else{
+                if(GFX.scene.testRay( ray, result, undefined, 0x1, true )){
                     GFX.model.flags.ignore_collisions = true; // points are now stuff for plane
                     APP.addAreaBase(result, area_type);
                     window.base_added = true;
-                    return true;
                 }
-            
-            if(on_complete)
-                on_complete();
         }  
     },
     
@@ -359,115 +371,79 @@ var APP = {
         $("#add-dialog").click();
     },
     
-    createArea: function(point_list, index)
+    createArea: function(index, nodes)
     {
-        var points2D = [];
-        var p2D = null;
-        var adds = 0, subs = 0;
-
-        APP.addLine(point_list);
-
-        for(var i = 0; i < point_list.length; ++i)
-        {
-            // planta --> index = 1
-            // alzado --> index = 2
-            p2D = index == 1 ? vec2.fromValues(point_list[i][0], point_list[i][2]) : vec2.fromValues(point_list[i][1], point_list[i][2]);
-            points2D.push(p2D);
+        var real_positions = [], old_positions = [], points2D = [];
+        
+        // get positions before rotating the plane to show the area later
+        for(var it in nodes){
+            var node = nodes[it];
+            var node_global_position = vec3.create();
+            node_global_position = vec3.clone( node.getGlobalPosition() );
+            old_positions.push( node_global_position );
         }
-
-        for(var i = 0; i < points2D.length - 1; ++i)
-        {
-            var current = points2D[i];
-            var next = points2D[i+1];
-            adds += current[0] * next[1];
-            subs += current[1] * next[0];
-        }
-
-        var area = Math.abs(0.5 * (adds - subs));
-        area /= Math.pow(project._meter, 2);
-
-        // passing 3d points list
-        project.insertArea(point_list, area, index, "nueva_area", project._default_measure_options);
-        //clear all
-        APP.disableAllFeatures();  
-    },
-    
-    CREATE_THIS_AREA: function(index, point_list)
-    {
-        console.log("DEBUG PRELIST", point_list);
+        
         // rotate plane to easy calculation
         var plane = GFX.scene.root.getNodeByName("area-plane");
-        var aux_list = [], nodes = [].concat(plane.children);
-        
         plane._rotation = [0, 0, 0, 1];
         plane.updateMatrices();
         
         for(var it in nodes){
             var node = nodes[it];
-            if(node.parentNode != plane)
-                continue;
-            // transform to world space
-            var root = GFX.scene.root;
-            var node_matrix = node._local_matrix;
-            plane.removeChild(node);
-            root.addChild(node);
-            node._global_matrix = node_matrix;
+            // get world space position from each node to calculate real distances
+            var node_global_position = vec3.create();
+            node_global_position = vec3.clone( node.getGlobalPosition() );
             // add position in world space
-            aux_list.push(node._position);
+            real_positions.push( node_global_position );
+            // add position in 2d (x-z)
+            points2D.push( vec2.fromValues(node_global_position[0], node_global_position[2]) );
         }
         
-        console.log("DEBUG AUX", aux_list);
-            
-        var left = 0, right = 0, points2D = [];
-
-        for(var i = 0; i < aux_list.length; ++i)
-            points2D.push(vec2.fromValues(aux_list[i][0], aux_list[i][2]));
-
+        // calculate area with math formula
+        var left = 0, right = 0;
         for(var i = 0; i < points2D.length - 1; ++i)
         {
             var current = points2D[i], next = points2D[i+1];
             left += current[0] * next[1];
             right += current[1] * next[0];
         }
-
         var area = Math.abs(0.5 * (left - right));
+
+        // pass it to m2
         area /= Math.pow(project._meter, 2);
 
         // clear
         APP.disableAllFeatures();
-        // passing 3d points list to render measure
-        project.insertArea(point_list, area, index, "nueva_area", project._default_measure_options);
+        project.insertArea(old_positions, area, index, "nueva_area", project._default_measure_options);
     },
       
-    DO_THIS_AREA: function ( area_type )
+    calcArea: function ( area_type )
     {
         // clear first
         APP.disableAllFeatures({no_msg: true});
 
         if(project._meter == -1){
-            var msg = {
+            putCanvasMessage({
                 es: "Falta configurar la escala",
                 cat: "Primer has de configurar l'escala",
                 en: "Set up the scale first"
-            }
-            putCanvasMessage(msg, 3000, {type: "error"});
-            return;
+            }, 3000, {type: "error"});
+            return 0;
         }
         
         //open dialog tools
         testDialog();
-        window.tmp = [];
+        window.nodes_used = [];
         window.base_added = false;
 
-        $("#add-dialog").click(function()
-        { 
+        $("#add-dialog").click(function(){ 
             selectDialogOption($(this));
-            APP.set3DArea(area_type);
+            $("#myCanvas").css("cursor", "crosshair");
+            APP.set3DAreaPoint(area_type);
         });
-        $("#end-dialog").click(function()
-        {
-            if(tmp.length > 2)
-                APP.CREATE_THIS_AREA((area_type+1), tmp);
+        $("#end-dialog").click(function(){
+            if(nodes_used.length > 2)
+                APP.createArea((area_type+1), nodes_used);
         });
         // begin with an option selected
         $("#add-dialog").click();
@@ -476,6 +452,18 @@ var APP = {
     addLine: function(points, options)
     {
         options = options || {};
+        var positions = null;
+        
+        // option for scene node list
+        if(options.node_list){
+            positions = [];
+            for(var i = 0; i < points.length; ++i)
+            {
+                positions.push( vec3.clone( points[i].position ) );
+            }
+            points = positions;
+        }
+        
         var vertices = [];
         GFX.destroyElements(GFX.scene.root.children, "config-tmp"); // clear last line
         for(var i = 0; i < points.length; ++i)
@@ -510,7 +498,7 @@ var APP = {
                 position: basePoint,
                 scaling: 300,
                 opacity: 0.55,
-                color: [0.9, 0.2, 0.2]
+                color: [0, 0.439, 0.788]
         });
         plane.name = "area-plane";
         plane.description = "config";
@@ -534,9 +522,6 @@ var APP = {
         if(session_lang = localStorage.getItem("lang"))
             lang = session_lang;
         APP.inspector.addVector2(string[lang], null, {callback: function(v){
-            if(tmp.lenght) // no moving if one point is selected
-                return;
-            
             if(v[0] > APP._plane_rotation_[0])
                 plane.rotate(v[0] * DEG2RAD, RD.FRONT);    
             if(v[0] < APP._plane_rotation_[0])

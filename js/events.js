@@ -171,35 +171,7 @@ $("#measure-opt-btn").click(function(){
 /*
 * holds the action of taking a snapshot of the canvas
 */
-$("#capture-scene").click(function(){
-   
-    // clear capturing box
-    APP.disableAllFeatures({no_msg: true});
-    var msg = {
-        es: "Capturando escena...",
-        cat: "Capturant escena...",
-        en: "Taking snapshot..."
-    }
-    putCanvasMessage(msg, 1500);
-    
-    // get final canvas
-    var canvas = gl.snapshot(0, 0, GFX.renderer.canvas.width, GFX.renderer.canvas.height);
-    
-    function on_complete( img_blob )
-		{
-            var src = canvas.toDataURL();
-			var url = URL.createObjectURL( img_blob );
-			var img = new Image();
-			img.src = src;
-            img.className = "download-image";
-            $("#capturing").append("<a href='"+url+"' download='screenshot.png' class='btn table-btn'>Download</a>");
-            $("#capturing").append("<a data-url='"+src+"' onclick='uploadBLOB($(this))' class='btn table-btn'>Add to project</a>");
-			$("#capturing").append( img );
-            $("#capturing").append("<a onclick='APP.disableAllFeatures()' class='btn table-btn'>Cancel</a>").fadeIn();
-		}
-    
-    canvas.toBlob( on_complete, "image/png");
-});
+$("#capture-scene").click(GFX.takeSnapshot);
 
 /*
 * Anotations TAB
@@ -208,19 +180,15 @@ $("#capture-scene").click(function(){
 $("#saveTextButton").click(function(e)
 {
     var id = project.getAnnotations().length + 1;
-    var ind = new SceneIndication();
-    ind = ind.ball(null, APP.result, {id: id, color: [1,0,0,1]});
-    ind.active = false;
-    ind.time = 0.0;
-
-    ind.update = function(dt)
-    {
-        this.time += dt;
-        if(!this.active)
-            this.color = [1,0,0,1];
-        else
-            this.color = [1, 0.3 + Math.sin(this.time*5), 0.3 + Math.sin(this.time*5), 1];
-    }
+    
+    var ind = new SceneIndication({
+        position: APP.result,
+        id: id,
+        active: false,
+        color: [1,0,0,1],
+        time: 0.0,
+        onupdate: "blink"
+    });
     
     setParent(GFX.model, ind);
 
@@ -452,10 +420,18 @@ $(function() {
     });
 });
 
+// prevent copy-paste the password to confirmation
+$("#password2").on("paste", function(e){
+    e.preventDefault();
+})
+
 $("#formForgotPassword").on('submit', function(e)
 {
     e.preventDefault();
     var values = getFormValues(this);
+    
+    if(values["password"] !== values["password2"])
+        throw( "invalid confirmation" );
     
     LiteFileServer.login( QueryString["email"], QueryString["pass"], function(session, result){
         if( session.status == LiteFileServer.LOGGED )

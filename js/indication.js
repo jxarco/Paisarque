@@ -8,6 +8,16 @@ function SceneIndication(o)
 {
 	if(this.constructor !== SceneIndication)
 		throw("You must use new to create a new annotation");
+    
+    this.blink = function(dt)
+    {
+        this.time += dt;
+        if(!this.active)
+            this.color = [1,0,0];
+        else
+            this.color = [1, 0.3 + Math.sin(this.time*5), 0.3 + Math.sin(this.time*5)];
+    }
+    
     if(o)
         this.configure(o);
 }
@@ -48,11 +58,19 @@ SceneIndication.prototype.configure = function(o)
                     node.color = [0.258, 0.525, 0.956, 1]; 
                 break;
             default:
-                if(key != "scene")
+                //special cases
+                if(key == "onupdate")
+                    continue;
+                if(key == "scene")
+                    continue;
+                //normal cases
                 node[key] = o[key];
                 break;
         }
     }
+    
+    if(o.onupdate)
+        node.update = this.blink;
     
     if(o.scene && GFX.scene)
         GFX.scene.root.addChild(node);
