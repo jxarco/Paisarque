@@ -53,23 +53,201 @@ var APP = {
 //        $("#tab-content1-large").append(APP.info_inspector.root);
         
         APP.tools_inspector = new LiteGUI.Inspector("tools_inspector");
+        APP.tools_inspector.addSection("General");
         APP.tools_inspector.addButton(null,"Guardar", { width: "100%",  callback: function(){
             project.save();
         }});
         APP.tools_inspector.addButton(null,"Pantalla completa", { width: "100%",  callback: function(){
             GFX.goFullscreen();
         }});
-        APP.tools_inspector.addButton(null,"Capturar", { width: "100%",  callback: function(){
-            GFX.takeSnapshot();
+        
+        APP.tools_inspector.addSection("Modelo 3D");
+        APP.tools_inspector.addButton("Rotaciones", "Configurar", { width: "100%",  callback: function(){
+            APP.setRotation();
+        }});
+        APP.tools_inspector.addButton("Escala-metro", "Configurar", { width: "100%",  callback: function(){
+            APP.setScale();
+        }});
+        
+        APP.tools_inspector.addSection("Cámara");
+        APP.tools_inspector.addButton(null, "Restablecer", { width: "100%",  callback: function(){
+            GFX.camera.perspective( 45, gl.canvas.width / gl.canvas.height, 0.1, 10000 );
+            GFX.camera.lookAt( [150,60,150],[0,0,0],[0,1,0] );
+            GFX.camera.direction = [150,60,150];
+            GFX.camera.previous = vec3.clone(GFX.camera._position);
         }});
         APP.tools_inspector.addNumber("Orbitar", 0, { width: "100%",  callback: function(v){
-            GFX.go_orbit(null, v);
-        }, min: -1, max: 1});
+            GFX.orbit_speed = v;
+            if(v == 0) APP.camera_static = true;
+            else APP.camera_static = false;
+        }, min: -1, max: 1, step: 0.01});
+
+        APP.tools_inspector.addSection("Medidas");
+        APP.tools_inspector.addButtons("Tablas",["O-D","Segmentos","Áreas"],{callback: function(v) {        
+            APP.showMeasureTables(v);
+        }});
+        
+        APP.tools_inspector.addSection("Exportar escena");
+        APP.tools_inspector.addButton("Imagen","Capturar", { width: "100%",  callback: function(){
+            GFX.takeSnapshot();
+        }});
+        APP.export_data = {
+            format: "webm",   
+            framerate: "30",
+//            motionBlurFrames: "8",
+            quality: "85",
+            name: "exported"
+        }
+        APP.tools_inspector.addButtons("Grabar",["Play","Stop","Exportar"],{callback: function(v) {        
+            APP.exportCanvas(v);
+        }});
+        APP.tools_inspector.addString("Nombre", APP.export_data.name,{callback: function(v) { APP.export_data.name = v; }});
+        APP.tools_inspector.addString("Frame rate", APP.export_data.framerate,{values:["webm","gif"], callback: function(v) { APP.export_data.framerate = v; }});
+        APP.tools_inspector.addCombo("Formato", APP.export_data.format,{values:["webm","gif"], callback: function(v) { APP.export_data.format = v; }});
+//        APP.tools_inspector.addString("Motion blur frames", APP.export_data.motionBlurFrames,{callback: function(v) { APP.export_data.motionBlurFrames = v; }});
+        APP.tools_inspector.addNumber("Calidad", APP.export_data.quality, { width: "100%",  callback: function(v){ APP.export_data.quality = v; }, min: 1, max: 99, step: 1});
         
         $("#tab-content2-large").append(APP.tools_inspector.root);
         
         // finish and run GFX stuff
         GFX.init( meshURL, textURL );  
+    },
+    
+    showMeasureTables: function(name)
+    {
+        APP.disableAllFeatures({no_msg: true});
+        var table = null;
+        var btn = null;
+        var flag = null;
+        
+        if(name == "O-D")
+        {
+            APP.showing["t1"] = !APP.showing["t1"];
+            table = $('#distances-table');
+            btn = $('#measure-btn');
+            flag = APP.showing["t1"];
+        }
+        
+        else if(name == "Segmentos")
+        {
+            APP.showing["t2"] = !APP.showing["t2"];
+            table = $('#segment-distances-table');
+            btn = $('#measure-s-btn');
+            flag = APP.showing["t2"];
+        }
+        
+        else if(name == "Áreas")
+        {
+            APP.showing["t3"] = !APP.showing["t3"];
+            table = $('#areas-table');
+            btn = $('#measure-opt-btn');
+            flag = APP.showing["t3"]
+        }
+        
+        revealDOMElements([table, btn], flag);
+    },
+    
+    exportCanvas: function(name)
+    {
+        if(name == "Play")
+        {
+            this.capturer = new CCapture( { 
+                name: APP.export_data.name,
+                framerate: parseInt( APP.export_data.framerate ),
+//                motionBlurFrames: parseInt( APP.export_data.motionBlurFrames ),
+                quality: APP.export_data.quality,
+                format: APP.export_data.format,
+                workersPath: 'js/extra/',
+                onProgress: function( p ) { 
+                    console.warn(p * 100);
+                }
+            } );  
+
+            this.capturer.start();
+        }
+        
+        else if(name == "Stop")
+        {
+            this.capturer.stop();
+        }
+        
+        else if(name == "Exportar")
+        {
+            this.capturer.save();
+        }
+    },
+    
+    adjustSlider: function (slider)
+    {
+        var to_rotate;
+        if(slider.value > APP.value)
+            to_rotate = 0.05 * Math.sign(slider.value);
+        else
+            to_rotate = - 0.05 * Math.sign(slider.value);
+
+        var axis = null;
+
+        if(slider.id === "s1")
+                axis = RD.UP;
+        if(slider.id === "s2")
+                axis = RD.LEFT;
+        if(slider.id === "s3")
+                axis = RD.FRONT;
+
+        GFX.model.rotate(to_rotate, axis);
+        APP.value = slider.value;
+    },
+
+    disableAllFeatures: function (options)
+    {
+        options = options || {};
+        GFX.context.onmousedown = function(e) {};
+        
+        APP.fadeAllTables(this.showing);
+        APP.rotation = false;
+        revealDOMElements([$("#cardinal-axis"), $('.sliders'), $(".sub-btns")], false);
+        GFX.destroyElements(GFX.scene.root.children, "config");
+        GFX.destroyElements(GFX.scene.root.children, "config-tmp");
+        GFX.model.flags.ignore_collisions = false;
+        $("#measure-opt-btn").find("i").html("add_circle_outline");
+        $("#myCanvas").css("cursor", "default");
+        $(".draggable").remove();
+//        $("#cont-msg").empty();
+        
+        // remove helping grid
+        var grid = GFX.scene.root.getNodeByName("grid");
+        if(grid)
+            grid.destroy();
+
+        //remove active classes
+        $(".on-point").removeClass("on-point");
+        $("#tools-tab .btn.tool-btn").removeClass("pressed");
+        
+        // clear capturing box
+        $("#capturing").fadeOut().empty();
+        
+        if(options.no_msg)
+            return;
+        
+        var msg = options.msg || {
+            es: "Hecho",
+            cat: "Fet",
+            en: "Done"
+        };
+        var ms = options.ms || 1250;
+        putCanvasMessage(msg, ms);
+    },
+    
+    fadeAllTables: function (o)
+    {
+        // flags for visibility
+        for(var i in o)
+            o[i] = false;
+        
+        var list = [];
+        list.push($('#distances-table'), $('#measure-btn'), $('#segment-distances-table'));
+        list.push($('#measure-s-btn'), $('#areas-table'), $('#measure-opt-btn'));
+        revealDOMElements(list, false, {e: ""});
     },
     
     lookAt: function(camera)
@@ -579,77 +757,4 @@ var APP = {
             GFX.camera.smooth = true;    
         }
     },
-
-    adjustSlider: function (slider)
-    {
-        var to_rotate;
-        if(slider.value > APP.value)
-            to_rotate = 0.05 * Math.sign(slider.value);
-        else
-            to_rotate = - 0.05 * Math.sign(slider.value);
-
-        var axis = null;
-
-        if(slider.id === "s1")
-                axis = RD.UP;
-        if(slider.id === "s2")
-                axis = RD.LEFT;
-        if(slider.id === "s3")
-                axis = RD.FRONT;
-
-        GFX.model.rotate(to_rotate, axis);
-        APP.value = slider.value;
-    },
-
-    disableAllFeatures: function (options)
-    {
-        options = options || {};
-        GFX.context.onmousedown = function(e) {};
-        
-        APP.fadeAllTables(this.showing);
-        APP.rotation = false;
-        revealDOMElements([$("#cardinal-axis"), $('.sliders'), $(".sub-btns")], false);
-        GFX.destroyElements(GFX.scene.root.children, "config");
-        GFX.destroyElements(GFX.scene.root.children, "config-tmp");
-        GFX.model.flags.ignore_collisions = false;
-        $("#measure-opt-btn").find("i").html("add_circle_outline");
-        $("#myCanvas").css("cursor", "default");
-        $(".draggable").remove();
-//        $("#cont-msg").empty();
-        
-        // remove helping grid
-        var grid = GFX.scene.root.getNodeByName("grid");
-        if(grid)
-            grid.destroy();
-
-        //remove active classes
-        $(".on-point").removeClass("on-point");
-        $("#tools-tab .btn.tool-btn").removeClass("pressed");
-        
-        // clear capturing box
-        $("#capturing").fadeOut().empty();
-        
-        if(options.no_msg)
-            return;
-        
-        var msg = options.msg || {
-            es: "Hecho",
-            cat: "Fet",
-            en: "Done"
-        };
-        var ms = options.ms || 1250;
-        putCanvasMessage(msg, ms);
-    },
-    
-    fadeAllTables: function (o)
-    {
-        // flags for visibility
-        for(var i in o)
-            o[i] = false;
-        
-        var list = [];
-        list.push($('#distances-table'), $('#measure-btn'), $('#segment-distances-table'));
-        list.push($('#measure-s-btn'), $('#areas-table'), $('#measure-opt-btn'));
-        revealDOMElements(list, false, {e: ""});
-    }
 }

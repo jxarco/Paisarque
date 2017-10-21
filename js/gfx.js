@@ -156,21 +156,6 @@ var GFX = {
             // set ball parent
             setParent(that.model, ind.node);
         }
-        
-//        this.capturer = new CCapture( { 
-//                name: "video",
-//				verbose: true, 
-//				framerate: 60,
-//				motionBlurFrames: 16,
-//				quality: 90,
-//				format: 'webm',
-//                format: 'gif',
-//				workersPath: 'js/extra/',
-//				onProgress: function( p ) { 
-//                    console.warn(p * 100);
-//                }
-//			} );
-
 
         //global settings
         var bg_color = vec4.fromValues(0.937, 0.937, 0.937, 1);
@@ -190,7 +175,8 @@ var GFX = {
             that.renderer.clear(bg_color);
 
             // orbit depending on orbit speed
-            that.camera.orbit(that.orbit_speed * dt, RD.UP);
+            if(that.orbit_speed)
+                that.camera.orbit(that.orbit_speed * dt, RD.UP);
             
             //smoothing camera
             if(that.camera.smooth){
@@ -203,8 +189,8 @@ var GFX = {
             that.renderer.render(that.scene, that.camera);
             that.scene.update(dt);
             
-            if(that.capturer)
-                that.capturer.capture( that.renderer.canvas );
+            if(APP.capturer)
+                APP.capturer.capture( that.renderer.canvas );
             
             //get old camera
             that.camera.previous = vec3.clone(that.camera._position);
@@ -256,15 +242,6 @@ var GFX = {
             
             if(e.keyCode === KEY_S)
                 that.renderer.loadShaders("data/shaders/shaders.glsl");
-            
-            if(e.keyCode === KEY_Z)
-                that.capturer.start();
-            
-            if(e.keyCode === KEY_X)
-                that.capturer.stop();
-            
-            if(e.keyCode === KEY_C)
-                that.capturer.save();
         }
 
         this.context.captureMouse(true);
@@ -301,22 +278,11 @@ var GFX = {
         cubeMaptexture.bind(0);
     },
     /*
-    * orbit camera at specific speed
+    * 
     */
-    go_orbit: function(element, speed)
+    test: function(param)
     {
-        if(!speed){
-            this.orbit_speed = 0.1;
-            if(!speed)
-                element.find("i").html("pause_circle_outline");
-            else{
-                element.find("i").html("play_circle_outline");
-                element.removeClass("pressed");
-            }
-            return;
-        }
         
-        this.orbit_speed = speed;
     },
     /*
     * takes a photo of the renderer canvas

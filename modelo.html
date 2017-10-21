@@ -32,7 +32,7 @@
         </script>
     </head>
 
-    <body style="padding-bottom: 180px !important;">
+    <body style="padding-bottom: 0px !important;">
         <!-- Navbar -->
         <div class="w3-top">
           <div class="w3-bar w3-card-2">
@@ -143,42 +143,7 @@
                              aria-labelledby="tools" 
                              aria-hidden="true">
                             
-                            <div class="w3-col m2 w3-center">
-                                <a class="btn tool-btn save" title="Guardar proyecto">
-                                    <i class="material-icons">save</i>
-                                    <p id="label-save-btn" class="info_hover_box">Guardar</p>
-                                </a>
-                            </div>
-                            <div class="w3-col m2 w3-center">
-                                <a onclick="GFX.goFullscreen();" class="btn tool-btn" title="Pantalla completa" id="fullscreen-btn">
-                                    <i class="material-icons">fullscreen</i>
-                                    <p class="info_hover_box" >100%</p>
-                                </a>
-                            </div>
-                            <div class="w3-col m2 w3-center">
-                                <a id="capture-scene" class="btn tool-btn" title="Captura de escena">
-                                    <i class="material-icons">photo_camera</i>
-                                    <p id="label-capture-btn" class="info_hover_box">Capturar</p>
-                                </a>
-                            </div>
-                            <div class="w3-col m2 w3-center">
-                                <a onclick="GFX.go_orbit($(this));" class="btn tool-btn" title="Movimiento de cámara" id="orbit-btn">
-                                    <i class="material-icons">play_circle_outline</i>
-                                    <p id="label-orbit-btn" class="info_hover_box">Orbitar</p>
-                                </a>
-                            </div>
-                            <div class="w3-col m2 w3-center">
-                                <a onclick="APP.setRotation()" class="btn tool-btn" title="Aplicar rotaciones por defecto" id="rotations-btn">
-                                    <i class="material-icons">3d_rotation</i>
-                                    <p id="label-rot-btn" class="info_hover_box">Rotaciones</p>
-                                </a>
-                            </div>
-                            <div class="w3-col m2 w3-center">
-                                <a onclick="APP.setScale()" class="btn tool-btn" title="Configurar escala" id="scale-btn">
-                                    <i class="material-icons">tune</i>
-                                    <p id="label-scale-btn" class="info_hover_box">Escala</p>
-                                </a>
-                            </div>
+<!--
                             <div class="w3-col m2 w3-center">
                                 <a id="show_dt" class="btn tool-btn" title="Tabla de distancias">
                                     <i class="material-icons">remove</i>
@@ -197,6 +162,7 @@
                                     <p id="label-t3" class="info_hover_box">Áreas</p>
                                 </a>
                             </div>
+-->
                             
                             <div id="capturing">
                             
@@ -366,18 +332,6 @@
             </div>
             <!--  END TOOLS       -->
         </div>
-        
-        <footer>
-            <p>Proyecto PaisArque - <a href="https://www.upf.edu/web/paisarque">upf.edu/web/paisarque</a></p>
-            <p>CaSES: Complexity and Socio-Ecological Dynamics - Edificio Mercè Rodoreda (Campus de la Ciutadella)
-                Ramon Trias Fargas, 25-27
-                08005 Barcelona
-                cases@upf.edu - <a href="https://www.upf.edu/web/cases">upf.edu/web/cases</a></p>
-            <p>Interactive Technologies Group - Edificio Tànger (Campus de la Comunicació-Poblenou)
-                    Tànger, 122-140 
-                    08018 Barcelona - <a href="http://gti.upf.edu/">gti.upf.edu</a></p>
-            <img height="20px;" src="http://icons.iconarchive.com/icons/icons8/windows-8/512/City-Archeology-icon.png">    
-        </footer><!--   footer end-->
         
         </body>
         

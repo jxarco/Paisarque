@@ -6,7 +6,8 @@
 .inspector {
 	/* margin-top: 10px; */
 	/*margin-bottom: 20px;*/
-	color: #999;
+	color: #333;
+/*    background-color: #3A3A3A;*/
 	/*
 	user-select: none;
 	-moz-user-select: none;
@@ -53,7 +54,7 @@
 }
 
 .inspector:not(.one_line) .widget.even {
-	background-color: rgba(40,40,40,0.5);
+/*	background-color: rgba(40,40,40,0.5);*/
 }
 
 
@@ -63,14 +64,14 @@
 }
 
 .inspector .widget:hover {
-/*	background-color: #556 !important;*/
+	background-color: #556 !important;
 }
 
 .inspector .wtitle, .inspector .wsectiontitle {
 	display: inline-block;
 	position: relative;
 	z-index: auto;
-	background-color: #555;
+	background-color: rgba(160, 160, 200, 0.4);
 
 	/*
     background-image: linear-gradient(right , #555, #444);
@@ -85,13 +86,13 @@
 	padding: 2px;
 	padding-left: 8px;
 	/*margin-bottom: 4px;*/
-	color: #BBC;
-	font-size: 1.2em;
+	color: #444;
+	font-size: 1.1em;
 }
 
 .inspector .wsectioncontent {
 	padding: 4px 4px;
-	background-color: #3A3A3A;
+/*	background-color: #3A3A3A;*/
 }
 
 .inspector .wtitle {
@@ -121,11 +122,17 @@
 	overflow: hidden;
 	/*max-height: 1.5em;*/
 	white-space: nowrap;
+    border-radius: 2px;
+}
+
+.inspector .wsectiontitle:hover{
+	background: #aab !important;
+    cursor: pointer;
 }
 
 .inspector .wsectiontitle .buttons {
     position: absolute;
-	top: 4px;
+	top: 2px;
     right: 4px;
 }
 
@@ -162,7 +169,7 @@
 
 .inspector .wsection {
 	/*padding: 4px 2px;*/
-	margin-bottom: 4px;
+	margin-bottom: 2px;
 }
 
 .inspector .wsection.selected .wsectiontitle {
@@ -324,6 +331,7 @@
 	border-top: 1px solid #000; 
 	border-bottom: 1px solid #3f3f3f; 
 	border-radius: 3px;	
+    margin-right: 4px !important;
 }
 
 .inspector .wcontent .inputfield input:focus, .inspector .wcontent .inputfield textarea:focus

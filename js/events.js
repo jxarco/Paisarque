@@ -112,45 +112,6 @@ $(".save").click(function()
         copy.save();// save copy of the project for extra
 });
 
-/*
-*   Button: Show/Hide the distances measured table
-*/
-$("#show_dt").click(function() 
-{
-    APP.disableAllFeatures({no_msg: true});
-    APP.showing["t1"] = !APP.showing["t1"];
-    
-    var table = $('#distances-table');
-    var btn = $('#measure-btn');
-    revealDOMElements([table, btn], APP.showing["t1"]);
-});
-
-/*
-*   Button: Show/Hide the segments distances measured table
-*/
-$("#show_dst").click(function() 
-{
-    APP.disableAllFeatures({no_msg: true});
-    APP.showing["t2"] = !APP.showing["t2"];
-    
-    var table = $('#segment-distances-table');
-    var btn = $('#measure-s-btn');
-    revealDOMElements([table, btn], APP.showing["t2"]);
-});
-
-/*
-*   Button: Show/Hide the area measured table
-*/
-$("#show_areat").click(function() 
-{
-    APP.disableAllFeatures({no_msg: true});
-    APP.showing["t3"] = !APP.showing["t3"];
-    
-    var table = $('#areas-table');
-    var btn = $('#measure-opt-btn');
-    revealDOMElements([table, btn], APP.showing["t3"]);
-});
-
 /* 
 * interface changing when click
 */
@@ -167,11 +128,6 @@ $("#measure-opt-btn").click(function(){
         $(".sub-btns").hide(); 
     }
 });
-
-/*
-* holds the action of taking a snapshot of the canvas
-*/
-$("#capture-scene").click(GFX.takeSnapshot);
 
 /*
 * Anotations TAB

@@ -609,7 +609,14 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
     box-shadow: -5px 0px 15px rgba(0, 0, 0, 0.32); 
 }
 .tab-content-large{
-        overflow: hidden !important;
+        overflow: hidden;
+}
+#tab-content2-large{
+    padding: 0 !important;
+    overflow: scroll !important;
+}
+#tab-content2-large::-webkit-scrollbar { 
+    display: none; 
 }
 #myCanvas {
     margin: 0;
