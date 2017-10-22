@@ -70,8 +70,7 @@ $(".pagination").click(function(){
 //Enable deleting a project at the main page
 $("#delete-project").click(function() {
     
-    delete_project_active = true;
-    alert("Selecciona proyecto a eliminar:");
+    
 });
 
 /*
@@ -108,23 +107,6 @@ $(".save").click(function()
         project.save(); 
     else
         copy.save();// save copy of the project for extra
-});
-
-/* 
-* interface changing when click
-*/
-$("#measure-opt-btn").click(function(){
-   
-    if($(".sub-btns").css("display") == "none")
-    {
-        $(this).find("i").html("remove_circle_outline");
-        $(".sub-btns").show(); 
-    }
-    else 
-    {
-        $(this).find("i").html("add_circle_outline");
-        $(".sub-btns").hide(); 
-    }
 });
 
 /*
@@ -166,38 +148,16 @@ $("#delete-anot-btn").click(function() {
     
     if(!project.getAnnotations().length)
     {
-        var msg = {
+        putCanvasMessage({
             es: "No hay anotaciones",
             cat: "No hi ha cap anotació",
             en: "No annotations to delete"
-        }
-        putCanvasMessage(msg, 3000, {type: "error"});
+        }, 3000, {type: "error"});
         return;
     }
     
     else if(confirm("¿Estas seguro?"))
         project.deleteAllAnotations( GFX.model );
-});
-
-/*
-*   Button: Change visibility of the annotations
-*   in canvas
-*/
-$(".viz_on").click(function() 
-{
-    APP.anot_visible = !APP.anot_visible;
-    APP.showElements(GFX.model.children, APP.anot_visible);
-    
-    var lang = localStorage.getItem("lang");
-    var options = {
-        _show: {es: "Mostrar", cat: "Mostrar", en: "Show"},
-        _hide: {es: "Esconder", cat: "Amagar", en: "Hide"},
-    }
-    
-    var extra = APP.anot_visible === false ? "" : "_off";
-    var tooltip = APP.anot_visible === false ? options["_show"][lang] : options["_hide"][lang];
-    $(this).html( "<i class='material-icons'>visibility" + extra + "</i>" +
-                "<p class='info_hover_box'>" + tooltip + "</p>");
 });
 
 /*
@@ -377,7 +337,13 @@ $(function() {
 // prevent copy-paste the password to confirmation
 $("#password2").on("paste", function(e){
     e.preventDefault();
-})
+});
+
+$("#password2").on("keyup", function(e){
+    e.preventDefault();
+    if($(this).val() != $("#password").val())
+        $(this).css("background-color", "rgba(255, 0, 0, 0.3)");
+});
 
 $("#formForgotPassword").on('submit', function(e)
 {

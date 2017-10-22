@@ -4,8 +4,6 @@ var _dt             = 0.0;
 var APP = {
     // rotation mode
     rotation: false,
-    // visibility of anotations
-    anot_visible: true,
     // qnt of rotation of the slider
     value: 0,
     // result of collisions
@@ -45,7 +43,7 @@ var APP = {
     {  
         this.createInfoInspector();
         this.createToolsInspector();
-//        this.createAnotInspector();
+        this.createAnotInspector();
         
         // finish and run GFX stuff
         GFX.init( meshURL, textURL );  
@@ -56,22 +54,22 @@ var APP = {
         APP.info_inspector = new LiteGUI.Inspector();
         
         APP.info_inspector.addSection("Datos");
-        APP.info_inspector.addStringButton("Autor", project._author, { width: "100%", callback: function(v){
+        APP.info_inspector.addString("Autor", project._author, { width: "100%", callback: function(v){
             project.setAuthor(v);
         }});
-        APP.info_inspector.addStringButton("Ubicación", project._location, { callback: function(v){
+        APP.info_inspector.addString("Ubicación", project._location, { callback: function(v){
             project.setLocation(v);
         }});
-        APP.info_inspector.addStringButton("Descripción", project._description, { callback: function(v){
+        APP.info_inspector.addString("Descripción", project._description, { callback: function(v){
             project._description = v;
         }});
         
         APP.info_inspector.addSection("Mapa", {className: "map-section"});
-        APP.info_inspector.addStringButton("Latitud", project._coordinates.lat, { width: "100%",  callback: function(v){
+        APP.info_inspector.addString("Latitud", project._coordinates.lat, { width: "100%",  callback: function(v){
             project._coordinates.lat = parseFloat( v );
             initMap(); 
         }, step: 0.0001});
-        APP.info_inspector.addStringButton("Longitud", project._coordinates.lng, { width: "100%",  callback: function(v){
+        APP.info_inspector.addString("Longitud", project._coordinates.lng, { width: "100%",  callback: function(v){
             project._coordinates.lng = parseFloat( v );
             initMap(); 
         }, step: 0.0001});
@@ -126,31 +124,63 @@ var APP = {
             APP.appendNewMeasure(PW.AREA, v);
         }});
         
-        APP.tools_inspector.addSection("Exportar escena", {collapsed: true});
+        APP.tools_inspector.addSection("Exportar escena", {collapsed: true, className: "export-section"});
         APP.tools_inspector.addButton("Imagen","Capturar", { width: "100%",  callback: function(){
             GFX.takeSnapshot();
         }});
         APP.export_data = {
             format: "webm",   
-            framerate: "30",
-//            motionBlurFrames: "8",
-            quality: "85",
-            name: "exported"
+            framerate: "60",
+            mb_frames: 1,
+            quality: "50",
+            name: "exported",
+            verbose: false,
+            display: false
         }
         APP.tools_inspector.addButtons("Grabar",["Play","Stop","Exportar"],{callback: function(v) {        
             APP.exportCanvas(v);
         }});
         APP.tools_inspector.addString("Nombre", APP.export_data.name,{callback: function(v) { APP.export_data.name = v; }});
-        APP.tools_inspector.addString("Frame rate", APP.export_data.framerate,{values:["webm","gif"], callback: function(v) { APP.export_data.framerate = v; }});
         APP.tools_inspector.addCombo("Formato", APP.export_data.format,{values:["webm","gif"], callback: function(v) { APP.export_data.format = v; }});
-//        APP.tools_inspector.addString("Motion blur frames", APP.export_data.motionBlurFrames,{callback: function(v) { APP.export_data.motionBlurFrames = v; }});
-        APP.tools_inspector.addNumber("Calidad", APP.export_data.quality, { width: "100%",  callback: function(v){ APP.export_data.quality = v; }, min: 1, max: 99, step: 1});
+        APP.tools_inspector.addNumber("Calidad", APP.export_data.quality, { width: "100%",  callback: function(v){  APP.export_data.quality = v; }, min: 1, max: 99, step: 1});
+        APP.tools_inspector.addSeparator();
+        APP.tools_inspector.addString("Frame rate", APP.export_data.framerate,{ callback: function(v) {             APP.export_data.framerate = v; }});
+        APP.tools_inspector.addCombo("MotionBlur f.", APP.export_data.mb_frames,{ values:[1, 2, 4, 8, 16], callback: function(v) { APP.export_data.mb_frames = v; }});
+//        APP.tools_inspector.addCheckbox("Progreso", APP.export_data.verbose, { callback: function(v){
+//            APP.export_data.verbose = v;
+//        }});
+        APP.tools_inspector.addCheckbox("Widget", APP.export_data.display, { callback: function(v){
+            APP.export_data.display = v;
+            if(!v)
+                $("#capture-widget").remove();
+        }});
         
         $("#tab-content2-large").append(APP.tools_inspector.root);
+        
+        var progress = document.createElement("div");
+        progress.id = "progress-line";
+        
         $(".wsection.model3d-section").find(".wsectioncontent").append($(".sliders"));
         $(".wsection.measures-section").find(".wsectioncontent").append($("#distances-table"));
         $(".wsection.measures-section").find(".wsectioncontent").append($("#segment-distances-table"));
         $(".wsection.measures-section").find(".wsectioncontent").append($("#areas-table"));  
+        $(".wsection.export-section").find(".wsectioncontent").prepend(progress);
+    },
+    
+    createAnotInspector: function()
+    {
+        APP.anot_inspector = new LiteGUI.Inspector();
+        
+        APP.anot_inspector.addSection("Opciones", {className: "anot-section"});
+        APP.anot_inspector.addCheckbox("Mostrar", true, {callback: function(v){
+            APP.showElements( GFX.model.children, v );
+        }});
+        APP.anot_inspector.addCheckbox("Anotar", false, {callback: function(v){
+            APP.anotate( v );
+        }});
+        APP.anot_inspector.addSeparator();
+        
+        $("#tab-content3-large").prepend(APP.anot_inspector.root);
     },
     
     showMeasureTables: function(name)
@@ -215,16 +245,24 @@ var APP = {
         {
             this.capturer = new CCapture( { 
                 name: APP.export_data.name,
+                verbose: APP.export_data.verbose,
+                display: APP.export_data.display,
                 framerate: parseInt( APP.export_data.framerate ),
-//                motionBlurFrames: parseInt( APP.export_data.motionBlurFrames ),
-                quality: APP.export_data.quality,
+                motionBlurFrames: APP.export_data.mb_frames,
+                quality: parseInt( APP.export_data.quality ),
                 format: APP.export_data.format,
                 workersPath: 'js/extra/',
                 onProgress: function( p ) { 
-                    console.warn(p * 100);
+                    var progress = $("#progress-line");
+                    if(p > 0 && progress.css("display") == "none")
+                        progress.show();
+                    var width = (p * 100) + "%"; 
+                    progress.css("width", width);
+                    if(p == 1)
+                        progress.hide();
                 }
             } );  
-
+            
             this.capturer.start();
         }
         
@@ -321,27 +359,19 @@ var APP = {
             camera.smooth = false;
     },
 
-    anotate: function(modoAnotacion)
+    anotate: function( anotate )
     {
-        if (modoAnotacion) {
-            $("#desAnot").css('opacity', '1');
-            $("#actAnot").css('opacity', '0.2');
-
+        if (anotate) {
             GFX.context.onmousedown = function(e) 
             {
                 var ray = GFX.camera.getRay( e.canvasx, e.canvasy );
-                var node = GFX.scene.testRay( ray, APP.result, undefined, 0x1, true );
-
-                // Si ha habido colision, se crea un punto y se abre una ventana de texto para escribir la anotacion
-                if (node)
+                if ( GFX.scene.testRay( ray, APP.result, undefined, 0x1, true ) )
                     $('#modalText').modal('show');
             }
-
-        } else if (!modoAnotacion) {
-            $("#desAnot").css('opacity', '0.2');
-            $("#actAnot").css('opacity', '1');
+        } 
+        
+        else
             GFX.context.onmousedown = function(e) {}
-        }
     },
     
     showElements: function (elements, flag)

@@ -22,7 +22,9 @@ LiteFileServer.setup("", function(status, resp) {
         console.log("Server ready");
         systemReady();
 
-        if(localStorage.session && session === null)
+        var url = window.location.pathname;
+        
+        if(localStorage.session && url.includes( "/index" ))
         {
             var last_session_opened = JSON.parse(localStorage.session);
             window.location.href = "inicio";

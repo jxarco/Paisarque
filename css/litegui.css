@@ -326,7 +326,7 @@
 
 .inspector .inputfield {
 	display: inline-block;
-	background-color: #222;
+	background-color: #292929;
 	border: 0;
 	border-top: 1px solid #000; 
 	border-bottom: 1px solid #3f3f3f; 
@@ -392,7 +392,7 @@
 }
 
 .inspector .wcontent .inputcombo select {
-	background: #262626;
+	background: #292929;
 	text-align-last:center;
 }
 

@@ -264,6 +264,12 @@ h1, h2, h3, h4, h5, h6{
 /*
 * modelo.html
 */
+#progress-line{
+    height: 1px;
+    border: 2px solid #0070c9;
+    width: 0px;
+    display: none;
+}
 input{
     font-size: 15px;
     margin-top: 50px;
@@ -479,7 +485,6 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 #capturing{ /* here goes the screenshot*/
     width: 100%;
     height: auto;
-    margin-top: 255px !important;
     display: none;
 }
 .download-image{
@@ -557,19 +562,11 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
     box-shadow: -5px 0px 15px rgba(0, 0, 0, 0.32); 
 }
 .tab-content-large{
-        overflow: hidden;
+        padding: 0 !important;
+        overflow: scroll !important;
 }
 .tab-content-large::-webkit-scrollbar { 
     display: none; 
-}
-#tab-content1-large{
-    padding: 0 !important;
-    overflow: scroll !important;
-}
-
-#tab-content2-large{
-    padding: 0 !important;
-    overflow: scroll !important;
 }
 #myCanvas {
     margin: 0;
