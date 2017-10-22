@@ -23,6 +23,7 @@ var GFX = {
         this.scene.root.getNodesByName = function(name){ 
             var nodes = [];
             for(var n in that.scene.root.children) if(that.scene.root.children[n].name == name) nodes.push(that.scene.root.children[n]);
+            return nodes;
         }
         
         //create camera

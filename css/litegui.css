@@ -87,7 +87,7 @@
 	padding-left: 8px;
 	/*margin-bottom: 4px;*/
 	color: #444;
-	font-size: 1.1em;
+	font-size: 1em;
 }
 
 .inspector .wsectioncontent {
@@ -375,9 +375,9 @@
 
 .inspector .wcontent .inputfield.button {
 	margin: 0;
-	width: -moz-calc(100% - 26px);
-	width: -webkit-calc(100% - 26px);
-	width: calc(100% - 26px);
+	width: -moz-calc(100% - 28px);
+	width: -webkit-calc(100% - 28px);
+	width: calc(100% - 28px);
 }
 
 .inspector .wcontent .inputcombo {
@@ -477,6 +477,7 @@
 	border-radius: 2px;
 	margin: 0 !important;
 	text-align: center;
+    color:aliceblue;
 
 	user-select: none;
 	-moz-user-select: none;

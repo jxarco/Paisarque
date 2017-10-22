@@ -87,8 +87,6 @@ $(".slide-tab").click(function(){
     else
         target.slideUp('slow'); 
 });
-$("#lat").keypress(onlyNumbers);
-$("#lon").keypress(onlyNumbers);
 /*
 * Herramientas TAB
 */ 

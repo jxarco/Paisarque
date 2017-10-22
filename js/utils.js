@@ -6,6 +6,13 @@ var KEY_SPACE = 32, KEY_ESC = 27, KEY_ENTER = 13;
 var separator = "__________________________________________________\n";
 var TOP_AREA = 0;
 
+var PW = {
+    // measures
+    OD: 0,
+    SGM: 1,
+    AREA: 2
+}
+
 /*
 * Sets a specific lang to local storage
 */

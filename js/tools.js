@@ -561,12 +561,13 @@ function testDialog(options)
     
     var upperbtn = options.upperbtn || "Añadir puntos";
     var lowerbtn = options.lower || "Finalizar";
-    var location = $("#tab-content2-large");
+//    var location = $("#tab-content2-large");
+    var location = $(".wsection.measures-section").find(".wsectioncontent");
     
     var html = "<div " +
                     "class='draggable ui-widget-content' " +
                   "style='" +
-                  "margin-top: 265px;" +
+//                  "margin-top: 265px;" +
                   "text-align: center;'>" +
                   "<button title='Cancelar' id='close-dialog' class='dialog-btn info'><i class='material-icons'>close</i></button>" +
                   "<div class='dialog-option'>" +

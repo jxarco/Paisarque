@@ -56,6 +56,15 @@ Project.prototype.setAuthor = function(author)
         this.save();
 }
 
+Project.prototype.setLocation = function(location)
+{
+    this._location = location;
+    
+    if(this._auto_save)
+        this.save();
+}
+
+
 /*
 *   @method pushExtra
 *   Insert extra information to the _extra list.
@@ -711,23 +720,7 @@ Project.prototype.save = function( overwrite, extra )
 */
 Project.prototype.config = function()
 {
-    if(this._meter !== -1)
-        $(".measures-btns").css('opacity', '1');
     
-    if(this._description !== "nodesc")
-        $(".pro-info").val(this._description);
-    
-    // data
-    $("#mod_author").val(this._author);
-    $("#mod_location").val(this._location);
-    
-    // coordinates
-    $("#lat").val(this._coordinates.lat);
-    $("#lon").val(this._coordinates.lng);
-    
-    // auto save css
-    if(this._auto_save)
-        $("#auto-save-btn").addClass("auto-saving");
 }
 
 

@@ -42,31 +42,60 @@ var APP = {
     },
     
     init: function(meshURL, textURL)
-    {
-//        APP.info_inspector = new LiteGUI.Inspector();
-//        APP.info_inspector.addCheckbox("Auto-save", project._auto_save, { callback: function(v) { 
-//            if(project._auto_save != v){
-//                project._auto_save = v;
-//                project.save();    
-//            }
-//        }});
-//        $("#tab-content1-large").append(APP.info_inspector.root);
+    {  
+        this.createInfoInspector();
+        this.createToolsInspector();
+//        this.createAnotInspector();
         
+        // finish and run GFX stuff
+        GFX.init( meshURL, textURL );  
+    },
+    
+    createInfoInspector: function()
+    {
+        APP.info_inspector = new LiteGUI.Inspector();
+        
+        APP.info_inspector.addSection("Datos");
+        APP.info_inspector.addStringButton("Autor", project._author, { width: "100%", callback: function(v){
+            project.setAuthor(v);
+        }});
+        APP.info_inspector.addStringButton("Ubicación", project._location, { callback: function(v){
+            project.setLocation(v);
+        }});
+        APP.info_inspector.addStringButton("Descripción", project._description, { callback: function(v){
+            project._description = v;
+        }});
+        
+        APP.info_inspector.addSection("Mapa", {className: "map-section"});
+        APP.info_inspector.addStringButton("Latitud", project._coordinates.lat, { width: "100%",  callback: function(v){
+            project._coordinates.lat = parseFloat( v );
+            initMap(); 
+        }, step: 0.0001});
+        APP.info_inspector.addStringButton("Longitud", project._coordinates.lng, { width: "100%",  callback: function(v){
+            project._coordinates.lng = parseFloat( v );
+            initMap(); 
+        }, step: 0.0001});
+        
+        APP.info_inspector.addSection("Fondos de escena", {className: "cubemap-section"});
+        
+        $("#tab-content1-large").prepend(APP.info_inspector.root);
+        $(".wsection.map-section").find(".wsectioncontent").append($("#map"));
+        $(".wsection.cubemap-section").find(".wsectioncontent").append($("#cubemaps"));
+    },
+    
+    createToolsInspector: function()
+    {
         APP.tools_inspector = new LiteGUI.Inspector("tools_inspector");
         APP.tools_inspector.addSection("General");
-        APP.tools_inspector.addButton(null,"Guardar", { width: "100%",  callback: function(){
+        APP.tools_inspector.addCheckbox("Auto-save", project._auto_save, { callback: function(v){
+            project._auto_save = v;
+            project.save();
+        }});
+        APP.tools_inspector.addButton(null, "Guardar", { width: "100%",  callback: function(){
             project.save();
         }});
         APP.tools_inspector.addButton(null,"Pantalla completa", { width: "100%",  callback: function(){
             GFX.goFullscreen();
-        }});
-        
-        APP.tools_inspector.addSection("Modelo 3D");
-        APP.tools_inspector.addButton("Rotaciones", "Configurar", { width: "100%",  callback: function(){
-            APP.setRotation();
-        }});
-        APP.tools_inspector.addButton("Escala-metro", "Configurar", { width: "100%",  callback: function(){
-            APP.setScale();
         }});
         
         APP.tools_inspector.addSection("Cámara");
@@ -78,16 +107,26 @@ var APP = {
         }});
         APP.tools_inspector.addNumber("Orbitar", 0, { width: "100%",  callback: function(v){
             GFX.orbit_speed = v;
-            if(v == 0) APP.camera_static = true;
-            else APP.camera_static = false;
         }, min: -1, max: 1, step: 0.01});
-
-        APP.tools_inspector.addSection("Medidas");
-        APP.tools_inspector.addButtons("Tablas",["O-D","Segmentos","Áreas"],{callback: function(v) {        
-            APP.showMeasureTables(v);
+        
+        APP.tools_inspector.addSection("Modelo 3D", {className: "model3d-section"});
+        APP.tools_inspector.addButton("Rotaciones", "Configurar", { width: "100%",  callback: function(){
+            APP.setRotation();
         }});
         
-        APP.tools_inspector.addSection("Exportar escena");
+        APP.tools_inspector.addSection("Medidas", {collapsed: true, className: "measures-section"});
+        APP.tools_inspector.addButton("Escala", "Configurar", { width: "100%",  callback: function(){
+            APP.setScale();
+        }});
+        APP.tools_inspector.addCombo("Tablas", "...",{values:["...", "O-D","Segmentos","Áreas"], callback: function(v) { APP.showMeasureTables(v); }});
+        APP.tools_inspector.addButton("Distancia", "Crear", { width: "100%",  callback: function(){
+            APP.appendNewMeasure(PW.OD);
+        }});
+        APP.tools_inspector.addButtons("Área",["Planta","Otra"],{callback: function(v) {        
+            APP.appendNewMeasure(PW.AREA, v);
+        }});
+        
+        APP.tools_inspector.addSection("Exportar escena", {collapsed: true});
         APP.tools_inspector.addButton("Imagen","Capturar", { width: "100%",  callback: function(){
             GFX.takeSnapshot();
         }});
@@ -108,9 +147,10 @@ var APP = {
         APP.tools_inspector.addNumber("Calidad", APP.export_data.quality, { width: "100%",  callback: function(v){ APP.export_data.quality = v; }, min: 1, max: 99, step: 1});
         
         $("#tab-content2-large").append(APP.tools_inspector.root);
-        
-        // finish and run GFX stuff
-        GFX.init( meshURL, textURL );  
+        $(".wsection.model3d-section").find(".wsectioncontent").append($(".sliders"));
+        $(".wsection.measures-section").find(".wsectioncontent").append($("#distances-table"));
+        $(".wsection.measures-section").find(".wsectioncontent").append($("#segment-distances-table"));
+        $(".wsection.measures-section").find(".wsectioncontent").append($("#areas-table"));  
     },
     
     showMeasureTables: function(name)
@@ -141,10 +181,32 @@ var APP = {
             APP.showing["t3"] = !APP.showing["t3"];
             table = $('#areas-table');
             btn = $('#measure-opt-btn');
-            flag = APP.showing["t3"]
+            flag = APP.showing["t3"];
         }
         
+        else
+            throw( "no table" );
+        
         revealDOMElements([table, btn], flag);
+    },
+    
+    appendNewMeasure: function(type, area_name)
+    {
+        if(typeof( type ) != "number")
+            throw( "nothing to create" );
+        
+        if(type == PW.OD || type == PW.SGM)
+        { 
+            APP.calcDistance();  
+        }
+        
+        else if(type == PW.AREA)
+        { 
+            if(area_name == "Planta")
+                APP.calcArea(0);
+            else
+                APP.calcArea(1);
+        }
     },
     
     exportCanvas: function(name)
@@ -204,6 +266,7 @@ var APP = {
         GFX.context.onmousedown = function(e) {};
         
         APP.fadeAllTables(this.showing);
+        APP.current_ms_type = null;
         APP.rotation = false;
         revealDOMElements([$("#cardinal-axis"), $('.sliders'), $(".sub-btns")], false);
         GFX.destroyElements(GFX.scene.root.children, "config");
@@ -214,10 +277,10 @@ var APP = {
         $(".draggable").remove();
 //        $("#cont-msg").empty();
         
-        // remove helping grid
-        var grid = GFX.scene.root.getNodeByName("grid");
-        if(grid)
-            grid.destroy();
+        // remove helping grids
+        var grids = GFX.scene.root.getNodesByName("grid");
+        for(var i = grids.length - 1; i >= 0; i--)
+            grids[i].destroy();
 
         //remove active classes
         $(".on-point").removeClass("on-point");
