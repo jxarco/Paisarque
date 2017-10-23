@@ -41,91 +41,108 @@ var APP = {
     
     init: function(meshURL, textURL)
     {  
-        this.createInfoInspector();
-        this.createToolsInspector();
-        this.createAnotInspector();
+        var lang = localStorage.getItem("lang") || "es";
+        
+        if(!DATA)
+            throw( "no translations" );
+        
+        this.createInfoInspector(lang);
+        this.createToolsInspector(lang);
+        this.createAnotInspector(lang);
         
         // finish and run GFX stuff
         GFX.init( meshURL, textURL );  
     },
     
-    createInfoInspector: function()
+    createInfoInspector: function(lang)
     {
         APP.info_inspector = new LiteGUI.Inspector();
+        var text_section = DATA.litegui.sections.data;
         
-        APP.info_inspector.addSection("Datos");
-        APP.info_inspector.addString("Autor", project._author, { width: "100%", callback: function(v){
+        APP.info_inspector.addSection( text_section.title[lang] );
+        APP.info_inspector.addString( text_section.author[lang], project._author, { width: "100%", callback: function(v){
             project.setAuthor(v);
         }});
-        APP.info_inspector.addString("Ubicación", project._location, { callback: function(v){
+        APP.info_inspector.addString( text_section.loc[lang], project._location, { callback: function(v){
             project.setLocation(v);
         }});
-        APP.info_inspector.addString("Descripción", project._description, { callback: function(v){
+        APP.info_inspector.addString( text_section.desc[lang], project._description, { callback: function(v){
             project._description = v;
         }});
         
-        APP.info_inspector.addSection("Mapa", {className: "map-section"});
-        APP.info_inspector.addString("Latitud", project._coordinates.lat, { width: "100%",  callback: function(v){
+        text_section = DATA.litegui.sections.map;
+        APP.info_inspector.addSection( text_section.title[lang], {className: "map-section"} );
+        APP.info_inspector.addString( text_section.lat[lang], project._coordinates.lat, { width: "100%",  callback: function(v){
             project._coordinates.lat = parseFloat( v );
             initMap(); 
         }, step: 0.0001});
-        APP.info_inspector.addString("Longitud", project._coordinates.lng, { width: "100%",  callback: function(v){
+        APP.info_inspector.addString( text_section.lng[lang], project._coordinates.lng, { width: "100%",  callback: function(v){
             project._coordinates.lng = parseFloat( v );
             initMap(); 
         }, step: 0.0001});
         
-        APP.info_inspector.addSection("Fondos de escena", {className: "cubemap-section"});
+        text_section = DATA.litegui.sections.cubemaps;
+        APP.info_inspector.addSection( text_section.title[lang], {className: "cubemap-section"} );
+        APP.info_inspector.addButton(null, text_section.quit[lang], { width: "100%",  callback: function(){
+            GFX.setCubeMap(null);
+        }});
         
         $("#tab-content1-large").prepend(APP.info_inspector.root);
         $(".wsection.map-section").find(".wsectioncontent").append($("#map"));
-        $(".wsection.cubemap-section").find(".wsectioncontent").append($("#cubemaps"));
+        $(".wsection.cubemap-section").find(".wsectioncontent").prepend($("#cubemaps"));
     },
     
-    createToolsInspector: function()
+    createToolsInspector: function(lang)
     {
         APP.tools_inspector = new LiteGUI.Inspector("tools_inspector");
-        APP.tools_inspector.addSection("General");
-        APP.tools_inspector.addCheckbox("Auto-save", project._auto_save, { callback: function(v){
+        var text_section = DATA.litegui.sections.general;
+        
+        APP.tools_inspector.addSection( text_section.title[lang] );
+        APP.tools_inspector.addCheckbox( text_section.auto_save[lang], project._auto_save, { callback: function(v){
             project._auto_save = v;
             project.save();
         }});
-        APP.tools_inspector.addButton(null, "Guardar", { width: "100%",  callback: function(){
+        APP.tools_inspector.addButton(null, text_section.save[lang], { width: "100%",  callback: function(){
             project.save();
         }});
-        APP.tools_inspector.addButton(null,"Pantalla completa", { width: "100%",  callback: function(){
+        APP.tools_inspector.addButton(null, text_section.fullscreen[lang], { width: "100%",  callback: function(){
             GFX.goFullscreen();
         }});
         
-        APP.tools_inspector.addSection("Cámara");
-        APP.tools_inspector.addButton(null, "Restablecer", { width: "100%",  callback: function(){
+        text_section = DATA.litegui.sections.camera;
+        APP.tools_inspector.addSection( text_section.title[lang] );
+        APP.tools_inspector.addButton(null, text_section.reset[lang], { width: "100%",  callback: function(){
             GFX.camera.perspective( 45, gl.canvas.width / gl.canvas.height, 0.1, 10000 );
             GFX.camera.lookAt( [150,60,150],[0,0,0],[0,1,0] );
             GFX.camera.direction = [150,60,150];
             GFX.camera.previous = vec3.clone(GFX.camera._position);
         }});
-        APP.tools_inspector.addNumber("Orbitar", 0, { width: "100%",  callback: function(v){
+        APP.tools_inspector.addNumber( text_section.orbit[lang], 0, { width: "100%",  callback: function(v){
             GFX.orbit_speed = v;
         }, min: -1, max: 1, step: 0.01});
         
-        APP.tools_inspector.addSection("Modelo 3D", {className: "model3d-section"});
-        APP.tools_inspector.addButton("Rotaciones", "Configurar", { width: "100%",  callback: function(){
+        text_section = DATA.litegui.sections.model;
+        APP.tools_inspector.addSection( text_section.title[lang], {className: "model3d-section"});
+        APP.tools_inspector.addButton( text_section.rotations[lang], text_section.config_rot[lang], { width: "100%",  callback: function(){
             APP.setRotation();
         }});
         
-        APP.tools_inspector.addSection("Medidas", {collapsed: true, className: "measures-section"});
-        APP.tools_inspector.addButton("Escala", "Configurar", { width: "100%",  callback: function(){
+        text_section = DATA.litegui.sections.measures;
+        APP.tools_inspector.addSection( text_section.title[lang], {collapsed: true, className: "measures-section"});
+        APP.tools_inspector.addButton( text_section.scale[lang], text_section.config_scale[lang], { width: "100%",  callback: function(){
             APP.setScale();
         }});
-        APP.tools_inspector.addCombo("Tablas", "...",{values:["...", "O-D","Segmentos","Áreas"], callback: function(v) { APP.showMeasureTables(v); }});
-        APP.tools_inspector.addButton("Distancia", "Crear", { width: "100%",  callback: function(){
+        APP.tools_inspector.addCombo( text_section.log[lang], "...",{values: text_section.log_values[lang], callback: function(v) { APP.showMeasureTables(v); }});
+        APP.tools_inspector.addButton( text_section.dist[lang], text_section.create_dist[lang], { width: "100%",  callback: function(){
             APP.appendNewMeasure(PW.OD);
         }});
-        APP.tools_inspector.addButtons("Área",["Planta","Otra"],{callback: function(v) {        
+        APP.tools_inspector.addButtons( text_section.area[lang], text_section.area_values[lang],{callback: function(v) {        
             APP.appendNewMeasure(PW.AREA, v);
         }});
         
-        APP.tools_inspector.addSection("Exportar escena", {collapsed: true, className: "export-section"});
-        APP.tools_inspector.addButton("Imagen","Capturar", { width: "100%",  callback: function(){
+        text_section = DATA.litegui.sections.export;
+        APP.tools_inspector.addSection( text_section.title[lang], {collapsed: true, className: "export-section"});
+        APP.tools_inspector.addButton( text_section.image[lang], text_section.image_btn[lang], { width: "100%",  callback: function(){
             GFX.takeSnapshot();
         }});
         APP.export_data = {
@@ -137,12 +154,12 @@ var APP = {
             verbose: false,
             display: false
         }
-        APP.tools_inspector.addButtons("Grabar",["Play","Stop","Exportar"],{callback: function(v) {        
+        APP.tools_inspector.addButtons( text_section.record[lang], text_section.record_values[lang],{callback: function(v) {        
             APP.exportCanvas(v);
         }});
-        APP.tools_inspector.addString("Nombre", APP.export_data.name,{callback: function(v) { APP.export_data.name = v; }});
-        APP.tools_inspector.addCombo("Formato", APP.export_data.format,{values:["webm","gif"], callback: function(v) { APP.export_data.format = v; }});
-        APP.tools_inspector.addNumber("Calidad", APP.export_data.quality, { width: "100%",  callback: function(v){  APP.export_data.quality = v; }, min: 1, max: 99, step: 1});
+        APP.tools_inspector.addString( text_section.name[lang], APP.export_data.name,{callback: function(v) { APP.export_data.name = v; }});
+        APP.tools_inspector.addCombo( text_section.format[lang], APP.export_data.format,{values:["webm","gif"], callback: function(v) { APP.export_data.format = v; }});
+        APP.tools_inspector.addNumber( text_section.quality[lang], APP.export_data.quality, { width: "100%",  callback: function(v){  APP.export_data.quality = v; }, min: 1, max: 99, step: 1});
         APP.tools_inspector.addSeparator();
         APP.tools_inspector.addString("Frame rate", APP.export_data.framerate,{ callback: function(v) {             APP.export_data.framerate = v; }});
         APP.tools_inspector.addCombo("MotionBlur f.", APP.export_data.mb_frames,{ values:[1, 2, 4, 8, 16], callback: function(v) { APP.export_data.mb_frames = v; }});
@@ -167,15 +184,16 @@ var APP = {
         $(".wsection.export-section").find(".wsectioncontent").prepend(progress);
     },
     
-    createAnotInspector: function()
+    createAnotInspector: function(lang)
     {
         APP.anot_inspector = new LiteGUI.Inspector();
+        var text_section = DATA.litegui.sections.anot_options;
         
-        APP.anot_inspector.addSection("Opciones", {className: "anot-section"});
-        APP.anot_inspector.addCheckbox("Mostrar", true, {callback: function(v){
+        APP.anot_inspector.addSection( text_section.title[lang], {className: "anot-section"});
+        APP.anot_inspector.addCheckbox( text_section.show[lang], true, {callback: function(v){
             APP.showElements( GFX.model.children, v );
         }});
-        APP.anot_inspector.addCheckbox("Anotar", false, {callback: function(v){
+        APP.anot_inspector.addCheckbox( text_section.anotate[lang], false, {callback: function(v){
             APP.anotate( v );
         }});
         APP.anot_inspector.addSeparator();
@@ -198,7 +216,7 @@ var APP = {
             flag = APP.showing["t1"];
         }
         
-        else if(name == "Segmentos")
+        else if(name == "Segmentos" || name == "Segments")
         {
             APP.showing["t2"] = !APP.showing["t2"];
             table = $('#segment-distances-table');
@@ -206,7 +224,7 @@ var APP = {
             flag = APP.showing["t2"];
         }
         
-        else if(name == "Áreas")
+        else if(name == "Áreas" || name == "Àrees" || name == "Areas")
         {
             APP.showing["t3"] = !APP.showing["t3"];
             table = $('#areas-table');
@@ -232,7 +250,7 @@ var APP = {
         
         else if(type == PW.AREA)
         { 
-            if(area_name == "Planta")
+            if(area_name == "Planta" || area_name == "Top view")
                 APP.calcArea(0);
             else
                 APP.calcArea(1);
@@ -241,7 +259,7 @@ var APP = {
     
     exportCanvas: function(name)
     {
-        if(name == "Play")
+        if(name == "Play" || name == "Empezar" || name == "Comença")
         {
             this.capturer = new CCapture( { 
                 name: APP.export_data.name,
@@ -266,12 +284,12 @@ var APP = {
             this.capturer.start();
         }
         
-        else if(name == "Stop")
+        if(name == "Stop" || name == "Parar" || name == "Atura")
         {
             this.capturer.stop();
         }
         
-        else if(name == "Exportar")
+        else if(name == "Export" || name == "Exportar")
         {
             this.capturer.save();
         }

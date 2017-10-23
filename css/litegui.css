@@ -152,7 +152,7 @@
 }
 
 .inspector .wcontent button.single {
-	padding: 2px;
+	padding: 1px;
 }
 
 .inspector .icon {
@@ -271,6 +271,7 @@
 }
 
 .inspector .wname {
+    font-size: 0.8em;
 	display: inline-block;
 	-moz-box-sizing: border-box;	
 	-webkit-box-sizing: border-box;	
@@ -328,9 +329,9 @@
 	display: inline-block;
 	background-color: #292929;
 	border: 0;
-	border-top: 1px solid #000; 
-	border-bottom: 1px solid #3f3f3f; 
-	border-radius: 3px;	
+/*	border-top: 1px solid #000; */
+/*	border-bottom: 1px solid #3f3f3f; */
+	border-radius: 4px;	
     margin-right: 4px !important;
 }
 
@@ -471,10 +472,10 @@
 
 .inspector .wcontent .checkbox {
 	width: 4em;
-	display: inline-block;
+/*	display: inline-block;*/
 	background-color: #222;
 	border: 0;
-	border-radius: 2px;
+	border-radius: 4px;
 	margin: 0 !important;
 	text-align: center;
     color:aliceblue;
@@ -1443,6 +1444,7 @@ button.litebutton {
     padding: 2px;
     text-shadow: 0 1px 1px black;
     vertical-align: top;	
+    font-size: 0.9em;
 }
 
 button.litebutton:hover:not(:disabled) {

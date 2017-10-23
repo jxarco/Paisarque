@@ -36,6 +36,12 @@ function setLanguage(lang, queryString)
 function applyLanguage(target)
 {
     var lang = localStorage.getItem("lang") || "es";
+    // no translating if spanish
+    if(lang == "es")
+        return;
+    else
+        console.log("Translating to " + lang);
+    
     var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTCYVW9A1Rap8RQ2hua3BekD-C_VNUYFg-bLe51fwZ6QVUqyu1fm-Aq0mRvp2qTUwb4usE2Pzg2_KKc/pub?gid=0&single=true&output=csv';
     var src = "data/lang.csv";
 

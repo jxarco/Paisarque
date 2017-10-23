@@ -42,7 +42,7 @@ content{
 }
 .ladda-button{
     width: fit-content;
-    min-width: 40% !important;
+    min-width: 55% !important;
     margin: 0 auto;
 }
 .form-control{
@@ -151,6 +151,9 @@ button:hover{
 }
 h1, h2, h3, h4, h5, h6{
     font-family: 'Noto Sans', sans-serif !important;
+}
+th{
+    text-align: center !important;
 }
 /*
 * general
@@ -459,7 +462,6 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 }
 #cubemaps{
     width: 100%;
-    height: 220px;
     box-sizing: border-box;
 }
 .responsive div img {
@@ -618,6 +620,7 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 }
 #drag-cont{
     margin-top: 5px;
+    margin-right: 10px;
     height: 60px;
     padding: 5px;
     border: 1px solid rgba(100, 100, 100, 0.2);
