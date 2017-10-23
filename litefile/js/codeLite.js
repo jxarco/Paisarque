@@ -89,9 +89,13 @@ function systemReady()
 		e.preventDefault();
         
         var that = this;
+        var redirect_url = window.location.pathname;
         
-        var redirect_url = window.location.pathname.replace("index", "forgot_pass");
-
+        if(redirect_url.includes( "index" ))
+            redirect_url = redirect_url.replace( "index", "forgot_pass" );
+        else
+            redirect_url += "/forgot_pass";
+        
 		//ask to send email
 		LiteFileServer.forgotPassword( values["username"], function( v, result ){
 			forgotpassword_button.stop();

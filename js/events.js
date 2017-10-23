@@ -341,8 +341,11 @@ $("#password2").on("paste", function(e){
 
 $("#password2").on("keyup", function(e){
     e.preventDefault();
+    
     if($(this).val() != $("#password").val())
-        $(this).css("background-color", "rgba(255, 0, 0, 0.3)");
+        $(this).css("background", "rgba(255, 0, 0, 0.3)");
+    else
+        $(this).css("background", "rgba(0, 255, 0, 0.3)");
 });
 
 $("#formForgotPassword").on('submit', function(e)
