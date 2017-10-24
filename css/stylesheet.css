@@ -831,6 +831,9 @@ text css (information)
 /* 
 * export css
 */
+.export-pdf, .export-file, .export-xls, .export-json{
+    cursor: pointer;
+}
 .wrap {
     width: 97.5%;
     margin: 0 auto;

@@ -37,13 +37,10 @@ function select(element, type){
     
     var img = null, size = null;
     
-    if(type == "text"){
+    if(type == "text")
         img = element.className.split(" ")[1];
-    }
-        
-    else{
+    else
         img = element.className.split(" ")[2];
-    }
     
     var classtype = type + "-active";
     

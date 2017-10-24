@@ -92,6 +92,7 @@
                                 echo $path . '/tex_0.jpg"';
                                 echo 'download="" title="Descargar textura">Textura</a><br><br>';
                              ?>
+                              <a class="export-json _rotations" title="Exportar en JSON">Rotaciones</a><br><br>
                           </div>
                         </li>
 
@@ -101,10 +102,9 @@
                             <div class="circle pink">PDF</div>
                           </div>
                             <div class="bottom">
-                            <a class="export-pdf summary" title="Exportar en PDF" href="">Resumen</a><br><br>
-                            <a class="export-pdf detailed" title="Exportar en PDF" href="">Detalle</a><br><br>
-                            <a class="export-pdf config" title="Exportar en PDF" href="">Configuración</a><br><br>
-                            <a class="export-pdf aport" title="Exportar en PDF" href="">Aportaciones</a><br><br>
+                            <a class="export-pdf summary" title="Exportar en PDF">Resumen</a><br><br>
+                            <a class="export-pdf detailed" title="Exportar en PDF">Detalle</a><br><br>
+                            <a class="export-pdf config" title="Exportar en PDF">Configuración</a><br><br>
                           </div>
                         </li>
                         
@@ -115,7 +115,7 @@
                           </div>
                           <div class="bottom">
 <!--                             <a class="export-file pdf" title="Descargar ZIP de PDF's" href="">PDF'S</a><br><br>-->
-                            <a class="export-file text" title="Descargar ZIP de texto" href="">Notas de texto</a><br><br>
+                            <a class="export-file text" title="Descargar ZIP de texto">Notas de texto</a><br><br>
                             <a class="export-file images" title="Descargar ZIP de imágenes">Imágenes</a><br><br>
                           </div>
                         </li>
@@ -126,9 +126,9 @@
                             <div class="circle green">CSV</div>
                           </div>
                             <div class="bottom">
-                                <a class="export-xls _anotations" title="Exportar en CSV" href="">Anotaciones</a><br><br>
-                                <a class="export-xls _measures" title="Exportar en CSV" href="">Medidas</a><br><br>
-                                <a class="export-xls _areas" title="Exportar en CSV" href="">Areas</a><br><br>
+                                <a class="export-xls _anotations" title="Exportar en CSV">Anotaciones</a><br><br>
+                                <a class="export-xls _measures" title="Exportar en CSV">Medidas</a><br><br>
+                                <a class="export-xls _areas" title="Exportar en CSV">Areas</a><br><br>
                           </div>
                         </li>
 
@@ -138,9 +138,9 @@
                             <div class="circle">JSON</div>
                           </div>
                             <div class="bottom">
-                                <a class="export-json _anotations" title="Exportar en JSON" href="">Anotaciones</a><br><br>
-                                <a class="export-json _measures" title="Exportar en JSON" href="">Medidas</a><br><br>
-                                <a class="export-json _areas" title="Exportar en JSON" href="">Areas</a><br><br>
+                                <a class="export-json _anotations" title="Exportar en JSON">Anotaciones</a><br><br>
+                                <a class="export-json _measures" title="Exportar en JSON">Medidas</a><br><br>
+                                <a class="export-json _areas" title="Exportar en JSON">Areas</a><br><br>
                                 <?php
                                 
                                     $info = explode("/", $_GET['r']);
@@ -154,7 +154,7 @@
                                     echo $path . '.json"';
                                     echo 'download="" title="Descargar configuración en JSON">Configuración</a><br><br>';
                                  ?>
-                                <a class="export-json _extra" title="Exportar en JSON" href="">Aportaciones</a><br><br>
+                                <a class="export-json _extra" title="Exportar en JSON">Aportaciones</a><br><br>
                           </div>
                         </li>
                     </ul>

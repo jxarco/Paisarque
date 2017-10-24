@@ -663,65 +663,41 @@ function fileToBLOB(params)
         case 'images':
             var images = [];
             for(var i = 0, info; info = copy._extra[i]; i++)
-                if(info.type == "image") 
+                if(info.type == "image" && info.data.includes( "litefile/files/" )) 
                     images.push(info);
             
-            var exportar = function(){
-                zip.generateAsync({type:"blob"}).then(function(content) {
-                        LiteGUI.downloadFile( filename, content );
-                    });
-            };
-            
-            var src = info.data;
-            var extension = src.slice(src.lastIndexOf("."));
-            var new_file = "Extra_" + i + extension;
+            var xhr = [],
+                successfulRequests = 0,
+                responseArray = [];
 
-            var xhr = new XMLHttpRequest();
+            for (var i = 0; i < images.length; i++){
+                (function(i){
+                    var url = images[i].data;
+                    xhr[i] = new XMLHttpRequest();
+                    xhr[i].responseType = 'blob';
+                    xhr[i].open("GET", url);
+                    xhr[i].onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            // track successful requests here
+                            successfulRequests++;
+                            responseArray.push( this.response );
+                            
+                            var extension = url.slice(url.lastIndexOf("."));
+                            var new_file = "Extra_" + i + extension;
+                            zip.file(new_file, this.response);
 
-            xhttp.onreadystatechange = (function(images) {
-                return function() {
-                    if (this.readyState == 4 && this.status == 200){
-                        zip.file(new_file, this.response);
-                        console.log("added to zip", this.response);
-                        
-                        
-                        var src = info.data;
-                        var extension = src.slice(src.lastIndexOf("."));
-                        var new_file = "Extra_" + i + extension;
-                        
-                        
-                        
-                        
-                    }
-                    
-                    
-                }
-            })(images);
-
-
-
-
-
-            xhr.onreadystatechange = function(){
-                
+                            if(successfulRequests == images.length) {
+                                var exportar = function(filename){
+                                    zip.generateAsync({type:"blob"}).then(function(content) {
+                                        LiteGUI.downloadFile( filename, content );
+                                    });
+                                }(filename);
+                            }
+                        }
+                    };
+                    xhr[i].send();
+                })(i);
             }
-            console.log(i);
-
-            if(i == images.length - 1){
-                xhr.onreadystatechange = function(){
-                    if (this.readyState == 4 && this.status == 200){
-                        zip.file(new_file, this.response);
-                        console.log("added to zip (last)", this.response);
-                        console.log(zip.files);
-                        exportar();
-                    }
-                }
-            }else{
-                console.log("no the last");
-            }
-            xhr.open('GET', src);
-            xhr.responseType = 'blob';
-            xhr.send();   
             break;
         case 'text':
             for(var i = 0, info; info = copy._extra[i]; i++)
@@ -824,8 +800,8 @@ function jsToPDF(options)
                     body += "\tID: " + current.id + "\n";
                     body += "\tEtiqueta: " + "Sin etiqueta" + "\n";
                     body += "\tDistancia: " + current.distance + "\n";
-                    body += "\tPosición P0: (" + current.x1[0] + ", " + current.x1[1] + ", " + current.x1[2] + ")\n" +
-                        "\tPosición P1: (" + current.x2[0] + ", " + current.x2[1] + ", " + current.x2[2] + ")\n";
+                    body += "\tPosición P0: (" + current.points[0][0] + ", " + current.points[0][1] + ", " + current.points[0][2] + ")\n" +
+                        "\tPosición P1: (" + current.points[1][0] + ", " + current.points[1][1] + ", " + current.points[1][2] + ")\n";
                 }
             }
             else
@@ -914,56 +890,6 @@ function jsToPDF(options)
             }
         }
     }
-        
-    if(type == "aport")
-    {
-        body = "";
-        body += "Aportaciones subidas al proyecto:\n" + separator;
-        
-        if(copy._extra.length){
-            copy._extra.sort(function(a,b) {
-                  if (a.type < b.type)
-                       return -1;
-                  if (a.type > b.type)
-                    return 1;
-                  return 0;
-                });
-            
-            for(var i = 0; i < copy._extra.length; ++i)
-            {
-                var current = copy._extra[i];
-                if(current.type == "image")
-                    body += "\tImagen (URL): " + current.data + "\n";
-                else if(current.type == "pdf")
-                    body += "\tURL imagen: " + current.data + "\n";
-                else if(current.type == "text")
-                    body += "\tNota: " + current.data + "\n";
-                else if(current.type == "youtube")
-                    body += "\tVídeo (URL): " + current.data + "\n";
-            }
-            body += separator;
-        }
-        else
-        {
-            body += "El proyecto no dispone de aportaciones.\n";
-            body += separator;
-        }
-        
-        var lines = body.split("\n");
-        // Y corresponds to the current page height
-        var y = 45;
-        
-        for(var i = 0; i < lines.length; i++)
-        {
-            doc.text(lines[i], 20, y);            
-            y += 7;
-            if(y > pageHeight)
-            {
-                doc.addPage();
-                y = 25;
-            }
-        }
-    }
     
     if(type == "config")
     {
@@ -981,7 +907,6 @@ function jsToPDF(options)
                 y = 25;
             }
         }
-        
     }
     
     // saving is the same for every option
