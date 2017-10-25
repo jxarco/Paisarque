@@ -124,7 +124,7 @@
                             <div class="url-loc">
                                     <input id="pdf-url" placeholder="Cargar PDF desde URL">
                                     <i class="material-icons extra-btn add_extra" data-type="pdf" data-from="pdf-url">add_circle</i>
-<!--                                    <i class="material-icons extra-btn" data-style="slide-up"  data-toggle="modal" data-target="#TESTModal"  >file_upload</i>-->
+                                    <i class="material-icons extra-btn" data-style="slide-up"  data-toggle="modal" data-target="#TESTModalPDF"  >file_upload</i>
                                     <i class="material-icons extra-btn refresh">refresh</i>
                                     <i class="material-icons extra-btn save">save</i>
                                     <i class="material-icons extra-btn" onclick="deleteElement('pdf')">delete</i>
@@ -216,6 +216,36 @@
                             <div class="form-group">
                                 <div class="col-lg-10">
                                     <input required type="file" class="form-control" id="image" name="image">
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="modal-footer">
+                            <div class="form-group">
+                                <div class="col-lg-10 col-lg-offset-2">
+                                     <button type="button" class="btn btn-default cancel-btn" data-dismiss="modal">Cancel</button>
+                                    <button type="submit" name="submit" value="send" class="btn btn-primary submit-btn" >Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div id="TESTModalPDF" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+             <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;  </button>
+                    <h4 class="modal-title" id="myModalLabel">Subir pdf</h4>
+                  </div>
+                  <div class="modal-body" id="idModalBody">
+                      <form class="form-horizontal" id="formAddPDF" method="POST" role="form" enctype="multipart/form-data">
+                        <fieldset id="fieldset">
+                            <div class="form-group">
+                                <div class="col-lg-10">
+                                    <input required type="file" class="form-control" id="pdf" name="pdf">
                                 </div>
                             </div>
                         </fieldset>

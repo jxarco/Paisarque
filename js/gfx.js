@@ -309,13 +309,42 @@ var GFX = {
                 var img = new Image();
                 img.src = src;
                 img.className = "download-image";
-                $("#capturing").append("<a href='"+url+"' download='screenshot.png' class='btn table-btn'>Download</a>");
-                $("#capturing").append("<a data-url='"+src+"' onclick='uploadBLOB($(this))' class='btn table-btn'>Add to project</a>");
-                $("#capturing").append( img );
-                $("#capturing").append("<a onclick='APP.disableAllFeatures()' class='btn table-btn'>Cancel</a>").fadeIn();
+                
+                var download_button = document.createElement("a");
+                download_button.innerHTML = "Download";
+                download_button.href = url;
+                download_button.download = "screenshot.png";
+                download_button.className = "btn table-btn";
+                
+                var add_button = document.createElement("a");
+                add_button.innerHTML = "Add to project";
+                add_button.id = "upload-capture-button";
+                add_button.dataset.url = src;
+                add_button.className = "btn table-btn";
+                $(add_button).click(function(){
+                    uploadBLOB($(this));
+                });
+                    
+                var dialog = GFX.createCaptureDialog("es");
+                var section = $(".wsection.capture-section").find(".wsectioncontent");
+                section.append( img );
+                section.append( download_button );
+                section.append( add_button );
             }
 
         canvas.toBlob( on_complete, "image/png");  
+    },
+    createCaptureDialog: function(lang)
+    {
+        var text_section = DATA.litegui.sections.capture;
+        var name = "title";
+        var dialog = new LiteGUI.Dialog(name, {parent: "body", title:name, close: true, width: 300, scroll: true, draggable: true });
+        dialog.show('fade');
+        
+        var widgets = new LiteGUI.Inspector();
+        widgets.addSection("Seccion", {className: "capture-section"});
+        dialog.add(widgets);
+        return dialog;
     },
     /*
     * resize method for canvas
@@ -341,5 +370,84 @@ var GFX = {
             this.renderer.gl.fullscreen();
         else
             console.error("fullscreen not supported");
+    },
+    /*
+    * make nº orbits depending on speed
+    * @param speed {Num} 0..1
+    */
+    makeOrbit: function(speed, it, on_complete)
+    {
+        it = it || 1;
+        speed = speed || 0.5;
+        
+        if(!speed || !it)
+            throw( "bad params" );
+        
+        if(speed > 3 || it > 5)
+            throw( "passed max params value" );
+        
+        window.orbitCounter = 0;
+        
+        var updateModel = function(dt){
+            
+            if( orbitCounter > (360 * DEG2RAD) * it)
+            {
+                GFX.model.update = function(){};
+                window.orbitCounter = undefined;
+                
+                if(on_complete)
+                    on_complete();
+            }
+            else{
+                GFX.camera.orbit(speed * dt, RD.UP);
+                window.orbitCounter += speed * dt;
+            }
+        };
+
+        GFX.model.update = updateModel;
+    },
+    /*
+    * render any type of measure
+    * @param o {object} measure to render
+    */
+    renderMeasure: function(o)
+    {
+        o = o || {};
+    	var id = o.id;
+    	var type = o.type;
+    	var msr = null;
+
+        // clear first
+        GFX.destroyElements(GFX.scene.root.children, "config");
+        
+        //get from project
+        if(type == 'm')
+            msr = project.getMeasure(id);
+	    else if(type == 's')
+            msr = project.getSegmentMeasure(id);
+	    else if(type == 'a')
+            msr = project.getArea(id);
+	    else
+	        console.error("no measure to show");
+
+        // points stuff
+        var points = [];
+        for(var i = 0; i < msr.points.length; ++i){
+            var list = [];
+            list.push(msr.points[i][0], msr.points[i][1], msr.points[i][2]);
+            points.push(list);
+            // ball render representation
+            var ind = new SceneIndication();
+            ind = ind.ball(GFX.scene, points[i], {depth_test: false, type: "view"});    
+        }    
+        
+        APP.addLine(points, {desc: "config"});
+
+        // change global camera to look at with smooth efect
+        if(msr.camera_position)
+        {
+            GFX.camera.direction = msr.camera_position;
+            GFX.camera.smooth = true;    
+        }
     }
 }

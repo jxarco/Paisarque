@@ -23,18 +23,39 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script type="text/javascript">
+            // Used to toggle the menu on small screens when clicking on the menu button
+            function showNavbar() {
+                var x = document.getElementById("navDemo");
+                if (x.className.indexOf("w3-show") == -1) {
+                    x.className += " w3-show";
+                } else { 
+                    x.className = x.className.replace(" w3-show", "");
+                }
+            }
+        </script>
     </head>
     <body class="container">
         
         <!-- Navbar -->
         <div class="w3-top">
           <div class="w3-bar w3-card-2">
+            <a class="w3-bar-item w3-button w3-padding-large w3-hide-large w3-right" onclick="showNavbar()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
             <a id="megatitle" class="w3-bar-item w3-button w3-padding-large">PaisArque</a>
-            <a onclick="setLanguage('en')" class="w3-bar-item w3-button w3-right w3-padding-large language">EN</a>
-            <a onclick="setLanguage('cat')" class="w3-bar-item w3-button w3-right w3-padding-large language">CAT</a>
-            <a onclick="setLanguage('es')" class="w3-bar-item w3-button w3-right w3-padding-large language">ES</a>
+            <a onclick="setLanguage('en')" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">EN</a>
+            <a onclick="setLanguage('cat')" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">CAT</a>
+            <a onclick="setLanguage('es')" class="w3-bar-item w3-button w3-right w3-padding-large w3-hide-small w3-hide-medium language">ES</a>
           </div>
         </div>
+        
+        
+        <!-- Navbar on small screens -->
+        <div id="navDemo" class="w3-bar-block w3-hide w3-hide-large w3-top" style="margin-top:46px">
+            <a onclick="setLanguage('es')" class="w3-bar-item w3-button w3-padding-large">ES</a>
+            <a onclick="setLanguage('cat')" class="w3-bar-item w3-button w3-padding-large">CAT</a>
+            <a onclick="setLanguage('en')" class="w3-bar-item w3-button w3-padding-large">EN</a>
+        </div>
+        
         <br>
         <content class="container">
             <div class="row" style="margin-top: 50px;">
@@ -44,7 +65,7 @@
                             <h3 class="panel-title">PaisArque</h3>
                         </div>
                         <div class="panel-body">
-                            <p style="text-align: justify;" id="body1">Proyecto realizado por grupos pertenecientes a la Universidad Pompeu Fabra con la financiación de la <a href="https://www.fbbva.es/">Fundación BBVA.</a></p><br>
+                            <p id="body1">Proyecto realizado por grupos pertenecientes a la Universidad Pompeu Fabra con la financiación de la <a href="https://www.fbbva.es/">Fundación BBVA.</a></p><br>
                             <a href="https://www.upf.edu/web/paisarque"><img src="data/assets/upf.png" class="img-responsive" style="margin-left: calc(50% - 70px); width: 160px;"></a>        
                         </div>
                     </div>
@@ -97,7 +118,7 @@
                             <h3 class="panel-title" id="body2_title">Resumen</h3>
                         </div>
                         <div class="panel-body">
-                            <p style="text-align: justify;" id="body2">PaisArque se propone desarrollar una aplicación de fácil utilizo y acceso, basada en la web, a través de la cual los usuarios puedan generar modelos 3D de monumentos y/o objetos a partir de fotografías digitales.<br><br>Tecnológicamente, el proyecto opta por una visión integrada 3D en web debido a la creciente importancia de la participación colectiva en la ciencia, tanto por parte de los profesionales, como de los usuarios, de forma que las apps para la experiencia y visualización del patrimonio arqueológico sean multiplataforma.</p>
+                            <p id="body2">PaisArque se propone desarrollar una aplicación de fácil utilizo y acceso, basada en la web, a través de la cual los usuarios puedan generar modelos 3D de monumentos y/o objetos a partir de fotografías digitales.<br><br>Tecnológicamente, el proyecto opta por una visión integrada 3D en web debido a la creciente importancia de la participación colectiva en la ciencia, tanto por parte de los profesionales, como de los usuarios, de forma que las apps para la experiencia y visualización del patrimonio arqueológico sean multiplataforma.</p>
                             <br>
                             <img class="img-responsive image-box" title="Example" src="data/assets/example.png">
                         </div>

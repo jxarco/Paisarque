@@ -42,14 +42,18 @@ var APP = {
     init: function(meshURL, textURL)
     {  
         var lang = localStorage.getItem("lang") || "es";
+        var that = this;
         
         if(!DATA)
             throw( "no translations" );
         
-        this.createInfoInspector(lang);
-        this.createToolsInspector(lang);
-        this.createAnotInspector(lang);
-        
+        //$(window).bind("load", function(){ 
+        //    LiteGUI.init(); 
+            that.createInfoInspector(lang);
+            that.createToolsInspector(lang);
+            that.createAnotInspector(lang);
+        //});
+            
         // finish and run GFX stuff
         GFX.init( meshURL, textURL );  
     },
@@ -110,7 +114,7 @@ var APP = {
         }});
         
         text_section = DATA.litegui.sections.camera;
-        APP.tools_inspector.addSection( text_section.title[lang] );
+        APP.tools_inspector.addSection( text_section.title[lang], {collapsed: true});
         APP.tools_inspector.addButton(null, text_section.reset[lang], { width: "100%",  callback: function(){
             GFX.camera.perspective( 45, gl.canvas.width / gl.canvas.height, 0.1, 10000 );
             GFX.camera.lookAt( [150,60,150],[0,0,0],[0,1,0] );
@@ -119,7 +123,7 @@ var APP = {
         }});
         APP.tools_inspector.addNumber( text_section.orbit[lang], 0, { width: "100%",  callback: function(v){
             GFX.orbit_speed = v;
-        }, min: -1, max: 1, step: 0.01});
+        }, min: -2, max: 2, step: 0.01});
         
         text_section = DATA.litegui.sections.model;
         APP.tools_inspector.addSection( text_section.title[lang], {className: "model3d-section"});
@@ -128,11 +132,12 @@ var APP = {
         }});
         
         text_section = DATA.litegui.sections.measures;
-        APP.tools_inspector.addSection( text_section.title[lang], {collapsed: true, className: "measures-section"});
+        APP.tools_inspector.addSection( text_section.title[lang], {className: "measures-section", collapsed: true});
         APP.tools_inspector.addButton( text_section.scale[lang], text_section.config_scale[lang], { width: "100%",  callback: function(){
             APP.setScale();
         }});
         APP.tools_inspector.addCombo( text_section.log[lang], "...",{values: text_section.log_values[lang], callback: function(v) { APP.showMeasureTables(v); }});
+        APP.tools_inspector.addSeparator();
         APP.tools_inspector.addButton( text_section.dist[lang], text_section.create_dist[lang], { width: "100%",  callback: function(){
             APP.appendNewMeasure(PW.OD);
         }});
@@ -142,9 +147,8 @@ var APP = {
         
         text_section = DATA.litegui.sections.export;
         APP.tools_inspector.addSection( text_section.title[lang], {collapsed: true, className: "export-section"});
-        APP.tools_inspector.addButton( text_section.image[lang], text_section.image_btn[lang], { width: "100%",  callback: function(){
-            GFX.takeSnapshot();
-        }});
+        
+        // default options
         APP.export_data = {
             format: "webm",   
             framerate: "60",
@@ -152,36 +156,68 @@ var APP = {
             quality: "50",
             name: "exported",
             verbose: false,
-            display: false
+            display: true,
+            
+                export_speed: 0.5,
+                n_iterations: 1
         }
+        APP.tools_inspector.addButton( text_section.image[lang], text_section.image_btn[lang], { width: "100%",  callback: function(){
+            GFX.takeSnapshot();
+        }});
         APP.tools_inspector.addButtons( text_section.record[lang], text_section.record_values[lang],{callback: function(v) {        
             APP.exportCanvas(v);
         }});
-        APP.tools_inspector.addString( text_section.name[lang], APP.export_data.name,{callback: function(v) { APP.export_data.name = v; }});
-        APP.tools_inspector.addCombo( text_section.format[lang], APP.export_data.format,{values:["webm","gif"], callback: function(v) { APP.export_data.format = v; }});
-        APP.tools_inspector.addNumber( text_section.quality[lang], APP.export_data.quality, { width: "100%",  callback: function(v){  APP.export_data.quality = v; }, min: 1, max: 99, step: 1});
+        
         APP.tools_inspector.addSeparator();
-        APP.tools_inspector.addString("Frame rate", APP.export_data.framerate,{ callback: function(v) {             APP.export_data.framerate = v; }});
-        APP.tools_inspector.addCombo("MotionBlur f.", APP.export_data.mb_frames,{ values:[1, 2, 4, 8, 16], callback: function(v) { APP.export_data.mb_frames = v; }});
-//        APP.tools_inspector.addCheckbox("Progreso", APP.export_data.verbose, { callback: function(v){
-//            APP.export_data.verbose = v;
-//        }});
-        APP.tools_inspector.addCheckbox("Widget", APP.export_data.display, { callback: function(v){
-            APP.export_data.display = v;
-            if(!v)
-                $("#capture-widget").remove();
+        APP.tools_inspector.addButton( null, text_section.advanced[lang], { width: "100%",  callback: function(){
+            APP.createWidgetsDialog(lang);
         }});
         
         $("#tab-content2-large").append(APP.tools_inspector.root);
         
         var progress = document.createElement("div");
-        progress.id = "progress-line";
+        progress.className = "progress-line";
         
         $(".wsection.model3d-section").find(".wsectioncontent").append($(".sliders"));
         $(".wsection.measures-section").find(".wsectioncontent").append($("#distances-table"));
         $(".wsection.measures-section").find(".wsectioncontent").append($("#segment-distances-table"));
         $(".wsection.measures-section").find(".wsectioncontent").append($("#areas-table"));  
         $(".wsection.export-section").find(".wsectioncontent").prepend(progress);
+    },
+    
+    createWidgetsDialog: function(lang)
+    {   
+        // advanced options
+        var text_section = DATA.litegui.sections.dialog;
+        var name = text_section.title[lang];
+        var dialog = new LiteGUI.Dialog(name, {parent: "body", title:name, close: true, width: 300, scroll: true, draggable: true });
+        dialog.show('fade');
+        
+        var widgets = new LiteGUI.Inspector();
+        
+        widgets.addNumber( text_section.speed[lang], APP.export_data.export_speed, { width: "100%",  callback: function(v){  APP.export_data.export_speed = v; }, min: 0.1, max: 3, step: 0.1});
+        widgets.addCombo( text_section.iterations[lang], APP.export_data.n_iterations,{ values:[1, 2, 3, 4, 5], callback: function(v) { APP.export_data.n_iterations = v; }});
+        widgets.addButtons( text_section.record[lang], text_section.record_values[lang],{callback: function(v) {        
+            APP.exportCanvas(v);
+        }});
+        
+        widgets.addString( text_section.name[lang], APP.export_data.name,{callback: function(v) { APP.export_data.name = v; }});
+        widgets.addCombo( text_section.format[lang], APP.export_data.format,{values:["webm","gif"], callback: function(v) { APP.export_data.format = v; }});
+        widgets.addNumber( text_section.quality[lang], APP.export_data.quality, { width: "100%",  callback: function(v){  APP.export_data.quality = v; }, min: 1, max: 99, step: 1});
+        widgets.addSeparator();
+        widgets.addString("Frame rate", APP.export_data.framerate,{ callback: function(v) {             APP.export_data.framerate = v; }});
+        widgets.addCombo("MotionBlur f.", APP.export_data.mb_frames,{ values:[1, 2, 4, 8, 16], callback: function(v) { APP.export_data.mb_frames = v; }});
+        widgets.addCheckbox("Widget", APP.export_data.display, { callback: function(v){
+            APP.export_data.display = v;
+            if(!v)
+                $("#capture-widget").remove();
+        }});
+        widgets.addSeparator();
+        
+//        var progress = document.createElement("div");
+//        progress.className = "progress-line";
+//        widgets.add( progress );
+        dialog.add(widgets);  
     },
     
     createAnotInspector: function(lang)
@@ -259,19 +295,19 @@ var APP = {
     
     exportCanvas: function(name)
     {
-        if(name == "Play" || name == "Empezar" || name == "Comença")
+        if(name == "Grabar" || name == "Gravar" || name == "Record")
         {
             this.capturer = new CCapture( { 
-                name: APP.export_data.name,
-                verbose: APP.export_data.verbose,
-                display: APP.export_data.display,
-                framerate: parseInt( APP.export_data.framerate ),
-                motionBlurFrames: APP.export_data.mb_frames,
-                quality: parseInt( APP.export_data.quality ),
-                format: APP.export_data.format,
-                workersPath: 'js/extra/',
-                onProgress: function( p ) { 
-                    var progress = $("#progress-line");
+            name: APP.export_data.name,
+            verbose: APP.export_data.verbose,
+            display: APP.export_data.display,
+            framerate: parseInt( APP.export_data.framerate ),
+            motionBlurFrames: APP.export_data.mb_frames,
+            quality: parseInt( APP.export_data.quality ),
+            format: APP.export_data.format,
+            workersPath: 'js/extra/',
+            onProgress: function( p ) { 
+                    var progress = $(".progress-line");
                     if(p > 0 && progress.css("display") == "none")
                         progress.show();
                     var width = (p * 100) + "%"; 
@@ -280,17 +316,21 @@ var APP = {
                         progress.hide();
                 }
             } );  
+
+            var stopCapturer = function(){
+                APP.capturer.stop();
+            }
+            
+            GFX.makeOrbit( APP.export_data.export_speed, 
+                          APP.export_data.n_iterations, 
+                         stopCapturer);
             
             this.capturer.start();
         }
         
-        if(name == "Stop" || name == "Parar" || name == "Atura")
+        else if(name == "Guardar" || name == "Desar" || name == "Save")
         {
-            this.capturer.stop();
-        }
-        
-        else if(name == "Export" || name == "Exportar")
-        {
+            $("#capture-widget").remove();
             this.capturer.save();
         }
     },
@@ -341,9 +381,6 @@ var APP = {
         //remove active classes
         $(".on-point").removeClass("on-point");
         $("#tools-tab .btn.tool-btn").removeClass("pressed");
-        
-        // clear capturing box
-        $("#capturing").fadeOut().empty();
         
         if(options.no_msg)
             return;
@@ -826,46 +863,5 @@ var APP = {
         }, step: 0.005, min: 0});
         
         $(".draggable").append(APP.inspector.root);
-    },
-    
-    renderMeasure: function(o)
-    {
-        o = o || {};
-    	var id = o.id;
-    	var type = o.type;
-    	var msr = null;
-
-        // clear first
-        GFX.destroyElements(GFX.scene.root.children, "config");
-        
-        //get from project
-        if(type == 'm')
-            msr = project.getMeasure(id);
-	    else if(type == 's')
-            msr = project.getSegmentMeasure(id);
-	    else if(type == 'a')
-            msr = project.getArea(id);
-	    else
-	        console.error("no measure to show");
-
-        // points stuff
-        var points = [];
-        for(var i = 0; i < msr.points.length; ++i){
-            var list = [];
-            list.push(msr.points[i][0], msr.points[i][1], msr.points[i][2]);
-            points.push(list);
-            // ball render representation
-            var ind = new SceneIndication();
-            ind = ind.ball(GFX.scene, points[i], {depth_test: false, type: "view"});    
-        }    
-        
-        APP.addLine(points, {desc: "config"});
-
-        // change global camera to look at with smooth efect
-        if(msr.camera_position)
-        {
-            GFX.camera.direction = msr.camera_position;
-            GFX.camera.smooth = true;    
-        }
-    },
+    }
 }

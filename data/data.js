@@ -18,7 +18,7 @@ var DATA = {
                 title: { "es": "Información", "cat": "Informació", "en": "Information" },
                 author: { "es": "Autor", "cat": "Autor", "en": "Author" },
                 loc: { "es": "Ubicación", "cat": "Ubicació", "en": "Location" },
-                desc: { "es": "Decripción", "cat": "Descripció", "en": "Description" }
+                desc: { "es": "Descripción", "cat": "Descripció", "en": "Description" }
             },
             map: {
                 title: { "es": "Mapa", "cat": "Mapa", "en": "Map" },
@@ -60,8 +60,18 @@ var DATA = {
                 title: { "es": "Exportar escena", "cat": "Exportar l'escena", "en": "Export scene" },
                 image: { "es": "Imagen", "cat": "Imatge", "en": "Snapshot" },
                 image_btn: { "es": "Capturar", "cat": "Captura", "en": "Capture" },
-                record: { "es": "Grabar", "cat": "Gravar", "en": "Record" },
-                record_values: { "es": ["Empezar","Parar","Exportar"], "cat": ["Comença","Atura","Exportar"], "en": ["Play","Stop","Export"] },
+                video: { "es": "Vídeo", "cat": "Vídeo", "en": "Video" },
+                video_btn: { "es": "Grabar", "cat": "Gravar", "en": "Record" },
+                record: { "es": "Exportar", "cat": "Exportar", "en": "Export" },
+                record_values: { "es": ["Grabar","Guardar"], "cat": ["Gravar","Desar"], "en": ["Record","Save"] },
+                advanced: {"es": "Más opciones", "cat": "Més opcions", "en": "More options" }
+            },
+            dialog: {
+                title: { "es": "Opciones avanzadas", "cat": "Opcions avançades", "en": "Advanced options" },
+                speed: { "es": "Velocidad", "cat": "Velocitat", "en": "Speed" },
+                iterations: { "es": "Iteraciones", "cat": "Iteracions", "en": "Iterations" },
+                record: { "es": "Exportar", "cat": "Exportar", "en": "Export" },
+                record_values: { "es": ["Grabar","Guardar"], "cat": ["Gravar","Desar"], "en": ["Record","Save"] },
                 name: { "es": "Nombre", "cat": "Nom", "en": "Name" },
                 format: { "es": "Formato", "cat": "Format", "en": "Format" },
                 quality: { "es": "Calidad", "cat": "Qualitat", "en": "Quality" }

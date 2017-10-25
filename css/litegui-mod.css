@@ -6,7 +6,8 @@
 .inspector {
 	/* margin-top: 10px; */
 	/*margin-bottom: 20px;*/
-	color: #999;
+	color: #333;
+/*    background-color: #3A3A3A;*/
 	/*
 	user-select: none;
 	-moz-user-select: none;
@@ -53,7 +54,7 @@
 }
 
 .inspector:not(.one_line) .widget.even {
-	background-color: rgba(40,40,40,0.5);
+/*	background-color: rgba(40,40,40,0.5);*/
 }
 
 
@@ -70,7 +71,7 @@
 	display: inline-block;
 	position: relative;
 	z-index: auto;
-	background-color: #555;
+	background-color: rgba(160, 160, 200, 0.4);
 
 	/*
     background-image: linear-gradient(right , #555, #444);
@@ -85,13 +86,13 @@
 	padding: 2px;
 	padding-left: 8px;
 	/*margin-bottom: 4px;*/
-	color: #BBC;
-	font-size: 1.05em;
+	color: #444;
+	font-size: 1em;
 }
 
 .inspector .wsectioncontent {
 	padding: 4px 4px;
-	background-color: #3A3A3A;
+/*	background-color: #3A3A3A;*/
 }
 
 .inspector .wtitle {
@@ -121,15 +122,17 @@
 	overflow: hidden;
 	/*max-height: 1.5em;*/
 	white-space: nowrap;
+    border-radius: 2px;
 }
 
 .inspector .wsectiontitle:hover{
+	background: #aab !important;
     cursor: pointer;
 }
 
 .inspector .wsectiontitle .buttons {
     position: absolute;
-	top: 4px;
+	top: 2px;
     right: 4px;
 }
 
@@ -149,7 +152,7 @@
 }
 
 .inspector .wcontent button.single {
-	padding: 2px;
+	padding: 1px;
 }
 
 .inspector .icon {
@@ -166,7 +169,7 @@
 
 .inspector .wsection {
 	/*padding: 4px 2px;*/
-	margin-bottom: 4px;
+	margin-bottom: 2px;
 }
 
 .inspector .wsection.selected .wsectiontitle {
@@ -268,7 +271,7 @@
 }
 
 .inspector .wname {
-    font-size: 0.95em;
+    font-size: 0.8em;
 	display: inline-block;
 	-moz-box-sizing: border-box;	
 	-webkit-box-sizing: border-box;	
@@ -324,11 +327,12 @@
 
 .inspector .inputfield {
 	display: inline-block;
-	background-color: #222;
+	background-color: #292929;
 	border: 0;
-	border-top: 1px solid #000; 
-	border-bottom: 1px solid #3f3f3f; 
-	border-radius: 3px;	
+/*	border-top: 1px solid #000; */
+/*	border-bottom: 1px solid #3f3f3f; */
+	border-radius: 4px;	
+    margin-right: 4px !important;
 }
 
 .inspector .wcontent .inputfield input:focus, .inspector .wcontent .inputfield textarea:focus
@@ -372,9 +376,9 @@
 
 .inspector .wcontent .inputfield.button {
 	margin: 0;
-	width: -moz-calc(100% - 26px);
-	width: -webkit-calc(100% - 26px);
-	width: calc(100% - 26px);
+	width: -moz-calc(100% - 28px);
+	width: -webkit-calc(100% - 28px);
+	width: calc(100% - 28px);
 }
 
 .inspector .wcontent .inputcombo {
@@ -389,7 +393,7 @@
 }
 
 .inspector .wcontent .inputcombo select {
-	background: #262626;
+	background: #292929;
 	text-align-last:center;
 }
 
@@ -468,12 +472,13 @@
 
 .inspector .wcontent .checkbox {
 	width: 4em;
-	display: inline-block;
+/*	display: inline-block;*/
 	background-color: #222;
 	border: 0;
-	border-radius: 2px;
+	border-radius: 4px;
 	margin: 0 !important;
 	text-align: center;
+    color:aliceblue;
 
 	user-select: none;
 	-moz-user-select: none;
@@ -745,11 +750,6 @@ button.wcombobutton.selected {
 
 /* Here goes all the CSS related to layout the web (panels, windows, bars, etc) */
 
-html, body {
-	height: 100%;
-	background-color: #111;
-}
-
 div {
 	margin: 0;
 	padding: 0;
@@ -963,26 +963,6 @@ audio:not([controls]) {
 /* ==========================================================================
    Base
    ========================================================================== */
-
-/*
- * 1. Sets default font family to sans-serif.
- * 2. Prevents iOS text size adjust after orientation change, without disabling
- *    user zoom.
- */
-
-html {
-    font-family: sans-serif; /* 1 */
-    -webkit-text-size-adjust: 100%; /* 2 */
-    -ms-text-size-adjust: 100%; /* 2 */
-}
-
-/*
- * Removes default margin.
- */
-
-body {
-    margin: 0;
-}
 
 /* ==========================================================================
    Links
@@ -1464,6 +1444,7 @@ button.litebutton {
     padding: 2px;
     text-shadow: 0 1px 1px black;
     vertical-align: top;	
+    font-size: 0.9em;
 }
 
 button.litebutton:hover:not(:disabled) {

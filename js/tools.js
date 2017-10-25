@@ -358,7 +358,7 @@ function show(e)
         var id = e.parent().attr("id");
         var type = e.data("type");
 
-        APP.renderMeasure({id: id, type: type});
+        GFX.renderMeasure({id: id, type: type});
     }
     else{
         e.removeClass("on-point");

@@ -14,7 +14,6 @@ $('.form-signin').each(function() {
             }
     });
 });
-
 /******************************************************************************************/
 
 /*
@@ -126,7 +125,7 @@ $("#saveTextButton").click(function(e)
         onupdate: "blink"
     });
     
-    setParent(GFX.model, ind);
+    setParent(GFX.model, ind.node);
 
     // se anade a la lista de anotaciones del proyecto
     project.insertAnotation(id, GFX.camera, APP.result, $("#message-text").val());
@@ -264,6 +263,73 @@ $("#formAddImage").on('submit', function(e)
             fileReader.readAsArrayBuffer( f );
 		}
     }
+});
+
+// upload pdf from disc
+$("#formAddPDF").on('submit', function(e)
+{
+    e.preventDefault();
+    $('#TESTModalPDF').modal('hide');   
+    
+    var values = getFormValues(this);
+    
+    /*       guest/grave       */
+    var project_id = current_project;
+
+    var formData = new FormData(this);
+    var user = current_user;
+    formData.append("user", user);
+    formData.append("id", project_id);
+    
+    var urlPDF = "litefile/files/" + user + "/projects/" + copy._id + "/";
+    
+    $(':file').each(function() {
+        var input = $(this);
+        var auxList = input[0]["value"].split('\\');
+        var name = auxList[auxList.length - 1];
+        urlPDF += name;
+        
+        // add pdf to project
+        if(copy._extra.length)
+            extraCounter = copy._extra[copy._extra.length-1].name.split("_")[1];
+        else
+            extraCounter = -1;
+
+        extraCounter++;
+        var name = "extra_" + extraCounter;
+        
+        copy.pushExtra(name, "pdf", urlPDF);
+        
+        // avoid process more files
+        return;
+    });
+    
+    $('#loadingModal').modal('show'); 
+    // Upload file
+    
+//    for(var i = 0, f; f = input_files[i]; i++)
+//    {
+//        if(f.constructor == File)
+//		{
+//			var fileReader = new FileReader();
+//            
+//             fileReader.onload = (function(theFile) {
+//                return function(e) {
+//                    var arrayBuffer = this.result;
+//                    var fullpath = current_user + "/projects/" + copy._id + "/" + theFile.name;
+//                    
+//                    session.uploadFile( fullpath, arrayBuffer, 0, function(){
+//                        $('#loadingModal').modal('hide');
+//                        // Resetear campos del form
+//                        $(this).trigger("reset");
+//                        parseExtraJSON(copy._extra);
+//                    });
+//                };
+//              })(f);
+//            
+//            fileReader.readAsArrayBuffer( f );
+//		}
+//    }
 });
 
 /*
