@@ -188,7 +188,7 @@ ayuda,#tab-content3,,"<h4>Sobre el proyecto</h4>
                             </div> <br>
 
                             <div class=""info-panel"">
-                                <p class=""kawaii"">Para más soporte, descarga la <a>guía completa</a> de la aplicación.</p>
+                                <p class=""kawaii"">Para más soporte, descarga la <a href=""data/doc.pdf"" download=""documentation.pdf"">guía completa</a> de la aplicación.</p>
                             </div>"," <h4>Sobre el projecte</h4>
                             <div class=""info-panel"">
                                         <p class=""kawaii"">Utilitza els quadres de text para actualitzar la informació sobre el projecte.</p>
@@ -290,7 +290,7 @@ ayuda,#tab-content3,,"<h4>Sobre el proyecto</h4>
                             </div> <br>
 
                             <div class=""info-panel"">
-                                <p class=""kawaii"">Per més suport, descarrega la <a>guia completa</a> de l’aplicació.</p>
+                                <p class=""kawaii"">Per més suport, descarrega la <a href=""data/doc.pdf"" download=""documentation.pdf"">guia completa</a> de l’aplicació.</p>
                             </div>
 
 "," <h4>About the project</h4>
@@ -387,7 +387,7 @@ ayuda,#tab-content3,,"<h4>Sobre el proyecto</h4>
                             </div> <br>
 
                             <div class=""info-panel"">
-                                <p class=""kawaii"">For more support, download the <a>full guide</a> of the application.</p>
+                                <p class=""kawaii"">For more support, download the <a href=""data/doc.pdf"" download=""documentation.pdf"">full guide</a> of the application.</p>
                             </div>
 
 ", 

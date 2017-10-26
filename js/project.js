@@ -128,7 +128,7 @@ Project.prototype.deleteExtra = function( selector, type )
 *   @param position {vec3} x y z of the anotation
 *   @param status {string} text of the anotation
 */
-Project.prototype.insertAnotation = function( id, camera, position, text )
+Project.prototype.insertAnotation = function( id, camera, position, text, options )
 {
     var a = new Annotation(id, camera, position, text);
     this._anotations.push(a.TO_JSON());
@@ -138,7 +138,8 @@ Project.prototype.insertAnotation = function( id, camera, position, text )
     
     $("#anotacion_tabla").append(totalString);
     
-    if(this._auto_save)
+    // only if auto_saving on and not parsing
+    if(this._auto_save && options.display)
         this.save();
 }
 
@@ -421,7 +422,6 @@ Project.prototype.insertMeasure = function( camera, points, distance, name, opti
         return;
     }
         
-    
     options = options || {};
     
     var table = $('#distances-table');
@@ -453,7 +453,8 @@ Project.prototype.insertMeasure = function( camera, points, distance, name, opti
             "distance": distance
         });
     
-    if(this._auto_save)
+    // only if auto_saving on and not parsing
+    if(this._auto_save && options.display)
         this.save();
 }
 
@@ -501,7 +502,8 @@ Project.prototype.insertSegmentMeasure = function( camera, points, distance, nam
             "distance": distance
         } );
     
-    if(this._auto_save)
+    // only if auto_saving on and not parsing
+    if(this._auto_save && options.display)
         this.save();
 }
 
@@ -548,7 +550,8 @@ Project.prototype.insertArea = function( points, area, index, name, options )
             "area": area
         } );
     
-    if(this._auto_save)
+    // only if auto_saving on and not parsing
+    if(this._auto_save && options.display)
         this.save();
 }
 
@@ -597,9 +600,11 @@ Project.prototype.FROMJSON = function( data )
             "target": data.anotaciones[i].camera_target,
             "up": data.anotaciones[i].camera_up
         };
-        this.insertAnotation( data.anotaciones[i].id, camera,
-                             data.anotaciones[i].position,
-                             data.anotaciones[i].text );
+        this.insertAnotation(   data.anotaciones[i].id, camera,
+                                data.anotaciones[i].position,
+                                data.anotaciones[i].text,
+                                {display: false} // parsing so prevent auto_saving
+                            );
     }
     
     // rotations
@@ -783,35 +788,6 @@ $("#auto-save-btn").click(function(){
         project.save();
     }
 });
-
-/* 
-* get the input values to modify the project 
-* coordinates location
-*/
-$('#coord-btn').click(function(e) 
-{
-    var lat = parseFloat($("#lat").val());
-    var lng = parseFloat($("#lon").val());
-    project._coordinates.lat = lat;
-    project._coordinates.lng = lng;
-    initMap(lat, lng);
-    
-    if(project._auto_save)
-        project.save();
-});
-
-
-$("#data-btn").click(function(){
-    var author = $("#mod_author").val();
-    var loc = $("#mod_location").val();
-    project._author = author;
-    project._location = loc;
-    
-    if(project._auto_save)
-        project.save();
-});
-
-
 
 /**
 * Annotation class to hold an annotation data
