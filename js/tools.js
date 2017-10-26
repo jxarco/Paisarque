@@ -713,6 +713,43 @@ function fileToBLOB(params)
             });
             break;
         case 'pdf':
+            var pdfs = [];
+            for(var i = 0, info; info = copy._extra[i]; i++)
+                if(info.type == "pdf" && info.data.includes( "litefile/files/" )) 
+                    pdfs.push(info);
+            
+            var xhr = [],
+                successfulRequests = 0,
+                responseArray = [];
+
+            for (var i = 0; i < pdfs.length; i++){
+                (function(i){
+                    var url = pdfs[i].data;
+                    xhr[i] = new XMLHttpRequest();
+                    xhr[i].responseType = 'blob';
+                    xhr[i].open("GET", url);
+                    xhr[i].onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            // track successful requests here
+                            successfulRequests++;
+                            responseArray.push( this.response );
+                            
+                            var extension = url.slice(url.lastIndexOf("."));
+                            var new_file = "Extra_" + i + extension;
+                            zip.file(new_file, this.response);
+
+                            if(successfulRequests == pdfs.length) {
+                                var exportar = function(filename){
+                                    zip.generateAsync({type:"blob"}).then(function(content) {
+                                        LiteGUI.downloadFile( filename, content );
+                                    });
+                                }(filename);
+                            }
+                        }
+                    };
+                    xhr[i].send();
+                })(i);
+            }
             break;
     }
 }

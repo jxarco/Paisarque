@@ -23,8 +23,12 @@ LiteFileServer.setup("", function(status, resp) {
         systemReady();
 
         var url = window.location.pathname;
+        var index = url.lastIndexOf("/");
+        var subpath = url.slice(index);
         
-        if(localStorage.session && url.includes( "/index" ))
+        // conditions to login:
+        // have last lession in localstorage AND url is index or root
+        if(localStorage.session && ( url.includes( "/index" ) || subpath.length == 1 ))
         {
             var last_session_opened = JSON.parse(localStorage.session);
             window.location.href = "inicio";

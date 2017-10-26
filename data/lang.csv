@@ -3,12 +3,15 @@ index,title,,PaisArque (ES),PaisArque (CAT),PaisArque (EN),
 index,#bbva_mark,,Financiado por,Finançat per,Funded by,
 index,#body1,,"Proyecto realizado por grupos pertenecientes a la Universidad Pompeu Fabra con la financiación de la <a href=""https://www.fbbva.es/"">Fundación BBVA.</a> ","Projecte realitzat per grups pertanyents a la Universitat Pompeu Fabra amb el finançament de la <a href=""https://www.fbbva.es/"">Fundació BBVA.</a> ","Project by UPF related groups thanks to the funding of the <a href=""https://www.fbbva.es/"">BBVA foundation.</a>", 
 index,#body2_title,,Resumen,Resum,Summary,
-index,#body2,,"PaisArque se propone desarrollar una aplicación de fácil utilizo y acceso, basada en la web, a través de la cual los usuarios puedan generar modelos 3D de monumentos y/o objetos a partir de fotografías digitales.<br><br>Tecnológicamente, el proyecto opta por una visión integrada 3D en web debido a la creciente importancia de la participación colectiva en la ciencia, tanto por parte de los profesionales, como de los usuarios, de forma que las apps para la experiencia y visualización del patrimonio arqueológico sean multiplataforma.","PaisArque es proposa desenvolupar una aplicació de fàcil ús i accés, basada en la web, a través de la qual els usuaris puguin generar models 3D de monuments i/o objectes a partir de fotografies digitals.<br><br>Tecnològicament, el projecte opta per una visió integrada 3D en web a causa de la creixent importància de la participació col·lectiva en la ciència, tant per part dels professionals com dels usuaris, de manera que les apps per l'experiència i visualització del patrimoni arqueològic siguin multiplataforma.","PaisArque aims to develop an easy-to-use, web-based application through which users can generate 3D models of monuments and / or objects from digital photographs.<br><br>Technologically, the project opts for an integrated 3D vision in web because of the growing importance of collective participation in science, both by professionals and users, so that the applications for the experience and visualization of the archaeological heritage be multiplatform.", 
+index,#body2,,"PaisArque se propone desarrollar una aplicación de fácil utilizo y acceso, basada en la web, a través de la cual los usuarios puedan generar modelos 3D de monumentos y/o objetos a partir de fotografías digitales.<br><br>Tecnológicamente, el proyecto opta por una visión integrada 3D en web debido a la creciente importancia de la participación colectiva en la ciencia, tanto por parte de los profesionales, como de los usuarios, de forma que las apps para la experiencia y visualización del patrimonio arqueológico sean multiplataforma.","PaisArque es proposa desenvolupar una aplicació de fàcil ús i accés, basada en la web, a través de la qual els usuaris puguin generar models 3D de monuments i/o objectes a partir de fotografies digitals.<br><br>Tecnològicament, el projecte opta per una visió integrada 3D en web a causa de la creixent importància de la participació col·lectiva en la ciència, tant per part dels professionals com dels usuaris, de manera que les apps per l'experiència i visualització del patrimoni arqueològic siguin multiplataforma.","PaisArque aims to develop an easy-to-use, web-based application through which users can generate 3D models of monuments and/or objects from digital photographs.<br><br>Technologically, the project opts for an integrated 3D vision in web because of the growing importance of collective participation in science, both by professionals and users, so that the applications for the experience and visualization of the archaeological heritage be multiplatform.", 
 index,#have_account,,¿Tienes cuenta?,Tens compte?,Do you have an account?,
-index,#signin-btn,,Iniciar sesión,Iniciar sessió,Sign in,
-index,.new-account,,Registrarse,Registrar-se,Sign up,
+index,#signin-btn,,"<span class=""ladda-label"">Iniciar sesión</span><span class=""ladda-spinner""></span>","<span class=""ladda-label"">Iniciar sessió</span><span class=""ladda-spinner""></span>","<span class=""ladda-label"">Sign in</span><span class=""ladda-spinner""></span>",
+index,.new-account,,"<span class=""ladda-label"">Registrarse</span><span class=""ladda-spinner""></span>","<span class=""ladda-label"">Registrar-se</span><span class=""ladda-spinner""></span>","<span class=""ladda-label"">Sign up</span><span class=""ladda-spinner""></span>",
+index,#have-problem-login,,"<span class=""ladda-label"">¿Problemas para iniciar sesión?</span><span class=""ladda-spinner""></span>","<span class=""ladda-label"">Problemes per iniciar sessió?</span><span class=""ladda-spinner""></span>","<span class=""ladda-label"">Having trouble logging in?</span><span class=""ladda-spinner""></span>", 
+index,.forgotpasswordsend-button,,"<span class=""ladda-label"">Enviar mail de reset</span><span class=""ladda-spinner""></span>","<span class=""ladda-label"">Enviar mail de reset</span><span class=""ladda-spinner""></span>","<span class=""ladda-label"">Send reset mail</span><span class=""ladda-spinner""></span>",
 index,#inputEmail,placeholder,Usuario,Usuari,Username,
 index,#inputPassword,placeholder,Contraseña,Clau,Password,
+index,.form-forgot-heading,,¿Has olvidado la contraseña?,Has oblidat la contraseña?,Forgot your password?,
 inicio,title,,PaisArque - Proyectos (ES),PaisArque - Projectes (CAT),PaisArque - Projects (EN),
 inicio,#addProject,,Crear nuevo proyecto,Crear nou projecte,Create new project,
 inicio,#search-bar,placeholder,Buscador...,Cercador...,Search here,
@@ -21,7 +24,7 @@ inicio,#th-1,,Nombre proyecto,Nom projecte,Project name,
 inicio,#th-2,,Autor proyecto,Autor projecte,Project author,
 inicio,#th-3,,Lugar,Lloc,Location,
 inicio,.uploading-files,,Subiendo archivos al servidor,Pujant arxius al servidor,Uploading files,
-inicio,#myModalLabel,,Cargar proyecto,Carregar projecte,Load project,
+inicio,#myModalLabel,,Nuevo proyecto,Nou projecte,New project,
 inicio,#lb-id,,Nombre,Nom,Name,
 inicio,#lb-author,,Autor,Autor,Author,
 inicio,#lb-place,,Lugar,Lloc,Location,
@@ -36,10 +39,12 @@ inicio,#latitud,placeholder,Latitud,Latitud,Latitude,
 inicio,#longitud,placeholder,Longitud,Longitud,Longitude,
 inicio,#sendProject,,Enviar,Enviar,Send,
 inicio,#cancelProject,,Cancelar,Surt,Cancel,
-exportar,.help-nav,,AYUDA,AJUDA,HELP,
-exportar,.extra-nav,,APORTACIONES,APORTACIONS,EXTRA INFO,
+exportar,title,,PaisArque - Exportar (ES),PaisArque - Exportar (CAT),PaisArque - Export (EN),
+exportar,.help-nav,,SOPORTE,SUPORT,SUPPORT,
+exportar,.extra-nav,,APORTACIONES,APORTACIONS,CONTRIBUTIONS,
 exportar,.export-nav,,EXPORTAR,EXPORTAR,EXPORT,
 exportar,.w3-xlarge,,<b>EXPORTAR</b>,<b>EXPORTAR</b>,<b>EXPORT</b>,
+exportar,#h3-files,,ARCHIVOS,ARXIUS,FILES,
 exportar,#h3-model,,MODELO,MODEL,MODEL,
 exportar,#h3-project,,PROYECTO,PROJECTE,PROJECT,
 exportar,#h3-tables,,TABLAS,TAULES,TABLES,
@@ -49,10 +54,14 @@ exportar,.detailed,,Detalle,Detall,In detail,
 exportar,.config,,Configuración,Configuració,Configuration file,
 exportar,.aport,,Aportaciones,Aportacions,Extra information,
 exportar,._anotations,,Anotaciones,Anotacions,Annotations,
+exportar,._rotations,,Rotaciones,Rotacions,Rotations,
 exportar,._measures,,Medidas,Mesures,Measures,
-exportar,._areas,,Areas,Àrees,Areas,
+exportar,._areas,,Áreas,Àrees,Areas,
 exportar,._extra,,Aportaciones,Aportacions,Extra information,
+exportar,.images,,Imágenes,Imatges,Images,
+exportar,.text,,Notas de texto,Notes de text,Text notes,
 exportar,.conf-php,,Configuración,Configuració,Configuration file,
+exportar,.export-file,title,Descargar archivos en ZIP,Descarregar arxius en ZIP,Download in ZIP file,
 exportar,.export-pdf,title,Exportar en PDF,Exportar a PDF,Export in PDF,
 exportar,.export-xls,title,Exportar en CSV,Exportar a CSV,Export in CSV,
 exportar,.export-json,title,Exportar en JSON,Exportar a JSON,Export in JSON,
@@ -60,13 +69,337 @@ exportar,#down-mesh,,Mesh,Mesh,Mesh,
 exportar,#down-text,,Textura,Textura,Texture,
 exportar,#down-mesh,title,Descargar mesh,Descarregar mesh,Download mesh,
 exportar,#down-text,title,Descargar textura,Descarregar textura,Download texture,
-infoextra,.help-nav,,AYUDA,AJUDA,HELP,
-infoextra,.extra-nav,,APORTACIONES,APORTACIONS,EXTRA INFO,
+infoextra,title,,PaisArque - Aportaciones (ES),PaisArque - Aportacions (CAT),PaisArque - Contributions (EN),
+infoextra,.help-nav,,SOPORTE,SUPORT,SUPPORT,
+infoextra,.extra-nav,,APORTACIONES,APORTACIONS,CONTRIBUTIONS,
 infoextra,.export-nav,,EXPORTAR,EXPORTAR,EXPORT,
-infoextra,.w3-xlarge,,<b>APORTACIONES</b>,<b>APORTACIONS</b>,<b>EXTRA INFO</b>,
-infoextra,#tab1 label,,Imágenes,Imatges,Images,
-infoextra,#tab3 label,,Texto,Text,Text,
-infoextra,#tab4 label,,Vídeos,Vídeos,Videos,
+infoextra,.w3-xlarge,,<b>APORTACIONES</b>,<b>APORTACIONS</b>,<b>CONTRIBUTIONS</b>,
+infoextra,#label-tab1,,Imágenes,Imatges,Images,
+infoextra,#label-tab3,,Texto,Text,Text,
+infoextra,#label-tab4,,Vídeos,Vídeos,Videos,
 infoextra,myModalLabel,,Subir imagen,Pujar imatge,Upload image,
 infoextra,.cancel-btn,,Cancelar,Surt,Cancel,
 infoextra,.submit-btn,,Añadir,Afegir,Add,
+infoextra,#image-url,placeholder,Cargar imagen desde URL,Afegir imatge desde URL,Load image from URL,
+infoextra,#pdf-url,placeholder,Cargar PDF desde URL,Afegir PDF desde URL,Load PDF from URL,
+infoextra,#text-url,placeholder,Escribe aquí cualquier nota,Escriu aquí qualsevol nota,Write something here,
+infoextra,#video-url,placeholder,Youtube URL vídeo,Youtube URL vídeo,Youtube video URL,
+ayuda,title,,PaisArque - Soporte (ES),PaisArque - Suport (CAT),PaisArque - Support (EN),
+ayuda,.help-nav,,SOPORTE,SUPORT,SUPPORT,
+ayuda,.extra-nav,,APORTACIONES,APORTACIONS,CONTRIBUTIONS,
+ayuda,.export-nav,,EXPORTAR,EXPORTAR,EXPORT,
+ayuda,.w3-xlarge,,<b>SOPORTE</b>,<b>SUPORT</b>,<b>SUPPORT</b>,
+ayuda,#label-tab-photo,,Tomar las fotografías,Fer les fotografies,Take photographies,
+ayuda,#label-tab-model,,Crear el modelo 3D,Crear el model 3D,Creating 3D model,
+ayuda,#label-tab-app,,Aplicación,Aplicació,APP,
+ayuda,#fotogrametria-p,,"La fotogrametría es un proceso de toma de fotos para la modelación de un objeto real al mundo 3D. A continuación podrás ver un tutorial en el que aprenderás a tomar unas buenas fotografías para, más adelante, reconstruir la escena en un archivo OBJ y poder visualizarlo en nuestra página.","La fotogrametria és un procés de presa de fotografies per a la modelització d'un objecte real al món 3D. A continuació podrás veure un tutorial en el qual aprendràs a prendre unes bones fotografies per, més endevant, reconstruir l'escena en un arxiu OBJ i poder visualitzar-ho en la nostra pàgina.",Photogrammetry is the process of taking photos for modeling a real object into the 3D world. Follows a tutorial in which you will learn to take useful pictures to reconstruct the scene in an OBJ file and to be able to visualize it in our page.,
+ayuda,#modelo3d-p,,¿Ya tienes las fotos? Aquí tienes un tutorial sobre cómo modelar tu objeto a partir de las fotografías tomadas anteriormente. Asegúrate de haber tomado las medidas necesarias y haber realizado el proceso de fotogrametría correctamente. ,Ja tens unes bones fotografies? Aquí tens un tutorial sobre com modelar l'objecte a partir de les fotografies preses anteriorment. Assegura't d'haver pres les mesures necessàries i haver realitzat el procés de fotogrametria correctament.,"Once you have the photos, you can build a 3D model from them. Here's a tutorial on how to model your object from previously taken pictures. Make sure you have taken the necessary steps and completed the photogrammetry process correctly.",
+ayuda,#tab-content3,,"<h4>Sobre el proyecto</h4>
+                            <div class=""info-panel"">
+                                        <p class=""kawaii"">Usa los cuadro de texto para actualizar la información sobre el proyecto.</p>
+                                        <p class=""kawaii"">El mapa indica la posición real de tu modelo 3D. Puedes modificar las coordenadas siempre que quieras.</p>
+                            <p class=""kawaii"">Pulsa sobre cada fondo de escena para usarlo como ambiente. Puedes quitarlo pulsando el botón situado justo debajo</p>
+                            </div>
+
+                            <h4>Herramientas</h4>
+
+                            <h6>Guardar estado del proyecto</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">save</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">Utiliza esta herramienta para guardar todos los cambios aplicados al proyecto.</p> 
+                                <p class=""kawaii error"">Si no se usa al acabar, tendrás que volver a realizar todos los cambios.</p>
+                                <p class=""kawaii"">Si quieres olvidarte de guardar, asegúrate de permitir el auto-guardado al empezar.</p> 
+                            </div><br>
+
+                            <h6>Establecer rotaciones por defecto</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">3d_rotation</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">Usa las barras que aparecerán justo abajo para rotar el objeto 3D a tu gusto. Puedes hacerlo guiándote por los ejes cardinales o por cualquier otra base.</p>
+                                <p class=""kawaii"">Prueba a pulsar las teclas A, S, D de tu teclado mientras rotas el objeto. Cada tecla corresponde a un eje diferente.</p>
+                                <p class=""kawaii"">Realizando esto, no tendrás que volver a rotar la cámara buscando la posición idónea de tu modelo.</p>
+                            </div> <br>   
+
+                               
+
+                            <h6>Configurar la escala</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">tune</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">En PaisArque no sabemos cómo de grande es tu modelo. Por ello necesitamos alguna información relacionada con la escala.</p>
+                                <p class=""kawaii"">Selecciona en el modelo 3D una distancia mencionando cuánto mide en la realidad.</p>
+                                <p class=""kawaii"">De esa manera sabremos la escala de tu modelo. Puede elegir cualquier distancia como base.</p>
+                                <p class=""kawaii error"">Si no existe esta configuración, cualquier medición estará deshabilitada.</p>
+                            </div><br>
+
+                            <h6>Distancias y áreas</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">linear_scale</i>
+                            </a>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">photo_size_select_small</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">El registro de medidas muestra todas las distancias y áreas calculadas. Puedes añadir más usando el menú de la sección.</p>
+                                <p class=""kawaii"">Haz clic en ""Añadir"" y mira el panel en la parte inferior, este te ayudará a realizar cada medida. Dispones de dos opciones, añadir puntos o mover la cámara.</p>
+                                <p class=""kawaii"">El primer punto de cada área determinará la posición del plano donde se colocarán los puntos.</p>
+                                <p class=""kawaii error"">Recuerda cerrar el área siempre con el punto inicial.</p>
+                                <p class=""kawaii"">Cuando estés listo, pulsa finalizar para guardar la medida en la tabla correspondiente. Puedes eliminar medidas y observarlas con las opciones de la tabla.</p>
+                            </div><br>
+
+                            <h6>Exportar escena</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">photo_camera</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">Dispones de varias opciones para exportar tu escena. Grabarla en vídeo o gif, o tomar una captura como imagen.</p>
+                                <p class=""kawaii"">Podrás guardar la foto en tu ordenador para usarla en cualquier otro momento o añadirla al proyecto en el que estás para poder verla en aportaciones.</p>
+                                <p class=""kawaii"">Si decides realizar una grabación, dispones de varias opciones de exportación como el formato o la calidad.</p>
+                            </div> <br>   
+
+
+
+                            <h4>Anotaciones</h4>
+
+                            <h6>Crear y eliminar</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">create</i>
+                            </a>                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">delete</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">Estando en modo anotación podrás hacer clic en la escena para añadir un anotación.</p>
+                                <p class=""kawaii"">Dale una descripción y listo.</p>
+                            <p class=""kawaii"">Una sola anotación puede borrarse si se arrastra a la papelera desde la tabla.</p>
+                                <p class=""kawaii"">En caso de querer borrarlas todas, pulsa el botón que verás al lado de la papelera.</p></div><br>
+
+                            <h6>Visualizar</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">visibility_off</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">Todas las anotaciones creadas aparecerán en la tabla que podrás ver debajo de los botones. Para ver cada anotación en el modelo 3D, tócala en la tabla.</p>
+                                <p class=""kawaii"">La cámara cambiará para representar la anotación que se haya tocado y esta parpadeará para destacarse entre el resto.</p>
+                                <p class=""kawaii"">Puedes ocultar todas las anotaciones con el botón Mostrar</p>
+                            </div> <br>
+
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">Para más soporte, descarga la <a>guía completa</a> de la aplicación.</p>
+                            </div>"," <h4>Sobre el projecte</h4>
+                            <div class=""info-panel"">
+                                        <p class=""kawaii"">Utilitza els quadres de text para actualitzar la informació sobre el projecte.</p>
+                                        <p class=""kawaii"">El mapa indica la posició real del teu model 3D.</p>
+<p class=""kawaii"">Pots modificar les coordenades sempre que calgui.</p>
+                            <p class=""kawaii"">Fes clic a cada fondo d’escena para utilitzar-lo como ambient. Pots treure’l fent clic al botó situat just avall.</p>
+                            </div>
+
+                            <h4>Eines</h4>
+
+                            <h6>Desar estat del projecte</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">save</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">Utilitza aquesta eina per desar tots els canvis aplicats al projecte.</p> 
+                                <p class=""kawaii error"">De no desar, hauràs de tornar a fer tot el treball!</p>
+                                <p class=""kawaii"">Si vols oblidar-te’n de desar, pots activar l’opció d’auto-desar abans de començar.</p> 
+                            </div><br>
+
+                            <h6>Establir rotacions por defecte</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">3d_rotation</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">Utilitza les guies de la part inferior per rotar el model al teu gust. Pots basar-te en els eixos cardinals o en qualsevol altre base.</p>
+                                <p class=""kawaii"">També el pots rotar amb les tecles A, S, D per guanyar més precisió. </p>
+                                <p class=""kawaii"">Fent aquesta configuració, no hauràs de tornar a rotar el model mai més!</p>
+                            </div> <br>   
+
+                               
+
+                            <h6>Configurar l’escala</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">tune</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">A PaisArque no sabem com de gran és el teu model. Per això necessitem alguna informació relacionada amb l'escala.</p>
+                                <p class=""kawaii"">Marca al model 3D una distància seleccionant quant mesura en realitat.</p>
+                                <p class=""kawaii"">D'aquesta manera sabrem l'escala del teu model. Podeu triar qualsevol distància com a base.</p>
+                                <p class=""kawaii error"">Si no hi ha aquesta configuració, qualsevol mesurament romandrà desactivat.</p>
+                            </div><br>
+
+                            <h6>Distancies y àrees</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">linear_scale</i>
+                            </a>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">photo_size_select_small</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class = ""kawaii""> El registre de mesures mostra totes les distàncies i àrees calculades. Pots afegir més usant el menú de la secció. </p>
+                                 <p class = ""kawaii""> Fes clic a ""Afegeix"" i mira el panell a la part inferior, aquest t'ajudarà a realitzar cada mesura. Disposes de dues opcions, afegir punts o moure la càmera. </p>
+                                 <p class = ""kawaii""> El primer punt de cada àrea determinarà la posició del pla on es col·locaran els punts. </p>
+                                 <p class = ""kawaii error""> Recorda tancar l'àrea sempre amb el punt inicial. </p>
+                                 <p class = ""kawaii""> Quan estiguis llest, prem finalitzar per guardar la mesura en la taula corresponent. Pots eliminar mesures i observar-les amb les opcions de la taula. </p>
+
+                            </div><br>
+
+                            <h6>Exportar escena</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">photo_camera</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class = ""kawaii""> Disposes de diverses opcions per exportar la teva escena. Gravar-la en vídeo o gif, o prendre una captura com imatge. </p>
+                                 <p class = ""kawaii""> Podràs guardar-les al teu ordinador per utilitzar-la en qualsevol altre moment o afegir-la al projecte actual per veure-la en aportacions. </p>
+                                 <p class = ""kawaii""> Si decideixes fer un vídeo, disposes de diverses opcions d'exportació com el format o la qualitat. </p>
+
+                            </div> <br>   
+
+
+
+                            <h4>Anotacions</h4>
+
+                            <h6>Crear i eliminar</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">create</i>
+                            </a>
+     <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">delete</i>
+                            </a>
+
+                            <div class=""info-panel"">
+                                <p class = ""kawaii""> Estant en mode anotació podràs fer clic a l'escena per afegir un anotació. </p>
+                                 <p class = ""kawaii""> Dóna-li una descripció i llest. </p>
+<p class = ""kawaii""> Una sola anotació pot esborrar-se si s'arrossega a la paperera des de la taula. </p>
+                                 <p class = ""kawaii""> En cas de voler esborrar-les totes, prem el botó que veuràs al costat de la paperera. </p>
+
+                            </div><br>
+
+                            <h6>Visualitzar</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">visibility_off</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">Totes les anotacions creades apareixeran a la taula que podràs veure sota dels botons. Per veure cada anotació en el model 3D, fes clic a la taula.</p>
+                                <p class=""kawaii"">La càmera canviarà per representar l'anotació que s'hagi tocat i aquesta es destaca entre la resta.</p>
+                                <p class=""kawaii"">Pots amagar totes les anotacions amb el botó Mostra</p>
+                            </div> <br>
+
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">Per més suport, descarrega la <a>guia completa</a> de l’aplicació.</p>
+                            </div>
+
+"," <h4>About the project</h4>
+                            <div class=""info-panel"">
+                                        <p class=""kawaii"">Use text fields to update your project’s information.</p>
+                                        <p class=""kawaii"">The above map shows the real location of your 3D model. Coordinates can be modified as many times as you want.</p>
+                            <p class=""kawaii"">This application has default scene backgrounds you can use.</p>
+                            </div>
+
+                            <h4>Tools</h4>
+
+                            <h6>Saving project state</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">save</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">Use this tool to save all changes applied to the project.</p> 
+                                <p class=""kawaii error"">No saving could be a big problem.</p>
+                                <p class=""kawaii"">If you want to forget saving, it’s possible to enable auto-saving before starting.</p> 
+                            </div><br>
+
+                            <h6>Set rotations by default</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">3d_rotation</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">Use the sliders below to rotate the 3D model as you consider.</p>
+                                <p class=""kawaii"">Using A, S, D keys on your keyboard could help you giving more precision. It’s up to you.</p>
+                                <p class=""kawaii"">Setting this, it will be the last time you think about the rotations.</p>
+                            </div> <br>   
+
+
+                            <h6>Setting scale</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">tune</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">At PaisArque we do not know how big is your 3D model, so you have to give us a kind of scaling factor.</p>
+                                <p class=""kawaii"">Select a distance in the 3D area at specify how big it is in meters.</p>
+                                <p class=""kawaii"">At this way, we can extract a factor that can relate the distances in real life with PaisArque ones.</p>
+                                <p class=""kawaii error"">Without this configuration, all measurements are disabled.</p>
+                            </div><br>
+
+                            <h6>Distances & areas</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">linear_scale</i>
+                            </a>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">photo_size_select_small</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">The measurement log shows all distances and calculated areas. You can add more using the section menu.</p>
+                                <p class=""kawaii"">Click on ""Add"" and look at the panel at the bottom, this will help you to create each measurement. You have two options, add points or move the camera.</p>
+                                <p class=""kawaii"">The first point of each area will determine the position of the plane where the points will be located at.</p>
+                                <p class=""kawaii error"">Always close the area with the starting point.</p>
+                                <p class=""kawaii"">When ready to go, press finish to save the measurement in the corresponding table. You can delete measurements and observe them with the options in the table.</p>
+                            </div><br>
+
+                            <h6>Export scene</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">photo_camera</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">You have several options to export your scene. Record it in video or gif, or take a capture as an image.</p>
+                                <p class=""kawaii"">You can save the photo into your computer or add it to the project you are working on, in order to have it in contributions tab.</p>
+                                <p class=""kawaii"">If your decision is to make a recording, you have several export options such as formatting or quality.</p>
+                            </div> <br>   
+
+
+
+
+                            <h4>Annotations</h4>
+
+                            <h6>Create and remove</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">create</i>
+                            </a><a class=""btn tool-btn info"">
+                                <i class=""material-icons"">delete</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">While in annotation mode you can click on the scene to add an annotation.</p>
+                                <p class=""kawaii"">Give it a description and done.</p>
+                                <p class=""kawaii"">A single annotation can be deleted if it is dragged to the trash from the table.</p>
+                                <p class=""kawaii"">In case you want to erase all of them, press the button that you will see next to the trash.</p></div><br>
+
+                            <h6>Visualize</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">visibility_off</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">All annotations created will appear in the table below buttoning section. To see each annotation in the 3D model, touch it in the table.</p>
+                                <p class=""kawaii"">The camera will change to represent the annotation that has been touched and it will blink to stand out from the rest.</p>
+                                <p class=""kawaii"">You can hide all annotations with the Show button</p>
+                            </div> <br>
+
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">For more support, download the <a>full guide</a> of the application.</p>
+                            </div>
+
+", 
+modelo,.help-nav,,SOPORTE,SUPORT,SUPPORT,
+modelo,.extra-nav,,APORTACIONES,APORTACIONS,CONTRIBUTIONS,
+modelo,.export-nav,,EXPORTAR,EXPORTAR,EXPORT,
+modelo,#label-proyecto-tab,,Proyecto,Projecte,Draft,
+modelo,#label-tools-tab,,Herramientas,Eines,Tools,
+modelo,#label-anot-tab,,Anotaciones,Anotacions,Annotations,
+modelo,#apply-rotation-btn,,Aplicar,Aplica,Apply,
+modelo,.table-th-description,,Descripción,Descripció,Description,
+modelo,.table-th-view,,Vista,Vista,View,
+modelo,#exampleModalLabel,,Anotación,Anotació,Annotation,
+modelo,#label-deleteall-anot,,Todo,Tot,All,
+modelo,#drag-cont,,Arrastra aquí para eliminar anotación,Arrossega aquí per eliminar anotació,Drag here to remove annotation,

@@ -615,12 +615,6 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 #entire-anot-table::-webkit-scrollbar { 
     display: none; 
 }
-.anot-table-full{
-    color: #ddd;
-}
-.anot-table-full tr:hover{
-    background-color: #556 !important;
-}
 #drag-cont{
     margin-top: 5px;
     margin-right: 10px;
@@ -751,9 +745,23 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 .sub-btns{
     display: none;
 }
+
+.anot-table-full{
+    color: #ddd;
+}
+.anot-table-full tr:hover{
+    background-color: #556 !important;
+}
 .tables{
     font-size: 13px;
     display: none;
+    color: #ddd !important;
+}
+.tables tr td p{
+    color: #ddd !important;
+}
+.tables tr:hover{
+    background-color: #556 !important;
 }
 .tables th{
     text-align: center;
@@ -908,9 +916,14 @@ a:hover{
 /*
 * info extra css
 */
+#tab-content-2{
+    height: 600px !important;
+    overflow: auto; 
+}
 .tab-content-extra{
     z-index: 1 !important;
-    height: auto !important;
+    height: auto;
+    min-height: 600px;
 }
 @media only screen and (max-width: 480px) {
     /* For medium and small */
@@ -1266,12 +1279,14 @@ a:hover{
     left: -9999px;
 }
 .tabs label {
+    background-color: #3A3A3A;
     display: block;
     padding: 12px 12px;
     font-size: 13px;
     font-weight: normal;
     cursor: pointer;
     position: relative;
+    color: #ddd;
     -moz-transition: all 0.2s ease-in-out;
     -o-transition: all 0.2s ease-in-out;
     -webkit-transition: all 0.2s ease-in-out;
@@ -1279,7 +1294,7 @@ a:hover{
     outline: none;
 }
 .tabs label:hover {
-    color: #0070c9;
+    color: #5AF;
 }
 .tabs .tab-content-large label{
     padding: 3px !important;
@@ -1327,7 +1342,7 @@ a:hover{
     display: none; 
 }
 .tabs [id^="tab"]:checked + label {
-    color: #0070c9;
+    color: #5AF;
 }
 .tabs [id^="tab"]:checked ~ [id^="tab-content"] {
     display: block;

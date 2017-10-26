@@ -269,6 +269,7 @@ $("#formAddImage").on('submit', function(e)
 $("#formAddPDF").on('submit', function(e)
 {
     e.preventDefault();
+    var that = $(this);
     $('#TESTModalPDF').modal('hide');   
     
     var values = getFormValues(this);
@@ -283,10 +284,8 @@ $("#formAddPDF").on('submit', function(e)
     
     var urlPDF = "litefile/files/" + user + "/projects/" + copy._id + "/";
     
-    $(':file').each(function() {
-        var input = $(this);
-        var auxList = input[0]["value"].split('\\');
-        var name = auxList[auxList.length - 1];
+     for(var i = 0, f; f = input_files[i]; i++){
+        var name = input_files[i].name;
         urlPDF += name;
         
         // add pdf to project
@@ -299,37 +298,35 @@ $("#formAddPDF").on('submit', function(e)
         var name = "extra_" + extraCounter;
         
         copy.pushExtra(name, "pdf", urlPDF);
-        
-        // avoid process more files
-        return;
-    });
+    }
     
     $('#loadingModal').modal('show'); 
     // Upload file
     
-//    for(var i = 0, f; f = input_files[i]; i++)
-//    {
-//        if(f.constructor == File)
-//		{
-//			var fileReader = new FileReader();
-//            
-//             fileReader.onload = (function(theFile) {
-//                return function(e) {
-//                    var arrayBuffer = this.result;
-//                    var fullpath = current_user + "/projects/" + copy._id + "/" + theFile.name;
-//                    
-//                    session.uploadFile( fullpath, arrayBuffer, 0, function(){
-//                        $('#loadingModal').modal('hide');
-//                        // Resetear campos del form
-//                        $(this).trigger("reset");
-//                        parseExtraJSON(copy._extra);
-//                    });
-//                };
-//              })(f);
-//            
-//            fileReader.readAsArrayBuffer( f );
-//		}
-//    }
+    for(var i = 0, f; f = input_files[i]; i++)
+    {
+        if(f.constructor == File)
+		{
+			var fileReader = new FileReader();
+            
+             fileReader.onload = (function(theFile) {
+                return function(e) {
+                    var result = this.result;
+                    var fullpath = current_user + "/projects/" + copy._id + "/" + theFile.name;
+                    
+                    session.uploadFile( fullpath, result, 0, function(){
+                        $('#loadingModal').modal('hide');
+                        // Resetear campos del form
+                        input_files = [];
+                        that.trigger("reset");
+                        parseExtraJSON(copy._extra);
+                    });
+                };
+              })(f);
+            
+            fileReader.readAsArrayBuffer( f );
+		}
+    }
 });
 
 /*
@@ -564,7 +561,7 @@ function handleFileSelect(evt) {
 
         var output = [];
         for (var i = 0, f; f = files[i]; i++){
-          console.warn(f);
+            console.warn(f);
             input_files.push(f);
         }
           
@@ -577,4 +574,8 @@ if(document.getElementById('mesh') && document.getElementById('textura')){
 
 if(document.getElementById('image')){
     document.getElementById('image').addEventListener('change', handleFileSelect, false);
+}
+
+if(document.getElementById('pdf')){
+    document.getElementById('pdf').addEventListener('change', handleFileSelect, false);
 }

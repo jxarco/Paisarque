@@ -114,9 +114,9 @@
                             <div class="circle yellow">ZIP</div>
                           </div>
                           <div class="bottom">
-<!--                             <a class="export-file pdf" title="Descargar ZIP de PDF's" href="">PDF'S</a><br><br>-->
-                            <a class="export-file text" title="Descargar ZIP de texto">Notas de texto</a><br><br>
-                            <a class="export-file images" title="Descargar ZIP de imágenes">Imágenes</a><br><br>
+                            <a class="export-file text" title="Descargar ZIP">Notas de texto</a><br><br>
+                            <a class="export-file images" title="Descargar ZIP">Imágenes</a><br><br>
+                            <a class="export-file pdf" title="Descargar ZIP">PDF'S</a><br><br>
                           </div>
                         </li>
 
