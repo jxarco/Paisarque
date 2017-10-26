@@ -31,7 +31,8 @@ LiteFileServer.setup("", function(status, resp) {
         if(localStorage.session && ( url.includes( "/index" ) || subpath.length == 1 ))
         {
             var last_session_opened = JSON.parse(localStorage.session);
-            window.location.href = "inicio";
+            var user = last_session_opened.user.username;
+            window.location.href = "inicio?u=" + user;
         }
     }
     else
@@ -47,7 +48,6 @@ LiteFileServer.setup("", function(status, resp) {
 
 //LOGOUT
 $(".logout-button").click( function(e) {
-
     session.logout();
     localStorage.clear();
     window.location.href = "index";
@@ -74,13 +74,13 @@ function systemReady()
             // si el login es correcto, se entra y se va a la url de inicio
 			if( session.status == LiteFileServer.LOGGED ) {
 				onLoggedIn(session);
-                console.log(session);
+//                console.log(session);
+                var user = session.user.username;
                 localStorage.setItem('session', JSON.stringify(session));
-                window.location.href = "inicio";
+                window.location.href = "inicio?u=" + user;
             }
 			else
 				throw("error login in");
-
 		});
 	});
     

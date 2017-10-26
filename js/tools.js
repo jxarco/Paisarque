@@ -1,7 +1,8 @@
 var default_project         = null;
 var default_user            = "guest";
 var current_user            = null;
-var current_project         = localStorage.getItem("current_project") || null;
+var current_project         = QueryString["p"] || null;
+//var current_project         = localStorage.getItem("current_project") || null;
 
 var delete_project_active   = false;
 var copy = null; // copy of the project
@@ -217,7 +218,7 @@ function loadContent(url, id)
     // load content 
     console.log("loading content " + url);
     
-    if(url !== 'inicio'){
+    if(!url.includes( 'inicio' )){
         // pass project information to reload it later
         var preurl = document.location.pathname;
         if(preurl.includes("/modelo"))
@@ -226,7 +227,12 @@ function loadContent(url, id)
             sessionStorage.setItem("project", JSON.stringify(copy));     
         
         // set selected project
-        localStorage.setItem("current_project", id || current_project);
+        url += "?p=" + ( id || current_project );
+    }
+    else
+    {
+        // set selected project
+        url += "?u=" + ( current_user || "public" );
     }
 
     // go new location
