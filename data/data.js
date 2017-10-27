@@ -64,17 +64,18 @@ var DATA = {
                 video_btn: { "es": "Grabar", "cat": "Gravar", "en": "Record" },
                 record: { "es": "Exportar", "cat": "Exportar", "en": "Export" },
                 record_values: { "es": ["Grabar","Guardar"], "cat": ["Gravar","Desar"], "en": ["Record","Save"] },
-                advanced: {"es": "Más opciones", "cat": "Més opcions", "en": "More options" }
+                advanced: { "es": "Opciones avanzadas", "cat": "Opcions avançades", "en": "Advanced options" }
             },
             dialog: {
                 title: { "es": "Opciones avanzadas", "cat": "Opcions avançades", "en": "Advanced options" },
                 speed: { "es": "Velocidad", "cat": "Velocitat", "en": "Speed" },
-                iterations: { "es": "Iteraciones", "cat": "Iteracions", "en": "Iterations" },
+                iterations: { "es": "# Órbitas", "cat": "# Òrbites", "en": "# Orbits" },
                 record: { "es": "Exportar", "cat": "Exportar", "en": "Export" },
                 record_values: { "es": ["Grabar","Guardar"], "cat": ["Gravar","Desar"], "en": ["Record","Save"] },
                 name: { "es": "Nombre", "cat": "Nom", "en": "Name" },
                 format: { "es": "Formato", "cat": "Format", "en": "Format" },
-                quality: { "es": "Calidad", "cat": "Qualitat", "en": "Quality" }
+                quality: { "es": "Calidad (MBs)", "cat": "Qualitat (MBs)", "en": "Quality (MBs)" },
+                quality_range: { "es": ["Baja","Normal", "Alta", "Muy alta"], "cat": ["Baixa","Normal", "Alta", "Excel·lent"], "en": ["Low","Normal", "High", "Very high"] }
             },
             anot_options: {
                 title: { "es": "Opciones", "cat": "Opcions", "en": "Options" },

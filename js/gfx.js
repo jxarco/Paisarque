@@ -31,7 +31,7 @@ var GFX = {
         this.camera.perspective( 45, gl.canvas.width / gl.canvas.height, 0.1, 10000 );
         this.camera.lookAt( [150,60,150],[0,0,0],[0,1,0] );
         this.camera.direction = [150,60,150];
-        this.camera.previous = vec3.clone(this.camera._position);
+        this.camera.previous = [150,60,150];
         
         var wBinURL = meshURL.split(".")[0] + ".wbin";
         
@@ -162,22 +162,15 @@ var GFX = {
         var bg_color = vec4.fromValues(0.937, 0.937, 0.937, 1);
 
         //main render loop
-        var last = now = getTime();
-        requestAnimationFrame(animate);
-        
-        function animate() {
-            requestAnimationFrame( animate );
+        function ondraw() {
             
             APP.lookAt(that.camera);
             
-            last = now;
-            now = getTime();
-            var dt = (now - last) * 0.001;
             that.renderer.clear(bg_color);
 
             // orbit depending on orbit speed
             if(that.orbit_speed)
-                that.camera.orbit(that.orbit_speed * dt, RD.UP);
+                that.camera.orbit(that.orbit_speed, RD.UP);
             
             //smoothing camera
             if(that.camera.smooth){
@@ -188,7 +181,6 @@ var GFX = {
             
             that.skybox.position = that.camera.position;
             that.renderer.render(that.scene, that.camera);
-            that.scene.update(dt);
             
             if(APP.capturer)
                 APP.capturer.capture( that.renderer.canvas );
@@ -200,9 +192,12 @@ var GFX = {
         window.onresize = this.resize;
         this.resize();
         this.context.animate(); //launch loop
-
+        this.context.ondraw = ondraw;
+        
         this.context.onupdate = function(dt) {
             _dt = dt;
+            // update all scene
+            that.scene.update(dt);
         }
 
         this.context.onmousemove = function(e)
@@ -283,7 +278,19 @@ var GFX = {
     */
     test: function(param)
     {
+        APP.capturer = new CCapture( { 
+            format: APP.export_data.format,
+            workersPath: 'js/extra/'
+            } );  
         
+        for( var i = 0; i < 100; i++)
+        {
+            this.renderer.render(this.scene, this.camera);
+            APP.capturer.capture( this.renderer.canvas );
+        }
+        
+//       APP.capturer.stop();
+//        APP.capturer.save();
     },
     /*
     * takes a photo of the renderer canvas
@@ -377,6 +384,8 @@ var GFX = {
     */
     makeOrbit: function(speed, it, on_complete)
     {
+        console.log("orbiting");
+        
         it = it || 1;
         speed = speed || 0.5;
         
@@ -390,13 +399,16 @@ var GFX = {
         
         var updateModel = function(dt){
             
-            if( orbitCounter > (360 * DEG2RAD) * it)
+            console.log(window.orbitCounter, "orbit counter");
+            
+            if( window.orbitCounter > (360 * DEG2RAD) * it)
             {
-                GFX.model.update = function(){};
-                window.orbitCounter = undefined;
-                
                 if(on_complete)
                     on_complete();
+                
+                GFX.model.update = undefined;
+                window.orbitCounter = undefined;
+                console.log("orbit done");
             }
             else{
                 GFX.camera.orbit(speed * dt, RD.UP);

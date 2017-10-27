@@ -122,8 +122,8 @@ var APP = {
             GFX.camera.previous = vec3.clone(GFX.camera._position);
         }});
         APP.tools_inspector.addNumber( text_section.orbit[lang], 0, { width: "100%",  callback: function(v){
-            GFX.orbit_speed = v;
-        }, min: -2, max: 2, step: 0.01});
+            GFX.orbit_speed = v * 0.001;
+        }, min: -10, max: 10, step: 0.1});
         
         text_section = DATA.litegui.sections.model;
         APP.tools_inspector.addSection( text_section.title[lang], {className: "model3d-section"});
@@ -151,14 +151,14 @@ var APP = {
         // default options
         APP.export_data = {
             format: "webm",   
-            framerate: "60",
-            mb_frames: 1,
-            quality: "50",
+            framerate: "40",
+            mb_frames: 0,
+            quality: 60,
             name: "exported",
             verbose: false,
             display: true,
             
-                export_speed: 0.5,
+                export_speed: 0.25,
                 n_iterations: 1
         }
         APP.tools_inspector.addButton( text_section.image[lang], text_section.image_btn[lang], { width: "100%",  callback: function(){
@@ -190,24 +190,24 @@ var APP = {
         // advanced options
         var text_section = DATA.litegui.sections.dialog;
         var name = text_section.title[lang];
-        var dialog = new LiteGUI.Dialog(name, {parent: "body", title:name, close: true, width: 300, scroll: true, draggable: true });
+        var dialog = new LiteGUI.Dialog(name, {parent: "body", title:name, close: true, width: 325, scroll: true, draggable: true });
         dialog.show('fade');
         
         var widgets = new LiteGUI.Inspector();
         
-        widgets.addNumber( text_section.speed[lang], APP.export_data.export_speed, { width: "100%",  callback: function(v){  APP.export_data.export_speed = v; }, min: 0.1, max: 3, step: 0.1});
-        widgets.addCombo( text_section.iterations[lang], APP.export_data.n_iterations,{ values:[1, 2, 3, 4, 5], callback: function(v) { APP.export_data.n_iterations = v; }});
-        widgets.addButtons( text_section.record[lang], text_section.record_values[lang],{callback: function(v) {        
+//        widgets.addNumber( text_section.speed[lang], APP.export_data.export_speed, { name_width: "33.33%", callback: function(v){  APP.export_data.export_speed = v; }, min: 0.1, max: 3, step: 0.1});
+        widgets.addCombo( text_section.iterations[lang], APP.export_data.n_iterations,{ name_width: "33.33%", values:[1, 2, 3, 4, 5], callback: function(v) { APP.export_data.n_iterations = v; }});
+        widgets.addButtons( text_section.record[lang], text_section.record_values[lang],{name_width: "33.33%", callback: function(v) {      
             APP.exportCanvas(v);
         }});
         
-        widgets.addString( text_section.name[lang], APP.export_data.name,{callback: function(v) { APP.export_data.name = v; }});
-        widgets.addCombo( text_section.format[lang], APP.export_data.format,{values:["webm","gif"], callback: function(v) { APP.export_data.format = v; }});
-        widgets.addNumber( text_section.quality[lang], APP.export_data.quality, { width: "100%",  callback: function(v){  APP.export_data.quality = v; }, min: 1, max: 99, step: 1});
+        widgets.addString( text_section.name[lang], APP.export_data.name,{ name_width: "33.33%", callback: function(v) { APP.export_data.name = v; }});
+        widgets.addCombo( text_section.format[lang], APP.export_data.format,{ name_width: "33.33%", values:["webm","gif"], callback: function(v) { APP.export_data.format = v; }});
+        widgets.addCombo( text_section.quality[lang], "Normal",{ name_width: "33.33%", values: text_section.quality_range[lang], callback: function(v) { APP.setQuality(v); }});
         widgets.addSeparator();
-        widgets.addString("Frame rate", APP.export_data.framerate,{ callback: function(v) {             APP.export_data.framerate = v; }});
-        widgets.addCombo("MotionBlur f.", APP.export_data.mb_frames,{ values:[1, 2, 4, 8, 16], callback: function(v) { APP.export_data.mb_frames = v; }});
-        widgets.addCheckbox("Widget", APP.export_data.display, { callback: function(v){
+//        widgets.addString("Frame rate", APP.export_data.framerate,{ name_width: "33.33%", callback: function(v) {             APP.export_data.framerate = v; }});
+//        widgets.addCombo("MotionBlur f.", APP.export_data.mb_frames,{ name_width: "33.33%", values:[0, 1, 2, 4, 8, 16], callback: function(v) { APP.export_data.mb_frames = v; }});
+        widgets.addCheckbox("Widget", APP.export_data.display, { name_width: "33.33%", callback: function(v){
             APP.export_data.display = v;
             if(!v)
                 $("#capture-widget").remove();
@@ -235,6 +235,21 @@ var APP = {
         APP.anot_inspector.addSeparator();
         
         $("#tab-content3-large").prepend(APP.anot_inspector.root);
+    },
+    
+    setQuality: function(name)
+    {
+        if(!name)
+            throw( "no quality" );
+        
+        if(name == "Baixa" || name == "Baja" || name == "Low")
+            APP.export_data.quality = 20;
+        else if(name == "Normal")
+            APP.export_data.quality = 60;
+        else if(name == "Alta" || name == "High")
+            APP.export_data.quality = 80;
+        else
+            APP.export_data.quality = 95;
     },
     
     showMeasureTables: function(name)
@@ -303,7 +318,7 @@ var APP = {
             display: APP.export_data.display,
             framerate: parseInt( APP.export_data.framerate ),
             motionBlurFrames: APP.export_data.mb_frames,
-            quality: parseInt( APP.export_data.quality ),
+            quality: APP.export_data.quality,
             format: APP.export_data.format,
             workersPath: 'js/extra/',
             onProgress: function( p ) { 
