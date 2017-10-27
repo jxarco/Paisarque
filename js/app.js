@@ -132,7 +132,7 @@ var APP = {
         }});
         
         text_section = DATA.litegui.sections.measures;
-        APP.tools_inspector.addSection( text_section.title[lang], {className: "measures-section", collapsed: true});
+        APP.tools_inspector.addSection( text_section.title[lang], {className: "measures-section"});
         APP.tools_inspector.addButton( text_section.scale[lang], text_section.config_scale[lang], { width: "100%",  callback: function(){
             APP.setScale();
         }});
@@ -151,10 +151,11 @@ var APP = {
         // default options
         APP.export_data = {
             format: "webm",   
-            framerate: "40",
+            framerate: 40,
             mb_frames: 0,
             quality: 60,
             name: "exported",
+            time_limit: 10000,
             verbose: false,
             display: true,
             
@@ -195,29 +196,42 @@ var APP = {
         
         var widgets = new LiteGUI.Inspector();
         
-//        widgets.addNumber( text_section.speed[lang], APP.export_data.export_speed, { name_width: "33.33%", callback: function(v){  APP.export_data.export_speed = v; }, min: 0.1, max: 3, step: 0.1});
-        widgets.addCombo( text_section.iterations[lang], APP.export_data.n_iterations,{ name_width: "33.33%", values:[1, 2, 3, 4, 5], callback: function(v) { APP.export_data.n_iterations = v; }});
-        widgets.addButtons( text_section.record[lang], text_section.record_values[lang],{name_width: "33.33%", callback: function(v) {      
-            APP.exportCanvas(v);
-        }});
+        widgets.on_refresh = function(){
         
-        widgets.addString( text_section.name[lang], APP.export_data.name,{ name_width: "33.33%", callback: function(v) { APP.export_data.name = v; }});
-        widgets.addCombo( text_section.format[lang], APP.export_data.format,{ name_width: "33.33%", values:["webm","gif"], callback: function(v) { APP.export_data.format = v; }});
-        widgets.addCombo( text_section.quality[lang], "Normal",{ name_width: "33.33%", values: text_section.quality_range[lang], callback: function(v) { APP.setQuality(v); }});
-        widgets.addSeparator();
-//        widgets.addString("Frame rate", APP.export_data.framerate,{ name_width: "33.33%", callback: function(v) {             APP.export_data.framerate = v; }});
-//        widgets.addCombo("MotionBlur f.", APP.export_data.mb_frames,{ name_width: "33.33%", values:[0, 1, 2, 4, 8, 16], callback: function(v) { APP.export_data.mb_frames = v; }});
-        widgets.addCheckbox("Widget", APP.export_data.display, { name_width: "33.33%", callback: function(v){
-            APP.export_data.display = v;
-            if(!v)
-                $("#capture-widget").remove();
-        }});
-        widgets.addSeparator();
-        
-//        var progress = document.createElement("div");
-//        progress.className = "progress-line";
-//        widgets.add( progress );
+            widgets.clear();
+            
+            widgets.addSection("...", {className: "advanced-export-section"});
+    //        widgets.addNumber( text_section.speed[lang], APP.export_data.export_speed, { name_width: "33.33%", callback: function(v){  APP.export_data.export_speed = v; }, min: 0.1, max: 3, step: 0.1});
+            widgets.addCombo( text_section.iterations[lang], APP.export_data.n_iterations,{ name_width: "33.33%", values:[1, 2, 3, 4, 5], callback: function(v) { APP.export_data.n_iterations = v; }});
+            widgets.addButtons( text_section.record[lang], text_section.record_values[lang],{name_width: "33.33%", callback: function(v) {      
+                APP.exportCanvas(v);
+            }});
+
+            widgets.addString( text_section.name[lang], APP.export_data.name,{ name_width: "33.33%", callback: function(v) { APP.export_data.name = v; }});
+            widgets.addCombo( text_section.format[lang], APP.export_data.format,{ name_width: "33.33%", values:["webm","gif"], callback: function(v) { APP.export_data.format = v; }});
+            widgets.addCombo( text_section.quality[lang], "Normal",{ name_width: "33.33%", values: text_section.quality_range[lang], callback: function(v) { APP.setQuality(v); }});
+            widgets.addSeparator();
+    //        widgets.addString("Frame rate", APP.export_data.framerate,{ name_width: "33.33%", callback: function(v) {             APP.export_data.framerate = v; }});
+//            widgets.addCombo("MotionBlur f.", APP.export_data.mb_frames,{ name_width: "33.33%", values:[0, 2, 4, 8, 16], callback: function(v) {
+//                APP.export_data.mb_frames = v;
+//                if(!v)
+//                    return;
+//                APP.export_data.framerate /= v;
+//                widgets.on_refresh();
+//            }});
+            widgets.addCheckbox("Widget", APP.export_data.display, { name_width: "33.33%", callback: function(v){
+                APP.export_data.display = v;
+                if(!v)
+                    $("#capture-widget").remove();
+            }});
+            widgets.addSeparator();
+        }
+
+        widgets.on_refresh();
         dialog.add(widgets);  
+        var progress = document.createElement("div");
+        progress.className = "progress-line";
+        $(".wsection.advanced-export-section").find(".wsectioncontent").prepend(progress);
     },
     
     createAnotInspector: function(lang)
@@ -316,10 +330,11 @@ var APP = {
             name: APP.export_data.name,
             verbose: APP.export_data.verbose,
             display: APP.export_data.display,
-            framerate: parseInt( APP.export_data.framerate ),
+            framerate: APP.export_data.framerate,
             motionBlurFrames: APP.export_data.mb_frames,
             quality: APP.export_data.quality,
             format: APP.export_data.format,
+            limit: APP.export_data.time_limit,
             workersPath: 'js/extra/',
             onProgress: function( p ) { 
                     var progress = $(".progress-line");
@@ -626,7 +641,7 @@ var APP = {
                     nodes_used[nodes_used.length - 1].active = false;
                     // adjust to same point if first point is too close
                     var pos_first = vec3.create();
-                    pos_first = vec3.clone( nodes_used[0].getGlobalPosition() );
+                    vec3.copy( pos_first, nodes_used[0].getGlobalPosition() );
                     if(vec3.dist(pos_first, result) < 2)
                         result = pos_first;
                     
@@ -634,7 +649,8 @@ var APP = {
                         APP.addLine(nodes_used, {node_list: true});
                 }
                 
-                var world_coord = vec3.clone( result );
+                var world_coord = vec3.create();
+                vec3.copy( world_coord, result );
                 
                 var ind = new SceneIndication({
                     scene: true,
@@ -720,7 +736,7 @@ var APP = {
         for(var it in nodes){
             var node = nodes[it];
             var node_global_position = vec3.create();
-            node_global_position = vec3.clone( node.getGlobalPosition() );
+            vec3.copy( node_global_position, node.getGlobalPosition() );
             old_positions.push( node_global_position );
         }
         
@@ -733,7 +749,7 @@ var APP = {
             var node = nodes[it];
             // get world space position from each node to calculate real distances
             var node_global_position = vec3.create();
-            node_global_position = vec3.clone( node.getGlobalPosition() );
+            vec3.copy( node_global_position, node.getGlobalPosition() );
             // add position in world space
             real_positions.push( node_global_position );
             // add position in 2d (x-z)

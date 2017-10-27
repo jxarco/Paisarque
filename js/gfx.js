@@ -30,8 +30,10 @@ var GFX = {
         this.camera = new RD.Camera();
         this.camera.perspective( 45, gl.canvas.width / gl.canvas.height, 0.1, 10000 );
         this.camera.lookAt( [150,60,150],[0,0,0],[0,1,0] );
-        this.camera.direction = [150,60,150];
-        this.camera.previous = [150,60,150];
+        this.camera.direction = vec3.create();
+        vec3.copy(this.camera.direction, this.camera._position);
+        this.camera.previous =  vec3.create();
+        vec3.copy(this.camera.previous, this.camera._position);
         
         var wBinURL = meshURL.split(".")[0] + ".wbin";
         
@@ -53,12 +55,11 @@ var GFX = {
 
             if(rotaciones && !rotaciones.length)
             {
-                var msg = {
+                putCanvasMessage({
                     es: "No hay rotaciones por defecto",
                     cat: "No hay rotacions per defecte",
                     en: "No rotations by default"
-                }
-                putCanvasMessage(msg, 2500, {type: "error"}); 
+                }, 2500, {type: "error"}); 
             }
         }
         
@@ -182,11 +183,11 @@ var GFX = {
             that.skybox.position = that.camera.position;
             that.renderer.render(that.scene, that.camera);
             
-            if(APP.capturer)
-                APP.capturer.capture( that.renderer.canvas );
+//            if(APP.capturer)
+//                APP.capturer.capture( that.renderer.canvas );
             
             //get old camera
-            that.camera.previous = vec3.clone(that.camera._position);
+            vec3.copy(that.camera.previous, that.camera._position);
         }
 
         window.onresize = this.resize;
@@ -238,6 +239,9 @@ var GFX = {
             
             if(e.keyCode === KEY_S)
                 that.renderer.loadShaders("data/shaders/shaders.glsl");
+            
+            if(e.keyCode === KEY_C)
+                APP.capturer.capture( that.renderer.canvas );
         }
 
         this.context.captureMouse(true);
@@ -398,8 +402,6 @@ var GFX = {
         window.orbitCounter = 0;
         
         var updateModel = function(dt){
-            
-            console.log(window.orbitCounter, "orbit counter");
             
             if( window.orbitCounter > (360 * DEG2RAD) * it)
             {
