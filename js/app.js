@@ -176,14 +176,10 @@ var APP = {
         
         $("#tab-content2-large").append(APP.tools_inspector.root);
         
-        var progress = document.createElement("div");
-        progress.className = "progress-line";
-        
         $(".wsection.model3d-section").find(".wsectioncontent").append($(".sliders"));
         $(".wsection.measures-section").find(".wsectioncontent").append($("#distances-table"));
         $(".wsection.measures-section").find(".wsectioncontent").append($("#segment-distances-table"));
         $(".wsection.measures-section").find(".wsectioncontent").append($("#areas-table"));  
-        $(".wsection.export-section").find(".wsectioncontent").prepend(progress);
     },
     
     createWidgetsDialog: function(lang)
@@ -269,9 +265,7 @@ var APP = {
     showMeasureTables: function(name)
     {
         APP.disableAllFeatures({no_msg: true});
-        var table = null;
-        var btn = null;
-        var flag = null;
+        var table = null, btn = null, flag = null;
         
         if(name == "O-D")
         {

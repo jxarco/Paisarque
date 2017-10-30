@@ -11,6 +11,7 @@ index,#have-problem-login,,"<span class=""ladda-label"">¿Problemas para iniciar
 index,.forgotpasswordsend-button,,"<span class=""ladda-label"">Enviar mail de reset</span><span class=""ladda-spinner""></span>","<span class=""ladda-label"">Enviar mail de reset</span><span class=""ladda-spinner""></span>","<span class=""ladda-label"">Send reset mail</span><span class=""ladda-spinner""></span>",
 index,#inputEmail,placeholder,Usuario,Usuari,Username,
 index,#inputPassword,placeholder,Contraseña,Clau,Password,
+index,#remember-me-label,,"<input id=""remember-me"" type=""checkbox"" value=""remember-me""> Mantener sesión iniciada","<input id=""remember-me"" type=""checkbox"" value=""remember-me""> Deixa la sessió iniciada","<input id=""remember-me"" type=""checkbox"" value=""remember-me""> Keep session opened",
 index,.form-forgot-heading,,¿Has olvidado la contraseña?,Has oblidat la contraseña?,Forgot your password?,
 inicio,title,,PaisArque - Proyectos (ES),PaisArque - Projectes (CAT),PaisArque - Projects (EN),
 inicio,#addProject,,Crear nuevo proyecto,Crear nou projecte,Create new project,

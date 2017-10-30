@@ -26,8 +26,11 @@ LiteFileServer.setup("", function(status, resp) {
         var index = url.lastIndexOf("/");
         var subpath = url.slice(index);
         
+        if( !JSON.parse( localStorage.getItem( "keep_session" ) ) )
+            return;
         // conditions to login:
         // have last lession in localstorage AND url is index or root
+        // login was done with keep session opened
         if(localStorage.session && ( url.includes( "/index" ) || subpath.length == 1 ))
         {
             var last_session_opened = JSON.parse(localStorage.session);
@@ -76,8 +79,10 @@ function systemReady()
 				onLoggedIn(session);
 //                console.log(session);
                 var user = session.user.username;
+                localStorage.setItem('keep_session', document.getElementById("remember-me").checked );
                 localStorage.setItem('session', JSON.stringify(session));
                 window.location.href = "inicio?u=" + user;
+                alert( "logging in" );
             }
 			else
 				throw("error login in");

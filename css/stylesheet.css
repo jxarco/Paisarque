@@ -271,10 +271,11 @@ th{
 /*
 * modelo.html
 */
-#progress-line{
+.progress-line{
     height: 1px;
-    border: 2px solid #0070c9;
-    width: 0px;
+    border: 2px solid #5AF;
+    border-radius: 3px;
+    background-color: #5AF;
     display: none;
 }
 input{

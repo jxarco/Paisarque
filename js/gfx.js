@@ -241,7 +241,8 @@ var GFX = {
                 that.renderer.loadShaders("data/shaders/shaders.glsl");
             
             if(e.keyCode === KEY_C)
-                APP.capturer.capture( that.renderer.canvas );
+                if(APP.capturer)
+                    APP.capturer.capture( that.renderer.canvas );
         }
 
         this.context.captureMouse(true);
