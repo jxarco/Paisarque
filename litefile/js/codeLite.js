@@ -82,7 +82,6 @@ function systemReady()
                 localStorage.setItem('keep_session', document.getElementById("remember-me").checked );
                 localStorage.setItem('session', JSON.stringify(session));
                 window.location.href = "inicio?u=" + user;
-                alert( "logging in" );
             }
 			else
 				throw("error login in");

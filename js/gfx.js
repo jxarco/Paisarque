@@ -243,6 +243,11 @@ var GFX = {
             if(e.keyCode === KEY_C)
                 if(APP.capturer)
                     APP.capturer.capture( that.renderer.canvas );
+            
+            if(e.keyCode === KEY_A && APP.capturer ){
+                APP.capturer.stop();
+                APP.capturer.save();
+            }
         }
 
         this.context.captureMouse(true);
@@ -281,21 +286,44 @@ var GFX = {
     /*
     * 
     */
-    test: function(param)
+    record_orbit: function( capturer )
     {
-        APP.capturer = new CCapture( { 
-            format: APP.export_data.format,
-            workersPath: 'js/extra/'
-            } );  
+        var do_this = function(){
+            
+            capturer = capturer || new CCapture( { 
+                    name: "Orbita",
+                    quality: 85,
+                    format: "webm",
+                    } );  
+            
+            //create camera
+            var camera = new RD.Camera();
+            camera.perspective( 45, gl.canvas.width / gl.canvas.height, 0.1, 10000 );
+            
+            vec3.copy( camera.position, GFX.camera.position );
+            vec3.copy( camera.target, GFX.camera.target );
+            vec3.copy( camera.up, GFX.camera.up );
+            
+            capturer.start();
+            var bg_color = vec4.fromValues(0.937, 0.937, 0.937, 1);
+            
+            for( var dt = 0; dt < 360 * DEG2RAD; dt += 0.025)
+            {
+                GFX.renderer.clear(bg_color);
+                GFX.renderer.render( GFX.scene, camera );
+                camera.orbit( 0.025, RD.UP );
+                capturer.capture( GFX.renderer.canvas );
+            }
+            
+            $("#capture-widget").remove();
+            capturer.stop();
+            capturer.save();
+        };
         
-        for( var i = 0; i < 100; i++)
-        {
-            this.renderer.render(this.scene, this.camera);
-            APP.capturer.capture( this.renderer.canvas );
-        }
-        
-//       APP.capturer.stop();
-//        APP.capturer.save();
+        putCanvasMessage({
+                es: "Grabando órbita, #%w=5q!p{*]s@s...", cat: "Gravant òrbita, #%w=5q!p{*]s@s...", en: "Recording orbit, #%w=5q!p{*]s@s..."
+            }, 1000);
+        setTimeout(do_this, 500);
     },
     /*
     * takes a photo of the renderer canvas

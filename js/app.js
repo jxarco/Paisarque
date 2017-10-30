@@ -146,7 +146,7 @@ var APP = {
         }});
         
         text_section = DATA.litegui.sections.export;
-        APP.tools_inspector.addSection( text_section.title[lang], {collapsed: true, className: "export-section"});
+        APP.tools_inspector.addSection( text_section.title[lang], {className: "export-section"});
         
         // default options
         APP.export_data = {
@@ -155,18 +155,17 @@ var APP = {
             mb_frames: 0,
             quality: 60,
             name: "exported",
-            time_limit: 10000,
             verbose: false,
             display: true,
             
                 export_speed: 0.25,
                 n_iterations: 1
         }
-        APP.tools_inspector.addButton( text_section.image[lang], text_section.image_btn[lang], { width: "100%",  callback: function(){
+        APP.tools_inspector.addButton( text_section.image[lang], text_section.image_btn[lang], { width: "100%", callback: function(){
             GFX.takeSnapshot();
         }});
-        APP.tools_inspector.addButtons( text_section.record[lang], text_section.record_values[lang],{callback: function(v) {        
-            APP.exportCanvas(v);
+        APP.tools_inspector.addButton( text_section.record[lang], text_section.record_btn[lang],{width: "100%", callback: function(v) {        
+            GFX.record_orbit();
         }});
         
         APP.tools_inspector.addSeparator();
@@ -198,9 +197,9 @@ var APP = {
             
             widgets.addSection("...", {className: "advanced-export-section"});
     //        widgets.addNumber( text_section.speed[lang], APP.export_data.export_speed, { name_width: "33.33%", callback: function(v){  APP.export_data.export_speed = v; }, min: 0.1, max: 3, step: 0.1});
-            widgets.addCombo( text_section.iterations[lang], APP.export_data.n_iterations,{ name_width: "33.33%", values:[1, 2, 3, 4, 5], callback: function(v) { APP.export_data.n_iterations = v; }});
-            widgets.addButtons( text_section.record[lang], text_section.record_values[lang],{name_width: "33.33%", callback: function(v) {      
-                APP.exportCanvas(v);
+//            widgets.addCombo( text_section.iterations[lang], APP.export_data.n_iterations,{ name_width: "33.33%", values:[1, 2, 3, 4, 5], callback: function(v) { APP.export_data.n_iterations = v; }});
+            widgets.addButton( text_section.record[lang], text_section.record_btn[lang],{name_width: "33.33%", callback: function() {      
+                APP.exportCanvas();
             }});
 
             widgets.addString( text_section.name[lang], APP.export_data.name,{ name_width: "33.33%", callback: function(v) { APP.export_data.name = v; }});
@@ -318,9 +317,7 @@ var APP = {
     
     exportCanvas: function(name)
     {
-        if(name == "Grabar" || name == "Gravar" || name == "Record")
-        {
-            this.capturer = new CCapture( { 
+            var capturer = new CCapture( { 
             name: APP.export_data.name,
             verbose: APP.export_data.verbose,
             display: APP.export_data.display,
@@ -328,7 +325,6 @@ var APP = {
             motionBlurFrames: APP.export_data.mb_frames,
             quality: APP.export_data.quality,
             format: APP.export_data.format,
-            limit: APP.export_data.time_limit,
             workersPath: 'js/extra/',
             onProgress: function( p ) { 
                     var progress = $(".progress-line");
@@ -341,22 +337,7 @@ var APP = {
                 }
             } );  
 
-            var stopCapturer = function(){
-                APP.capturer.stop();
-            }
-            
-            GFX.makeOrbit( APP.export_data.export_speed, 
-                          APP.export_data.n_iterations, 
-                         stopCapturer);
-            
-            this.capturer.start();
-        }
-        
-        else if(name == "Guardar" || name == "Desar" || name == "Save")
-        {
-            $("#capture-widget").remove();
-            this.capturer.save();
-        }
+            GFX.record_orbit( capturer );
     },
     
     adjustSlider: function (slider)
