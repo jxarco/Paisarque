@@ -78,7 +78,7 @@ var DATA = {
             anot_options: {
                 title: { "es": "Opciones", "cat": "Opcions", "en": "Options" },
                 show: { "es": "Mostrar", "cat": "Mostrar", "en": "Show" },
-                anotate: { "es": "Anotar", "cat": "Anotar", "en": "Anotate" }
+                anotate: { "es": "Anotar", "cat": "Anotar", "en": "Annotate" }
             }
         }
     }
