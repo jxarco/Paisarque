@@ -65,39 +65,9 @@ var GFX = {
         
         $("#placeholder").css("cursor", "wait");
         
-        mesh = GL.Mesh.fromURL( that.model.mesh, function (response) {
-            
-            if(response === null){
-                console.warn("no binary mesh found", that.model.mesh);
-                // load obj
-                that.model.mesh = meshURL;
-                mesh = GL.Mesh.fromURL( that.model.mesh, function (response) {
-                    if(response === null){
-                        console.warn("no mesh found", that.model.mesh);
-                    }
-                    else// upload binary mesh for next use
-                    {
-                        var file = mesh.encode("wbin");
-                        if(file)
-                        {
-                            var fileReader = new FileReader();
-                            fileReader.onload = function() {
-                                    var arrayBuffer = this.result;
-                                    var fullpath = current_user + "/projects/" + project._id + "/mesh.wbin";
-                                    session.uploadFile( fullpath, arrayBuffer, 0, function(){
-                                        console.log("binary uploaded");
-                                    }, function(err){
-                                        console.error(err);
-                                    });
-                            };
-                            fileReader.readAsArrayBuffer( new Blob([file]) );
-                        }else
-                            console.error("encoding error");
-                        
-                        on_load();
-                    }
-                }); //load from URL
-            }
+        mesh = GL.Mesh.fromURL( that.model.mesh, function (response){
+            if(response === null)
+                that.uploadBinaryMesh( meshURL, on_load );
             else
                 on_load();
         });
@@ -165,8 +135,10 @@ var GFX = {
         //main render loop
         function ondraw() {
             
-            APP.lookAt(that.camera);
+            // smoother changes of camera
+            that.lookAtSmooth(that.camera);
             
+            // clear buffers
             that.renderer.clear(bg_color);
 
             // orbit depending on orbit speed
@@ -182,9 +154,6 @@ var GFX = {
             
             that.skybox.position = that.camera.position;
             that.renderer.render(that.scene, that.camera);
-            
-//            if(APP.capturer)
-//                APP.capturer.capture( that.renderer.canvas );
             
             //get old camera
             vec3.copy(that.camera.previous, that.camera._position);
@@ -254,6 +223,41 @@ var GFX = {
         this.context.captureKeys();
     },
     /*
+    * upload binary mesh in case of first use
+    */
+    uploadBinaryMesh: function(meshURL, callback)
+    {
+        console.warn("no binary mesh found");
+        // load obj
+        this.model.mesh = meshURL;
+        mesh = GL.Mesh.fromURL( meshURL, function (response) {
+            if(response === null)
+                throw( "no mesh either obj or wbin found" );
+            
+            else// upload binary mesh for next use
+            {
+                var file = mesh.encode("wbin");
+                if(file)
+                {
+                    var fileReader = new FileReader();
+                    fileReader.onload = function() {
+                            var arrayBuffer = this.result;
+                            var fullpath = current_user + "/projects/" + project._id + "/mesh.wbin";
+                            session.uploadFile( fullpath, arrayBuffer, 0, function(){
+                                console.log("binary uploaded");
+                            }, function(err){
+                                console.error(err);
+                            });
+                    };
+                    fileReader.readAsArrayBuffer( new Blob([file]) );
+                }else
+                    console.error("encoding error");
+
+                callback();
+            }
+        }); //load from URL
+    },
+    /*
     * destroy elements by description attr
     */
     destroyElements: function (elements, description)
@@ -307,11 +311,13 @@ var GFX = {
             capturer.start();
             var bg_color = vec4.fromValues(0.937, 0.937, 0.937, 1);
             
-            for( var dt = 0; dt < 360 * DEG2RAD; dt += 0.025)
+            var speed = APP.export_data.export_speed;
+            
+            for( var dt = 0; dt < 360 * DEG2RAD; dt += speed)
             {
                 GFX.renderer.clear(bg_color);
                 GFX.renderer.render( GFX.scene, camera );
-                camera.orbit( 0.025, RD.UP );
+                camera.orbit( speed, RD.UP );
                 capturer.capture( GFX.renderer.canvas );
             }
             
@@ -374,6 +380,9 @@ var GFX = {
 
         canvas.toBlob( on_complete, "image/png");  
     },
+    /*
+    * create dialog to contain captured image (export stuff)
+    */
     createCaptureDialog: function(lang)
     {
         var text_section = DATA.litegui.sections.capture;
@@ -385,6 +394,16 @@ var GFX = {
         widgets.addSection("Seccion", {className: "capture-section"});
         dialog.add(widgets);
         return dialog;
+    },
+    /*
+    * set position of camera to be the direction until objective is reached
+    */
+    lookAtSmooth: function(camera)
+    {
+        if(!equals(camera.position, camera.direction) && camera.smooth)
+            camera.position = camera.direction;
+        else
+            camera.smooth = false;
     },
     /*
     * resize method for canvas

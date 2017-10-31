@@ -47,12 +47,9 @@ var APP = {
         if(!DATA)
             throw( "no translations" );
         
-        //$(window).bind("load", function(){ 
-        //    LiteGUI.init(); 
-            that.createInfoInspector(lang);
-            that.createToolsInspector(lang);
-            that.createAnotInspector(lang);
-        //});
+        that.createInfoInspector(lang);
+        that.createToolsInspector(lang);
+        that.createAnotInspector(lang);
             
         // finish and run GFX stuff
         GFX.init( meshURL, textURL );  
@@ -158,7 +155,7 @@ var APP = {
             verbose: false,
             display: true,
             
-                export_speed: 0.25,
+                export_speed: 0.025,
                 n_iterations: 1
         }
         APP.tools_inspector.addButton( text_section.image[lang], text_section.image_btn[lang], { width: "100%", callback: function(){
@@ -196,34 +193,19 @@ var APP = {
             widgets.clear();
             
             widgets.addSection("...", {className: "advanced-export-section"});
-    //        widgets.addNumber( text_section.speed[lang], APP.export_data.export_speed, { name_width: "33.33%", callback: function(v){  APP.export_data.export_speed = v; }, min: 0.1, max: 3, step: 0.1});
-//            widgets.addCombo( text_section.iterations[lang], APP.export_data.n_iterations,{ name_width: "33.33%", values:[1, 2, 3, 4, 5], callback: function(v) { APP.export_data.n_iterations = v; }});
             widgets.addButton( text_section.record[lang], text_section.record_btn[lang],{name_width: "33.33%", callback: function() {      
                 APP.exportCanvas();
             }});
-
             widgets.addString( text_section.name[lang], APP.export_data.name,{ name_width: "33.33%", callback: function(v) { APP.export_data.name = v; }});
             widgets.addCombo( text_section.format[lang], APP.export_data.format,{ name_width: "33.33%", values:["webm","gif"], callback: function(v) { APP.export_data.format = v; }});
-            widgets.addCombo( text_section.quality[lang], "Normal",{ name_width: "33.33%", values: text_section.quality_range[lang], callback: function(v) { APP.setQuality(v); }});
-            widgets.addSeparator();
-    //        widgets.addString("Frame rate", APP.export_data.framerate,{ name_width: "33.33%", callback: function(v) {             APP.export_data.framerate = v; }});
-//            widgets.addCombo("MotionBlur f.", APP.export_data.mb_frames,{ name_width: "33.33%", values:[0, 2, 4, 8, 16], callback: function(v) {
-//                APP.export_data.mb_frames = v;
-//                if(!v)
-//                    return;
-//                APP.export_data.framerate /= v;
-//                widgets.on_refresh();
-//            }});
-            widgets.addCheckbox("Widget", APP.export_data.display, { name_width: "33.33%", callback: function(v){
-                APP.export_data.display = v;
-                if(!v)
-                    $("#capture-widget").remove();
-            }});
+            widgets.addCombo( text_section.quality[lang], "Normal",{ name_width: "33.33%", values: text_section.quality_range[lang], callback: function(v) { APP.setQuality( v ); }});
+            widgets.addCombo( text_section.speed[lang], "Normal", { name_width: "33.33%", values: text_section.speed_range[lang] , callback: function(v){  APP.setSpeedOrbit( v ); }});
             widgets.addSeparator();
         }
 
         widgets.on_refresh();
         dialog.add(widgets);  
+        dialog.setPosition( 26, 116 );
         var progress = document.createElement("div");
         progress.className = "progress-line";
         $(".wsection.advanced-export-section").find(".wsectioncontent").prepend(progress);
@@ -259,6 +241,19 @@ var APP = {
             APP.export_data.quality = 80;
         else
             APP.export_data.quality = 95;
+    },
+    
+    setSpeedOrbit: function(name)
+    {
+        if(!name)
+            throw( "no speed" );
+        
+        if(name == "Baixa" || name == "Baja" || name == "Low")
+            APP.export_data.export_speed = 0.015;
+        else if(name == "Normal")
+            APP.export_data.export_speed = 0.025;
+        else
+            APP.export_data.export_speed = 0.035;
     },
     
     showMeasureTables: function(name)
@@ -409,14 +404,6 @@ var APP = {
         list.push($('#distances-table'), $('#measure-btn'), $('#segment-distances-table'));
         list.push($('#measure-s-btn'), $('#areas-table'), $('#measure-opt-btn'));
         revealDOMElements(list, false, {e: ""});
-    },
-    
-    lookAt: function(camera)
-    {
-        if(!equals(camera.position, camera.direction) && camera.smooth)
-            camera.position = camera.direction;
-        else
-            camera.smooth = false;
     },
 
     anotate: function( anotate )

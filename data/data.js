@@ -27,7 +27,7 @@ var DATA = {
             },
             cubemaps: {
                 title: { "es": "Fondo de escena", "cat": "Fons d'escena", "en": "Scene background" },
-                quit: { "es": "Quitar fondo", "cat": "Treure fons", "en": "Remove background" }
+                quit: { "es": "Quitar fondo", "cat": "Treu el fons", "en": "Remove background" }
             },
             general: {
                 title: { "es": "General", "cat": "General", "en": "General" },
@@ -67,6 +67,7 @@ var DATA = {
             dialog: {
                 title: { "es": "Opciones avanzadas", "cat": "Opcions avançades", "en": "Advanced options" },
                 speed: { "es": "Velocidad", "cat": "Velocitat", "en": "Speed" },
+                speed_range: { "es": ["Baja","Normal", "Alta"], "cat": ["Baixa","Normal", "Alta"], "en": ["Low","Normal", "High"] },
                 iterations: { "es": "# Órbitas", "cat": "# Òrbites", "en": "# Orbits" },
                 record: { "es": "Vídeo", "cat": "Vídeo", "en": "Video" },
                 record_btn: { "es": "Grabar órbita", "cat": "Gravar òrbita", "en": "Record orbit" },
