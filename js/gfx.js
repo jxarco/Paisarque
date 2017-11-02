@@ -44,6 +44,10 @@ var GFX = {
         model.scale([5,5,5]);
         model.mesh = wBinURL;
         
+        if (!isArray(textureURL)) {
+            model.texture = textureURL;
+        }
+        
         this.model = model;
         
         var on_load = function()
@@ -67,19 +71,13 @@ var GFX = {
         
         mesh = GL.Mesh.fromURL( that.model.mesh, function (response){
             if(response === null)
-                that.uploadBinaryMesh( meshURL, on_load );
-            else
-                on_load();
+                that.uploadBinaryMesh( meshURL );
         });
         
+        // make canvas visible after loading texture
+        that.renderer.loadTexture(that.model.texture, that.renderer.default_texture_settings, on_load);
+        
         // *************************************
-        
-        // one texture
-        if (!isArray(textureURL)) {
-            that.model.texture = textureURL;
-        }
-        
-        var obj_texture = this.renderer.loadTexture(that.model.texture, that.renderer.default_texture_settings);
         
         // Hacer las rotaciones pendientes
         var rotaciones = project.getRotations();
@@ -253,7 +251,8 @@ var GFX = {
                 }else
                     console.error("encoding error");
 
-                callback();
+                if(callback)
+                    callback();
             }
         }); //load from URL
     },

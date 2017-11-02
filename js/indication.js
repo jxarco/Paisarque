@@ -130,15 +130,17 @@ SceneIndication.prototype.grid = function(size, options)
     grid.name = "grid";
     grid.mesh = "grid";
     grid.primitive = gl.LINES;
-    grid.color = [0.6, 0.6, 0.6, 1];
+    grid.color = [0, 0, 0];
     grid.scale([50, 50, 50]);
+    grid.opacity = 0.3;
+    grid.blend_mode = RD.BLEND_ALPHA;
     
     if(options.position)
         grid.position = options.position;
     
     if(options.rotations){
         for(var i in options.rotations){
-            console.log("rotation");
+//            console.log("rotation");
             grid.rotate(options.rotations[i].angle, options.rotations[i].axis);
         }
         grid.updateMatrices();

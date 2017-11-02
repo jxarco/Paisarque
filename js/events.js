@@ -23,54 +23,62 @@ $('.form-signin').each(function() {
 $('#search-bar').keyup(function(e) 
 {
     e.preventDefault();
-    
-    // pressing enter
     var params = {};
-    // by default filter
-    params["name"] = $(this).val().toLowerCase();
     
-    // load optionsl filter
+    // load optional filter
     var filter = $("#filters-bar").find(":selected").val().toLowerCase();
-    if(filter != ""){
-        delete params["name"];
-        params[filter] = $(this).val().toLowerCase();
-    }
+    var searched = $(this).val().toLowerCase();
     
+    // by default filter
+    params["name"] = searched;
+    params["not_def"] = false;
+    
+    if( searched.length ){
+        delete params["name"];
+        params[filter] = searched;
+        params["not_def"] = true;
+    }
     loadProjectsTable(params);
 });
 
 $(".pagination").click(function(){
    
-    var current_page = parseInt(getQueryVariable("pag")) || 0;
+    var current_page = QueryString["pag"] != undefined ? parseInt( QueryString["pag"] ) : 0;
     var next_page = current_page + 1;
     var previous_page = current_page - 1;
     
-    // click left
-    if($(this).hasClass("l")){
-        if(!current_page)
-            return;
-        else{
-            var href = "inicio";
-            if(previous_page)
-                href += "?pag=" + previous_page;
-            
-            window.location.href = href;
-        }
-    }
     //click right
     if($(this).hasClass("r")){
-        if(!current_page)
-            window.location.href += "?pag=1";
-        else
-            window.location.href = "inicio?pag=" + next_page; 
+        if(current_page == 0)
+            window.location.href += "&pag=1";
+        else // page is over 0
+        {
+            var href = window.location.href;
+            var href_base = href.slice( 0, href.indexOf("&") );
+            window.location.href = href_base + "&pag=" + next_page;
+        }
+    }
+    // click left
+    else if($(this).hasClass("l")){
+        if(current_page == 0)
+            return;
+        else // page is over 0
+        {
+            var href = window.location.href;
+            var href_base = href.slice( 0, href.indexOf("&") );
+            if(previous_page == 0)
+                window.location.href = href_base;
+            else // previous page is over 0
+                window.location.href = href_base + "&pag=" + previous_page;
+        }
     }
 });
 
 //Enable deleting a project at the main page
-$("#delete-project").click(function() {
-    
-    
-});
+//$("#delete-project").click(function() {
+//    
+//    
+//});
 
 /*
 * Proyecto TAB

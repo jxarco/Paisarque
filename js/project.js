@@ -35,13 +35,6 @@ Project.prototype._ctor = function( data )
 //    this._max_measures_size = 20;
     
 	this.FROMJSON( data );
-    
-    // save the project description when typing
-    $('.pro-info').keyup(function(e) 
-    {
-        e.preventDefault();
-        project._description = $(this).val();
-    });
 }
 
 /*
@@ -582,7 +575,6 @@ Project.prototype.FROMJSON = function( data )
     this._coordinates = data.coordenadas;
     
     this._render = data.render;
-    
     this._mesh = data.render.mesh;
     
     for(var i = 0; i < data.render.texture.length; ++i)
@@ -626,7 +618,7 @@ Project.prototype.FROMJSON = function( data )
                            data.medidas[i].points,
                            data.medidas[i].distance,
                            data.medidas[i].name,
-                           {display: false, push: true});
+                           {display: false, push: true}); // parsing so prevent auto_saving
     }
     
     len = data.segmentos ? data.segmentos.length : 0;
@@ -642,7 +634,7 @@ Project.prototype.FROMJSON = function( data )
                                   data.segmentos[i].points,
                                   data.segmentos[i].distance,
                                   data.segmentos[i].name,
-                                  {display: false, push: true} );
+                                  {display: false, push: true} ); // parsing so prevent auto_saving
     }
     
     len = data.areas ? data.areas.length : 0;
@@ -660,7 +652,7 @@ Project.prototype.FROMJSON = function( data )
                         data.areas[i].area,
                         data.areas[i].index,
                         data.areas[i].name,
-                        {display: false, push: true} ); 
+                        {display: false, push: true} );  // parsing so prevent auto_saving
     }
 }
 

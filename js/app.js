@@ -26,9 +26,9 @@ var APP = {
         /****************************************************************/
         /* render stuff*/
 
-        var renderData = json.render;
+        var renderData = project._render;
         if(!renderData.mesh) {
-            console.err("There is no mesh");
+            console.error("There is no mesh");
             return;
         }
 
@@ -183,7 +183,12 @@ var APP = {
         // advanced options
         var text_section = DATA.litegui.sections.dialog;
         var name = text_section.title[lang];
-        var dialog = new LiteGUI.Dialog(name, {parent: "body", title:name, close: true, width: 325, scroll: true, draggable: true });
+        
+        var dialog_id = name.replace(" ", "-").toLowerCase();
+        if( document.getElementById( dialog_id ) )
+            return;
+        
+        var dialog = new LiteGUI.Dialog( dialog_id, {parent: "body", title: name, close: true, width: 325, scroll: true, draggable: true });
         dialog.show('fade');
         
         var widgets = new LiteGUI.Inspector();
@@ -205,7 +210,7 @@ var APP = {
 
         widgets.on_refresh();
         dialog.add(widgets);  
-        dialog.setPosition( 26, 116 );
+        dialog.setPosition( 36, 136 );
         var progress = document.createElement("div");
         progress.className = "progress-line";
         $(".wsection.advanced-export-section").find(".wsectioncontent").prepend(progress);
@@ -374,9 +379,8 @@ var APP = {
 //        $("#cont-msg").empty();
         
         // remove helping grids
-        var grids = GFX.scene.root.getNodesByName("grid");
-        for(var i = grids.length - 1; i >= 0; i--)
-            grids[i].destroy();
+        for(var i = 0, node; node = GFX.scene.root.getNodesByName("grid")[i]; i++)
+            node.destroy(); // remove help grid
 
         //remove active classes
         $(".on-point").removeClass("on-point");
@@ -483,19 +487,14 @@ var APP = {
     applyRotation: function()
     {
         if(APP.rotation){
-            APP.rotation = false;
-            for(var i = 0, node; node = GFX.scene.root.getNodesByName("grid")[i]; i++)
-                node.delete(); // remove help grid
-            revealDOMElements([$("#cardinal-axis"), $('.sliders')], false);
-            
+            APP.disableAllFeatures({no_msg: true});
             project.setRotations(GFX.model._rotation);
             project.save();
-            var msg = {
+            putCanvasMessage({
                 es: "¡Guardado!",
                 cat: "Desat!",
                 en: "Saved!"
-            }
-            putCanvasMessage(msg, 4000, {type: "response"});
+            }, 4000, {type: "response"});
             
              // upload project preview
             var canvas = gl.snapshot(0, 0, GFX.renderer.canvas.width, GFX.renderer.canvas.height);
@@ -527,12 +526,11 @@ var APP = {
         
         if(project._meter != -1)
         {
-            var msg = {
+            putCanvasMessage({
                 es: "La cofiguración de la escala ya se ha realizado antes",
                 cat: "L'escala ja ha sigut configurada abans",
                 en: "Scale set up before"
-            }
-            putCanvasMessage(msg, 5000, {type: "alert"});    
+            }, 5000, {type: "alert"});    
         }
 
         testDialog({scale: true, hidelower: true}); // open dialog

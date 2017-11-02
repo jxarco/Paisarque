@@ -30,6 +30,7 @@ body{
     background-color: rgb(250, 250, 250);
     width: 100% !important;
     color: #333;
+    line-height: inherit !important;
     -webkit-user-select: none; /* Chrome/Safari */        
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+ */
@@ -361,6 +362,9 @@ input{
     color: white !important;
     border-radius: 5px;
     outline: none;
+}
+.dialog-option input::placeholder{
+    color: whitesmoke;
 }
 .dialog-option.help{
     display: none;

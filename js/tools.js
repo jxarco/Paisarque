@@ -67,10 +67,6 @@ function loadJSON()
     $.ajax({
         dataType: "json",
         url: "litefile/files/" + current_user + "/projects/" + project  + '.json',
-        error: function(err)
-        {
-            console.error(err)
-        },
         success:function(data)
         {
             if(APP.parseJSON)
@@ -81,6 +77,10 @@ function loadJSON()
                 if(parseDATA)
                     parseDATA(null);
             }
+        },
+        error: function(err)
+        {
+            console.error(err)
         }
     });
 }
@@ -119,7 +119,7 @@ function parseDATA(options)
     }
 }
 
-function loadProjectsTable(filters)
+function loadProjectsTable( filters )
 {
     filters = filters || {};
     var per_page = 3;
@@ -141,22 +141,30 @@ function loadProjectsTable(filters)
             var index = 0;
             
             if(data.length <= per_page){
-                var page = parseInt(getQueryVariable("pag")) || 0;
+                var page = QueryString["pag"] != undefined ? parseInt( QueryString["pag"] ) : 0;
+                // prevent passing of pages
                 if(page >= (data.length / per_page))
                     return;
                 len = data.length;
                 $("#index-pag").html(1 + "/" + 1);
             }
             else{
-                var page = parseInt(getQueryVariable("pag")) || 0;
+                var page = QueryString["pag"] != undefined ? parseInt( QueryString["pag"] ) : 0;
                 index = page * per_page;
                 len = per_page + index;
                 
-                $("#index-pag").html(page + "/" + ((data.length / per_page)-1));
+                var total_pages = Math.ceil( data.length / per_page );
+                $("#index-pag").html(page + 1 + "/" + total_pages);
                 
                 // prevent passing of pages
                 if(page >= (data.length / per_page))
                     return;
+            }
+            
+            // do not apply pagination in case of using search bar
+            if( filters.not_def ){
+                index = 0;
+                len = data.length;
             }
             
             for(var i = index; i < len; i++)
@@ -165,14 +173,9 @@ function loadProjectsTable(filters)
                     continue;
                 
                 var file = data[i];
-                var user            = file[0];
-                var project         = file[1];
-                var preview_exists  = file[2];
-                var author          = file[3];
-                var place           = file[4];
+                var user = file[0], project = file[1], preview_exists = file[2], author = file[3], place = file[4];
                 
                 // apply filters
-                
                 if(filters){
                     if(filters.name && !project.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").includes(filters.name))
                         continue;    
