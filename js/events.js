@@ -83,6 +83,12 @@ $(".pagination").click(function(){
 /*
 * Proyecto TAB
 */ 
+$("#label-proyecto-tab").click( function(){
+    // map has to be launched only when
+    // visible, otherwise it wont work
+    initMap();
+    // !!!!
+} );
 // slide hidden tabs in information
 $(".slide-tab").click(function(){
     var target_id = $(this).data("target");
