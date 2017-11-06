@@ -460,6 +460,8 @@ $("#formUploadProject").on('submit', function(e)
     * @param {Object} extra could be category, metadata (object or string), preview (in base64)
     */
     
+    var hasErrors = false;
+    
     e.preventDefault();
     var values = getFormValues(this);
     var formData = new FormData(this);
@@ -488,8 +490,20 @@ $("#formUploadProject").on('submit', function(e)
             var auxList = input[0]["value"].split('\\');
             var nameTexture = auxList[auxList.length - 1];
             urlTexture = urlTexture + nameTexture;
+            
+            // if not jpg do not allow
+            var it = urlTexture.lastIndexOf( "." ) + 1;
+            var extension = urlTexture.slice( it ).toLowerCase();
+            if( extension != "jpg" ){
+                alert( "bad jpg extension" );
+                console.error("Only jpg texture files");
+                hasErrors = true;
+            }
         }
     });
+    
+    if( hasErrors )
+        return 0;
       
     // json object to save with information
     // about the entire project

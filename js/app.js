@@ -113,10 +113,8 @@ var APP = {
         text_section = DATA.litegui.sections.camera;
         APP.tools_inspector.addSection( text_section.title[lang], {collapsed: true});
         APP.tools_inspector.addButton(null, text_section.reset[lang], { width: "100%",  callback: function(){
-            GFX.camera.perspective( 45, gl.canvas.width / gl.canvas.height, 0.1, 10000 );
-            GFX.camera.lookAt( [150,60,150],[0,0,0],[0,1,0] );
             GFX.camera.direction = [150,60,150];
-            GFX.camera.previous = vec3.clone(GFX.camera._position);
+            GFX.camera.smooth = true;
         }});
         APP.tools_inspector.addNumber( text_section.orbit[lang], 0, { width: "100%",  callback: function(v){
             GFX.orbit_speed = v * 0.001;
@@ -517,6 +515,14 @@ var APP = {
                 cat: "Desat!",
                 en: "Saved!"
             }, 4000, {type: "response"});
+            
+            // destroy pending nodes to do a simple render
+            GFX.scene.destroyPendingNodes();
+            
+            // get render after remove some elements
+            var bg_color = vec4.fromValues(0.937, 0.937, 0.937, 1);
+            GFX.renderer.clear( bg_color );
+            GFX.renderer.render( GFX.scene, GFX.camera );
             
              // upload project preview
             var canvas = gl.snapshot(0, 0, GFX.renderer.canvas.width, GFX.renderer.canvas.height);

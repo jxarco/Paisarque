@@ -400,6 +400,19 @@ Project.prototype.update_meter = function(relation)
 }
 
 /*
+*   @method updateAllMeasures
+*   Push each measure as a node child to avoid losing all of them
+*   @param parent_node {SceneNode} 3d model or any other node to push childs
+*/
+Project.prototype.updateAllMeasures = function( parent_node )
+{
+    
+    
+//    if(this._auto_save)
+//        this.save();
+}
+
+/*
 *   @method insertMeasure
 *   Push a new measure to the list project
 *   @param camera {vec3} get camera properties
@@ -666,6 +679,12 @@ Project.prototype.FROMJSON = function( data )
 */
 Project.prototype.save = function( overwrite, extra )
 {
+    if( this._user == "guest" && window.guest_mode == undefined)
+    {
+        alert( "Please register to save your progress" );
+        return 0;
+    }
+    
     var project_name = this._id;
     
     if(overwrite && extra.length)
