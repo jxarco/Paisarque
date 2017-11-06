@@ -71,7 +71,7 @@ var GFX = {
         
         mesh = GL.Mesh.fromURL( that.model.mesh, function (response){
             if(response === null)
-                that.uploadBinaryMesh( meshURL );
+                that.uploadBinaryMesh( meshURL, wBinURL );
         });
         
         // make canvas visible after loading texture
@@ -224,7 +224,7 @@ var GFX = {
     /*
     * upload binary mesh in case of first use
     */
-    uploadBinaryMesh: function(meshURL, callback)
+    uploadBinaryMesh: function(meshURL, wBinURL, callback)
     {
         console.warn("no binary mesh found");
         // load obj
@@ -241,7 +241,8 @@ var GFX = {
                     var fileReader = new FileReader();
                     fileReader.onload = function() {
                             var arrayBuffer = this.result;
-                            var fullpath = current_user + "/projects/" + project._id + "/mesh.wbin";
+                            var wBinURLshort = wBinURL.slice( wBinURL.lastIndexOf( "/" ) );
+                            var fullpath = current_user + "/projects/" + project._id + "/" + wBinURLshort;
                             session.uploadFile( fullpath, arrayBuffer, 0, function(){
                                 console.log("binary uploaded");
                             }, function(err){

@@ -365,7 +365,9 @@ var APP = {
     {
         options = options || {};
         console.log( options );
-        GFX.context.onmousedown = function(e) {};
+        
+        if(!APP.anotation_mode)
+            GFX.context.onmousedown = function(e) {};
         
         APP.fadeAllTables(this.showing);
         APP.current_ms_type = null;
@@ -420,6 +422,7 @@ var APP = {
     anotate: function( anotate )
     {
         if (anotate) {
+            APP.anotation_mode = true;
             GFX.context.onmousedown = function(e) 
             {
                 var ray = GFX.camera.getRay( e.canvasx, e.canvasy );
@@ -428,8 +431,10 @@ var APP = {
             }
         } 
         
-        else
+        else{
+            APP.anotation_mode = false;
             GFX.context.onmousedown = function(e) {}
+        }
     },
     
     showElements: function (elements, flag)

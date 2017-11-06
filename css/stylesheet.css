@@ -639,7 +639,7 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
     cursor: move;
 }
 .drag-cont-over{
-    border: 1px solid #0070c9 !important;
+    border: 1px solid red !important;
     text-decoration: none;
     -webkit-transition: all 250ms linear;
     transition: all 250ms linear;
