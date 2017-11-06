@@ -198,17 +198,6 @@ function systemReady()
             {
                 window.alert("Usuario creado");
                 
-                // login as admin to change user space
-//                LiteFileServer.login( "admin", "", function(session, result){
-//                    if( session.status == LiteFileServer.LOGGED ) {
-                
-//                    }
-//                    else
-//                        throw("error login in (admin)");
-//                    
-//                    session.logout();
-//                });
-                
                 LiteFileServer.login( values["username"], values["password"], function(session, result){
             
                     // si el login es correcto, se entra y se va a la url de inicio
@@ -216,8 +205,7 @@ function systemReady()
                         onLoggedIn(session);
                         console.log(session);
                         localStorage.setItem('session', JSON.stringify(session));
-                        
-//                        session.
+                        localStorage.setItem('keep_session', false );
                         
                         var fullpath = session.user.username;
                         session.createFolder(fullpath);
@@ -225,13 +213,12 @@ function systemReady()
                         fullpath += "/projects/";
                         session.createFolder(fullpath);
                         
-                        window.location.href = "inicio";
+                        var user = session.user.username;
+                        window.location.href = "inicio?u=" + user;
                     }
                     else
                         throw("error login in");
                 });
-                
-                
                 
             } 
         } ,null, session ? session.token : null, valuesString);
