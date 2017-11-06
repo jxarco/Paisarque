@@ -567,10 +567,20 @@ function putCanvasMessage(msg, ms, options)
 function testDialog(options)
 {
     options = options || {};
+    var lang = "es", session_lang = null;
+    if(session_lang = localStorage.getItem("lang"))
+        lang = session_lang;
     
-    var upperbtn = options.upperbtn || "Añadir puntos";
-    var lowerbtn = options.lower || "Finalizar";
-//    var location = $("#tab-content2-large");
+    var text_options = {
+        add: {"es": "Añadir puntos","cat": "Afegir punts", "en": "Add points"},
+        end: {"es": "Finalizar","cat": "Finalitzar", "en": "Finish"},
+        camera: {"es": "Mover cámara","cat": "Moure càmera", "en": "Move camera"},
+        input: {"es": "Escala (m)","cat": "Escala (m)", "en": "Scale (m)"},
+    }
+    
+    var upperbtn = options.upperbtn || text_options.add[lang];
+    var lowerbtn = options.lower || text_options.end[lang];
+    var camerabtn = text_options.camera[lang];
     var location = $(".wsection.measures-section").find(".wsectioncontent");
     
     var html = "<div " +
@@ -578,12 +588,12 @@ function testDialog(options)
                   "style='" +
 //                  "margin-top: 265px;" +
                   "text-align: center;'>" +
-                  "<button title='Cancelar' id='close-dialog' class='dialog-btn info'><i class='material-icons'>close</i></button>" +
+                  "<button title='Cancel' id='close-dialog' class='dialog-btn info'><i class='material-icons'>close</i></button>" +
                   "<div class='dialog-option'>" +
                     "<button id='add-dialog' class='dialog-btn'>" + upperbtn + "</button>" +
                     "</div>" +
                   "<div class='dialog-option'>" +
-                    "<button id='camera-mode' class='dialog-btn'>Mover cámara</button>" +
+                    "<button id='camera-mode' class='dialog-btn'>" + camerabtn + "</button>" +
                     "</div>" +
                   "<div class='dialog-option'>" +
                     "<button id='end-dialog' class='dialog-btn'>" + lowerbtn + "</button>" +
@@ -591,11 +601,12 @@ function testDialog(options)
     
     if(options.scale)
         html +=   "<div class='dialog-option'>" +
-                    "<input id='scale-input' placeholder='Escala (metros)'></input><button id='help-dialog' class='dialog-btn info'><i class='material-icons'>info_outline</i></button>" +
-                    "</div>" + 
-                  "<div class='dialog-option help'>" +
-                    "<p>Escribe en el cuadro de texto la escala con la que vas a medir el modelo 3D. Por ejemplo, si introduces 0.1, la distancia total entre los puntos que selecciones será igual a 0.1 metros. Por defecto, la distancia será 1 metro.</p>" +
-                  "</div>";
+                    "<input id='scale-input' placeholder='" + text_options.input[lang] + "'></input><button id='help-dialog' class='dialog-btn info'><i class='material-icons'>info_outline</i></button>" +
+                    "</div>";
+    
+//                  "<div class='dialog-option help'>" +
+//                    "<p>Escribe en el cuadro de texto la escala con la que vas a medir el modelo 3D. Por ejemplo, si introduces 0.1, la distancia total entre los puntos que selecciones será igual a 0.1 metros. Por defecto, la distancia será 1 metro.</p>" +
+//                  "</div>";
                     
     html += "</div>";
     
@@ -614,7 +625,7 @@ function testDialog(options)
     });
     
     $("#close-dialog").click(function(){
-        APP.disableAllFeatures();  
+        APP.disableAllFeatures(); // want to reload initial rotations when cancel operation  
     });
 }
 

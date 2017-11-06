@@ -11,6 +11,11 @@ var DATA = {
         'https://maps.googleapis.com/maps/api/js?key=AIzaSyDrcNsufDO4FEmzoCO9X63ru59CUvCe2YI&callback=initMap'
     ],
     
+    buttons: {
+        download_capture: { "es": "Descargar", "cat": "Descarregar", "en": "Download" },
+        add_capture: { "es": "Añadir al proyecto", "cat": "Afegir al projecte", "en": "Add to project" }
+    },
+    
     litegui: {
         
         sections: {

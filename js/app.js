@@ -364,6 +364,7 @@ var APP = {
     disableAllFeatures: function (options)
     {
         options = options || {};
+        console.log( options );
         GFX.context.onmousedown = function(e) {};
         
         APP.fadeAllTables(this.showing);
@@ -385,6 +386,12 @@ var APP = {
         //remove active classes
         $(".on-point").removeClass("on-point");
         $("#tools-tab .btn.tool-btn").removeClass("pressed");
+        
+        if(options.last_rotation && window.init_rotation !== undefined){
+            console.log("wefwefew");
+            vec4.copy( GFX.model._rotation, window.init_rotation );
+            GFX.model.updateMatrices();
+        }
         
         if(options.no_msg)
             return;
@@ -431,6 +438,16 @@ var APP = {
             elements[i].flags.visible = flag;
     },
     
+    clear_newRotation: function()
+    {
+        project._measures = [];
+        project._segments = [];
+        project._areas = [];
+        $("#distances-table").find("tbody").empty();
+        $("#segment-distances-table").find("tbody").empty();
+        $("#areas-table").find("tbody").empty();
+    },
+    
     setRotation: function ()
     {
         if(project._rotations.length)
@@ -439,15 +456,13 @@ var APP = {
 
         // clear first
         APP.disableAllFeatures({no_msg: true});
-        project._measures = [];
-        project._segments = [];
-        project._areas = [];
-        $("#distances-table").find("tbody").empty();
-        $("#segment-distances-table").find("tbody").empty();
-        $("#areas-table").find("tbody").empty();
 
         APP.rotation = true;
-        revealDOMElements([$("#cardinal-axis"), $('.sliders')], true)
+        revealDOMElements([$("#cardinal-axis"), $('.sliders')], true);
+        
+        // save initial rotation in case on cancel operation
+        window.init_rotation = vec4.create();
+        vec4.copy( window.init_rotation, GFX.model._rotation );
         
         // create grid
         var rot_grid_x = new SceneIndication();
@@ -487,8 +502,10 @@ var APP = {
     applyRotation: function()
     {
         if(APP.rotation){
+            // clear previous distances when accept
+            APP.clear_newRotation();
             APP.disableAllFeatures({no_msg: true});
-            project.setRotations(GFX.model._rotation);
+            project.setRotations( GFX.model._rotation );
             project.save();
             putCanvasMessage({
                 es: "¡Guardado!",
@@ -827,12 +844,16 @@ var APP = {
             plane.rotate(90 * DEG2RAD, RD.FRONT);
         GFX.scene.root.addChild(plane); 
         
+        // top view area cannot be customized
+        if(areaType == TOP_AREA)
+            return;
+        
         // add buttons to move plane
         APP._plane_rotation_ = [0, 0];
         APP.inspector = new LiteGUI.Inspector();
         var string = {
             es: "Ajustar",
-            cat: "Adjustar",
+            cat: "Ajustar",
             en: "Adjust"
         }
         var lang = "es", session_lang;
@@ -851,7 +872,7 @@ var APP = {
 
             plane.updateMatrices();
             APP._plane_rotation_ = v;
-        }, step: 0.005, min: 0});
+        }, step: 0.0025, min: 0});
         
         $(".draggable").append(APP.inspector.root);
     }

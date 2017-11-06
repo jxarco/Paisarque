@@ -130,7 +130,8 @@ $("#saveTextButton").click(function(e)
         active: false,
         color: [1,0,0,1],
         time: 0.0,
-        onupdate: "blink"
+        onupdate: "blink",
+        name: "annotation"
     });
     
     setParent(GFX.model, ind.node);

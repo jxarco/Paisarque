@@ -120,7 +120,8 @@ var GFX = {
                 id: anotaciones[i].id,
                 active: false,
                 time: 0.0,
-                onupdate: "blink"
+                onupdate: "blink",
+                name: "annotation"
             });
 
             // set ball parent
@@ -171,14 +172,23 @@ var GFX = {
         this.context.onmousemove = function(e)
         {
             mouse = [e.canvasx, gl.canvas.height - e.canvasy];
-
-            if (e.dragging && e.leftButton) {
-                that.camera.orbit(-e.deltax * 0.5 * _dt, RD.UP);
-                that.camera.orbit(-e.deltay * 0.5 * _dt, that.camera._right);
+            
+            if( e.dragging ) {
+                if( e.leftButton ) {
+                    that.camera.orbit(-e.deltax * 0.5 * _dt, RD.UP);
+                    that.camera.orbit(-e.deltay * 0.5 * _dt, that.camera._right);
+                }
+                if( e.rightButton ) {
+                    that.camera.moveLocal([-e.deltax * _dt, e.deltay * _dt, 0]);
+                }
             }
-            if (e.dragging && e.rightButton) {
-                that.camera.moveLocal([-e.deltax * _dt, e.deltay * _dt, 0]);
-            }
+            
+//            if( e.leftButton ) {
+//                var ray = GFX.camera.getRay( e.canvasx, e.canvasy ), node = null;
+//                if ( node = GFX.scene.testRay( ray, APP.result, undefined, 0x1, true ))
+//                    if(node.name && node.name == "annotation")
+//                        alert("wefwe");
+//            }
         }
 
         this.context.onmousewheel = function(e)
@@ -206,15 +216,6 @@ var GFX = {
             
             if(e.keyCode === KEY_S)
                 that.renderer.loadShaders("data/shaders/shaders.glsl");
-            
-            if(e.keyCode === KEY_C)
-                if(APP.capturer)
-                    APP.capturer.capture( that.renderer.canvas );
-            
-            if(e.keyCode === KEY_A && APP.capturer ){
-                APP.capturer.stop();
-                APP.capturer.save();
-            }
         }
 
         this.context.captureMouse(true);
@@ -355,22 +356,28 @@ var GFX = {
                 img.src = src;
                 img.className = "download-image";
                 
+                var lang = "es", session_lang = null;
+                if(session_lang = localStorage.getItem("lang"))
+                    lang = session_lang;
+                
+                var buttons = DATA.buttons;
+                
                 var download_button = document.createElement("a");
-                download_button.innerHTML = "Download";
+                download_button.innerHTML = buttons.download_capture[lang];
                 download_button.href = url;
                 download_button.download = "screenshot.png";
                 download_button.className = "btn table-btn";
                 
                 var add_button = document.createElement("a");
-                add_button.innerHTML = "Add to project";
+                add_button.innerHTML = buttons.add_capture[lang];
                 add_button.id = "upload-capture-button";
                 add_button.dataset.url = src;
                 add_button.className = "btn table-btn";
                 $(add_button).click(function(){
                     uploadBLOB($(this));
                 });
-                    
-                var dialog = GFX.createCaptureDialog("es");
+                
+                var dialog = GFX.createCaptureDialog( lang );
                 var section = $(".wsection.capture-section").find(".wsectioncontent");
                 section.append( img );
                 section.append( download_button );
@@ -385,12 +392,12 @@ var GFX = {
     createCaptureDialog: function(lang)
     {
         var text_section = DATA.litegui.sections.capture;
-        var name = "title";
-        var dialog = new LiteGUI.Dialog(name, {parent: "body", title:name, close: true, width: 300, scroll: true, draggable: true });
+        var name = {"es": "Capturado", "cat": "Capturat", "en": "Captured"}[lang];
+        var dialog = new LiteGUI.Dialog(name, {parent: "body", title: name, close: true, width: 300, scroll: true, draggable: true });
         dialog.show('fade');
         
         var widgets = new LiteGUI.Inspector();
-        widgets.addSection("Seccion", {className: "capture-section"});
+        widgets.addSection("...", {className: "capture-section"});
         dialog.add(widgets);
         return dialog;
     },
@@ -498,8 +505,13 @@ var GFX = {
             list.push(msr.points[i][0], msr.points[i][1], msr.points[i][2]);
             points.push(list);
             // ball render representation
-            var ind = new SceneIndication();
-            ind = ind.ball(GFX.scene, points[i], {depth_test: false, type: "view"});    
+            var ind = new SceneIndication({
+                position: points[i],
+                scene: true,
+                color: [0.258, 0.525, 0.956,1],
+                depth_test: false,
+                render_priority: RD.PRIORITY_HUD
+            });
         }    
         
         APP.addLine(points, {desc: "config"});
