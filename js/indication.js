@@ -39,11 +39,12 @@ SceneIndication.prototype.configure = function(o)
         mesh: "sphere",
         layers: 0x4,
         color: [0, 0.44, 0.78],
-        scaling: 0.85
+        scaling: 0.6
 	});
     
+    node.addChild( node_inside );
+    
     node.description = "config";
-    node_inside.description = "config";
     this.node = node;
     this.node_inside = node_inside;
     
@@ -57,7 +58,6 @@ SceneIndication.prototype.configure = function(o)
                 break;
             case "position":
                 node.position = o[key];
-                node_inside.position = o[key];
                 break;
             case "depth_test":
                 node.flags.depth_test = o[key];
@@ -87,10 +87,8 @@ SceneIndication.prototype.configure = function(o)
     if(o.onupdate)
         node.update = this.blink;
     
-    if(o.scene && GFX.scene){
+    if(o.scene && GFX.scene)
         GFX.scene.root.addChild(node);
-        GFX.scene.root.addChild(node_inside);
-    }
 }
 
 /*

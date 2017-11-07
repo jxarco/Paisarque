@@ -365,7 +365,7 @@ var APP = {
 //        console.log( options );
         
         if(!APP.anotation_mode)
-            GFX.context.onmousedown = function(e) {};
+            GFX.context.onmousedown = function(e) { GFX.lookAnotInfo( e ); };
         
         APP.fadeAllTables(this.showing);
         APP.current_ms_type = null;
@@ -431,7 +431,7 @@ var APP = {
         
         else{
             APP.anotation_mode = false;
-            GFX.context.onmousedown = function(e) {}
+            GFX.context.onmousedown = function(e) { GFX.lookAnotInfo( e ); }
         }
     },
     

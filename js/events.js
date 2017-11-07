@@ -140,7 +140,6 @@ $("#saveTextButton").click(function(e)
     });
     
     setParent(GFX.model, ind.node);
-    setParent(GFX.model, ind.node_inside);
 
     // se anade a la lista de anotaciones del proyecto
     project.insertAnotation(id, GFX.camera, APP.result, $("#message-text").val());

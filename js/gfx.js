@@ -126,7 +126,6 @@ var GFX = {
 
             // set ball parent
             setParent(that.model, ind.node);
-            setParent(that.model, ind.node_inside);
         }
 
         //global settings
@@ -167,7 +166,7 @@ var GFX = {
         this.context.onupdate = function(dt) {
             _dt = dt;
             // update all scene
-            that.scene.update(dt);
+            that.scene.update( dt );
         }
 
         this.context.onmousemove = function(e)
@@ -187,18 +186,7 @@ var GFX = {
         
         this.context.onmousedown = function(e)
         {
-            if( e.leftButton ) {
-                window.test = vec3.create();
-                var ray = GFX.camera.getRay( e.canvasx, e.canvasy ), node = null;
-                if ( node = GFX.model.testRay( ray, window.test, undefined, 0x4, true ))
-                    if(node.name && node.name == "annotation"){
-                        GFX.setDialogHere( e, node );  
-                        for(var i = 0, child; child = GFX.model.children[i]; i++)
-                            child.active = false;
-                        // only one active
-                        node.active = true;
-                    }
-            }
+            GFX.lookAnotInfo( e );  
         }
 
         this.context.onmousewheel = function(e)
@@ -260,6 +248,21 @@ var GFX = {
         dialog.add(widgets);  
         
         dialog.setPosition( event.canvasx + 25 , GFX.renderer.canvas.height - event.canvasy + 25 );
+    },
+    lookAnotInfo: function(e)
+    {
+        if( e.leftButton ) {
+            window.test = vec3.create();
+            var ray = GFX.camera.getRay( e.canvasx, e.canvasy ), node = null;
+            if ( node = GFX.model.testRay( ray, window.test, undefined, 0x4, true ))
+                if(node.name && node.name == "annotation"){
+                    GFX.setDialogHere( e, node );  
+                    for(var i = 0, child; child = GFX.model.children[i]; i++)
+                        child.active = false;
+                    // only one active
+                    node.active = true;
+                }
+        }
     },
     /*
     * upload binary mesh in case of first use
