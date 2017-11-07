@@ -362,7 +362,7 @@ var APP = {
     disableAllFeatures: function (options)
     {
         options = options || {};
-        console.log( options );
+//        console.log( options );
         
         if(!APP.anotation_mode)
             GFX.context.onmousedown = function(e) {};

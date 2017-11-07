@@ -134,13 +134,13 @@ $("#saveTextButton").click(function(e)
         position: APP.result,
         id: id,
         active: false,
-        color: [1,0,0,1],
         time: 0.0,
         onupdate: "blink",
         name: "annotation"
     });
     
     setParent(GFX.model, ind.node);
+    setParent(GFX.model, ind.node_inside);
 
     // se anade a la lista de anotaciones del proyecto
     project.insertAnotation(id, GFX.camera, APP.result, $("#message-text").val());
