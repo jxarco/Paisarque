@@ -175,11 +175,25 @@ var GFX = {
             
             if( e.dragging ) {
                 if( e.leftButton ) {
+                    
+                    //create camera
+//                    var camera = new RD.Camera();
+//                    camera.perspective( 45, gl.canvas.width / gl.canvas.height, 0.1, 10000 );
+//                    camera.lookAt( GFX.camera.position, GFX.camera.target, GFX.camera.up );
+//                    
+//                    camera.direction = vec3.create();
+                    
+//                    vec3.copy(this.camera.direction, this.camera._position);
+//                    
+//                    this.camera.previous =  vec3.create();
+//                    
+//                    vec3.copy(this.camera.previous, this.camera._position);
+                    
                     that.camera.orbit(-e.deltax * 0.5 * _dt, RD.UP);
                     that.camera.orbit(-e.deltay * 0.5 * _dt, that.camera._right);
                 }
                 if( e.rightButton ) {
-                    that.camera.moveLocal([-e.deltax * _dt, e.deltay * _dt, 0]);
+                    that.camera.moveLocal([-e.deltax * 0.075, e.deltay, 0]);
                 }
             }
         }
@@ -238,10 +252,13 @@ var GFX = {
         
         widgets.on_refresh = function(){
             widgets.clear();
-            var desc = document.getElementById( node.id ).innerText;
-            desc = desc.slice(1, desc.length);
-            desc = capitalizeFirstLetter( desc );
-            widgets.addInfo(null, desc);
+            var desc = null;
+            if(document.getElementById( node.id )){
+                desc = document.getElementById( node.id ).innerText;
+                desc = desc.slice(1, desc.length);
+                desc = capitalizeFirstLetter( desc );
+                widgets.addInfo(null, desc);
+            }
         }
 
         widgets.on_refresh();

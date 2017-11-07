@@ -387,6 +387,9 @@ var APP = {
         $(".on-point").removeClass("on-point");
         $("#tools-tab .btn.tool-btn").removeClass("pressed");
         
+        // remove any litegui dialog
+        $(".litedialog ").remove();
+        
         if(options.last_rotation && window.init_rotation !== undefined){
             console.log("wefwefew");
             vec4.copy( GFX.model._rotation, window.init_rotation );
