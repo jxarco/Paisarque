@@ -13,9 +13,9 @@ function SceneIndication(o)
     {
         this.time += dt;
         if(!this.active)
-            this.color = [1,0,0];
+            this.color =  [0, 0.44, 0.78];
         else
-            this.color = [1, 0.3 + Math.sin(this.time*5), 0.3 + Math.sin(this.time*5)];
+            this.color = [Math.sin(this.time*5), 0.44 + Math.sin(this.time*5), 0.78 + Math.sin(this.time*5)];
     }
     
     if(o)
@@ -27,11 +27,25 @@ SceneIndication.prototype.configure = function(o)
     var node = new RD.SceneNode({
         mesh: "sphere",
         layers: 0x4,
-        color: [1, 0, 0, 1],
+        opacity: 0.35,
+        scaling: 1.35,
+        color: [0, 0.44, 0.78]
+	});
+    
+    node.blend_mode = RD.BLEND_ALPHA;
+    node.render_priority = RD.PRIORITY_ALPHA;
+    
+    var node_inside = new RD.SceneNode({
+        mesh: "sphere",
+        layers: 0x4,
+        color: [0, 0.44, 0.78],
+        scaling: 0.85
 	});
     
     node.description = "config";
+    node_inside.description = "config";
     this.node = node;
+    this.node_inside = node_inside;
     
     var params = Object.keys(o);
     for(var i = 0, key; key = params[i]; ++i)
@@ -43,6 +57,7 @@ SceneIndication.prototype.configure = function(o)
                 break;
             case "position":
                 node.position = o[key];
+                node_inside.position = o[key];
                 break;
             case "depth_test":
                 node.flags.depth_test = o[key];
@@ -72,8 +87,10 @@ SceneIndication.prototype.configure = function(o)
     if(o.onupdate)
         node.update = this.blink;
     
-    if(o.scene && GFX.scene)
+    if(o.scene && GFX.scene){
         GFX.scene.root.addChild(node);
+        GFX.scene.root.addChild(node_inside);
+    }
 }
 
 /*

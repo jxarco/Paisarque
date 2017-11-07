@@ -208,6 +208,9 @@ th{
     color: #0070c9;
     cursor: pointer;
 }
+#projects-tb thead tr th{
+    text-align: left !important;
+}
 #tableInicio{
     -webkit-transition: 0.5s ease-in-out;
     transition: 0.5s ease-in-out;

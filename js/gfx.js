@@ -126,6 +126,7 @@ var GFX = {
 
             // set ball parent
             setParent(that.model, ind.node);
+            setParent(that.model, ind.node_inside);
         }
 
         //global settings
@@ -182,13 +183,22 @@ var GFX = {
                     that.camera.moveLocal([-e.deltax * _dt, e.deltay * _dt, 0]);
                 }
             }
-            
-//            if( e.leftButton ) {
-//                var ray = GFX.camera.getRay( e.canvasx, e.canvasy ), node = null;
-//                if ( node = GFX.scene.testRay( ray, APP.result, undefined, 0x1, true ))
-//                    if(node.name && node.name == "annotation")
-//                        alert("wefwe");
-//            }
+        }
+        
+        this.context.onmousedown = function(e)
+        {
+            if( e.leftButton ) {
+                window.test = vec3.create();
+                var ray = GFX.camera.getRay( e.canvasx, e.canvasy ), node = null;
+                if ( node = GFX.model.testRay( ray, window.test, undefined, 0x4, true ))
+                    if(node.name && node.name == "annotation"){
+                        GFX.setDialogHere( e, node );  
+                        for(var i = 0, child; child = GFX.model.children[i]; i++)
+                            child.active = false;
+                        // only one active
+                        node.active = true;
+                    }
+            }
         }
 
         this.context.onmousewheel = function(e)
@@ -220,6 +230,36 @@ var GFX = {
 
         this.context.captureMouse(true);
         this.context.captureKeys();
+    },
+    setDialogHere: function( event, node )
+    {
+        var lang = "es", session_lang = null;
+        if(session_lang = localStorage.getItem("lang"))
+            lang = session_lang;
+        
+        var name = DATA.litegui.sections.data.desc[lang], last_dialog = null;
+        var dialog_id = name.replace(" ", "-").toLowerCase();
+        
+        if( last_dialog = document.getElementById( dialog_id ) )
+            last_dialog.remove();
+        
+        var dialog = new LiteGUI.Dialog( dialog_id, {parent: "body", title: name, close: true, width: 185, scroll: true, draggable: true });
+        dialog.show('fade');
+        
+        var widgets = new LiteGUI.Inspector();
+        
+        widgets.on_refresh = function(){
+            widgets.clear();
+            var desc = document.getElementById( node.id ).innerText;
+            desc = desc.slice(1, desc.length);
+            desc = capitalizeFirstLetter( desc );
+            widgets.addInfo(null, desc);
+        }
+
+        widgets.on_refresh();
+        dialog.add(widgets);  
+        
+        dialog.setPosition( event.canvasx + 25 , GFX.renderer.canvas.height - event.canvasy + 25 );
     },
     /*
     * upload binary mesh in case of first use
