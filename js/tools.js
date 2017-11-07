@@ -87,6 +87,8 @@ function loadJSON()
 
 function parseDATA(options)
 {
+    options = options || {};
+    
     if(!DATA)
         return 0;
     
@@ -96,6 +98,11 @@ function parseDATA(options)
         var o = DATA.scripts[i];
         addScript(o);
     }
+    
+    window.parsed = true;
+    
+    if(options.scripts)
+        return 0;
     
     // load by default cubemaps   
     for(var i in DATA.cubemaps)

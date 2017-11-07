@@ -99,10 +99,18 @@ var APP = {
         var text_section = DATA.litegui.sections.general;
         
         APP.tools_inspector.addSection( text_section.title[lang] );
-        APP.tools_inspector.addCheckbox( text_section.auto_save[lang], project._auto_save, { callback: function(v){
+        APP.tools_inspector.addCheckbox( text_section.auto_save[lang], project._auto_save, { width: "100%", name_width: "40%", callback: function(v){
             project._auto_save = v;
             project.save();
         }});
+        
+        var index = window.location.pathname.lastIndexOf("/");
+        var share_url = "paisarque.upf.edu";
+        share_url += window.location.pathname.slice( 0, index ) + "/player?p=" + current_project;
+        APP.tools_inspector.addButton("Share/Compartir", "...", {width: "100%", name_width: "50%", micro: true, callback: function(){
+            window.prompt("Copy to clipboard: Ctrl+C, Enter", share_url);
+        }});
+        
         APP.tools_inspector.addButton(null, text_section.save[lang], { width: "100%",  callback: function(){
             project.save();
         }});
@@ -367,7 +375,8 @@ var APP = {
         if(!APP.anotation_mode)
             GFX.context.onmousedown = function(e) { GFX.lookAnotInfo( e ); };
         
-        APP.fadeAllTables(this.showing);
+        if( window.mode != "player" )
+            APP.fadeAllTables(this.showing);
         APP.current_ms_type = null;
         APP.rotation = false;
         revealDOMElements([$("#cardinal-axis"), $('.sliders'), $(".sub-btns")], false);
@@ -388,7 +397,8 @@ var APP = {
         $("#tools-tab .btn.tool-btn").removeClass("pressed");
         
         // remove any litegui dialog
-        $(".litedialog ").remove();
+        if( window.mode != "player" )
+            $(".litedialog ").remove();
         
         if(options.last_rotation && window.init_rotation !== undefined){
             console.log("wefwefew");
