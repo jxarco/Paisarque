@@ -193,7 +193,7 @@ function loadProjectsTable( filters )
                 container.append("<tr id='" + project + "' onclick='loadContent(" + '"modelo"' + ", " + '"' + folder + '"' + ")'>");
                 var row = $("#" + project);
                 row.append("<td><img class='project-preview ' src='" + src + "' title='Vista previa de " + project + "'></td>");
-                row.append("<td>" + capitalizeFirstLetter(project) + "</td>");
+                row.append("<td>" + capitalizeFirstLetter(project).replace("_", " ") + "</td>");
                 row.append("<td class='w3-hide-small'>" + author + "</td>");
                 row.append("<td class='w3-hide-small w3-hide-medium'><div>" + place + "</div></td>");
                 container.append("</tr>");
