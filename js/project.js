@@ -439,9 +439,10 @@ Project.prototype.insertMeasure = function( camera, points, distance, name, opti
     var row = "<tr id=" + id + " a class='pointer'>" + 
     "<td onclick='show($(this))' data-type='m'>" + "<i class='material-icons show'>fiber_manual_record</i></td>" +
     "<td id='" + aux + "'><p onclick='setInput(" + id + ", " + '"dist"' + ")'>" + name + "</p></td>" + 
-    "<td>" + Math.round(distance * 1000) / 1000 + "</td>" + 
-    "<td><i onclick='remove(this)' class='material-icons'>close</i></td>" + 
-    "</tr>";
+    "<td>" + Math.round(distance * 1000) / 1000 + "</td>"; 
+    if(window.mode != "player")
+        row += "<td><i onclick='remove(this)' class='material-icons'>close</i></td>"; 
+    row += "</tr>";
     
     bodyTable.append(row);
     
@@ -486,11 +487,13 @@ Project.prototype.insertSegmentMeasure = function( camera, points, distance, nam
     
     var row = "<tr id=" + id + " a class='pointer'>" + 
     "<td onclick='show($(this))' data-type='s'>" + "<i class='material-icons show'>fiber_manual_record</i></td>" +
-    "<td id='" + aux + "'><p onclick='setInput(" + id + ", " + '"seg"' + ")'>" + name + "</p></td>" + 
-    "<td>" + (points.length - 1) + "</td>" + 
-    "<td>" + Math.round(distance * 1000) / 1000 + "</td>" +
-    "<td><i onclick='remove(this)' class='material-icons'>close</i></td>" + 
-    "</tr>";
+    "<td id='" + aux + "'><p onclick='setInput(" + id + ", " + '"seg"' + ")'>" + name + "</p></td>";
+    if(window.mode != "player")
+        row += "<td>" + (points.length - 1) + "</td>";
+    row += "<td>" + Math.round(distance * 1000) / 1000 + "</td>";
+    if(window.mode != "player")
+        row += "<td><i onclick='remove(this)' class='material-icons'>close</i></td>"; 
+    row += "</tr>";
     
     bodyTable.append(row);
     
@@ -536,11 +539,13 @@ Project.prototype.insertArea = function( points, area, index, name, options )
     
     var row = "<tr id=" + id + " a class='pointer'>" + 
     "<td onclick='show($(this))' data-type='a'>" + "<i class='material-icons show'>fiber_manual_record</i></td>" + 
-    "<td id='" + aux + "'><p onclick='setInput(" + id + ", " + '"area"' + ")'>" + name + "</p></td>" + 
-    "<td>" + style + "</td>" + 
-    "<td>" + Math.round(area * 1000) / 1000 + "</td>" + 
-    "<td><i onclick='remove(this)' class='material-icons'>close</i></td>" + 
-    "</tr>";
+    "<td id='" + aux + "'><p onclick='setInput(" + id + ", " + '"area"' + ")'>" + name + "</p></td>";
+    if(window.mode != "player")
+        row += "<td>" + style + "</td>";
+    row += "<td>" + Math.round(area * 1000) / 1000 + "</td>";
+    if(window.mode != "player")
+        row += "<td><i onclick='remove(this)' class='material-icons'>close</i></td>"; 
+    row += "</tr>";
     
     bodyTable.append(row);
     

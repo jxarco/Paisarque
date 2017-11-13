@@ -754,7 +754,6 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
 .sub-btns{
     display: none;
 }
-
 .anot-table-full{
     color: #ddd;
 }
@@ -766,18 +765,36 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
     display: none;
     color: #ddd !important;
 }
+.player-tables{
+    font-size: 12px;
+    color: #999 !important;
+}
 .tables tr td p{
     color: #ddd !important;
 }
-.tables tr:hover{
+.player-tables tr td p{
+    color: #999 !important;
+}
+.player-tables tr th{
+    color: #6c7ba7 !important;
+    background: #272a30;
+}
+.player-tables tr:hover, .tables tr:hover{
     background-color: #556 !important;
 }
 .tables th{
     text-align: center;
 }
-.tables td{
+.player-tables th{
+    text-align: center;
+    width: 47%;
+}
+.player-tables td, .tables td{
     text-align: center;
     padding-top: 12px !important; 
+}
+.player-tables .micro{
+    width: 6%;
 }
 .show{
     font-size: 13px !important;
