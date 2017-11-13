@@ -82,6 +82,12 @@ var APP = {
             initMap(); 
         }, step: 0.0001});
         
+        var icon_text = '<i class="material-icons">refresh</i>';
+        
+        APP.info_inspector.addButton( icon_text, "...", {width: "100%", micro: true, callback: function(){
+            initMap();
+        }});
+        
         text_section = DATA.litegui.sections.cubemaps;
         APP.info_inspector.addSection( text_section.title[lang], {className: "cubemap-section"} );
         APP.info_inspector.addButton(null, text_section.quit[lang], { width: "100%",  callback: function(){
@@ -99,7 +105,7 @@ var APP = {
         var text_section = DATA.litegui.sections.general;
         
         APP.tools_inspector.addSection( text_section.title[lang] );
-        APP.tools_inspector.addCheckbox( text_section.auto_save[lang], project._auto_save, { width: "100%", name_width: "40%", callback: function(v){
+        APP.tools_inspector.addCheckbox( text_section.auto_save[lang], project._auto_save, { width: "100%", name_width: "50%", callback: function(v){
             project._auto_save = v;
             project.save();
         }});
@@ -107,7 +113,7 @@ var APP = {
         var index = window.location.pathname.lastIndexOf("/");
         var share_url = "paisarque.upf.edu";
         share_url += window.location.pathname.slice( 0, index ) + "/player?p=" + current_project;
-        APP.tools_inspector.addButton("Share/Compartir", "...", {width: "100%", name_width: "50%", micro: true, callback: function(){
+        APP.tools_inspector.addButton( text_section.share[lang], "...", {width: "100%", name_width: "50%", micro: true, callback: function(){
             window.prompt("Copy to clipboard: Ctrl+C, Enter", share_url);
         }});
         
