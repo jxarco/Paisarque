@@ -69,7 +69,7 @@ var DATA = {
                 image_btn: { "es": "Capturar", "cat": "Captura", "en": "Capture" },
                 record: { "es": "Vídeo", "cat": "Vídeo", "en": "Video" },
                 record_btn: { "es": "Grabar órbita", "cat": "Gravar òrbita", "en": "Record orbit" },
-                advanced: { "es": "Opciones avanzadas", "cat": "Opcions avançades", "en": "Advanced options" }
+                advanced: { "es": "Más opciones", "cat": "Més opcions", "en": "More options" }
             },
             dialog: {
                 title: { "es": "Más opciones", "cat": "Més opcions", "en": "More options" },
