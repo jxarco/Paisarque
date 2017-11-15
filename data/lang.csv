@@ -3,7 +3,7 @@ index,title,,PaisArque (ES),PaisArque (CAT),PaisArque (EN),
 index,#bbva_mark,,Financiado por,Finançat per,Funded by,
 index,#body1,,"Proyecto realizado por grupos pertenecientes a la Universidad Pompeu Fabra con la financiación de la <a href=""https://www.fbbva.es/"">Fundación BBVA.</a> ","Projecte realitzat per grups pertanyents a la Universitat Pompeu Fabra amb el finançament de la <a href=""https://www.fbbva.es/"">Fundació BBVA.</a> ","Project by UPF related groups thanks to the funding of the <a href=""https://www.fbbva.es/"">BBVA foundation.</a>", 
 index,#body2_title,,Resumen,Resum,Summary,
-index,#body2,,"PaisArque se propone desarrollar una aplicación de fácil utilizo y acceso, basada en la web, a través de la cual los usuarios puedan generar modelos 3D de monumentos y/o objetos a partir de fotografías digitales.<br><br>Tecnológicamente, el proyecto opta por una visión integrada 3D en web debido a la creciente importancia de la participación colectiva en la ciencia, tanto por parte de los profesionales, como de los usuarios, de forma que las apps para la experiencia y visualización del patrimonio arqueológico sean multiplataforma.","PaisArque es proposa desenvolupar una aplicació de fàcil ús i accés, basada en la web, a través de la qual els usuaris puguin generar models 3D de monuments i/o objectes a partir de fotografies digitals.<br><br>Tecnològicament, el projecte opta per una visió integrada 3D en web a causa de la creixent importància de la participació col·lectiva en la ciència, tant per part dels professionals com dels usuaris, de manera que les apps per l'experiència i visualització del patrimoni arqueològic siguin multiplataforma.","PaisArque aims to develop an easy-to-use, web-based application through which users can generate 3D models of monuments and/or objects from digital photographs.<br><br>Technologically, the project opts for an integrated 3D vision in web because of the growing importance of collective participation in science, both by professionals and users, so that the applications for the experience and visualization of the archaeological heritage be multiplatform.", 
+index,#body2,,"PaisArque se propone desarrollar una aplicación de fácil uso y acceso, basada en la web, a través de la cual los usuarios puedan generar modelos 3D de monumentos y/o objetos a partir de fotografías digitales.<br><br>Tecnológicamente, el proyecto opta por una visión integrada 3D en web debido a la creciente importancia de la participación colectiva en la ciencia, tanto por parte de los profesionales, como de los usuarios, de forma que las apps para la experiencia y visualización del patrimonio arqueológico sean multiplataforma.","PaisArque es proposa desenvolupar una aplicació de fàcil ús i accés, basada en la web, a través de la qual els usuaris puguin generar models 3D de monuments i/o objectes a partir de fotografies digitals.<br><br>Tecnològicament, el projecte opta per una visió integrada 3D en web a causa de la creixent importància de la participació col·lectiva en la ciència, tant per part dels professionals com dels usuaris, de manera que les apps per l'experiència i visualització del patrimoni arqueològic siguin multiplataforma.","PaisArque aims to develop an easy-to-use, web-based application through which users can generate 3D models of monuments and/or objects from digital photographs.<br><br>Technologically, the project opts for an integrated 3D vision in web because of the growing importance of collective participation in science, both by professionals and users, so that the applications for the experience and visualization of the archaeological heritage be multiplatform.", 
 index,#have_account,,¿Tienes cuenta?,Tens compte?,Do you have an account?,
 index,#signin-btn,,"<span class=""ladda-label"">Iniciar sesión</span><span class=""ladda-spinner""></span>","<span class=""ladda-label"">Iniciar sessió</span><span class=""ladda-spinner""></span>","<span class=""ladda-label"">Sign in</span><span class=""ladda-spinner""></span>",
 index,.new-account,,"<span class=""ladda-label"">Registrarse</span><span class=""ladda-spinner""></span>","<span class=""ladda-label"">Registrar-se</span><span class=""ladda-spinner""></span>","<span class=""ladda-label"">Sign up</span><span class=""ladda-spinner""></span>",
@@ -92,7 +92,7 @@ ayuda,.export-nav,,EXPORTAR,EXPORTAR,EXPORT,
 ayuda,.w3-xlarge,,<b>SOPORTE</b>,<b>SUPORT</b>,<b>SUPPORT</b>,
 ayuda,#label-tab-photo,,Tomar las fotografías,Fer les fotografies,Take photographies,
 ayuda,#label-tab-model,,Crear el modelo 3D,Crear el model 3D,Creating 3D model,
-ayuda,#label-tab-app,,Aplicación,Aplicació,APP,
+ayuda,#label-tab-app,,Usar la aplicación,Utilitzar l'aplicació,Use the app,
 ayuda,#fotogrametria-p,,"La fotogrametría es un proceso de toma de fotos para la modelación de un objeto real al mundo 3D. A continuación podrás ver un tutorial en el que aprenderás a tomar unas buenas fotografías para, más adelante, reconstruir la escena en un archivo OBJ y poder visualizarlo en nuestra página.","La fotogrametria és un procés de presa de fotografies per a la modelització d'un objecte real al món 3D. A continuació podrás veure un tutorial en el qual aprendràs a prendre unes bones fotografies per, més endevant, reconstruir l'escena en un arxiu OBJ i poder visualitzar-ho en la nostra pàgina.",Photogrammetry is the process of taking photos for modeling a real object into the 3D world. Follows a tutorial in which you will learn to take useful pictures to reconstruct the scene in an OBJ file and to be able to visualize it in our page.,
 ayuda,#modelo3d-p,,¿Ya tienes las fotos? Aquí tienes un tutorial sobre cómo modelar tu objeto a partir de las fotografías tomadas anteriormente. Asegúrate de haber tomado las medidas necesarias y haber realizado el proceso de fotogrametría correctamente. ,Ja tens unes bones fotografies? Aquí tens un tutorial sobre com modelar l'objecte a partir de les fotografies preses anteriorment. Assegura't d'haver pres les mesures necessàries i haver realitzat el procés de fotogrametria correctament.,"Once you have the photos, you can build a 3D model from them. Here's a tutorial on how to model your object from previously taken pictures. Make sure you have taken the necessary steps and completed the photogrammetry process correctly.",
 ayuda,#tab-content3,,"<h4>Sobre el proyecto</h4>
@@ -113,6 +113,16 @@ ayuda,#tab-content3,,"<h4>Sobre el proyecto</h4>
                                 <p class=""kawaii error"">Si no se usa al acabar, tendrás que volver a realizar todos los cambios.</p>
                                 <p class=""kawaii"">Si quieres olvidarte de guardar, asegúrate de permitir el auto-guardado al empezar.</p> 
                             </div><br>
+<h6>Compartir escena</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">share</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">Es posible compartir tu proyecto de modo que otra persona pueda visualizar tu escena.</p> 
+                                <p class=""kawaii"">Haz click al botón que encontrarás en el panel general para crear un enlace. ¡Cópialo y pásalo!</p>
+                                <p class=""kawaii warning"">Recuerda que nadie podrá editar tu proyecto en modo <i>sharing</i></p> 
+                            </div><br>
+
 
                             <h6>Establecer rotaciones por defecto</h6>
                             <a class=""btn tool-btn info"">
@@ -209,6 +219,16 @@ ayuda,#tab-content3,,"<h4>Sobre el proyecto</h4>
                                 <p class=""kawaii error"">De no desar, hauràs de tornar a fer tot el treball!</p>
                                 <p class=""kawaii"">Si vols oblidar-te’n de desar, pots activar l’opció d’auto-desar abans de començar.</p> 
                             </div><br>
+<h6>Compartir escena</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">share</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">Es possible compartir el teu projecte de tal manera que un altra persona pugui visualitzar la teva escena.</p> 
+                                <p class=""kawaii"">Fes click al botó que trobaràs al panel general per a crear un enllaç. Només l'has de copiar i passar!</p>
+                                <p class=""kawaii warning"">Recorda que ningú serà capaç d'editar el teu projecte en mode <i>sharing</i></p> 
+                            </div><br>
+
 
                             <h6>Establir rotacions por defecte</h6>
                             <a class=""btn tool-btn info"">
@@ -312,6 +332,17 @@ ayuda,#tab-content3,,"<h4>Sobre el proyecto</h4>
                                 <p class=""kawaii error"">No saving could be a big problem.</p>
                                 <p class=""kawaii"">If you want to forget saving, it’s possible to enable auto-saving before starting.</p> 
                             </div><br>
+
+                            <h6>Share scene</h6>
+                            <a class=""btn tool-btn info"">
+                                <i class=""material-icons"">share</i>
+                            </a>
+                            <div class=""info-panel"">
+                                <p class=""kawaii"">It is possible to share your project so another person can visualize your scene.</p> 
+                                <p class=""kawaii"">Click on the button you'll find in the general section to generate a link. Copy and send it!</p>
+                                <p class=""kawaii warning"">Remember that no person will be able to edit your project in sharing mode.</p> 
+                            </div><br>
+
 
                             <h6>Set rotations by default</h6>
                             <a class=""btn tool-btn info"">
