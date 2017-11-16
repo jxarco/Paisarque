@@ -45,7 +45,7 @@ var DATA = {
             camera: {
                 title: { "es": "Cámara", "cat": "Càmera", "en": "Camera" },
                 reset: { "es": "Restablecer", "cat": "Restablir", "en": "Restore" },
-                orbit: { "es": "Orbitar", "cat": "Orbitar", "en": "Orbit" }
+                orbit: { "es": "Vel. Orbita", "cat": "Vel. Orbita", "en": "Orbit speed" }
             },
             model: {
                 title: { "es": "Modelo 3D", "cat": "Model 3D", "en": "3D Model" },

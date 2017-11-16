@@ -130,9 +130,16 @@ var APP = {
             GFX.camera.direction = [150,60,150];
             GFX.camera.smooth = true;
         }});
-        APP.tools_inspector.addNumber( text_section.orbit[lang], 0, { width: "100%",  callback: function(v){
-            GFX.orbit_speed = v * 0.001;
-        }, min: -10, max: 10, step: 0.1});
+        
+        APP.tools_inspector.addCombo(text_section.orbit[lang], "0", { values: ["0", "Med", "Top"], width: "100%",  callback: function(v){
+            if(v == "0") GFX.orbit_speed = 0;
+            if(v == "Med") GFX.orbit_speed = 5 * 0.001;
+            if(v == "Top") GFX.orbit_speed = 10 * 0.001;
+        }});
+        
+//        APP.tools_inspector.addNumber( text_section.orbit[lang], 0, { className: "class_orbit_value", width: "100%",  callback: function(v){
+//            GFX.orbit_speed = v * 0.001;
+//        }, min: -10, max: 10, step: 0.1});
         
         text_section = DATA.litegui.sections.model;
         APP.tools_inspector.addSection( text_section.title[lang], {className: "model3d-section"});
