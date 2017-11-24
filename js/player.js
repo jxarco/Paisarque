@@ -114,31 +114,15 @@ var PLAYER = {
         tools_widgets.on_refresh = on_refresh;
         tools_widgets.refresh();
         
-        $(".wsection.measures-section").find(".wsectioncontent").append($("#distances-table"));
-        $(".wsection.measures-section").find(".wsectioncontent").append($("#segment-distances-table"));
-        $(".wsection.measures-section").find(".wsectioncontent").append($("#areas-table"));  
+        $(".wsection.annot-section").find(".wsectioncontent").append( $("#entire-anot-table") );
+        $(".wsection.measures-section").find(".wsectioncontent").append( $("#distances-table") );
+        $(".wsection.measures-section").find(".wsectioncontent").append( $("#segment-distances-table") );
+        $(".wsection.measures-section").find(".wsectioncontent").append( $("#areas-table") );  
     },
     
     createTables: function( root )
     {
-        root.addSection( "Annotations", {collapsed: false});
-            
-        var table = new LiteGUI.Table({scrollable:true}), data = [];
-        root.append( table.root );
-        table.setColumns([{name: "ID", width: "15%"}, {name: "Text"}]);
-
-        for(var i = 0; i < project._anotations.length; ++i){
-
-            var anot = project._anotations[i];
-            data.push( {
-                id: anot.id,
-                text: anot.text
-            });
-        }
-        table.setRows( data, true );
-        
-        // *********
-        
+        root.addSection( "Annotations", {className: "annot-section", collapsed: false});
         root.addSection( "Measures", {className: "measures-section", collapsed: true});
         revealDOMElements([$("#distances-table"), $("#segment-distances-table"), $("#areas-table")], true);
     },

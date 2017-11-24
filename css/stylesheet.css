@@ -766,7 +766,7 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
     color: #ddd !important;
 }
 .player-tables{
-    font-size: 12px;
+    font-size: 13px;
     color: #999 !important;
 }
 .tables tr td p{
@@ -786,8 +786,13 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
     text-align: center;
 }
 .player-tables th{
-    text-align: center;
+    text-align: left !important;
+    border: none !important;
     width: 47%;
+}
+.player-tables td{
+    border: none !important;
+    text-align: left !important;
 }
 .player-tables td, .tables td{
     text-align: center;

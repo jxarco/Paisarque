@@ -27,6 +27,7 @@ var DATA = {
             },
             map: {
                 title: { "es": "Mapa", "cat": "Mapa", "en": "Map" },
+                refresh: { "es": "Actualizar", "cat": "Actualitza", "en": "Refresh" },
                 lat: { "es": "Latitud", "cat": "Latitud", "en": "Latitude" },
                 lng: { "es": "Longitud", "cat": "Longitud", "en": "Longitude" }
             },
@@ -38,13 +39,17 @@ var DATA = {
                 title: { "es": "General", "cat": "General", "en": "General" },
                 auto_save: { "es": "Auto-guardar", "cat": "Auto-desa", "en": "Auto-save" },
                 save: { "es": "Guardar", "cat": "Desa", "en": "Save" },
+<<<<<<< HEAD
                 share: { "es": "Compartir escena", "cat": "Compartir escena", "en": "Share scene" },
+=======
+                share: { "es": "Compartir escena", "cat": "Comparteix escena", "en": "Share scene" },
+>>>>>>> d63213b706e472243914c9c72a0677a63dc93a4d
                 fullscreen: { "es": "Pantalla completa", "cat": "Pantalla completa", "en": "Full screen" }
             },
             camera: {
                 title: { "es": "Cámara", "cat": "Càmera", "en": "Camera" },
                 reset: { "es": "Restablecer", "cat": "Restablir", "en": "Restore" },
-                orbit: { "es": "Orbitar", "cat": "Orbitar", "en": "Orbit" }
+                orbit: { "es": "Vel. Orbita", "cat": "Vel. Orbita", "en": "Orbit speed" }
             },
             model: {
                 title: { "es": "Modelo 3D", "cat": "Model 3D", "en": "3D Model" },
@@ -68,10 +73,10 @@ var DATA = {
                 image_btn: { "es": "Capturar", "cat": "Captura", "en": "Capture" },
                 record: { "es": "Vídeo", "cat": "Vídeo", "en": "Video" },
                 record_btn: { "es": "Grabar órbita", "cat": "Gravar òrbita", "en": "Record orbit" },
-                advanced: { "es": "Opciones avanzadas", "cat": "Opcions avançades", "en": "Advanced options" }
+                advanced: { "es": "Más opciones", "cat": "Més opcions", "en": "More options" }
             },
             dialog: {
-                title: { "es": "Opciones avanzadas", "cat": "Opcions avançades", "en": "Advanced options" },
+                title: { "es": "Más opciones", "cat": "Més opcions", "en": "More options" },
                 speed: { "es": "Velocidad", "cat": "Velocitat", "en": "Speed" },
                 speed_range: { "es": ["Baja","Normal", "Alta"], "cat": ["Baixa","Normal", "Alta"], "en": ["Low","Normal", "High"] },
                 iterations: { "es": "# Órbitas", "cat": "# Òrbites", "en": "# Orbits" },

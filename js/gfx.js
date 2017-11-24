@@ -429,20 +429,24 @@ var GFX = {
                 download_button.download = "screenshot.png";
                 download_button.className = "btn table-btn";
                 
-                var add_button = document.createElement("a");
-                add_button.innerHTML = buttons.add_capture[lang];
-                add_button.id = "upload-capture-button";
-                add_button.dataset.url = src;
-                add_button.className = "btn table-btn";
-                $(add_button).click(function(){
-                    uploadBLOB($(this));
-                });
-                
                 var dialog = GFX.createCaptureDialog( lang );
                 var section = $(".wsection.capture-section").find(".wsectioncontent");
                 section.append( img );
                 section.append( download_button );
-                section.append( add_button );
+                
+                if( window.mode != "player" )
+                {
+                    var add_button = document.createElement("a");
+                    add_button.innerHTML = buttons.add_capture[lang];
+                    add_button.id = "upload-capture-button";
+                    add_button.dataset.url = src;
+                    add_button.className = "btn table-btn";
+                    $(add_button).click(function(){
+                        uploadBLOB($(this));
+                    });
+                    
+                     section.append( add_button );
+                }
             }
 
         canvas.toBlob( on_complete, "image/png");  

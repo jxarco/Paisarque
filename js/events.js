@@ -33,7 +33,7 @@ $('#search-bar').keyup(function(e)
     params["name"] = searched;
     params["not_def"] = false;
     
-    if( searched.length ){
+    if( filter.length ){
         delete params["name"];
         params[filter] = searched;
         params["not_def"] = true;
@@ -86,7 +86,7 @@ $(".pagination").click(function(){
 $("#label-proyecto-tab").click( function(){
     // map has to be launched only when
     // visible, otherwise it wont work
-    initMap();
+    //initMap();
     // !!!!
 } );
 // slide hidden tabs in information
