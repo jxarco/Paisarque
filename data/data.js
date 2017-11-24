@@ -38,6 +38,7 @@ var DATA = {
                 title: { "es": "General", "cat": "General", "en": "General" },
                 auto_save: { "es": "Auto-guardar", "cat": "Auto-desa", "en": "Auto-save" },
                 save: { "es": "Guardar", "cat": "Desa", "en": "Save" },
+                share: { "es": "Compartir escena", "cat": "Compartir escena", "en": "Share scene" },
                 fullscreen: { "es": "Pantalla completa", "cat": "Pantalla completa", "en": "Full screen" }
             },
             camera: {
