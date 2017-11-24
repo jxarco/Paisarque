@@ -39,11 +39,7 @@ var DATA = {
                 title: { "es": "General", "cat": "General", "en": "General" },
                 auto_save: { "es": "Auto-guardar", "cat": "Auto-desa", "en": "Auto-save" },
                 save: { "es": "Guardar", "cat": "Desa", "en": "Save" },
-<<<<<<< HEAD
                 share: { "es": "Compartir escena", "cat": "Compartir escena", "en": "Share scene" },
-=======
-                share: { "es": "Compartir escena", "cat": "Comparteix escena", "en": "Share scene" },
->>>>>>> d63213b706e472243914c9c72a0677a63dc93a4d
                 fullscreen: { "es": "Pantalla completa", "cat": "Pantalla completa", "en": "Full screen" }
             },
             camera: {

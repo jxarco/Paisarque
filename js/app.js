@@ -102,55 +102,47 @@ var APP = {
     createToolsInspector: function(lang)
     {
         APP.tools_inspector = new LiteGUI.Inspector();
+        var text_section = DATA.litegui.sections.general;
         
-<<<<<<< HEAD
-        var on_refresh = function()
-        {
-            APP.tools_inspector.clear();
-=======
         APP.tools_inspector.addSection( text_section.title[lang] );
         APP.tools_inspector.addCheckbox( text_section.auto_save[lang], project._auto_save, { width: "100%", name_width: "50%", callback: function(v){
             project._auto_save = v;
             project.save();
         }});
-        
+
         var index = window.location.pathname.lastIndexOf("/");
         var share_url = "paisarque.upf.edu";
         share_url += window.location.pathname.slice( 0, index ) + "/player?p=" + current_project;
         APP.tools_inspector.addButton( text_section.share[lang], "...", {width: "100%", name_width: "50%", micro: true, callback: function(){
             window.prompt("Copy to clipboard: Ctrl+C, Enter", share_url);
         }});
-        
+
         APP.tools_inspector.addButton(null, text_section.save[lang], { width: "100%",  callback: function(){
             project.save();
         }});
         APP.tools_inspector.addButton(null, text_section.fullscreen[lang], { width: "100%",  callback: function(){
             GFX.goFullscreen();
         }});
-        
+
         text_section = DATA.litegui.sections.camera;
         APP.tools_inspector.addSection( text_section.title[lang], {collapsed: true});
         APP.tools_inspector.addButton(null, text_section.reset[lang], { width: "100%",  callback: function(){
             GFX.camera.direction = [150,60,150];
             GFX.camera.smooth = true;
         }});
-        
+
         APP.tools_inspector.addCombo(text_section.orbit[lang], "0", { values: ["0", "Med", "Top"], width: "100%",  callback: function(v){
             if(v == "0") GFX.orbit_speed = 0;
             if(v == "Med") GFX.orbit_speed = 5 * 0.001;
             if(v == "Top") GFX.orbit_speed = 10 * 0.001;
         }});
-        
-//        APP.tools_inspector.addNumber( text_section.orbit[lang], 0, { className: "class_orbit_value", width: "100%",  callback: function(v){
-//            GFX.orbit_speed = v * 0.001;
-//        }, min: -10, max: 10, step: 0.1});
-        
+
         text_section = DATA.litegui.sections.model;
         APP.tools_inspector.addSection( text_section.title[lang], {className: "model3d-section"});
         APP.tools_inspector.addButton( text_section.rotations[lang], text_section.config_rot[lang], { width: "100%",  callback: function(){
             APP.setRotation();
         }});
-        
+
         text_section = DATA.litegui.sections.measures;
         APP.tools_inspector.addSection( text_section.title[lang], {className: "measures-section"});
         APP.tools_inspector.addButton( text_section.scale[lang], text_section.config_scale[lang], { width: "100%",  callback: function(){
@@ -164,92 +156,34 @@ var APP = {
         APP.tools_inspector.addButtons( text_section.area[lang], text_section.area_values[lang],{callback: function(v) {        
             APP.appendNewMeasure(PW.AREA, v);
         }});
->>>>>>> d63213b706e472243914c9c72a0677a63dc93a4d
-        
-            var text_section = DATA.litegui.sections.general;
-            APP.tools_inspector.addSection( text_section.title[lang] );
-            APP.tools_inspector.addCheckbox( text_section.auto_save[lang], project._auto_save, { width: "100%", name_width: "40%", callback: function(v){
-                project._auto_save = v;
-                project.save();
-            }});
 
-            var index = window.location.pathname.lastIndexOf("/");
-            var share_url = "paisarque.upf.edu";
-            share_url += window.location.pathname.slice( 0, index ) + "/player?p=" + current_project;
-            APP.tools_inspector.addButton(text_section.share[lang], "...", {width: "100%", name_width: "40%", micro: true, callback: function(){
-                window.prompt("Copy to clipboard: ctrl+C / cmd+C", share_url);
-            }});
+        text_section = DATA.litegui.sections.export;
+        APP.tools_inspector.addSection( text_section.title[lang], {className: "export-section"});
 
-            APP.tools_inspector.addButton(null, text_section.save[lang], { width: "100%",  callback: function(){
-                project.save();
-            }});
-            APP.tools_inspector.addButton(null, text_section.fullscreen[lang], { width: "100%",  callback: function(){
-                GFX.goFullscreen();
-            }});
+        // default options
+        APP.export_data = {
+            format: "gif",   
+            framerate: 40,
+            mb_frames: 0,
+            quality: 60,
+            name: "exported",
+            verbose: false,
+            display: true,
 
-            text_section = DATA.litegui.sections.camera;
-            APP.tools_inspector.addSection( text_section.title[lang], {collapsed: false});
-            APP.tools_inspector.addButton(null, text_section.reset[lang], { width: "100%",  callback: function(){
-                GFX.camera.direction = [150,60,150];
-                GFX.camera.smooth = true;
-                GFX.orbit_speed = 0;
-                APP.tools_inspector.refresh();
-            }});
-            APP.tools_inspector.addNumber( text_section.orbit[lang], 0, { width: "100%",  callback: function(v){
-                GFX.orbit_speed = v * 0.001;
-            }, min: -10, max: 10, step: 0.1});
-
-            text_section = DATA.litegui.sections.model;
-            APP.tools_inspector.addSection( text_section.title[lang], {className: "model3d-section"});
-            APP.tools_inspector.addButton( text_section.rotations[lang], text_section.config_rot[lang], { width: "100%",  callback: function(){
-                APP.setRotation();
-            }});
-
-            text_section = DATA.litegui.sections.measures;
-            APP.tools_inspector.addSection( text_section.title[lang], {className: "measures-section", collapsed: true});
-            APP.tools_inspector.addButton( text_section.scale[lang], text_section.config_scale[lang], { width: "100%",  callback: function(){
-                APP.setScale();
-            }});
-            APP.tools_inspector.addCombo( text_section.log[lang], "...",{values: text_section.log_values[lang], callback: function(v) { APP.showMeasureTables(v); }});
-            APP.tools_inspector.addSeparator();
-            APP.tools_inspector.addButton( text_section.dist[lang], text_section.create_dist[lang], { width: "100%",  callback: function(){
-                APP.appendNewMeasure(PW.OD);
-            }});
-            APP.tools_inspector.addButtons( text_section.area[lang], text_section.area_values[lang],{callback: function(v) {        
-                APP.appendNewMeasure(PW.AREA, v);
-            }});
-
-            text_section = DATA.litegui.sections.export;
-            APP.tools_inspector.addSection( text_section.title[lang], {className: "export-section"});
-
-            // default options
-            APP.export_data = {
-                format: "webm",   
-                framerate: 40,
-                mb_frames: 0,
-                quality: 60,
-                name: "exported",
-                verbose: false,
-                display: true,
-
-                    export_speed: 0.025,
-                    n_iterations: 1
-            }
-            APP.tools_inspector.addButton( text_section.image[lang], text_section.image_btn[lang], { width: "100%", callback: function(){
-                GFX.takeSnapshot();
-            }});
-            APP.tools_inspector.addButton( text_section.record[lang], text_section.record_btn[lang],{width: "100%", callback: function(v) {        
-                GFX.record_orbit();
-            }});
-
-            APP.tools_inspector.addSeparator();
-            APP.tools_inspector.addButton( null, text_section.advanced[lang], { width: "100%",  callback: function(){
-                APP.createWidgetsDialog(lang);
-            }});
+                export_speed: 0.025,
+                n_iterations: 1
         }
-        
-        APP.tools_inspector.on_refresh = on_refresh;
-        APP.tools_inspector.refresh();
+        APP.tools_inspector.addButton( text_section.image[lang], text_section.image_btn[lang], { width: "100%", callback: function(){
+            GFX.takeSnapshot();
+        }});
+        APP.tools_inspector.addButton( text_section.record[lang], text_section.record_btn[lang],{width: "100%", callback: function(v) {        
+            GFX.record_orbit();
+        }});
+
+        APP.tools_inspector.addSeparator();
+        APP.tools_inspector.addButton( null, text_section.advanced[lang], { width: "100%",  callback: function(){
+            APP.createWidgetsDialog(lang);
+        }});
         
         $("#tab-content2-large").append( APP.tools_inspector.root );
         
@@ -283,8 +217,11 @@ var APP = {
                 APP.exportCanvas();
             }});
             widgets.addString( text_section.name[lang], APP.export_data.name,{ name_width: "33.33%", callback: function(v) { APP.export_data.name = v; }});
-            widgets.addCombo( text_section.format[lang], APP.export_data.format,{ name_width: "33.33%", values:["webm","gif"], callback: function(v) { APP.export_data.format = v; }});
-            widgets.addCombo( text_section.quality[lang], "Normal",{ name_width: "33.33%", values: text_section.quality_range[lang], callback: function(v) { APP.setQuality( v ); }});
+            widgets.addCombo( text_section.format[lang], APP.export_data.format,{ name_width: "33.33%", values:["webm","gif"], callback: function(v) { APP.export_data.format = v; widgets.on_refresh(); }});
+            
+            if( APP.export_data.format == "webm" )
+                widgets.addCombo( text_section.quality[lang], "Normal",{ name_width: "33.33%", values: text_section.quality_range[lang], callback: function(v) { APP.setQuality( v ); }});
+            
             widgets.addCombo( text_section.speed[lang], "Normal", { name_width: "33.33%", values: text_section.speed_range[lang] , callback: function(v){  APP.setSpeedOrbit( v ); }});
             widgets.addSeparator();
         }
